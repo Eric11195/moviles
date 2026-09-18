@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.util.Log;
@@ -12,6 +13,8 @@ public class GraphicsAndroid {
     private SurfaceHolder surface = null;
     private Canvas can = null;
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+    private FontAndroid font = new FontAndroid();
 
     //This must be call before any other of the following calls. And only once
     public void init(SurfaceView surf){
@@ -55,7 +58,7 @@ public class GraphicsAndroid {
     }
 
     //src refers to the part of the src image that will be rendered, dst refers to the destination pos and size in the viewport
-    public void drawImage(Image img, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h) throws Exception{
+    public void drawImage(ImageAndroid img, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h) throws Exception{
         assert(can!=null);
         assert(img!=null);
         set_style(true);
@@ -67,7 +70,7 @@ public class GraphicsAndroid {
         );
     }
     //draws the complete image in the indicated position and size
-    public void drawImage(Image img, int x, int y, int width, int height) throws Exception {
+    public void drawImage(ImageAndroid img, int x, int y, int width, int height) throws Exception {
         drawImage(
                 img,
                 0,0,img.getWidth(),img.getHeight(),
@@ -75,7 +78,7 @@ public class GraphicsAndroid {
         );
     }
     //draws image with its original size in screen
-    public void drawImage(Image img, int x, int y) throws Exception{
+    public void drawImage(ImageAndroid img, int x, int y) throws Exception{
         drawImage(img, x,y,img.getWidth(), img.getHeight());
     }
 
@@ -118,12 +121,18 @@ public class GraphicsAndroid {
         can.drawPath(getHexagonPath(x,y,rad), paint);
     }
     //Sets the fonts to be used in the following drawText calls
-    public void setFont(Font f){
-
+    public void setFont(FontAndroid f){
+        font = f;
+    }
+    private void setFontStyle(FontAndroid f){
+        assert(paint!=null);
+        paint.setTextSize(f.getFontSize());
+        paint.setTypeface(f.getTypeface());
     }
     public void drawText(String text, float x, float y){
         assert(can!=null);
         set_style(false);
+        setFontStyle(font);
         can.drawText(text, x, y, paint);
     }
 }

@@ -2,9 +2,9 @@ package com.example.mochilacohetonadisfrutona.intermedium;
 
 import android.graphics.Bitmap;
 
-public class Image {
+public class ImageAndroid {
     private Bitmap bm;
-    public Image() throws Exception{
+    public ImageAndroid() throws Exception{
         throw new Exception("Unimplemented");
     }
     public final Bitmap getBitmap(){
