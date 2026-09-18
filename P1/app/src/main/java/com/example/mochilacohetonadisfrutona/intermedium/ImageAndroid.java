@@ -1,11 +1,18 @@
 package com.example.mochilacohetonadisfrutona.intermedium;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
+//To load an image put it inside res/drawable
 public class ImageAndroid {
     private Bitmap bm;
-    public ImageAndroid() throws Exception{
-        throw new Exception("Unimplemented");
+    //Id looks like R.drawable.imageName on res/drawable
+    public ImageAndroid(Activity act, int imageId) throws Exception{
+        bm = BitmapFactory.decodeResource(
+                act.getResources(),
+                imageId
+        );
     }
     public final Bitmap getBitmap(){
         return bm;
