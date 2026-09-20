@@ -1,5 +1,6 @@
 package com.example.mochilacohetonadisfrutona.intermedium;
 
+import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -9,17 +10,26 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.util.Log;
 
-public class GraphicsAndroid {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class GraphicsAndroid implements GraphicsInterface{
     private SurfaceHolder surface = null;
     private Canvas can = null;
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     private FontAndroid font = new FontAndroid();
 
+    private AppCompatActivity activity = null;
+    GraphicsAndroid(AppCompatActivity activity){
+        this.activity = activity;
+    }
+
     //This must be call before any other of the following calls. And only once
-    public void init(SurfaceView surf){
+    @Override
+    public void init(int id){
         assert(surface == null);
         assert(can == null);
+        SurfaceView surf = activity.findViewById(id);
         surf.setZOrderOnTop(true);
         surface = surf.getHolder();
     }
@@ -41,10 +51,11 @@ public class GraphicsAndroid {
     }
     //This must be call before any other of the following calls.
     //And must be followed (after all the other calls by a endRender()
+    @Override
     public boolean startRender(){
         assert(can == null);
         //can = surface.lockHardwareCanvas();
-        can = surface.lockHardwareCanvas();
+        can = surface.lockCanvas();
         if (can == null) {
             Log.d("DRAW", "Canvas is NULL!");
             return false;
@@ -52,13 +63,15 @@ public class GraphicsAndroid {
         return true;
     }
     //render what has been rendered on screen in between startRender() and this call
+    @Override
     public void endRender(){
         assert(can!=null);
         surface.unlockCanvasAndPost(can);
     }
 
     //src refers to the part of the src image that will be rendered, dst refers to the destination pos and size in the viewport
-    public void drawImage(ImageAndroid img, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h) throws Exception{
+    @Override
+    public void drawImage(ImageAndroid img, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h) {
         assert(can!=null);
         assert(img!=null);
         set_style(true);
@@ -70,7 +83,8 @@ public class GraphicsAndroid {
         );
     }
     //draws the complete image in the indicated position and size
-    public void drawImage(ImageAndroid img, int x, int y, int width, int height) throws Exception {
+    @Override
+    public void drawImage(ImageAndroid img, int x, int y, int width, int height) {
         drawImage(
                 img,
                 0,0,img.getWidth(),img.getHeight(),
@@ -78,49 +92,59 @@ public class GraphicsAndroid {
         );
     }
     //draws image with its original size in screen
-    public void drawImage(ImageAndroid img, int x, int y) throws Exception{
+    @Override
+    public void drawImage(ImageAndroid img, int x, int y) {
         drawImage(img, x,y,img.getWidth(), img.getHeight());
     }
 
     // fills the entire display with the given color
+    @Override
     public void clear(int color){
         assert(can!=null);
         can.drawColor(color);
     }
     //sets the color for all the following simple shapes renders
+    @Override
     public void setColor(int color){
         assert(can!=null);
         paint.setColor(color);
     }
+    @Override
     public void set_style(boolean fill){
         paint.setStyle(fill ? Paint.Style.FILL : Paint.Style.STROKE);
     }
+    @Override
     public void drawRectangle(float x, float y, float width, float height, boolean fill){
         assert(can!=null);
         set_style(fill);
         can.drawRect(x,y,width,height,paint);
     }
+    @Override
     public void drawRoundRectangle(float x, float y, float width, float height, float arc, boolean fill){
         assert(can!=null);
         set_style(fill);
         can.drawRoundRect(x,y,width,height,arc,arc,paint);
     }
+    @Override
     public void drawCircle(float center_x, float center_y, float rad, boolean fill){
         assert(can!=null);
         set_style(fill);
         can.drawCircle(center_x,center_y,rad,paint);
     }
+    @Override
     public void drawLine(float x1, float y1, float x2, float y2){
         assert(can!= null);
         set_style(false);
         can.drawLine(x1,y1,x2,y2,paint);
     }
+    @Override
     public void drawHexagon(float x, float y, float rad, boolean fill){
         assert(can!=null);
         set_style(fill);
         can.drawPath(getHexagonPath(x,y,rad), paint);
     }
     //Sets the fonts to be used in the following drawText calls
+    @Override
     public void setFont(FontAndroid f){
         font = f;
     }
@@ -129,6 +153,7 @@ public class GraphicsAndroid {
         paint.setTextSize(f.getFontSize());
         paint.setTypeface(f.getTypeface());
     }
+    @Override
     public void drawText(String text, float x, float y){
         assert(can!=null);
         set_style(false);

@@ -3,6 +3,7 @@ package com.example.mochilacohetonadisfrutona.intermedium;
 import android.app.Activity;
 import android.graphics.Typeface;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
 //To load a font put it inside res/font
@@ -12,7 +13,7 @@ public class FontAndroid {
     //Creates a font with the given font resource
     //Id looks like R.font.fontName on res/drawable
     //Do not mark bold if yout font.ttf is bold by default
-    public FontAndroid(Activity act, float fontSize, boolean bold, int fontResourceId){
+    public FontAndroid(AppCompatActivity act, float fontSize, boolean bold, int fontResourceId){
         this.tf = Typeface.create(
                 ResourcesCompat.getFont(act, fontResourceId),
                 bold ? Typeface.BOLD : Typeface.NORMAL

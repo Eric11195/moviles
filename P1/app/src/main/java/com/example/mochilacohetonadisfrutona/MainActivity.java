@@ -1,5 +1,6 @@
 package com.example.mochilacohetonadisfrutona;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -7,6 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.mochilacohetonadisfrutona.game.MainGame;
+import com.example.mochilacohetonadisfrutona.intermedium.Engine;
+import com.example.mochilacohetonadisfrutona.intermedium.GraphicsInterface;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -19,5 +24,8 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        MainGame game = new MainGame();
+        Engine eng = new Engine(game::executeGameLoop, this, R.id.mainSurfaceView);
     }
 }

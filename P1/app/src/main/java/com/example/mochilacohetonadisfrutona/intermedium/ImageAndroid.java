@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 //To load an image put it inside res/drawable
 public class ImageAndroid {
     private Bitmap bm;
-    //Id looks like R.drawable.imageName on res/drawable
-    public ImageAndroid(Activity act, int imageId) throws Exception{
+    // Id looks like R.drawable.imageName on res/drawable
+    public ImageAndroid(AppCompatActivity act, int imageId) throws Exception{
         bm = BitmapFactory.decodeResource(
                 act.getResources(),
                 imageId
