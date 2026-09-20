@@ -23,5 +23,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "MochilaCohetonaDisfrutona"
-include(":app")
- 
+include(":android")
+include(":desktop")
+include(":engine")
+include(":game")
