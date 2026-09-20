@@ -13,8 +13,8 @@ import java.util.function.Consumer;
 
 public class AndroidEngine {
 
-    private final Engine engine;
-    private final GraphicsAndroid graphics;
+    private Engine engine;
+    private GraphicsAndroid graphics;
 
     private Thread gameThread;
 

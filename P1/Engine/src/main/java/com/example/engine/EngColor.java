@@ -1,7 +1,7 @@
 package com.example.engine;
 
 public class EngColor {
-    int r,g,b,a;
+    public int r,g,b,a;
     public EngColor(int r, int g, int b, int a){
         this.r = r;
         this.g = g;

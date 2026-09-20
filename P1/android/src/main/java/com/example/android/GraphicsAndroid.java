@@ -3,7 +3,6 @@ package com.example.android;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Rect;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.util.Log;
@@ -18,11 +17,11 @@ import com.example.engine.GraphicsInterface;
 public class GraphicsAndroid implements GraphicsInterface {
     private SurfaceHolder surface = null;
     private Canvas can = null;
-    private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-    private FontAndroid font = new FontAndroid();
+    private final FontAndroid font = new FontAndroid();
 
-    private AppCompatActivity activity = null;
+    private AppCompatActivity activity;
     public GraphicsAndroid(AppCompatActivity activity){
         this.activity = activity;
     }
@@ -37,20 +36,20 @@ public class GraphicsAndroid implements GraphicsInterface {
         surface = surf.getHolder();
     }
     //src: https://codingtechroom.com/question/-draw-hexagons-android
-    private Path getHexagonPath(float x, float y, float radius){
-        Path hexagonPath = new Path();
-        for (int i = 0; i < 6; i++) {
-            float angle = (float) (i * Math.PI / 3);
+    private Path getHexagonPath(int n, int x, int y, float radius){
+        Path nSidePolygonPath = new Path();
+        for (int i = 0; i < n; i++) {
+            float angle = (float) (2*i * Math.PI / n);
             float xPoint = (float) (x + radius * Math.cos(angle));
             float yPoint = (float) (y + radius * Math.sin(angle));
             if (i == 0) {
-                hexagonPath.moveTo(xPoint, yPoint);
+                nSidePolygonPath.moveTo(xPoint, yPoint);
             } else {
-                hexagonPath.lineTo(xPoint, yPoint);
+                nSidePolygonPath.lineTo(xPoint, yPoint);
             }
         }
-        hexagonPath.close();
-        return hexagonPath;
+        nSidePolygonPath.close();
+        return nSidePolygonPath;
     }
     //This must be call before any other of the following calls.
     //And must be followed (after all the other calls by a endRender()
@@ -115,7 +114,7 @@ public class GraphicsAndroid implements GraphicsInterface {
         paint.setColor(color.getColorAsInt());
     }
     @Override
-    public void setStrokeWidth(float pxWidth){
+    public void setStrokeWidth(int pxWidth){
         assert(can!=null);
         paint.setStrokeWidth(pxWidth);
     }
@@ -124,34 +123,35 @@ public class GraphicsAndroid implements GraphicsInterface {
         paint.setStyle(fill ? Paint.Style.FILL : Paint.Style.STROKE);
     }
     @Override
-    public void drawRectangle(float x, float y, float width, float height, boolean fill){
+    public void drawRectangle(int x, int y, int width, int height, boolean fill){
         assert(can!=null);
         setStyle(fill);
         can.drawRect(x,y,x+width,y+height,paint);
     }
     @Override
-    public void drawRoundRectangle(float x, float y, float width, float height, float arc, boolean fill){
+    public void drawRoundRectangle(int x, int y, int width, int height, int arc, boolean fill){
         assert(can!=null);
         setStyle(fill);
         can.drawRoundRect(x,y,x+width,y+height,arc,arc,paint);
     }
     @Override
-    public void drawCircle(float center_x, float center_y, float rad, boolean fill){
+    public void drawCircle(int center_x, int center_y, float rad, boolean fill){
         assert(can!=null);
         setStyle(fill);
         can.drawCircle(center_x,center_y,rad,paint);
     }
     @Override
-    public void drawLine(float x1, float y1, float x2, float y2){
+    public void drawLine(int x1, int y1, int x2, int y2){
         assert(can!= null);
         setStyle(false);
         can.drawLine(x1,y1,x2,y2,paint);
     }
     @Override
-    public void drawHexagon(float x, float y, float rad, boolean fill){
+    public void drawNSidePolygon(int n, int x, int y, float rad, boolean fill){
         assert(can!=null);
+        if(n<=2) throw new RuntimeException("n must be > 2 in call to drawNSidePolygon");
         setStyle(fill);
-        can.drawPath(getHexagonPath(x,y,rad), paint);
+        can.drawPath(getHexagonPath(n,x,y,rad), paint);
     }
     //Sets the fonts to be used in the following drawText calls
     @Override
@@ -164,7 +164,7 @@ public class GraphicsAndroid implements GraphicsInterface {
         paint.setTypeface(f.getTypeface());
     }
     @Override
-    public void drawText(String text, float x, float y){
+    public void drawText(String text, int x, int y){
         assert(can!=null);
         setStyle(false);
         setFontStyle(font);
