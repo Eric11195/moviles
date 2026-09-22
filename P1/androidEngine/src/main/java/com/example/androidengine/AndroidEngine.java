@@ -10,22 +10,12 @@ import java.util.function.Consumer;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
 
-public class AndroidEngine {
-
-    private Engine engine;
-    private GraphicsAndroid graphics;
-
-    private Thread gameThread;
-
+public class AndroidEngine extends Engine{
+    boolean readyToStart = false;
     public AndroidEngine(
             AppCompatActivity activity,
-            int surfaceViewId,
-            Consumer<Engine> gameStartFunc) {
-
-        graphics = new GraphicsAndroid(activity);
-        graphics.init(surfaceViewId);
-
-        engine = new Engine((GraphicsInterface) graphics);
+            int surfaceViewId) {
+        super(new GraphicsAndroid(activity, surfaceViewId));
 
         SurfaceView surface =
                 activity.findViewById(surfaceViewId);
@@ -37,7 +27,7 @@ public class AndroidEngine {
 
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-                startGame(gameStartFunc);
+                readyToStart = true;
             }
 
             @Override
@@ -50,45 +40,12 @@ public class AndroidEngine {
 
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
-                Log.d("DRAW", "Surface destroyed!");
-                stopGame();
+                readyToStart = false;
             }
         });
     }
-
-    private void startGame(Consumer<Engine> gameStartFunc) {
-
-        if (gameStartFunc == null) {
-            Log.e("ENGINE", "No app start callback!");
-            return;
-        }
-
-        engine.start();
-
-        gameThread = new Thread(() -> {
-            gameStartFunc.accept(engine);
-        });
-
-        gameThread.start();
-    }
-
-    private void stopGame() {
-
-        engine.stop();
-
-        if (gameThread != null &&
-                Thread.currentThread() != gameThread) {
-
-            try {
-                gameThread.join();
-            }
-            catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-    }
-
-    public Engine getEngine() {
-        return engine;
+    @Override
+    protected boolean correctlyResumedBoolean(){
+        return readyToStart;
     }
 }

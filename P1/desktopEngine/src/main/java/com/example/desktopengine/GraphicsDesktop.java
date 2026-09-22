@@ -3,6 +3,7 @@ package com.example.desktopengine;
 import com.example.engine.EngColor;
 import com.example.engine.EngFont;
 import com.example.engine.EngImage;
+import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
 
 import java.awt.BasicStroke;
@@ -13,6 +14,7 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
+import java.nio.Buffer;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
@@ -20,42 +22,43 @@ import javax.swing.WindowConstants;
 public class GraphicsDesktop implements GraphicsInterface {
     private JFrame mainJFrame;
     Graphics2D graphics;
+    BufferStrategy buf;
     Canvas canvas;
-    @Override
-    public void init(int id){
+    GraphicsDesktop(){
         mainJFrame = new JFrame("Desktop Engine");
         mainJFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         canvas = new Canvas();
         // Give the canvas an explicit size
         canvas.setPreferredSize(new Dimension(800, 600));
-
         mainJFrame.add(canvas);
         mainJFrame.pack();
-        mainJFrame.setLocationRelativeTo(null);
         mainJFrame.setVisible(true);
         // must be called after setVisible(true) and pack()
         canvas.createBufferStrategy(2);
+
+        buf = canvas.getBufferStrategy();
+        graphics = (Graphics2D) buf.getDrawGraphics();
     }
-    BufferStrategy bs;
-    @Override
-    public boolean startRender(){
-        bs = canvas.getBufferStrategy();
-        if (bs != null) {
-            this.graphics = (Graphics2D) bs.getDrawGraphics();
-            return false;
-        }
-        return true;
+
+    boolean correcltyInitialized(){
+        return mainJFrame.getWidth()!=0;
     }
     @Override
-    public void endRender(){
-        if (this.graphics != null) {
-            this.graphics.dispose(); // Flush drawing calls to buffer
-        }
-        if (bs != null) {
-            bs.show(); // Display buffer
-        }
-        Toolkit.getDefaultToolkit().sync(); // Synchronize display on Windows/Linux
+    public void render(Engine eng, double dt){
+        do {
+            do {
+                this.graphics = (Graphics2D)this.buf.getDrawGraphics();
+                try {
+                    eng.getCurrentScene().render(this,dt);
+                }
+                finally {
+                    this.graphics.dispose();
+                    //Elimina el contexto gráfico y libera recursos del sistema realacionado
+                }
+            } while(this.buf.contentsRestored());
+            this.buf.show();
+        } while(this.buf.contentsLost());
     }
     @Override
     public void drawImage(EngImage img, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h) throws Exception{

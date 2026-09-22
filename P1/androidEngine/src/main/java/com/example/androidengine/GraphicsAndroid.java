@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.engine.EngColor;
 import com.example.engine.EngFont;
 import com.example.engine.EngImage;
+import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
 
 public class GraphicsAndroid implements GraphicsInterface {
@@ -22,19 +23,15 @@ public class GraphicsAndroid implements GraphicsInterface {
     private final FontAndroid font = new FontAndroid();
 
     private AppCompatActivity activity;
-    public GraphicsAndroid(AppCompatActivity activity){
+    public GraphicsAndroid(AppCompatActivity activity, int id){
         this.activity = activity;
-    }
-
-    //This must be call before any other of the following calls. And only once
-    @Override
-    public void init(int id){
         assert(surface == null);
         assert(can == null);
         SurfaceView surf = activity.findViewById(id);
         surf.setZOrderOnTop(true);
         surface = surf.getHolder();
     }
+
     //src: https://codingtechroom.com/question/-draw-hexagons-android
     private Path getHexagonPath(int n, int x, int y, float radius){
         Path nSidePolygonPath = new Path();
@@ -53,7 +50,6 @@ public class GraphicsAndroid implements GraphicsInterface {
     }
     //This must be call before any other of the following calls.
     //And must be followed (after all the other calls by a endRender()
-    @Override
     public boolean startRender(){
         assert(can == null);
         //can = surface.lockHardwareCanvas();
@@ -65,10 +61,17 @@ public class GraphicsAndroid implements GraphicsInterface {
         return true;
     }
     //render what has been rendered on screen in between startRender() and this call
-    @Override
     public void endRender(){
         assert(can!=null);
         surface.unlockCanvasAndPost(can);
+        can = null;
+    }
+    @Override
+    public void render(Engine eng, double dt){
+        if(startRender()) {
+            eng.getCurrentScene().render(this, dt);
+            endRender();
+        }
     }
 
     //src refers to the part of the src image that will be rendered, dst refers to the destination pos and size in the viewport

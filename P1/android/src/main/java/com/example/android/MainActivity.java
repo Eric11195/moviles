@@ -9,7 +9,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.androidengine.AndroidEngine;
-import com.example.game.MainGame;
+import com.example.game.testing.TestScene;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -23,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        MainGame game = new MainGame();
-        AndroidEngine eng = new AndroidEngine(this, R.id.mainSurfaceView, game::executeGameLoop);
+        AndroidEngine eng = new AndroidEngine(this, R.id.mainSurfaceView);
+        eng.setScene(new TestScene());
+        eng.resume();
     }
 }

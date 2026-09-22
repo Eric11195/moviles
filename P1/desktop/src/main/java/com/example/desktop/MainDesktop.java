@@ -1,11 +1,12 @@
 package com.example.desktop;
 
 import com.example.desktopengine.DesktopEngine;
-import com.example.game.MainGame;
+import com.example.game.testing.TestScene;
 
 public class MainDesktop {
     public static void main(String[] args){
-        MainGame game = new MainGame();
-        DesktopEngine eng = new DesktopEngine(800,600, game::executeGameLoop);
+        DesktopEngine eng = new DesktopEngine(800,600);
+        eng.setScene(new TestScene());
+        eng.resume();
     }
 }
