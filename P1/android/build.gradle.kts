@@ -34,6 +34,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":androidEngine"))
     implementation(project(":engine"))
     implementation(project(":game"))
     implementation(libs.activity.ktx)

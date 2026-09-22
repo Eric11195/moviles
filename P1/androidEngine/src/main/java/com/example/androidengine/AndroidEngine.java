@@ -1,4 +1,4 @@
-package com.example.android;
+package com.example.androidengine;
 
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -6,10 +6,9 @@ import android.view.SurfaceView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.function.Consumer;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
-
-import java.util.function.Consumer;
 
 public class AndroidEngine {
 

@@ -1,14 +1,13 @@
-package com.example.desktop;
-
-import com.example.engine.Engine;
+package com.example.desktopengine;
 
 import java.util.function.Consumer;
+import com.example.engine.Engine;
 
 public class DesktopEngine {
     private Engine engine;
     private GraphicsDesktop graphics;
     private Thread gameThread;
-    DesktopEngine(int width, int height, Consumer<Engine> startFunc){
+    public DesktopEngine(int width, int height, Consumer<Engine> startFunc){
         graphics = new GraphicsDesktop();
 
         graphics.init(0);

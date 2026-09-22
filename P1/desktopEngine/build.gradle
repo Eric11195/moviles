@@ -6,7 +6,5 @@ java {
     targetCompatibility JavaVersion.VERSION_11
 }
 dependencies {
-    implementation project(':desktopEngine')
     implementation project(':engine')
-    implementation project(':game')
 }

@@ -1,5 +1,6 @@
 package com.example.desktop;
 
+import com.example.desktopengine.DesktopEngine;
 import com.example.game.MainGame;
 
 public class MainDesktop {
