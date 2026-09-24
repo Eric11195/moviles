@@ -2,31 +2,19 @@ package com.example.androidengine;
 
 
 
+import static android.view.MotionEvent.*;
+
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.example.engine.InputInterface;
+import com.example.engine.TouchEvent;
+import com.example.engine.TouchEventType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class InputAndroid {
-    public static class TouchEvent{
-        public TouchEvent(View _target, MotionEvent _event,float _x, float _y, long _eventTime){
-            target = _target;
-            event = _event;
-            eventTime = _eventTime;
-            x = _x;
-            y = _y;
-        }
-        View target;
-        MotionEvent event;
-        long eventTime;
-        float x;
-        float y;
-        public TouchEvent clone(){
-            return new TouchEvent(this.target,this.event,this.x,this.y,this.eventTime);
-        }
-    }
-
+public class InputAndroid implements InputInterface {
     private List<TouchEvent> eventList;
 
     public InputAndroid(){
@@ -38,13 +26,31 @@ public class InputAndroid {
                 new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        eventList.add(new TouchEvent(v, event,event.getX(),event.getY(),System.currentTimeMillis()));
+                        var temp = new TouchEvent();
+                        temp.x = event.getX();
+                        temp.y = event.getY();
+                        switch (event.getAction()){
+                            case ACTION_DOWN:
+                            case ACTION_POINTER_DOWN:
+                                temp.type = TouchEventType.DOWN;
+                                break;
+                            case ACTION_UP:
+                            case ACTION_POINTER_UP:
+                                temp.type = TouchEventType.UP;
+                                break;
+                            case ACTION_MOVE:
+                                temp.type = TouchEventType.MOVE;
+                                break;
+                        }
+                        temp.id = event.getActionIndex();
+                        eventList.add(temp);
                         return true;
                     }
                 }
         );
     }
 
+    @Override
     public List<TouchEvent> GetTouchEvents(){
         ArrayList<TouchEvent> temp = new ArrayList<>();
         eventList.forEach( event -> temp.add(event.clone()));
