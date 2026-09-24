@@ -35,6 +35,7 @@ public class Engine implements Runnable{
         running = false;
     }
 
+    //Called when the application starts running, or is started on after switching from another screen
     public void resume() {
         if(running) return;
 
@@ -42,7 +43,7 @@ public class Engine implements Runnable{
         gameThread = new Thread(this, "GameLoopThread");
         gameThread.start();
     }
-
+    //Called when the application is paused (switched to another screen etc)
     public void pause() {
         if(!running) return;
 
@@ -80,7 +81,6 @@ public class Engine implements Runnable{
         return true;
     }
 
-    //
     private double dt;
     //time since start
     private double t;
