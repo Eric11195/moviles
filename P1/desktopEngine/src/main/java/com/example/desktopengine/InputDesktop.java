@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class InputDesktop implements InputInterface {
@@ -17,8 +18,8 @@ public class InputDesktop implements InputInterface {
         eventList = new ArrayList<>();
     }
 
-    public void registerPanel(JPanel panel){
-        panel.addMouseListener(new MouseAdapter() {
+    public void registerPanel(JFrame frame){
+        frame.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
