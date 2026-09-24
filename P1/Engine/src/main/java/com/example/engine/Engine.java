@@ -5,11 +5,14 @@ public class Engine implements Runnable{
 
     private final GraphicsInterface graphics;
 
+    private final InputInterface input;
+
     private volatile boolean running;
     private Scene currentScene;
 
-    public Engine(GraphicsInterface graphics) {
+    protected Engine(GraphicsInterface graphics, InputInterface input) {
         this.graphics = graphics;
+        this.input = input;
     }
 
     public Scene getCurrentScene() {
@@ -20,9 +23,9 @@ public class Engine implements Runnable{
         this.currentScene = scn;
     }
 
-    public GraphicsInterface getGraphics() {
-        return graphics;
-    }
+    public GraphicsInterface getGraphics() {return graphics;}
+
+    public InputInterface getInput() {return input;}
 
     public boolean getRunning() {
         return running;
