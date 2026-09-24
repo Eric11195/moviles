@@ -147,4 +147,7 @@ public class GraphicsDesktop implements GraphicsInterface {
     public void drawText(String text, int x, int y){
 
     }
+    public JFrame getFrame(){
+        return mainJFrame;
+    }
 }

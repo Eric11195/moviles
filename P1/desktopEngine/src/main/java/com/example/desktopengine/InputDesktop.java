@@ -7,10 +7,8 @@ import com.example.engine.TouchEventType;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 public class InputDesktop implements InputInterface {
     ArrayList<TouchEvent> eventList;
@@ -18,7 +16,7 @@ public class InputDesktop implements InputInterface {
         eventList = new ArrayList<>();
     }
 
-    public void registerPanel(JFrame frame){
+    public void registerFrame(JFrame frame){
         frame.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
@@ -41,7 +39,7 @@ public class InputDesktop implements InputInterface {
         });
     }
     @Override
-    public List<TouchEvent> getTouchEvents(){
+    public ArrayList<TouchEvent> getTouchEvents(){
         ArrayList<TouchEvent> temp = new ArrayList<>();
         eventList.forEach( event -> temp.add(event.clone()));
         eventList = new ArrayList<>();
