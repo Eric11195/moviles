@@ -2,7 +2,7 @@ package com.example.engine;
 
 public interface GraphicsInterface {
     public void render(Engine eng, double dt);
-    public void drawImage(EngImage img, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h) throws Exception;
+    public void drawImage(EngImage img, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h);
     public void drawImage(EngImage img, int x, int y, int width, int height);
     public void drawImage(EngImage img, int x, int y);
     public void clear(EngColor color);

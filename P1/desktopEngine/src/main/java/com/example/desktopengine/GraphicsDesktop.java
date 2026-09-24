@@ -11,6 +11,7 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Polygon;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
@@ -61,15 +62,18 @@ public class GraphicsDesktop implements GraphicsInterface {
         } while(this.buf.contentsLost());
     }
     @Override
-    public void drawImage(EngImage img, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h) throws Exception{
-
+    public void drawImage(EngImage img, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h) {
+        ImageDesktop img_dsk = (ImageDesktop) img;
+        Image _img = img_dsk.getImage();
+        graphics.drawImage(_img,dst_x,dst_y,dst_w,dst_h, src_x,src_y,src_w, src_h,null);
     }
     @Override
     public void drawImage(EngImage img, int x, int y, int width, int height){
-
+        drawImage(img, 0,0,img.getWidth(), img.getHeight(),x,y,width,height);
     }
     @Override
     public void drawImage(EngImage img, int x, int y){
+        drawImage(img,x,y, img.getWidth(), img.getHeight());
     }
     @Override
     public void clear(EngColor color){
