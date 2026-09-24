@@ -54,6 +54,7 @@ public class InputAndroid implements InputInterface {
     public List<TouchEvent> getTouchEvents(){
         ArrayList<TouchEvent> temp = new ArrayList<>();
         eventList.forEach( event -> temp.add(event.clone()));
+        eventList = new ArrayList<>();
         return temp;
     }
 }
