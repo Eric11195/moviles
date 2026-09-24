@@ -10,16 +10,20 @@ import java.util.List;
 
 public class InputAndroid {
     public static class TouchEvent{
-        public TouchEvent(View _target, MotionEvent _event, long _eventTime){
+        public TouchEvent(View _target, MotionEvent _event,float _x, float _y, long _eventTime){
             target = _target;
             event = _event;
             eventTime = _eventTime;
+            x = _x;
+            y = _y;
         }
         View target;
         MotionEvent event;
         long eventTime;
+        float x;
+        float y;
         public TouchEvent clone(){
-            return new TouchEvent(this.target,this.event,this.eventTime);
+            return new TouchEvent(this.target,this.event,this.x,this.y,this.eventTime);
         }
     }
 
@@ -34,7 +38,7 @@ public class InputAndroid {
                 new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        eventList.add(new TouchEvent(v, event,System.currentTimeMillis()));
+                        eventList.add(new TouchEvent(v, event,event.getX(),event.getY(),System.currentTimeMillis()));
                         return true;
                     }
                 }
