@@ -118,6 +118,7 @@ public class GraphicsDesktop implements GraphicsInterface {
     }
     //src: https://codingtechroom.com/question/-draw-hexagons-android
     private Polygon generateNSidePolygon(int n, int x, int y, float radius){
+        if(n<=2) throw new RuntimeException("n must be > 2 in call to drawNSidePolygon");
         int[] xVec = new int[n];
         int[] yVec = new int[n];
         for (int i = 0; i < n; i++) {
