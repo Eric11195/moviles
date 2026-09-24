@@ -33,7 +33,7 @@ public class GraphicsAndroid implements GraphicsInterface {
     }
 
     //src: https://codingtechroom.com/question/-draw-hexagons-android
-    private Path getHexagonPath(int n, int x, int y, float radius){
+    private Path getNSidePolygonPath(int n, int x, int y, float radius){
         Path nSidePolygonPath = new Path();
         for (int i = 0; i < n; i++) {
             float angle = (float) (2*i * Math.PI / n);
@@ -154,7 +154,7 @@ public class GraphicsAndroid implements GraphicsInterface {
         assert(can!=null);
         if(n<=2) throw new RuntimeException("n must be > 2 in call to drawNSidePolygon");
         setStyle(fill);
-        can.drawPath(getHexagonPath(n,x,y,rad), paint);
+        can.drawPath(getNSidePolygonPath(n,x,y,rad), paint);
     }
     //Sets the fonts to be used in the following drawText calls
     @Override
