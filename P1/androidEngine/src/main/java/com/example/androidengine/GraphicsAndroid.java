@@ -3,6 +3,7 @@ package com.example.androidengine;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.util.Log;
@@ -88,6 +89,8 @@ public class GraphicsAndroid implements GraphicsInterface {
                 paint
         );
         */
+        ImageAndroid _img = (ImageAndroid)img;
+        can.drawBitmap(_img.getBitmap(), new Rect(src_x,src_y,src_w,src_h), new Rect(dst_x,dst_y,dst_w,dst_h), paint);
     }
     //draws the complete image in the indicated position and size
     @Override
