@@ -77,8 +77,7 @@ public class Engine implements Runnable{
         while(this.running && !this.correctlyResumedBoolean());
 
         this.start();
-        EngSound aux= this.audio.addSound("door-book.MP3");
-        this.audio.playSound(aux,0);
+        
         while(this.running){
             this.update();
 
