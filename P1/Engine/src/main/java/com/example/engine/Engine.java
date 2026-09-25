@@ -1,4 +1,6 @@
 package com.example.engine;
+import com.example.engine.audio.AudioInterface;
+import com.example.engine.audio.EngSound;
 
 public class Engine implements Runnable{
     private Thread gameThread;
@@ -7,12 +9,15 @@ public class Engine implements Runnable{
 
     private final InputInterface input;
 
+    private final AudioInterface audio;
+
     private volatile boolean running;
     private Scene currentScene;
 
-    protected Engine(GraphicsInterface graphics, InputInterface input) {
+    protected Engine(GraphicsInterface graphics, InputInterface input,AudioInterface audio) {
         this.graphics = graphics;
         this.input = input;
+        this.audio = audio;
     }
 
     public Scene getCurrentScene() {
@@ -26,6 +31,8 @@ public class Engine implements Runnable{
     public GraphicsInterface getGraphics() {return graphics;}
 
     public InputInterface getInput() {return input;}
+
+    public AudioInterface getAudio() {return audio;}
 
     public boolean getRunning() {
         return running;
@@ -70,8 +77,11 @@ public class Engine implements Runnable{
         while(this.running && !this.correctlyResumedBoolean());
 
         this.start();
+        EngSound aux= this.audio.addSound("door-book.MP3");
+        this.audio.playSound(aux,0);
         while(this.running){
             this.update();
+
         }
     }
     /** Returns true if everything was correctly setup after calling resume

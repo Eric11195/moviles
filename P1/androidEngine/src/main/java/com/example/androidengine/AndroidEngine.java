@@ -7,6 +7,8 @@ import android.view.SurfaceView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.function.Consumer;
+
+import com.example.androidengine.audio.AudioAndroid;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
 
@@ -15,7 +17,7 @@ public class AndroidEngine extends Engine{
     public AndroidEngine(
             AppCompatActivity activity,
             int surfaceViewId) {
-        super(new GraphicsAndroid(activity, surfaceViewId),new InputAndroid());
+        super(new GraphicsAndroid(activity, surfaceViewId),new InputAndroid(),new AudioAndroid(activity));
 
         SurfaceView surface =
                 activity.findViewById(surfaceViewId);
