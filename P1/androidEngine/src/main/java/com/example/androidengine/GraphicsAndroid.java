@@ -62,7 +62,7 @@ public class GraphicsAndroid implements GraphicsInterface {
         return true;
     }
     public ImageEng createImage(String path){
-        return new ImageAndroid(path);
+        return new ImageAndroid(activity,path);
     }
     //render what has been rendered on screen in between startRender() and this call
     public void endRender(){
@@ -93,7 +93,7 @@ public class GraphicsAndroid implements GraphicsInterface {
         );
         */
         ImageAndroid _img = (ImageAndroid)img;
-        can.drawBitmap(_img.getBitmap(), new Rect(src_x,src_y,src_w,src_h), new Rect(dst_x,dst_y,dst_w,dst_h), paint);
+        can.drawBitmap(_img.getBitmap(), new Rect(src_x,src_y,src_x+src_w,src_y+src_h), new Rect(dst_x,dst_y,dst_x+dst_w,dst_y+dst_h), paint);
     }
     //draws the complete image in the indicated position and size
     @Override

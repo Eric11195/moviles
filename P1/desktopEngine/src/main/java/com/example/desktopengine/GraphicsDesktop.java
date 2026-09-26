@@ -5,6 +5,7 @@ import com.example.engine.EngFont;
 import com.example.engine.ImageEng;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
+import com.example.utils.Utils;
 
 import java.awt.BasicStroke;
 import java.awt.Canvas;
@@ -14,6 +15,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Polygon;
 import java.awt.image.BufferStrategy;
+import java.nio.file.Path;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
@@ -151,6 +153,9 @@ public class GraphicsDesktop implements GraphicsInterface {
     }
 
     public ImageEng createImage(String path){
-        return new ImageDesktop(path);
+        return new ImageDesktop(Path.of(
+                "assets",
+                path
+        ).toString());
     }
 }

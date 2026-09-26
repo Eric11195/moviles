@@ -19,7 +19,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         release {
             optimization {
@@ -32,6 +31,14 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
+tasks.register<Copy>("Copy"){
+    from(rootDir.getAbsolutePath() + "/assets")
+    into("src/main/assets")
+}
+tasks.preBuild(){
+    dependsOn("Copy")
+}
+
 
 dependencies {
     implementation(project(":androidEngine"))
