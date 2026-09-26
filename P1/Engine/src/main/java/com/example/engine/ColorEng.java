@@ -1,8 +1,8 @@
 package com.example.engine;
 
-public class EngColor {
+public class ColorEng {
     public int r,g,b,a;
-    public EngColor(int r, int g, int b, int a){
+    public ColorEng(int r, int g, int b, int a){
         this.r = r;
         this.g = g;
         this.b = b;

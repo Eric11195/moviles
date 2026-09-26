@@ -1,5 +1,6 @@
 package com.example.androidengine;
 
+import android.content.Context;
 import android.graphics.Typeface;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,9 +13,14 @@ public class FontAndroid {
     //Creates a font with the given font resource
     //Id looks like R.font.fontName on res/drawable
     //Do not mark bold if yout font.ttf is bold by default
-    public FontAndroid(AppCompatActivity act, float fontSize, boolean bold, int fontResourceId){
+    public FontAndroid(Context context, String fontName, float fontSize, boolean bold){
+        int resourceId = context.getResources().getIdentifier(
+                fontName,
+                "font",
+                context.getPackageName()
+        );
         this.tf = Typeface.create(
-                ResourcesCompat.getFont(act, fontResourceId),
+                ResourcesCompat.getFont(context, resourceId),
                 bold ? Typeface.BOLD : Typeface.NORMAL
         );
         this.fontSize = fontSize;

@@ -1,11 +1,10 @@
 package com.example.desktopengine;
 
-import com.example.engine.EngColor;
-import com.example.engine.EngFont;
+import com.example.engine.ColorEng;
+import com.example.engine.FontEng;
 import com.example.engine.ImageEng;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
-import com.example.utils.Utils;
 
 import java.awt.BasicStroke;
 import java.awt.Canvas;
@@ -76,16 +75,16 @@ public class GraphicsDesktop implements GraphicsInterface {
         drawImage(img,x,y, img.getWidth(), img.getHeight());
     }
     @Override
-    public void clear(EngColor color){
+    public void clear(ColorEng color){
         if (graphics == null) return;
-        EngColor previous = new EngColor(color.r,color.g,color.b,color.a);
+        ColorEng previous = new ColorEng(color.r,color.g,color.b,color.a);
         setColor(color);
         // Fill canvas area with clear color
         graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         setColor(previous);
     }
     @Override
-    public void setColor(EngColor color){
+    public void setColor(ColorEng color){
         graphics.setColor(new Color(color.r,color.g,color.b,color.a));
     }
     @Override
@@ -144,7 +143,7 @@ public class GraphicsDesktop implements GraphicsInterface {
         }
     }
     @Override
-    public void setFont(EngFont f){
+    public void setFont(FontEng f){
 
     }
     @Override
@@ -157,5 +156,15 @@ public class GraphicsDesktop implements GraphicsInterface {
                 "assets",
                 path
         ).toString());
+    }
+
+    @Override
+    public FontEng createFont(String path, float size) {
+        return null;
+    }
+
+    @Override
+    public void setFontSize(float size) {
+
     }
 }

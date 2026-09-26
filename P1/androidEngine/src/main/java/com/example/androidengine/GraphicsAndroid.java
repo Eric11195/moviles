@@ -10,8 +10,8 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.engine.EngColor;
-import com.example.engine.EngFont;
+import com.example.engine.ColorEng;
+import com.example.engine.FontEng;
 import com.example.engine.ImageEng;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
@@ -21,7 +21,7 @@ public class GraphicsAndroid implements GraphicsInterface {
     private Canvas can = null;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-    private final FontAndroid font = new FontAndroid();
+    private FontAndroid font = new FontAndroid();
 
     private AppCompatActivity activity;
     public GraphicsAndroid(AppCompatActivity activity, int id){
@@ -64,6 +64,17 @@ public class GraphicsAndroid implements GraphicsInterface {
     public ImageEng createImage(String path){
         return new ImageAndroid(activity,path);
     }
+
+    @Override
+    public FontEng createFont(String path, float size) {
+        return (FontEng) new FontAndroid(activity,path,size, false);
+    }
+
+    @Override
+    public void setFontSize(float size) {
+        font.setFontSize(size);
+    }
+
     //render what has been rendered on screen in between startRender() and this call
     public void endRender(){
         assert(can!=null);
@@ -112,13 +123,13 @@ public class GraphicsAndroid implements GraphicsInterface {
 
     // fills the entire display with the given color
     @Override
-    public void clear(EngColor color){
+    public void clear(ColorEng color){
         assert(can!=null);
         can.drawColor(color.getColorAsInt());
     }
     //sets the color for all the following simple shapes renders
     @Override
-    public void setColor(EngColor color){
+    public void setColor(ColorEng color){
         assert(can!=null);
         paint.setColor(color.getColorAsInt());
     }
@@ -164,8 +175,8 @@ public class GraphicsAndroid implements GraphicsInterface {
     }
     //Sets the fonts to be used in the following drawText calls
     @Override
-    public void setFont(EngFont f){
-        //font = f;
+    public void setFont(FontEng f){
+        this.font = (FontAndroid) f;
     }
     private void setFontStyle(FontAndroid f){
         assert(paint!=null);
@@ -175,7 +186,7 @@ public class GraphicsAndroid implements GraphicsInterface {
     @Override
     public void drawText(String text, int x, int y){
         assert(can!=null);
-        setStyle(false);
+        setStyle(true);
         setFontStyle(font);
         can.drawText(text, x, y, paint);
     }
