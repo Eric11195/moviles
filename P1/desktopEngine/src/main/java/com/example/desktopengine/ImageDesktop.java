@@ -7,33 +7,47 @@ import java.awt.Frame;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.logging.Logger;
+
+import javax.imageio.ImageIO;
 
 public class ImageDesktop implements ImageEng {
     Image img;
 
     public ImageDesktop(String image_path){
-        img = Toolkit.getDefaultToolkit().getImage(image_path);
-        String output ="Searching for image in: "
-                + Utils.getCurrentPath()
-                + image_path;
-        System.out.println(output);
-        MediaTracker tracker = new MediaTracker(new Frame());
-        tracker.addImage(img, 0);
+        String fullPath = Path.of(
+                Utils.getCurrentPath(),
+                image_path
+        ).toAbsolutePath().toString();
+
+        System.out.println("Searching for image in: " + fullPath);
+
         try {
-            tracker.waitForID(0);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            img = ImageIO.read(new File(fullPath));
+        } catch (IOException e) {
+            throw new RuntimeException(
+                    "Could not load image: " + fullPath,
+                    e
+            );
+        }
+
+        if (img == null) {
+            throw new RuntimeException(
+                    "File is not a supported image: " + fullPath
+            );
         }
     }
     @Override
     public int getWidth() {
-        return 0;
+        return img.getWidth(null);
     }
 
     @Override
     public int getHeight() {
-        return 0;
+        return img.getHeight(null);
     }
     Image getImage(){
         return img;

@@ -63,7 +63,7 @@ public class GraphicsDesktop implements GraphicsInterface {
     public void drawImage(ImageEng img, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h) {
         ImageDesktop img_dsk = (ImageDesktop) img;
         Image _img = img_dsk.getImage();
-        graphics.drawImage(_img,dst_x,dst_y,dst_w,dst_h, src_x,src_y,src_w, src_h,null);
+        graphics.drawImage(_img,dst_x,dst_y,dst_x+dst_w,dst_y+dst_h, src_x,src_y,src_x+src_w, src_y+src_h,null);
     }
     @Override
     public void drawImage(ImageEng img, int x, int y, int width, int height){
@@ -108,7 +108,7 @@ public class GraphicsDesktop implements GraphicsInterface {
     }
     @Override
     public void drawCircle(int center_x, int center_y, float rad, boolean fill) {
-        if (fill) {
+        if (!fill) {
             graphics.drawOval((int)Math.round(center_x-rad), (int)Math.round(center_y-rad), (int)Math.round(rad*2), (int)Math.round(rad*2));
         } else {
             graphics.fillOval((int)Math.round(center_x - rad), (int)Math.round(center_y - rad), (int)Math.round(rad*2), (int)Math.round(rad*2));
@@ -135,7 +135,11 @@ public class GraphicsDesktop implements GraphicsInterface {
     @Override
     public void drawNSidePolygon(int n, int center_x, int center_y, float rad, boolean fill){
         if(n<=2) throw new RuntimeException("n must be > 2 in call to drawNSidePolygon");
-        graphics.drawPolygon(generateNSidePolygon(n,center_x,center_y,rad));
+        if (fill) {
+            graphics.fillPolygon(generateNSidePolygon(n,center_x,center_y,rad));
+        } else {
+            graphics.drawPolygon(generateNSidePolygon(n,center_x,center_y,rad));
+        }
     }
     @Override
     public void setFont(EngFont f){

@@ -22,7 +22,7 @@ public class ImageAndroid implements ImageEng {
         );
         String current_path = Utils.getCurrentPath();
         if(bm == null){
-            Log.d("There's no valid image in path: ",current_path+" : "+path);
+            Log.d("There's no valid image in path: ",current_path+path);
         }
     }
     public final Bitmap getBitmap(){

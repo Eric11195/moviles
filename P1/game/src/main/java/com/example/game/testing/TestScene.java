@@ -10,7 +10,7 @@ public class TestScene implements Scene {
     ImageEng testImage;
     @Override
     public void start(Engine eng){
-        testImage = eng.getGraphics().createImage("test_image.png");
+        testImage = eng.getGraphics().createImage("test_image.jpg");
     }
 
     @Override
@@ -30,6 +30,6 @@ public class TestScene implements Scene {
         g.drawNSidePolygon(3,350,50,50,false);
         g.drawRectangle(100,100,100,100,false);
         g.drawLine(200,100,300,200);
-        g.drawImage(testImage, 0,0);
+        g.drawImage(testImage, 300,300,100,100);
     }
 }
