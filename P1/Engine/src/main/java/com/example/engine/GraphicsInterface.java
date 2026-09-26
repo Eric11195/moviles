@@ -2,9 +2,9 @@ package com.example.engine;
 
 public interface GraphicsInterface {
     public void render(Engine eng, double dt);
-    public void drawImage(EngImage img, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h);
-    public void drawImage(EngImage img, int x, int y, int width, int height);
-    public void drawImage(EngImage img, int x, int y);
+    public void drawImage(ImageEng img, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h);
+    public void drawImage(ImageEng img, int x, int y, int width, int height);
+    public void drawImage(ImageEng img, int x, int y);
     public void clear(EngColor color);
     public void setColor(EngColor color);
     public void setStrokeWidth(int pxWidth);
@@ -15,4 +15,5 @@ public interface GraphicsInterface {
     public void drawNSidePolygon(int n, int center_x, int center_y, float rad, boolean fill);
     public void setFont(EngFont f);
     public void drawText(String text, int x, int y);
+    public ImageEng createImage(String path);
 }

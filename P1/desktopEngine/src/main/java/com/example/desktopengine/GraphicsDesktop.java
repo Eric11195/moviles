@@ -2,7 +2,7 @@ package com.example.desktopengine;
 
 import com.example.engine.EngColor;
 import com.example.engine.EngFont;
-import com.example.engine.EngImage;
+import com.example.engine.ImageEng;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
 
@@ -13,9 +13,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Polygon;
-import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
-import java.nio.Buffer;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
@@ -62,17 +60,17 @@ public class GraphicsDesktop implements GraphicsInterface {
         } while(this.buf.contentsLost());
     }
     @Override
-    public void drawImage(EngImage img, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h) {
+    public void drawImage(ImageEng img, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h) {
         ImageDesktop img_dsk = (ImageDesktop) img;
         Image _img = img_dsk.getImage();
         graphics.drawImage(_img,dst_x,dst_y,dst_w,dst_h, src_x,src_y,src_w, src_h,null);
     }
     @Override
-    public void drawImage(EngImage img, int x, int y, int width, int height){
+    public void drawImage(ImageEng img, int x, int y, int width, int height){
         drawImage(img, 0,0,img.getWidth(), img.getHeight(),x,y,width,height);
     }
     @Override
-    public void drawImage(EngImage img, int x, int y){
+    public void drawImage(ImageEng img, int x, int y){
         drawImage(img,x,y, img.getWidth(), img.getHeight());
     }
     @Override
@@ -146,5 +144,9 @@ public class GraphicsDesktop implements GraphicsInterface {
     @Override
     public void drawText(String text, int x, int y){
 
+    }
+
+    public ImageEng createImage(String path){
+        return new ImageDesktop(path);
     }
 }

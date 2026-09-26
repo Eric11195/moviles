@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.engine.EngColor;
 import com.example.engine.EngFont;
-import com.example.engine.EngImage;
+import com.example.engine.ImageEng;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
 
@@ -61,6 +61,9 @@ public class GraphicsAndroid implements GraphicsInterface {
         }
         return true;
     }
+    public ImageEng createImage(String path){
+        return new ImageAndroid(path);
+    }
     //render what has been rendered on screen in between startRender() and this call
     public void endRender(){
         assert(can!=null);
@@ -77,7 +80,7 @@ public class GraphicsAndroid implements GraphicsInterface {
 
     //src refers to the part of the src image that will be rendered, dst refers to the destination pos and size in the viewport
     @Override
-    public void drawImage(EngImage img, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h) {
+    public void drawImage(ImageEng img, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h) {
         assert(can!=null);
         assert(img!=null);
         setStyle(true);
@@ -94,7 +97,7 @@ public class GraphicsAndroid implements GraphicsInterface {
     }
     //draws the complete image in the indicated position and size
     @Override
-    public void drawImage(EngImage img, int x, int y, int width, int height) {
+    public void drawImage(ImageEng img, int x, int y, int width, int height) {
         drawImage(
                 img,
                 0,0,img.getWidth(),img.getHeight(),
@@ -103,7 +106,7 @@ public class GraphicsAndroid implements GraphicsInterface {
     }
     //draws image with its original size in screen
     @Override
-    public void drawImage(EngImage img, int x, int y) {
+    public void drawImage(ImageEng img, int x, int y) {
         drawImage(img, x,y,img.getWidth(), img.getHeight());
     }
 

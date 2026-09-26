@@ -1,11 +1,11 @@
 package com.example.desktopengine;
 
-import java.util.function.Consumer;
+import com.example.desktopengine.audio.AudioDesktop;
 import com.example.engine.Engine;
 
 public class DesktopEngine extends Engine{
     public DesktopEngine(int width, int height){
-        super(new GraphicsDesktop(), new InputDesktop());
+        super(new GraphicsDesktop(), new InputDesktop(), new AudioDesktop());
     }
     @Override
     public void resume() {

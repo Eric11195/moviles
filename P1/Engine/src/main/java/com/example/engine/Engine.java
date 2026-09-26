@@ -102,6 +102,7 @@ public class Engine implements Runnable{
         prevTime = lastFrameTime; // Informes de FPS
         frames = 0;
         dt = t = 0;
+        currentScene.start(this);
     }
 
     protected void update(){

@@ -1,6 +1,6 @@
 package com.example.engine;
 
-public interface EngImage {
+public interface ImageEng {
     public int getWidth();
     public int getHeight();
 }

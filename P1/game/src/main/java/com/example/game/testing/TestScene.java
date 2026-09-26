@@ -3,9 +3,15 @@ package com.example.game.testing;
 import com.example.engine.EngColor;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
+import com.example.engine.ImageEng;
 import com.example.engine.Scene;
 
 public class TestScene implements Scene {
+    ImageEng testImage;
+    @Override
+    public void start(Engine eng){
+        testImage = eng.getGraphics().createImage("test_image.png");
+    }
 
     @Override
     public void update(Engine eng, double dt) {
@@ -24,6 +30,6 @@ public class TestScene implements Scene {
         g.drawNSidePolygon(3,350,50,50,false);
         g.drawRectangle(100,100,100,100,false);
         g.drawLine(200,100,300,200);
-
+        g.drawImage(testImage, 0,0);
     }
 }
