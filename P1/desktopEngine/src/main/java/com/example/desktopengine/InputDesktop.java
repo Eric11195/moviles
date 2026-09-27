@@ -28,6 +28,7 @@ public class InputDesktop implements InputInterface {
                 temp.y = mouseEvent.getY();
                 temp.type = TouchEventType.DOWN;
                 temp.id = mouseEvent.getID();
+                eventList.add(temp);
             }
             @Override
             public void mouseReleased(MouseEvent mouseEvent){
@@ -37,6 +38,7 @@ public class InputDesktop implements InputInterface {
                 temp.y = mouseEvent.getY();
                 temp.type = TouchEventType.UP;
                 temp.id = mouseEvent.getID();
+                eventList.add(temp);
             }
         });
     }
