@@ -45,9 +45,15 @@ public class AndroidEngine extends Engine{
                 readyToStart = false;
             }
         });
+        ((InputAndroid)getInput()).registerView(surface);
     }
     @Override
     protected boolean correctlyResumedBoolean(){
         return readyToStart;
+    }
+    @Override
+    public void update(){
+        super.update();
+        getInput().getTouchEvents().forEach(evt -> {Log.d("AndroidEngine","EVENT LOGGED");});
     }
 }
