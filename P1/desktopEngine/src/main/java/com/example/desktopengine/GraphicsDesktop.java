@@ -175,4 +175,11 @@ public class GraphicsDesktop implements GraphicsInterface {
     public void setFontSize(float size) {
         current_font.setFontSize(size);
     }
+
+    public JFrame getFrame(){
+        return this.mainJFrame;
+    }
+    public Canvas getCanvas(){
+        return this.canvas;
+    }
 }

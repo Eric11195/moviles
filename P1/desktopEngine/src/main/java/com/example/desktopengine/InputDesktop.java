@@ -4,13 +4,13 @@ import com.example.engine.InputInterface;
 import com.example.engine.TouchEvent;
 import com.example.engine.TouchEventType;
 
+import java.awt.Canvas;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 public class InputDesktop implements InputInterface {
     ArrayList<TouchEvent> eventList;
@@ -18,8 +18,8 @@ public class InputDesktop implements InputInterface {
         eventList = new ArrayList<>();
     }
 
-    public void registerPanel(JFrame frame){
-        frame.addMouseListener(new MouseAdapter() {
+    public void registerCanvas(Canvas canvas){
+        canvas.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
