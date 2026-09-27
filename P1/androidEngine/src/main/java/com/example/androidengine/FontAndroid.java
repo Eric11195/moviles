@@ -6,8 +6,10 @@ import android.graphics.Typeface;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.example.engine.FontEng;
+
 //To load a font put it inside res/font
-public class FontAndroid {
+public class FontAndroid implements FontEng {
     private float fontSize;
     private final Typeface tf;
     //Creates a font with the given font resource
@@ -42,6 +44,7 @@ public class FontAndroid {
     public final float getFontSize(){
         return fontSize;
     }
+    @Override
     public void setFontSize(float newSize){
         this.fontSize = newSize;
     }

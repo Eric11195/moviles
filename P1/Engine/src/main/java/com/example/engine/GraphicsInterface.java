@@ -17,5 +17,6 @@ public interface GraphicsInterface {
     public void drawText(String text, int x, int y);
     public ImageEng createImage(String path);
     public FontEng createFont(String path, float size);
+    public FontEng createFont(float size);
     public void setFontSize(float size);
 }

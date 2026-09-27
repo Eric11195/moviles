@@ -10,10 +10,12 @@ import java.awt.BasicStroke;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Polygon;
 import java.awt.image.BufferStrategy;
+import java.io.InputStream;
 import java.nio.file.Path;
 
 import javax.swing.JFrame;
@@ -24,6 +26,7 @@ public class GraphicsDesktop implements GraphicsInterface {
     Graphics2D graphics;
     BufferStrategy buf;
     Canvas canvas;
+    FontDesktop current_font = new FontDesktop();
     GraphicsDesktop(){
         mainJFrame = new JFrame("Desktop Engine");
         mainJFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -144,11 +147,12 @@ public class GraphicsDesktop implements GraphicsInterface {
     }
     @Override
     public void setFont(FontEng f){
-
+        current_font = (FontDesktop) f;
     }
     @Override
     public void drawText(String text, int x, int y){
-
+        graphics.setFont(current_font.getFont());
+        graphics.drawString(text, x, y);
     }
 
     public ImageEng createImage(String path){
@@ -160,11 +164,15 @@ public class GraphicsDesktop implements GraphicsInterface {
 
     @Override
     public FontEng createFont(String path, float size) {
-        return null;
+        return (FontEng) new FontDesktop(path,size);
+    }
+    @Override
+    public FontEng createFont(float size) {
+        return (FontEng) new FontDesktop(size);
     }
 
     @Override
     public void setFontSize(float size) {
-
+        current_font.setFontSize(size);
     }
 }
