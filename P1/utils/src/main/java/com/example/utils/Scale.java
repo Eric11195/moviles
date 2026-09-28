@@ -1,10 +1,9 @@
 package com.example.utils;
 
 public class Scale implements Scaler{
-    double rotation=0;
-    public double getRotation(){return this.rotation;}
-    Vec2 offset=new Vec2(0,0);
-    Vec2 scale=new Vec2(1,1);
+    public double rotation=0;
+    public Vec2 offset=new Vec2(0,0);
+    public Vec2 scale=new Vec2(1,1);
 
     int expected_resolution_width=1280, expected_resolution_height=720;
     int virtual_resolution_width=1280, virtual_resolution_height=720;

@@ -145,6 +145,15 @@ public class GraphicsAndroid extends Scale implements GraphicsInterface {
         paint.setStrokeWidth(pxWidth);
     }
 
+    private void apply_transformation(float center_x, float center_y){
+        can.save();
+        can.scale((float)scale.x,(float)scale.y);
+        can.rotate((float)(rotation*180/Math.PI), center_x, center_y);
+        can.translate((float)offset.x,(float)offset.y);
+    }
+    private void clean_transformation(){
+        can.restore();
+    }
     private void setStyle(boolean fill){
         paint.setStyle(fill ? Paint.Style.FILL : Paint.Style.STROKE);
     }
@@ -152,7 +161,9 @@ public class GraphicsAndroid extends Scale implements GraphicsInterface {
     public void drawRectangle(int x, int y, int width, int height, boolean fill){
         assert(can!=null);
         setStyle(fill);
+        apply_transformation(x+width/2.0f,y+height/2.0f);
         can.drawRect(x,y,x+width,y+height,paint);
+        clean_transformation();
     }
     @Override
     public void drawRoundRectangle(int x, int y, int width, int height, int arc, boolean fill){
