@@ -15,9 +15,8 @@ import com.example.engine.FontEng;
 import com.example.engine.ImageEng;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
-import com.example.utils.Scale;
 
-public class GraphicsAndroid extends Scale implements GraphicsInterface {
+public class GraphicsAndroid implements GraphicsInterface {
     private SurfaceHolder surface = null;
     private Canvas can = null;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -79,6 +78,30 @@ public class GraphicsAndroid extends Scale implements GraphicsInterface {
     @Override
     public void setFontSize(float size) {
         font.setFontSize(size);
+    }
+
+    @Override
+    public void translate(float x, float y) {
+        can.translate(x,y);
+    }
+
+    @Override
+    public void scale(float x, float y) {
+        can.scale(x,y);
+    }
+
+    @Override
+    public void rotate(float x, float y, float rotationDegrees) {
+        can.rotate(rotationDegrees,x,y);
+    }
+    @Override
+    public void save() {
+        can.save();
+    }
+
+    @Override
+    public void restore() {
+        can.restore();
     }
 
     //render what has been rendered on screen in between startRender() and this call
@@ -144,16 +167,6 @@ public class GraphicsAndroid extends Scale implements GraphicsInterface {
         assert(can!=null);
         paint.setStrokeWidth(pxWidth);
     }
-
-    private void applyTransformation(float center_x, float center_y){
-        can.save();
-        can.scale((float)scale.x,(float)scale.y);
-        can.rotate((float)(rotation*180/Math.PI), center_x, center_y);
-        can.translate((float)offset.x,(float)offset.y);
-    }
-    private void cleanTransformation(){
-        can.restore();
-    }
     private void setStyle(boolean fill){
         paint.setStyle(fill ? Paint.Style.FILL : Paint.Style.STROKE);
     }
@@ -161,43 +174,32 @@ public class GraphicsAndroid extends Scale implements GraphicsInterface {
     public void drawRectangle(int x, int y, int width, int height, boolean fill){
         assert(can!=null);
         setStyle(fill);
-        applyTransformation(x+width/2.0f,y+height/2.0f);
         can.drawRect(x,y,x+width,y+height,paint);
-        cleanTransformation();
     }
     @Override
     public void drawRoundRectangle(int x, int y, int width, int height, int arc, boolean fill){
         assert(can!=null);
         setStyle(fill);
-        applyTransformation(x+width/2.0f,y+height/2.0f);
         can.drawRoundRect(x,y,x+width,y+height,arc,arc,paint);
-        cleanTransformation();
     }
     @Override
     public void drawCircle(int center_x, int center_y, float rad, boolean fill){
         assert(can!=null);
         setStyle(fill);
-
-        applyTransformation(center_x,center_y);
         can.drawCircle(center_x,center_y,rad,paint);
-        cleanTransformation();
     }
     @Override
     public void drawLine(int x1, int y1, int x2, int y2){
         assert(can!= null);
         setStyle(false);
-        applyTransformation((x1+x2)/2.0f,(y1+y2)/2.0f);
         can.drawLine(x1,y1,x2,y2,paint);
-        cleanTransformation();
     }
     @Override
     public void drawNSidePolygon(int n, int centerX, int centerY, float rad, boolean fill){
         assert(can!=null);
         if(n<=2) throw new RuntimeException("n must be > 2 in call to drawNSidePolygon");
         setStyle(fill);
-        applyTransformation(centerX,centerY);
         can.drawPath(getNSidePolygonPath(n,centerX,centerY,rad), paint);
-        cleanTransformation();
     }
     //Sets the fonts to be used in the following drawText calls
     @Override
@@ -214,8 +216,6 @@ public class GraphicsAndroid extends Scale implements GraphicsInterface {
         assert(can!=null);
         setStyle(true);
         setFontStyle(font);
-        applyTransformation(x,y);
         can.drawText(text, x, y, paint);
-        cleanTransformation();
     }
 }

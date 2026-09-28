@@ -5,9 +5,6 @@ import com.example.engine.FontEng;
 import com.example.engine.ImageEng;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
-import com.example.utils.CoordRect;
-import com.example.utils.Scale;
-import com.example.utils.Vec2;
 
 import java.awt.BasicStroke;
 import java.awt.Canvas;
@@ -23,7 +20,7 @@ import java.nio.file.Path;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-public class GraphicsDesktop extends Scale implements GraphicsInterface {
+public class GraphicsDesktop implements GraphicsInterface {
     private JFrame mainJFrame;
     Graphics2D graphics;
     BufferStrategy buf;
@@ -96,29 +93,14 @@ public class GraphicsDesktop extends Scale implements GraphicsInterface {
     public void setStrokeWidth(int pxWidth){
         graphics.setStroke(new BasicStroke(pxWidth));
     }
-    public Polygon getPolygon(Vec2... points) {
-        int[] xpoints = new int[points.length];
-        int[] ypoints = new int[points.length];
 
-        for (int i = 0; i < points.length; i++) {
-            xpoints[i] = (int) points[i].x;
-            ypoints[i] = (int) points[i].y;
-        }
-        return new Polygon(xpoints, ypoints, points.length);
-    }
+    private AffineTransform storedTransform = null;
     @Override
     public void drawRectangle(int x, int y, int width, int height, boolean fill){
-        CoordRect cr = new CoordRect(new Vec2(x,y), new Vec2(x+width,y+height));
-        transformRect(cr);
-        Polygon p = getPolygon(
-                cr.ul,
-                cr.ur,
-                cr.dr,
-                cr.dl);
         if (fill) {
-            graphics.fillPolygon(p);
+            graphics.fillRect(x,y,width,height);
         } else {
-            graphics.drawPolygon(p);
+            graphics.drawRect(x,y,width,height);
         }
     }
     @Override
@@ -142,14 +124,14 @@ public class GraphicsDesktop extends Scale implements GraphicsInterface {
         graphics.drawLine(x1,y1,x2,y2);
     }
     //src: https://codingtechroom.com/question/-draw-hexagons-android
-    private Polygon generateNSidePolygon(int n, int x, int y, float radius){
+    private Polygon generateNSidePolygon(int n, int centerX, int centerY, float radius){
         if(n<=2) throw new RuntimeException("n must be > 2 in call to drawNSidePolygon");
         int[] xVec = new int[n];
         int[] yVec = new int[n];
         for (int i = 0; i < n; i++) {
             float angle = (float) (2*i * Math.PI / n);
-            float xPoint = (float) (x + radius * Math.cos(angle));
-            float yPoint = (float) (y + radius * Math.sin(angle));
+            float xPoint = (float) (centerX + radius * Math.cos(angle));
+            float yPoint = (float) (centerY + radius * Math.sin(angle));
             xVec[i]=Math.round(xPoint);
             yVec[i]=Math.round(yPoint);
         }
@@ -193,6 +175,32 @@ public class GraphicsDesktop extends Scale implements GraphicsInterface {
     @Override
     public void setFontSize(float size) {
         current_font.setFontSize(size);
+    }
+
+    @Override
+    public void translate(float x, float y) {
+        graphics.translate(x,y);
+    }
+
+    @Override
+    public void scale(float x, float y) {
+        graphics.scale(x,y);
+    }
+
+    @Override
+    public void rotate(float x, float y, float rotationDegrees) {
+        graphics.rotate(Math.PI*rotationDegrees/180, x, y);
+    }
+
+    @Override
+    public void save() {
+        storedTransform = graphics.getTransform();
+    }
+
+    @Override
+    public void restore() {
+        if(storedTransform==null) throw new RuntimeException("Ensure to call save before this call at least once");
+        graphics.setTransform(storedTransform);
     }
 
     public JFrame getFrame(){

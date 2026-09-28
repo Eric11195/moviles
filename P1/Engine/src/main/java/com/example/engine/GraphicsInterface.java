@@ -1,8 +1,6 @@
 package com.example.engine;
 
-import com.example.utils.Scaler;
-
-public interface GraphicsInterface extends Scaler {
+public interface GraphicsInterface {
     public void render(Engine eng, double dt);
     public void drawImage(ImageEng img, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h);
     public void drawImage(ImageEng img, int x, int y, int width, int height);
@@ -21,4 +19,9 @@ public interface GraphicsInterface extends Scaler {
     public FontEng createFont(String path, float size);
     public FontEng createFont(float size);
     public void setFontSize(float size);
+    public void translate(float x, float y);
+    public void scale(float x, float y);
+    public void rotate(float x, float y, float rotationDegrees);
+    public void save();
+    public void restore();
 }
