@@ -27,6 +27,7 @@ public class TestScene implements Scene {
 
     @Override
     public void render(GraphicsInterface g, double dt) {
+        g.rotate(45);
         g.clear(new ColorEng(0,0,255,255));
         g.setColor(new ColorEng(255,255,255,255));
         g.drawCircle(50,50,50,true);
@@ -39,5 +40,6 @@ public class TestScene implements Scene {
         g.drawLine(200,100,300,200);
         g.drawImage(testImage, 300,300,100,100);
         g.drawText("Miau", 200,400);
+        g.rotate(-45);
     }
 }

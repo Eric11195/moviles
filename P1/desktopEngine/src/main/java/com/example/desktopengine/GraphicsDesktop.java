@@ -5,23 +5,25 @@ import com.example.engine.FontEng;
 import com.example.engine.ImageEng;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
+import com.example.utils.CoordRect;
+import com.example.utils.Scale;
+import com.example.utils.Vec2;
 
 import java.awt.BasicStroke;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Polygon;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
-import java.io.InputStream;
 import java.nio.file.Path;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-public class GraphicsDesktop implements GraphicsInterface {
+public class GraphicsDesktop extends Scale implements GraphicsInterface {
     private JFrame mainJFrame;
     Graphics2D graphics;
     BufferStrategy buf;
@@ -94,12 +96,29 @@ public class GraphicsDesktop implements GraphicsInterface {
     public void setStrokeWidth(int pxWidth){
         graphics.setStroke(new BasicStroke(pxWidth));
     }
+    public Polygon getPolygon(Vec2... points) {
+        int[] xpoints = new int[points.length];
+        int[] ypoints = new int[points.length];
+
+        for (int i = 0; i < points.length; i++) {
+            xpoints[i] = (int) points[i].x;
+            ypoints[i] = (int) points[i].y;
+        }
+        return new Polygon(xpoints, ypoints, points.length);
+    }
     @Override
     public void drawRectangle(int x, int y, int width, int height, boolean fill){
+        CoordRect cr = new CoordRect(new Vec2(x,y), new Vec2(x+width,y+height));
+        transformRect(cr);
+        Polygon p = getPolygon(
+                cr.ul,
+                cr.ur,
+                cr.dr,
+                cr.dl);
         if (fill) {
-            graphics.fillRect(x, y, width, height);
+            graphics.fillPolygon(p);
         } else {
-            graphics.drawRect(x, y, width, height);
+            graphics.drawPolygon(p);
         }
     }
     @Override

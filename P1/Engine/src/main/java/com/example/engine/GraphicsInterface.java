@@ -1,6 +1,8 @@
 package com.example.engine;
 
-public interface GraphicsInterface {
+import com.example.utils.Scaler;
+
+public interface GraphicsInterface extends Scaler {
     public void render(Engine eng, double dt);
     public void drawImage(ImageEng img, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h);
     public void drawImage(ImageEng img, int x, int y, int width, int height);

@@ -9,4 +9,5 @@ dependencies {
     implementation project(':desktopEngine')
     implementation project(':engine')
     implementation project(':game')
+    implementation project(':utils')
 }

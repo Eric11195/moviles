@@ -15,8 +15,9 @@ import com.example.engine.FontEng;
 import com.example.engine.ImageEng;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
+import com.example.utils.Scale;
 
-public class GraphicsAndroid implements GraphicsInterface {
+public class GraphicsAndroid extends Scale implements GraphicsInterface {
     private SurfaceHolder surface = null;
     private Canvas can = null;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);

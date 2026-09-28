@@ -44,6 +44,7 @@ dependencies {
     implementation(project(":androidEngine"))
     implementation(project(":engine"))
     implementation(project(":game"))
+    implementation(project(":utils"))
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
