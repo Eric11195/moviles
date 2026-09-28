@@ -145,13 +145,13 @@ public class GraphicsAndroid extends Scale implements GraphicsInterface {
         paint.setStrokeWidth(pxWidth);
     }
 
-    private void apply_transformation(float center_x, float center_y){
+    private void applyTransformation(float center_x, float center_y){
         can.save();
         can.scale((float)scale.x,(float)scale.y);
         can.rotate((float)(rotation*180/Math.PI), center_x, center_y);
         can.translate((float)offset.x,(float)offset.y);
     }
-    private void clean_transformation(){
+    private void cleanTransformation(){
         can.restore();
     }
     private void setStyle(boolean fill){
@@ -161,34 +161,43 @@ public class GraphicsAndroid extends Scale implements GraphicsInterface {
     public void drawRectangle(int x, int y, int width, int height, boolean fill){
         assert(can!=null);
         setStyle(fill);
-        apply_transformation(x+width/2.0f,y+height/2.0f);
+        applyTransformation(x+width/2.0f,y+height/2.0f);
         can.drawRect(x,y,x+width,y+height,paint);
-        clean_transformation();
+        cleanTransformation();
     }
     @Override
     public void drawRoundRectangle(int x, int y, int width, int height, int arc, boolean fill){
         assert(can!=null);
         setStyle(fill);
+        applyTransformation(x+width/2.0f,y+height/2.0f);
         can.drawRoundRect(x,y,x+width,y+height,arc,arc,paint);
+        cleanTransformation();
     }
     @Override
     public void drawCircle(int center_x, int center_y, float rad, boolean fill){
         assert(can!=null);
         setStyle(fill);
+
+        applyTransformation(center_x,center_y);
         can.drawCircle(center_x,center_y,rad,paint);
+        cleanTransformation();
     }
     @Override
     public void drawLine(int x1, int y1, int x2, int y2){
         assert(can!= null);
         setStyle(false);
+        applyTransformation((x1+x2)/2.0f,(y1+y2)/2.0f);
         can.drawLine(x1,y1,x2,y2,paint);
+        cleanTransformation();
     }
     @Override
-    public void drawNSidePolygon(int n, int x, int y, float rad, boolean fill){
+    public void drawNSidePolygon(int n, int centerX, int centerY, float rad, boolean fill){
         assert(can!=null);
         if(n<=2) throw new RuntimeException("n must be > 2 in call to drawNSidePolygon");
         setStyle(fill);
-        can.drawPath(getNSidePolygonPath(n,x,y,rad), paint);
+        applyTransformation(centerX,centerY);
+        can.drawPath(getNSidePolygonPath(n,centerX,centerY,rad), paint);
+        cleanTransformation();
     }
     //Sets the fonts to be used in the following drawText calls
     @Override
@@ -205,6 +214,8 @@ public class GraphicsAndroid extends Scale implements GraphicsInterface {
         assert(can!=null);
         setStyle(true);
         setFontStyle(font);
+        applyTransformation(x,y);
         can.drawText(text, x, y, paint);
+        cleanTransformation();
     }
 }
