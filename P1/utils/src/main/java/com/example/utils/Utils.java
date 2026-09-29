@@ -1,7 +1,5 @@
 package com.example.utils;
 
-import static java.util.Collections.swap;
-
 import java.nio.file.FileSystems;
 
 public class Utils {

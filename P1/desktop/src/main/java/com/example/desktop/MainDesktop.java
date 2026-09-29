@@ -1,7 +1,7 @@
 package com.example.desktop;
 
 import com.example.desktopengine.DesktopEngine;
-import com.example.game.testing.TestScene;
+import com.example.game.testing.Scenes.TestScene;
 
 public class MainDesktop {
     public static void main(String[] args){

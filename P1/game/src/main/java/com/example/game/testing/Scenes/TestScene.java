@@ -1,14 +1,10 @@
-package com.example.game.testing;
-
-import static com.example.utils.Utils.getNonDeformingAspectData;
+package com.example.game.testing.Scenes;
 
 import com.example.engine.ColorEng;
 import com.example.engine.Engine;
-import com.example.engine.FontEng;
 import com.example.engine.GraphicsInterface;
 import com.example.engine.ImageEng;
 import com.example.engine.Scene;
-import com.example.utils.Utils;
 
 public class TestScene implements Scene {
     ImageEng testImage;

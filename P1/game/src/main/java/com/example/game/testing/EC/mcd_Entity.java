@@ -1,11 +1,18 @@
 package com.example.game.testing.EC;
 
 import com.example.engine.GraphicsInterface;
+import com.example.game.testing.Scenes.mcd_Scene;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class mcd_Entity {
+    mcd_Scene myScene;
+    private boolean alive = true;
+
+    public mcd_Entity(mcd_Scene scene){
+        myScene = scene;
+    }
     //add here the enum of your components
     public enum cmp_id{
         cmp_id_button
@@ -22,6 +29,10 @@ public class mcd_Entity {
     public void addComponent(cmp_id id, mcd_Component cmp){
         if(hasComponent(id)) throw new RuntimeException("Component already exists new one cannot be created");
         components.set(getCmpIdx(id), cmp);
+    }
+
+    public mcd_Entity createEntity(){
+        return myScene.createEntity();
     }
     //Gets the idx of the component with the given id in the
     private int getCmpIdx(cmp_id id){
@@ -41,5 +52,11 @@ public class mcd_Entity {
         for(mcd_Component cmp : components){
             if(cmp!=null) cmp.render(this,gi);
         }
+    }
+    public void destroyEntity(){
+        alive = false;
+    }
+    public boolean getAlive(){
+        return alive;
     }
 }

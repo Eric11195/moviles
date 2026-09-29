@@ -7,7 +7,7 @@ import com.example.game.testing.EC.mcd_Entity;
 
 import java.awt.Button;
 
-// All buttons have same
+// All buttons have same color, but different text
 public class ButtonComponent implements mcd_Component {
     interface ButtonClickFunction{
         void onClick();
@@ -15,9 +15,9 @@ public class ButtonComponent implements mcd_Component {
     ButtonClickFunction func;
     boolean hovering = false;
     boolean clicked = false;
-    String button_text;
-    ColorEng clr;
-    public ButtonComponent(String text, ColorEng colorButton, ButtonClickFunction onClickFunc){
+    public String button_text;
+    private final static ColorEng clr = new ColorEng(120,120,120, 255);
+    public ButtonComponent(String text, ButtonClickFunction onClickFunc){
         func = onClickFunc;
     }
 
