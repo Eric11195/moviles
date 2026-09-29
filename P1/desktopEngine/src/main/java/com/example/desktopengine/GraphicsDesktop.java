@@ -14,6 +14,7 @@ import java.awt.BasicStroke;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Polygon;
@@ -156,11 +157,11 @@ public class GraphicsDesktop implements GraphicsInterface {
         }
     }
     @Override
-    public void drawRoundRectangle(Vec2 pos, Vec2 size, int arc, boolean fill){
+    public void drawRoundRectangle(Vec2 pos, Vec2 size, float arc, boolean fill){
         if(fill) {
-            graphics.fillRoundRect((int)pos.x,(int)pos.y,(int)size.x,(int)size.y, arc, arc);
+            graphics.fillRoundRect((int)pos.x,(int)pos.y,(int)size.x,(int)size.y, (int)arc,(int) arc);
         }else{
-            graphics.drawRoundRect((int)pos.x,(int)pos.y,(int)size.x,(int)size.y, arc, arc);
+            graphics.drawRoundRect((int)pos.x,(int)pos.y,(int)size.x,(int)size.y, (int)arc, (int)arc);
         }
     }
     @Override
@@ -205,7 +206,13 @@ public class GraphicsDesktop implements GraphicsInterface {
     @Override
     public void drawText(String text, Vec2 pos){
         graphics.setFont(current_font.getFont());
-        graphics.drawString(text, pos.x, pos.y);
+
+        FontMetrics metrics = graphics.getFontMetrics();
+
+        float x = pos.x - metrics.stringWidth(text) / 2f;
+        float y = pos.y - (metrics.getAscent() - metrics.getDescent()) / 2f;
+
+        graphics.drawString(text, Math.round(x), Math.round(y));
     }
 
     public ImageEng createImage(String path){

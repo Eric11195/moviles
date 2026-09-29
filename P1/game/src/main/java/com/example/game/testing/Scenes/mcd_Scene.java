@@ -8,7 +8,7 @@ import com.example.game.testing.EC.mcd_Entity;
 import java.util.ArrayList;
 
 public abstract class mcd_Scene implements Scene {
-    protected ArrayList<mcd_Entity> entityList;
+    protected ArrayList<mcd_Entity> entityList = new ArrayList<mcd_Entity>();
     @Override
     public void update(Engine eng, double dt) {
         for(mcd_Entity ents : entityList){

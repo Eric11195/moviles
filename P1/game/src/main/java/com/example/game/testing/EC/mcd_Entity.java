@@ -3,7 +3,8 @@ package com.example.game.testing.EC;
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.Scenes.mcd_Scene;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class mcd_Entity {
@@ -13,7 +14,13 @@ public class mcd_Entity {
     public mcd_Entity(mcd_Scene scene){
         myScene = scene;
     }
-    private List<mcd_Component> components = Arrays.asList(null);
+    private final List<mcd_Component> components =
+            new ArrayList<>(
+                    Collections.nCopies(
+                            ComponentId.COMPONENT_COUNT.ordinal(),
+                            (mcd_Component) null
+                    )
+            );
     public mcd_Component getComponent(ComponentId id){
         if(!hasComponent(id)) throw new RuntimeException("Cannot access non existing component");
         return components.get(getCmpIdx(id));

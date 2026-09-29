@@ -227,7 +227,7 @@ public class GraphicsAndroid implements GraphicsInterface {
         can.drawRect(pos.x,pos.y,pos.x+size.x,pos.y+size.y,paint);
     }
     @Override
-    public void drawRoundRectangle(Vec2 pos, Vec2 size, int arc, boolean fill){
+    public void drawRoundRectangle(Vec2 pos, Vec2 size, float arc, boolean fill){
         assert(can!=null);
         setStyle(fill);
         can.drawRoundRect(pos.x,pos.y,pos.x+size.x,pos.y+size.y,arc,arc,paint);
@@ -266,6 +266,12 @@ public class GraphicsAndroid implements GraphicsInterface {
         assert(can!=null);
         setStyle(true);
         setFontStyle(font);
-        can.drawText(text, pos.x, pos.y, paint);
+
+        Paint.FontMetrics metrics = paint.getFontMetrics();
+
+        float x = pos.x - paint.measureText(text) / 2f;
+        float y = pos.y - (metrics.ascent + metrics.descent) / 2f;
+
+        can.drawText(text, x, y, paint);
     }
 }

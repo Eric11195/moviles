@@ -21,7 +21,7 @@ public class ImageComponent implements mcd_Component {
         if(ent.hasComponent(ComponentId.TRANSFORM_COMPONENT)){
             TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
             if(img==null) img = g.createImage(filePath);
-            g.drawImage(img,tr.position,tr.size);
+            g.drawImage(img,tr.pos,tr.size);
         }
     }
 }

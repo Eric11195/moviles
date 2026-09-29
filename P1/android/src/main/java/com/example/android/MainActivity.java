@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.androidengine.AndroidEngine;
+import com.example.game.testing.Scenes.MainMenuScene;
 import com.example.game.testing.Scenes.TestScene;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         AndroidEngine eng = new AndroidEngine(this, R.id.mainSurfaceView);
-        eng.setScene(new TestScene());
+        eng.setScene(new MainMenuScene());
         eng.resume();
     }
 }

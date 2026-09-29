@@ -11,12 +11,12 @@ public interface GraphicsInterface {
     public void setColor(ColorEng color);
     public void setStrokeWidth(int pxWidth);
     public void drawRectangle(Vec2 pos, Vec2 size, boolean fill);
-    public void drawRoundRectangle(Vec2 pos, Vec2 size, int arc, boolean fill);
+    public void drawRoundRectangle(Vec2 pos, Vec2 size, float arc, boolean fill);
     public void drawCircle(Vec2 centerPos, float rad, boolean fill);
     public void drawLine(Vec2 startPoint, Vec2 enPoint);
     public void drawNSidePolygon(int n, Vec2 centerPos, float rad, boolean fill);
     public void setFont(FontEng f);
-    public void drawText(String text, Vec2 pos);
+    public void drawText(String text, Vec2 center_pos);
     public ImageEng createImage(String path);
     public FontEng createFont(String path, float size);
     public FontEng createFont(float size);
