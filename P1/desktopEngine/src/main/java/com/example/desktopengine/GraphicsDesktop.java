@@ -8,6 +8,7 @@ import com.example.engine.ImageEng;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
 import com.example.utils.Utils;
+import com.example.utils.Vec2;
 
 import java.awt.BasicStroke;
 import java.awt.Canvas;
@@ -108,18 +109,18 @@ public class GraphicsDesktop implements GraphicsInterface {
         } while(this.buf.contentsLost());
     }
     @Override
-    public void drawImage(ImageEng img, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h) {
+    public void drawImage(ImageEng img, Vec2 src_pos, Vec2 src_size, Vec2 dst_pos, Vec2 dst_size) {
         ImageDesktop img_dsk = (ImageDesktop) img;
         Image _img = img_dsk.getImage();
-        graphics.drawImage(_img,dst_x,dst_y,dst_x+dst_w,dst_y+dst_h, src_x,src_y,src_x+src_w, src_y+src_h,null);
+        graphics.drawImage(_img,(int)dst_pos.x,(int)dst_pos.y,(int) (dst_pos.x+dst_size.x),(int)(dst_pos.y+dst_size.y), (int)src_pos.x,(int)src_pos.y,(int)(src_pos.x+src_size.x), (int)(src_pos.y+src_size.y),null);
     }
     @Override
-    public void drawImage(ImageEng img, int x, int y, int width, int height){
-        drawImage(img, 0,0,img.getWidth(), img.getHeight(),x,y,width,height);
+    public void drawImage(ImageEng img, Vec2 pos, Vec2 size){
+        drawImage(img, new Vec2(0,0),new Vec2(img.getWidth(), img.getHeight()),pos,size);
     }
     @Override
-    public void drawImage(ImageEng img, int x, int y){
-        drawImage(img,x,y, img.getWidth(), img.getHeight());
+    public void drawImage(ImageEng img, Vec2 pos){
+        drawImage(img, pos, new Vec2(img.getWidth(), img.getHeight()));
     }
     ColorEng clearColor = new ColorEng(255,255,255,255);
     @Override
@@ -147,32 +148,32 @@ public class GraphicsDesktop implements GraphicsInterface {
 
     private AffineTransform storedTransform = null;
     @Override
-    public void drawRectangle(int x, int y, int width, int height, boolean fill){
+    public void drawRectangle(Vec2 pos, Vec2 size, boolean fill){
         if (fill) {
-            graphics.fillRect(x,y,width,height);
+            graphics.fillRect((int)pos.x,(int)pos.y,(int)size.x,(int)size.y);
         } else {
-            graphics.drawRect(x,y,width,height);
+            graphics.drawRect((int)pos.x,(int)pos.y,(int)size.x,(int)size.y);
         }
     }
     @Override
-    public void drawRoundRectangle(int x, int y, int width, int height, int arc, boolean fill){
+    public void drawRoundRectangle(Vec2 pos, Vec2 size, int arc, boolean fill){
         if(fill) {
-            graphics.fillRoundRect(x, y, width, height, arc, arc);
+            graphics.fillRoundRect((int)pos.x,(int)pos.y,(int)size.x,(int)size.y, arc, arc);
         }else{
-            graphics.drawRoundRect(x, y, width, height, arc, arc);
+            graphics.drawRoundRect((int)pos.x,(int)pos.y,(int)size.x,(int)size.y, arc, arc);
         }
     }
     @Override
-    public void drawCircle(int center_x, int center_y, float rad, boolean fill) {
+    public void drawCircle(Vec2 center_pos, float rad, boolean fill) {
         if (!fill) {
-            graphics.drawOval((int)Math.round(center_x-rad), (int)Math.round(center_y-rad), (int)Math.round(rad*2), (int)Math.round(rad*2));
+            graphics.drawOval((int)Math.round(center_pos.x-rad), (int)Math.round(center_pos.y-rad), (int)Math.round(rad*2), (int)Math.round(rad*2));
         } else {
-            graphics.fillOval((int)Math.round(center_x - rad), (int)Math.round(center_y - rad), (int)Math.round(rad*2), (int)Math.round(rad*2));
+            graphics.fillOval((int)Math.round(center_pos.x- rad), (int)Math.round(center_pos.y- rad), (int)Math.round(rad*2), (int)Math.round(rad*2));
         }
     }
     @Override
-    public void drawLine(int x1, int y1, int x2, int y2){
-        graphics.drawLine(x1,y1,x2,y2);
+    public void drawLine(Vec2 start_point, Vec2 end_point){
+        graphics.drawLine((int)start_point.x,(int)start_point.y,(int)end_point.x,(int)end_point.y);
     }
     //src: https://codingtechroom.com/question/-draw-hexagons-android
     private Polygon generateNSidePolygon(int n, int centerX, int centerY, float radius){
@@ -189,12 +190,12 @@ public class GraphicsDesktop implements GraphicsInterface {
         return new Polygon(xVec,yVec,n);
     }
     @Override
-    public void drawNSidePolygon(int n, int center_x, int center_y, float rad, boolean fill){
+    public void drawNSidePolygon(int n, Vec2 center_pos, float rad, boolean fill){
         if(n<=2) throw new RuntimeException("n must be > 2 in call to drawNSidePolygon");
         if (fill) {
-            graphics.fillPolygon(generateNSidePolygon(n,center_x,center_y,rad));
+            graphics.fillPolygon(generateNSidePolygon(n,(int)center_pos.x,(int)center_pos.y,rad));
         } else {
-            graphics.drawPolygon(generateNSidePolygon(n,center_x,center_y,rad));
+            graphics.drawPolygon(generateNSidePolygon(n,(int)center_pos.x,(int)center_pos.y,rad));
         }
     }
     @Override
@@ -202,9 +203,9 @@ public class GraphicsDesktop implements GraphicsInterface {
         current_font = (FontDesktop) f;
     }
     @Override
-    public void drawText(String text, int x, int y){
+    public void drawText(String text, Vec2 pos){
         graphics.setFont(current_font.getFont());
-        graphics.drawString(text, x, y);
+        graphics.drawString(text, pos.x, pos.y);
     }
 
     public ImageEng createImage(String path){

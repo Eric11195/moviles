@@ -13,20 +13,16 @@ public class mcd_Entity {
     public mcd_Entity(mcd_Scene scene){
         myScene = scene;
     }
-    //add here the enum of your components
-    public enum cmp_id{
-        cmp_id_button
-    }
     private List<mcd_Component> components = Arrays.asList(null);
-    public mcd_Component getComponent(cmp_id id){
+    public mcd_Component getComponent(ComponentId id){
         if(!hasComponent(id)) throw new RuntimeException("Cannot access non existing component");
         return components.get(getCmpIdx(id));
     }
-    public boolean hasComponent(cmp_id id){
+    public boolean hasComponent(ComponentId id){
         return components.get(getCmpIdx(id)) != null;
     }
 
-    public void addComponent(cmp_id id, mcd_Component cmp){
+    public void addComponent(ComponentId id, mcd_Component cmp){
         if(hasComponent(id)) throw new RuntimeException("Component already exists new one cannot be created");
         components.set(getCmpIdx(id), cmp);
     }
@@ -35,11 +31,11 @@ public class mcd_Entity {
         return myScene.createEntity();
     }
     //Gets the idx of the component with the given id in the
-    private int getCmpIdx(cmp_id id){
+    private int getCmpIdx(ComponentId id){
         return id.ordinal();
     }
     //Removes the component
-    public void rmComponent(cmp_id id){
+    public void rmComponent(ComponentId id){
         if(!hasComponent(id)) throw new RuntimeException("Component already exists new one cannot be created");
         components.set(getCmpIdx(id), null);
     }

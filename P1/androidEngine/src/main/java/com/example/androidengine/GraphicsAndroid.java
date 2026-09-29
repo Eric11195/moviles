@@ -19,6 +19,7 @@ import com.example.engine.ImageEng;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
 import com.example.utils.Utils;
+import com.example.utils.Vec2;
 
 public class GraphicsAndroid implements GraphicsInterface {
     private SurfaceView surf;
@@ -79,12 +80,12 @@ public class GraphicsAndroid implements GraphicsInterface {
     }
 
     //src: https://codingtechroom.com/question/-draw-hexagons-android
-    private Path getNSidePolygonPath(int n, int x, int y, float radius){
+    private Path getNSidePolygonPath(int n, Vec2 center_pos, float radius){
         Path nSidePolygonPath = new Path();
         for (int i = 0; i < n; i++) {
             float angle = (float) (2*i * Math.PI / n);
-            float xPoint = (float) (x + radius * Math.cos(angle));
-            float yPoint = (float) (y + radius * Math.sin(angle));
+            float xPoint = (float) (center_pos.x + radius * Math.cos(angle));
+            float yPoint = (float) (center_pos.y + radius * Math.sin(angle));
             if (i == 0) {
                 nSidePolygonPath.moveTo(xPoint, yPoint);
             } else {
@@ -169,7 +170,7 @@ public class GraphicsAndroid implements GraphicsInterface {
 
     //src refers to the part of the src image that will be rendered, dst refers to the destination pos and size in the viewport
     @Override
-    public void drawImage(ImageEng img, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h) {
+    public void drawImage(ImageEng img, Vec2 src_pos, Vec2 src_size, Vec2 dst_pos, Vec2 dst_size) {
         assert(can!=null);
         assert(img!=null);
         setStyle(true);
@@ -182,21 +183,21 @@ public class GraphicsAndroid implements GraphicsInterface {
         );
         */
         ImageAndroid _img = (ImageAndroid)img;
-        can.drawBitmap(_img.getBitmap(), new Rect(src_x,src_y,src_x+src_w,src_y+src_h), new Rect(dst_x,dst_y,dst_x+dst_w,dst_y+dst_h), paint);
+        can.drawBitmap(_img.getBitmap(), new Rect((int)src_pos.x,(int)src_pos.y,(int)(src_pos.x+src_size.x),(int)(src_pos.y+src_size.y)), new Rect((int)dst_pos.x,(int)dst_pos.y,(int)(dst_pos.x+dst_size.x),(int)(dst_pos.y+dst_size.y)), paint);
     }
     //draws the complete image in the indicated position and size
     @Override
-    public void drawImage(ImageEng img, int x, int y, int width, int height) {
+    public void drawImage(ImageEng img, Vec2 pos, Vec2 size) {
         drawImage(
                 img,
-                0,0,img.getWidth(),img.getHeight(),
-                x,y,width,height
+                new Vec2(0,0),new Vec2(img.getWidth(),img.getHeight()),
+                pos,size
         );
     }
     //draws image with its original size in screen
     @Override
-    public void drawImage(ImageEng img, int x, int y) {
-        drawImage(img, x,y,img.getWidth(), img.getHeight());
+    public void drawImage(ImageEng img, Vec2 pos) {
+        drawImage(img, pos,new Vec2(img.getWidth(), img.getHeight()));
     }
 
     // fills the entire display with the given color
@@ -220,35 +221,35 @@ public class GraphicsAndroid implements GraphicsInterface {
         paint.setStyle(fill ? Paint.Style.FILL : Paint.Style.STROKE);
     }
     @Override
-    public void drawRectangle(int x, int y, int width, int height, boolean fill){
+    public void drawRectangle(Vec2 pos, Vec2 size, boolean fill){
         assert(can!=null);
         setStyle(fill);
-        can.drawRect(x,y,x+width,y+height,paint);
+        can.drawRect(pos.x,pos.y,pos.x+size.x,pos.y+size.y,paint);
     }
     @Override
-    public void drawRoundRectangle(int x, int y, int width, int height, int arc, boolean fill){
+    public void drawRoundRectangle(Vec2 pos, Vec2 size, int arc, boolean fill){
         assert(can!=null);
         setStyle(fill);
-        can.drawRoundRect(x,y,x+width,y+height,arc,arc,paint);
+        can.drawRoundRect(pos.x,pos.y,pos.x+size.x,pos.y+size.y,arc,arc,paint);
     }
     @Override
-    public void drawCircle(int center_x, int center_y, float rad, boolean fill){
+    public void drawCircle(Vec2 center_pos, float rad, boolean fill){
         assert(can!=null);
         setStyle(fill);
-        can.drawCircle(center_x,center_y,rad,paint);
+        can.drawCircle(center_pos.x,center_pos.y,rad,paint);
     }
     @Override
-    public void drawLine(int x1, int y1, int x2, int y2){
+    public void drawLine(Vec2 start_pos, Vec2 end_pos){
         assert(can!= null);
         setStyle(false);
-        can.drawLine(x1,y1,x2,y2,paint);
+        can.drawLine(start_pos.x,start_pos.y,end_pos.x,end_pos.y,paint);
     }
     @Override
-    public void drawNSidePolygon(int n, int centerX, int centerY, float rad, boolean fill){
+    public void drawNSidePolygon(int n, Vec2 center_pos, float rad, boolean fill){
         assert(can!=null);
         if(n<=2) throw new RuntimeException("n must be > 2 in call to drawNSidePolygon");
         setStyle(fill);
-        can.drawPath(getNSidePolygonPath(n,centerX,centerY,rad), paint);
+        can.drawPath(getNSidePolygonPath(n,center_pos,rad), paint);
     }
     //Sets the fonts to be used in the following drawText calls
     @Override
@@ -261,10 +262,10 @@ public class GraphicsAndroid implements GraphicsInterface {
         paint.setTypeface(f.getTypeface());
     }
     @Override
-    public void drawText(String text, int x, int y){
+    public void drawText(String text, Vec2 pos){
         assert(can!=null);
         setStyle(true);
         setFontStyle(font);
-        can.drawText(text, x, y, paint);
+        can.drawText(text, pos.x, pos.y, paint);
     }
 }

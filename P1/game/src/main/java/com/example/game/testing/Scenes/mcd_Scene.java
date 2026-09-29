@@ -14,7 +14,8 @@ public abstract class mcd_Scene implements Scene {
         for(mcd_Entity ents : entityList){
             ents.update(dt);
         }
-        for(int i = entityList.size(); i>=0; --i){
+        //erases entities that are no longer alive
+        for(int i = entityList.size()-1; i>=0; --i){
             if(!entityList.get(i).getAlive()){
                 entityList.remove(i);
             }
