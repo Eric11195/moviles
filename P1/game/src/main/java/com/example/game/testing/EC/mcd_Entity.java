@@ -31,7 +31,7 @@ public class mcd_Entity {
         components.set(getCmpIdx(id), cmp);
     }
 
-    public mcd_Entity createEntity(){
+    public mcd_Entity createNewEntity(){
         return myScene.createEntity();
     }
     //Gets the idx of the component with the given id in the
@@ -53,7 +53,7 @@ public class mcd_Entity {
             if(cmp!=null) cmp.render(this,gi);
         }
     }
-    public void destroyEntity(){
+    public void destroyThisEntity(){
         alive = false;
     }
     public boolean getAlive(){
