@@ -3,6 +3,7 @@ package com.example.game.testing.EC.Component;
 import com.example.engine.ColorEng;
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.mcd_Component;
+import com.example.game.testing.EC.mcd_Entity;
 
 import java.awt.Button;
 
@@ -21,7 +22,7 @@ public class ButtonComponent implements mcd_Component {
     }
 
     @Override
-    public void update(double dt) {
+    public void update(mcd_Entity ent, double dt) {
         clicked = false;
         hovering = false;
         //Detect clic
@@ -32,7 +33,7 @@ public class ButtonComponent implements mcd_Component {
     }
 
     @Override
-    public void render(GraphicsInterface g) {
+    public void render(mcd_Entity ent,  GraphicsInterface g) {
         if(clicked){
 
         }

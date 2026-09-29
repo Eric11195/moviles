@@ -1,5 +1,7 @@
 package com.example.game.testing.EC;
 
+import com.example.engine.GraphicsInterface;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,5 +31,15 @@ public class mcd_Entity {
     public void rmComponent(cmp_id id){
         if(!hasComponent(id)) throw new RuntimeException("Component already exists new one cannot be created");
         components.set(getCmpIdx(id), null);
+    }
+    public void update(double dt){
+        for(mcd_Component cmp : components){
+            if(cmp!=null) cmp.update(this,dt);
+        }
+    }
+    public void render(GraphicsInterface gi){
+        for(mcd_Component cmp : components){
+            if(cmp!=null) cmp.render(this,gi);
+        }
     }
 }
