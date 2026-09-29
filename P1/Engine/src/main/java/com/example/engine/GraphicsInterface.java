@@ -24,4 +24,9 @@ public interface GraphicsInterface {
     public void rotate(float x, float y, float rotationDegrees);
     public void save();
     public void restore();
+
+    int getWidth();
+    int getHeight();
+
+    void setViewport(float scale_mult, float offset_x, float offset_y);
 }

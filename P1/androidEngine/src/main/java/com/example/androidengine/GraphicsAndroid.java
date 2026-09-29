@@ -1,6 +1,9 @@
 package com.example.androidengine;
 
+import static com.example.utils.Utils.getNonDeformingAspectData;
+
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
@@ -15,8 +18,10 @@ import com.example.engine.FontEng;
 import com.example.engine.ImageEng;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
+import com.example.utils.Utils;
 
 public class GraphicsAndroid implements GraphicsInterface {
+    private SurfaceView surf;
     private SurfaceHolder surface = null;
     private Canvas can = null;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -28,9 +33,49 @@ public class GraphicsAndroid implements GraphicsInterface {
         this.activity = activity;
         assert(surface == null);
         assert(can == null);
-        SurfaceView surf = activity.findViewById(id);
+        surf = activity.findViewById(id);
         surf.setZOrderOnTop(true);
         surface = surf.getHolder();
+        surface.addCallback(
+                new SurfaceHolder.Callback() {
+
+                    @Override
+                    public void surfaceCreated(SurfaceHolder holder) {
+                    }
+
+                    @Override
+                    public void surfaceChanged(
+                            SurfaceHolder holder,
+                            int format,
+                            int width,
+                            int height) {
+                        com.example.utils.Utils.NonDeformingAspectData data = getNonDeformingAspectData(width,height);
+                        setViewport(data.scale_mult,data.offset_x,data.offset_y);
+                    }
+
+                    @Override
+                    public void surfaceDestroyed(SurfaceHolder holder) {
+                    }
+                }
+        );
+    }
+
+    @Override
+    public int getWidth() {
+        return surf.getWidth();
+    }
+
+    @Override
+    public int getHeight() {
+        return surf.getHeight();
+    }
+
+    float scaleMult,offsetX,offsetY;
+    @Override
+    public void setViewport(float scale_mult, float offset_x, float offset_y) {
+        scaleMult = scale_mult;
+        offsetX = offset_x;
+        offsetY = offset_y;
     }
 
     //src: https://codingtechroom.com/question/-draw-hexagons-android
@@ -49,6 +94,7 @@ public class GraphicsAndroid implements GraphicsInterface {
         nSidePolygonPath.close();
         return nSidePolygonPath;
     }
+    private final Matrix identityMatrix = new Matrix();
     //This must be call before any other of the following calls.
     //And must be followed (after all the other calls by a endRender()
     public boolean startRender(){
@@ -59,6 +105,9 @@ public class GraphicsAndroid implements GraphicsInterface {
             Log.d("DRAW", "Canvas is NULL!");
             return false;
         }
+        can.setMatrix(identityMatrix);
+        can.translate(offsetX, offsetY);
+        can.scale(scaleMult, scaleMult);
         return true;
     }
     public ImageEng createImage(String path){

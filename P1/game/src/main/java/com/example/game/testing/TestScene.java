@@ -1,22 +1,21 @@
 package com.example.game.testing;
 
+import static com.example.utils.Utils.getNonDeformingAspectData;
+
 import com.example.engine.ColorEng;
 import com.example.engine.Engine;
 import com.example.engine.FontEng;
 import com.example.engine.GraphicsInterface;
 import com.example.engine.ImageEng;
 import com.example.engine.Scene;
+import com.example.utils.Utils;
 
 public class TestScene implements Scene {
     ImageEng testImage;
-    FontEng f;
     @Override
     public void start(Engine eng){
         GraphicsInterface g = eng.getGraphics();
-
         testImage = g.createImage("test_image.jpg");
-        //f = g.createFont("", 12);
-        //eng.getGraphics().setFont(f);
         g.setFontSize(128);
     }
 
@@ -38,10 +37,10 @@ public class TestScene implements Scene {
         g.drawRectangle(100,100,100,100,false);
         g.drawLine(200,100,300,200);
 
-        g.save();
-        g.rotate(300,300,145);
-        g.drawImage(testImage, 300,300,100,100);
-        g.restore();
+        //g.save();
+        //g.rotate(300,300,145);
+        //g.drawImage(testImage, 300,300,100,100);
+        //g.restore();
 
         g.drawText("Miau", 200,400);
     }

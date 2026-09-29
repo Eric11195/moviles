@@ -1,10 +1,13 @@
 package com.example.desktopengine;
 
+import static com.example.utils.Utils.getNonDeformingAspectData;
+
 import com.example.engine.ColorEng;
 import com.example.engine.FontEng;
 import com.example.engine.ImageEng;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
+import com.example.utils.Utils;
 
 import java.awt.BasicStroke;
 import java.awt.Canvas;
@@ -13,6 +16,8 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Polygon;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.nio.file.Path;
@@ -31,8 +36,18 @@ public class GraphicsDesktop implements GraphicsInterface {
         mainJFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         canvas = new Canvas();
+
+        canvas.addComponentListener(new ComponentAdapter() {
+
+            @Override
+            public void componentResized(ComponentEvent e) {
+            Utils.NonDeformingAspectData data = getNonDeformingAspectData(getWidth(),getHeight());
+            setViewport(data.scale_mult,data.offset_x,data.offset_y);
+            }
+        });
+
         // Give the canvas an explicit size
-        canvas.setPreferredSize(new Dimension(800, 600));
+        canvas.setPreferredSize(new Dimension(600, 400));
         mainJFrame.add(canvas);
         mainJFrame.pack();
         mainJFrame.setVisible(true);
@@ -42,9 +57,30 @@ public class GraphicsDesktop implements GraphicsInterface {
         buf = canvas.getBufferStrategy();
         graphics = (Graphics2D) buf.getDrawGraphics();
     }
+    @Override
+    public int getWidth() {
+        return canvas.getWidth();
+    }
 
+    @Override
+    public int getHeight() {
+        return canvas.getHeight();
+    }
+
+    float scaleMult,offsetX,offsetY;
+    private final AffineTransform identityTransform = new AffineTransform();
+    @Override
+    public void setViewport(float scale_mult, float offset_x, float offset_y) {
+        scaleMult = scale_mult;
+        offsetX = offset_x;
+        offsetY = offset_y;
+    }
     boolean correcltyInitialized(){
         return mainJFrame.getWidth()!=0;
+    }
+    public void applyViewport() {
+        graphics.translate(offsetX, offsetY);
+        graphics.scale(scaleMult, scaleMult);
     }
     @Override
     public void render(Engine eng, double dt){
@@ -52,6 +88,15 @@ public class GraphicsDesktop implements GraphicsInterface {
             do {
                 this.graphics = (Graphics2D)this.buf.getDrawGraphics();
                 try {
+                    // Reset transform for THIS frame
+                    graphics.setTransform(identityTransform);
+                    // Clear screen
+                    clear();
+
+                    // Apply viewport
+                    graphics.translate(offsetX, offsetY);
+                    graphics.scale(scaleMult, scaleMult);
+                    // Render
                     eng.getCurrentScene().render(this,dt);
                 }
                 finally {
@@ -76,14 +121,20 @@ public class GraphicsDesktop implements GraphicsInterface {
     public void drawImage(ImageEng img, int x, int y){
         drawImage(img,x,y, img.getWidth(), img.getHeight());
     }
+    ColorEng clearColor = new ColorEng(255,255,255,255);
     @Override
     public void clear(ColorEng color){
         if (graphics == null) return;
-        ColorEng previous = new ColorEng(color.r,color.g,color.b,color.a);
+        clearColor = color;
         setColor(color);
         // Fill canvas area with clear color
         graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        setColor(previous);
+    }
+    public void clear(){
+        if (graphics == null) return;
+        setColor(clearColor);
+        // Fill canvas area with clear color
+        graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
     @Override
     public void setColor(ColorEng color){
