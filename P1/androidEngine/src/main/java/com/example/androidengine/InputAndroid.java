@@ -7,20 +7,14 @@ import static android.view.MotionEvent.*;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.engine.InputInterface;
+import com.example.engine.InputBase;
 import com.example.engine.TouchEvent;
 import com.example.engine.TouchEventType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class InputAndroid implements InputInterface {
-    private List<TouchEvent> eventList;
-
-    public InputAndroid(){
-        eventList = new ArrayList<>();
-    }
-
+public class InputAndroid extends InputBase {
     public void registerView (View _view){
         _view.setOnTouchListener(
                 new View.OnTouchListener() {
@@ -48,13 +42,5 @@ public class InputAndroid implements InputInterface {
                     }
                 }
         );
-    }
-
-    @Override
-    public List<TouchEvent> getTouchEvents(){
-        ArrayList<TouchEvent> temp = new ArrayList<>();
-        eventList.forEach( event -> temp.add(event.clone()));
-        eventList = new ArrayList<>();
-        return temp;
     }
 }

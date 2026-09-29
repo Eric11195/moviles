@@ -1,5 +1,6 @@
 package com.example.game.testing.EC;
 
+import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.Scenes.mcd_Scene;
 
@@ -61,5 +62,8 @@ public class mcd_Entity {
     }
     public boolean getAlive(){
         return alive;
+    }
+    public Engine getEngine(){
+        return myScene.getEngine();
     }
 }

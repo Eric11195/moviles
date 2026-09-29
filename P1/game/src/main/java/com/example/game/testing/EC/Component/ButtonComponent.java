@@ -2,6 +2,8 @@ package com.example.game.testing.EC.Component;
 
 import com.example.engine.ColorEng;
 import com.example.engine.GraphicsInterface;
+import com.example.engine.TouchEvent;
+import com.example.engine.TouchEventType;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
@@ -34,9 +36,9 @@ public class ButtonComponent implements mcd_Component {
         clicked = false;
         hovering = false;
         //Detect clic
-        if(clickedDown() && func != null) {
-            func.onClick();
+        if(clickedDown(ent) && func != null) {
             clicked=true;
+            func.onClick();
         }
     }
 
@@ -58,8 +60,23 @@ public class ButtonComponent implements mcd_Component {
         g.drawText(button_text,final_pos);
     }
 
-    public boolean clickedDown(){
+    public boolean clickedDown(mcd_Entity ent){
+        if(!ent.hasComponent(ComponentId.TRANSFORM_COMPONENT)) return false;
+        TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
         //Set hover if its the case
+        for(TouchEvent evt : ent.getEngine().getInput().getTouchEvents()){
+            System.out.println("Event: "+evt.x+" , "+evt.y);
+            if(inside(tr, evt.x,evt.y)) {
+                hovering = true;
+                if (evt.type == TouchEventType.UP){
+                    return true;
+                }
+            }
+        }
         return false;
+    }
+    public boolean inside(TransformComponent tr, float ptr_x, float ptr_y){
+        return tr.pos.x < ptr_x && tr.pos.x+tr.size.x >ptr_x &&
+                tr.pos.y < ptr_y && tr.pos.y +tr.size.y > ptr_y;
     }
 }

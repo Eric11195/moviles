@@ -1,20 +1,19 @@
 package com.example.engine;
 import com.example.engine.audio.AudioInterface;
-import com.example.engine.audio.EngSound;
 
 public class Engine implements Runnable{
     private Thread gameThread;
 
     private final GraphicsInterface graphics;
 
-    private final InputInterface input;
+    private final InputBase input;
 
     private final AudioInterface audio;
 
     private volatile boolean running;
     private Scene currentScene;
 
-    protected Engine(GraphicsInterface graphics, InputInterface input,AudioInterface audio) {
+    protected Engine(GraphicsInterface graphics, InputBase input, AudioInterface audio) {
         this.graphics = graphics;
         this.input = input;
         this.audio = audio;
@@ -30,7 +29,7 @@ public class Engine implements Runnable{
 
     public GraphicsInterface getGraphics() {return graphics;}
 
-    public InputInterface getInput() {return input;}
+    public InputBase getInput() {return input;}
 
     public AudioInterface getAudio() {return audio;}
 
@@ -110,6 +109,7 @@ public class Engine implements Runnable{
         long nanoElapsedTime = currentTime - lastFrameTime;
         lastFrameTime = currentTime;
 
+        input.update();
         currentScene.update(this,dt);
         this.render();
         // Informe de FPS

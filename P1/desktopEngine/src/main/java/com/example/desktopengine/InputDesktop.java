@@ -1,6 +1,6 @@
 package com.example.desktopengine;
 
-import com.example.engine.InputInterface;
+import com.example.engine.InputBase;
 import com.example.engine.TouchEvent;
 import com.example.engine.TouchEventType;
 
@@ -10,14 +10,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JFrame;
-
-public class InputDesktop implements InputInterface {
-    ArrayList<TouchEvent> eventList;
-    public InputDesktop(){
-        eventList = new ArrayList<>();
-    }
-
+public class InputDesktop extends InputBase {
     public void registerCanvas(Canvas canvas){
         canvas.addMouseListener(new MouseAdapter() {
             @Override
@@ -42,11 +35,5 @@ public class InputDesktop implements InputInterface {
             }
         });
     }
-    @Override
-    public List<TouchEvent> getTouchEvents(){
-        ArrayList<TouchEvent> temp = new ArrayList<>();
-        eventList.forEach( event -> temp.add(event.clone()));
-        eventList = new ArrayList<>();
-        return temp;
-    }
+
 }

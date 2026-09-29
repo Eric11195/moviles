@@ -9,8 +9,13 @@ import java.util.ArrayList;
 
 public abstract class mcd_Scene implements Scene {
     protected ArrayList<mcd_Entity> entityList = new ArrayList<mcd_Entity>();
+    private Engine my_engine;
+    public Engine getEngine(){
+        return my_engine;
+    }
     @Override
     public void update(Engine eng, double dt) {
+        my_engine = eng;
         for(mcd_Entity ents : entityList){
             ents.update(dt);
         }
