@@ -22,14 +22,14 @@ import com.example.utils.Utils;
 import com.example.utils.Vec2;
 
 public class GraphicsAndroid implements GraphicsInterface {
-    private SurfaceView surf;
+    private final SurfaceView surf;
     private SurfaceHolder surface = null;
     private Canvas can = null;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     private FontAndroid font = new FontAndroid();
 
-    private AppCompatActivity activity;
+    private final AppCompatActivity activity;
     public GraphicsAndroid(AppCompatActivity activity, int id){
         this.activity = activity;
         assert(surface == null);
@@ -81,12 +81,10 @@ public class GraphicsAndroid implements GraphicsInterface {
         viewportMatrix.reset();
 
         // Must match the transformation used in startRender()
+        viewportMatrix.setScale(scaleMult, scaleMult);
         viewportMatrix.postTranslate(offsetX, offsetY);
-        viewportMatrix.postScale(scaleMult, scaleMult);
 
-        if (!viewportMatrix.invert(inverseViewportMatrix)) {
-            inverseViewportMatrix.reset();
-        }
+        calculateInverseMatrix();
     }
 
     //src: https://codingtechroom.com/question/-draw-hexagons-android
@@ -119,6 +117,7 @@ public class GraphicsAndroid implements GraphicsInterface {
             return false;
         }
 
+        can.drawColor(clearColor.getColorAsInt());
         can.setMatrix(viewportMatrix);
 
         return true;
@@ -129,12 +128,12 @@ public class GraphicsAndroid implements GraphicsInterface {
 
     @Override
     public FontEng createFont(String path, float size) {
-        return (FontEng) new FontAndroid(activity,path,size, false);
+        return new FontAndroid(activity,path,size, false);
     }
 
     @Override
     public FontEng createFont(float size) {
-        return (FontEng) new FontAndroid(size, false);
+        return new FontAndroid(size, false);
     }
 
     @Override
@@ -212,10 +211,12 @@ public class GraphicsAndroid implements GraphicsInterface {
         drawImage(img, pos,new Vec2(img.getWidth(), img.getHeight()));
     }
 
+    ColorEng clearColor = new ColorEng(255,255,255,255);
     // fills the entire display with the given color
     @Override
     public void clear(ColorEng color){
         assert(can!=null);
+        clearColor = color;
         can.drawColor(color.getColorAsInt());
     }
     //sets the color for all the following simple shapes renders
@@ -269,7 +270,6 @@ public class GraphicsAndroid implements GraphicsInterface {
         this.font = (FontAndroid) f;
     }
     private void setFontStyle(FontAndroid f){
-        assert(paint!=null);
         paint.setTextSize(f.getFontSize());
         paint.setTypeface(f.getTypeface());
     }
@@ -286,11 +286,10 @@ public class GraphicsAndroid implements GraphicsInterface {
 
         can.drawText(text, x, y, paint);
     }
-    Matrix inverseMatrix = new Matrix();
     public void calculateInverseMatrix(){
-        Matrix mat = new Matrix();
-        can.getMatrix().invert(mat);
-        inverseMatrix = mat;
+        if (!viewportMatrix.invert(inverseViewportMatrix)) {
+            inverseViewportMatrix.reset();
+        }
     }
     @Override
     public Vec2 getPointInWindowPos(Vec2 pos) {
