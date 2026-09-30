@@ -23,6 +23,6 @@ public class DesktopEngine extends Engine{
     @Override
     public void update(){
         super.update();
-        getInput().getTouchEvents().forEach(evt -> System.out.println("EVENT LOGGED"));
+        //getInput().getTouchEvents().forEach(evt -> System.out.println("EVENT LOGGED"));
     }
 }

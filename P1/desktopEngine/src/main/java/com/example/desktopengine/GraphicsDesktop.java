@@ -21,6 +21,8 @@ import java.awt.Polygon;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferStrategy;
 import java.nio.file.Path;
 
@@ -70,7 +72,6 @@ public class GraphicsDesktop implements GraphicsInterface {
     }
 
     float scaleMult,offsetX,offsetY;
-    private final AffineTransform identityTransform = new AffineTransform();
     @Override
     public void setViewport(float scale_mult, float offset_x, float offset_y) {
         scaleMult = scale_mult;
@@ -90,16 +91,18 @@ public class GraphicsDesktop implements GraphicsInterface {
             do {
                 this.graphics = (Graphics2D)this.buf.getDrawGraphics();
                 try {
-                    // Reset transform for THIS frame
-                    graphics.setTransform(identityTransform);
-                    // Clear screen
+                    transformation.setToIdentity();
+
                     clear();
 
-                    // Apply viewport
-                    graphics.translate(offsetX, offsetY);
-                    graphics.scale(scaleMult, scaleMult);
-                    // Render
-                    eng.getCurrentScene().render(this,dt);
+                    transformation.translate(offsetX, offsetY);
+                    transformation.scale(scaleMult, scaleMult);
+
+                    this.graphics.setTransform(transformation);
+
+                    eng.getCurrentScene().render(this, dt);
+
+                    calculateInverseMatrix();
                 }
                 finally {
                     this.graphics.dispose();
@@ -238,28 +241,42 @@ public class GraphicsDesktop implements GraphicsInterface {
 
     @Override
     public void translate(float x, float y) {
-        graphics.translate(x,y);
+        transformation.translate(x, y);
+        graphics.setTransform(transformation);
     }
 
     @Override
     public void scale(float x, float y) {
-        graphics.scale(x,y);
+        transformation.scale(x, y);
+        graphics.setTransform(transformation);
     }
 
     @Override
     public void rotate(float x, float y, float rotationDegrees) {
-        graphics.rotate(Math.PI*rotationDegrees/180, x, y);
+        transformation.rotate(
+                Math.PI * rotationDegrees / 180.0,
+                x,
+                y
+        );
+
+        graphics.setTransform(transformation);
     }
 
     @Override
     public void save() {
-        storedTransform = graphics.getTransform();
+        storedTransform = new AffineTransform(transformation);
     }
 
     @Override
     public void restore() {
-        if(storedTransform==null) throw new RuntimeException("Ensure to call save before this call at least once");
-        graphics.setTransform(storedTransform);
+        if (storedTransform == null) {
+            throw new RuntimeException(
+                    "Ensure to call save before this call at least once"
+            );
+        }
+
+        transformation = new AffineTransform(storedTransform);
+        graphics.setTransform(transformation);
     }
 
     public JFrame getFrame(){
@@ -267,5 +284,32 @@ public class GraphicsDesktop implements GraphicsInterface {
     }
     public Canvas getCanvas(){
         return this.canvas;
+    }
+
+    AffineTransform transformation = new AffineTransform();
+    AffineTransform inverse = new AffineTransform();
+    private void calculateInverseMatrix(){
+        try{
+            inverse =
+                    transformation.createInverse();
+        }catch(NoninvertibleTransformException error){
+            inverse = new AffineTransform();
+        }
+    }
+    @Override
+    public Vec2 getPointInWindowPos(Vec2 pos){
+        Point2D.Float screen = new Point2D.Float(pos.x,pos.y);
+        Point2D.Float game = new Point2D.Float();
+        inverse.transform(screen,game);
+
+        System.out.println(
+                "mouse screen: " + pos.x + ", " + pos.y +
+                        " -> game: " + game.x + ", " + game.y
+        );
+        System.out.println(
+                "viewport: scale=" + scaleMult +
+                        " offset=" + offsetX + ", " + offsetY
+        );
+        return new Vec2(game.x,game.y);
     }
 }

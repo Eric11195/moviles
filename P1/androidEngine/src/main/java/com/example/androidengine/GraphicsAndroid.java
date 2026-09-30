@@ -274,4 +274,16 @@ public class GraphicsAndroid implements GraphicsInterface {
 
         can.drawText(text, x, y, paint);
     }
+    Matrix inverseMatrix = new Matrix();
+    public void calculateInverseMatrix(){
+        Matrix mat = new Matrix();
+        can.getMatrix().invert(mat);
+        inverseMatrix = mat;
+    }
+    @Override
+    public Vec2 getPointInWindowPos(Vec2 pos) {
+        float[] point = { pos.x, pos.y };
+        inverseMatrix.mapPoints(point);
+        return new Vec2(pos.x,pos.y);
+    }
 }

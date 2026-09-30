@@ -31,4 +31,6 @@ public interface GraphicsInterface {
     int getHeight();
 
     void setViewport(float scale_mult, float offset_x, float offset_y);
+
+    Vec2 getPointInWindowPos(Vec2 pos);
 }

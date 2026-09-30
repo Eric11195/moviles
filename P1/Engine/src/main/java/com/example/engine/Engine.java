@@ -109,15 +109,15 @@ public class Engine implements Runnable{
         long nanoElapsedTime = currentTime - lastFrameTime;
         lastFrameTime = currentTime;
 
-        input.update();
         currentScene.update(this,dt);
         this.render();
+        input.update(this.graphics::getPointInWindowPos);
         // Informe de FPS
         dt = (double) nanoElapsedTime / 1.0E9;
         t = (double) currentTime / 1.0E9;
         if (currentTime - prevTime > 1000000000l) {
             long fps = frames * 1000000000l / (currentTime - prevTime);
-            System.out.println("" + fps + " fps");
+            //System.out.println("" + fps + " fps");
             frames = 0;
             prevTime = currentTime;
         }

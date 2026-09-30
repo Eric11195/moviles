@@ -10,6 +10,7 @@ import android.view.View;
 import com.example.engine.InputBase;
 import com.example.engine.TouchEvent;
 import com.example.engine.TouchEventType;
+import com.example.utils.Vec2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +22,7 @@ public class InputAndroid extends InputBase {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
                         var temp = new TouchEvent();
-                        temp.x = event.getX();
-                        temp.y = event.getY();
+                        temp.pos = new Vec2(event.getX(), event.getY());
                         switch (event.getAction()){
                             case ACTION_DOWN:
                             case ACTION_POINTER_DOWN:

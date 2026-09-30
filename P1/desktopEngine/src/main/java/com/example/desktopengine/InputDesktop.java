@@ -3,6 +3,7 @@ package com.example.desktopengine;
 import com.example.engine.InputBase;
 import com.example.engine.TouchEvent;
 import com.example.engine.TouchEventType;
+import com.example.utils.Vec2;
 
 import java.awt.Canvas;
 import java.awt.event.MouseAdapter;
@@ -17,8 +18,7 @@ public class InputDesktop extends InputBase {
             public void mouseClicked(MouseEvent mouseEvent) {
                 super.mouseClicked(mouseEvent);
                 var temp = new TouchEvent();
-                temp.x = mouseEvent.getX();
-                temp.y = mouseEvent.getY();
+                temp.pos = new Vec2(mouseEvent.getX(), mouseEvent.getY());
                 temp.type = TouchEventType.DOWN;
                 temp.id = mouseEvent.getID();
                 eventList.add(temp);
@@ -27,8 +27,7 @@ public class InputDesktop extends InputBase {
             public void mouseReleased(MouseEvent mouseEvent){
                 super.mouseReleased(mouseEvent);
                 var temp = new TouchEvent();
-                temp.x = mouseEvent.getX();
-                temp.y = mouseEvent.getY();
+                temp.pos = new Vec2(mouseEvent.getX(), mouseEvent.getY());
                 temp.type = TouchEventType.UP;
                 temp.id = mouseEvent.getID();
                 eventList.add(temp);

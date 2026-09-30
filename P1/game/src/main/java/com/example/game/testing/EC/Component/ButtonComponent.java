@@ -65,8 +65,8 @@ public class ButtonComponent implements mcd_Component {
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
         //Set hover if its the case
         for(TouchEvent evt : ent.getEngine().getInput().getTouchEvents()){
-            System.out.println("Event: "+evt.x+" , "+evt.y);
-            if(inside(tr, evt.x,evt.y)) {
+            //System.out.println("Event: "+evt.pos.x+" , "+evt.pos.y);
+            if(inside(tr, evt.pos)) {
                 hovering = true;
                 if (evt.type == TouchEventType.UP){
                     return true;
@@ -75,8 +75,8 @@ public class ButtonComponent implements mcd_Component {
         }
         return false;
     }
-    public boolean inside(TransformComponent tr, float ptr_x, float ptr_y){
-        return tr.pos.x < ptr_x && tr.pos.x+tr.size.x >ptr_x &&
-                tr.pos.y < ptr_y && tr.pos.y +tr.size.y > ptr_y;
+    public boolean inside(TransformComponent tr, Vec2 ptr){
+        return tr.pos.x < ptr.x && tr.pos.x+tr.size.x >ptr.x &&
+                tr.pos.y < ptr.y && tr.pos.y +tr.size.y > ptr.y;
     }
 }

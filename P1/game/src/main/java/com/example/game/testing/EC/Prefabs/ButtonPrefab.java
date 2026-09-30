@@ -1,6 +1,7 @@
 package com.example.game.testing.EC.Prefabs;
 
 import com.example.game.testing.EC.Component.ButtonComponent;
+import com.example.game.testing.EC.Component.MouseToScreenComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
@@ -12,6 +13,7 @@ public class ButtonPrefab {
         mcd_Entity ent = scene.createEntity();
         ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent(pos, new Vec2(100,40)));
         ent.addComponent(ComponentId.BUTTON_COMPONENT, new ButtonComponent(text,clickFunc));
+        ent.addComponent(ComponentId.MOUSETOSCREEN_COMPONENT, new MouseToScreenComponent());
         return ent;
     }
 }
