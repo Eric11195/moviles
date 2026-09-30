@@ -77,6 +77,16 @@ public class GraphicsAndroid implements GraphicsInterface {
         scaleMult = scale_mult;
         offsetX = offset_x;
         offsetY = offset_y;
+
+        viewportMatrix.reset();
+
+        // Must match the transformation used in startRender()
+        viewportMatrix.postTranslate(offsetX, offsetY);
+        viewportMatrix.postScale(scaleMult, scaleMult);
+
+        if (!viewportMatrix.invert(inverseViewportMatrix)) {
+            inverseViewportMatrix.reset();
+        }
     }
 
     //src: https://codingtechroom.com/question/-draw-hexagons-android
@@ -95,20 +105,22 @@ public class GraphicsAndroid implements GraphicsInterface {
         nSidePolygonPath.close();
         return nSidePolygonPath;
     }
-    private final Matrix identityMatrix = new Matrix();
+    private final Matrix viewportMatrix = new Matrix();
+    private final Matrix inverseViewportMatrix = new Matrix();
     //This must be call before any other of the following calls.
     //And must be followed (after all the other calls by a endRender()
-    public boolean startRender(){
+    public boolean startRender() {
         assert(can == null);
-        //can = surface.lockHardwareCanvas();
+
         can = surface.lockCanvas();
+
         if (can == null) {
             Log.d("DRAW", "Canvas is NULL!");
             return false;
         }
-        can.setMatrix(identityMatrix);
-        can.translate(offsetX, offsetY);
-        can.scale(scaleMult, scaleMult);
+
+        can.setMatrix(viewportMatrix);
+
         return true;
     }
     public ImageEng createImage(String path){
@@ -282,8 +294,13 @@ public class GraphicsAndroid implements GraphicsInterface {
     }
     @Override
     public Vec2 getPointInWindowPos(Vec2 pos) {
-        float[] point = { pos.x, pos.y };
-        inverseMatrix.mapPoints(point);
-        return new Vec2(pos.x,pos.y);
+        float[] point = {
+                pos.x,
+                pos.y
+        };
+
+        inverseViewportMatrix.mapPoints(point);
+
+        return new Vec2(point[0], point[1]);
     }
 }
