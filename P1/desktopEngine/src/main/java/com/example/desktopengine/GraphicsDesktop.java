@@ -301,15 +301,6 @@ public class GraphicsDesktop implements GraphicsInterface {
         Point2D.Float screen = new Point2D.Float(pos.x,pos.y);
         Point2D.Float game = new Point2D.Float();
         inverse.transform(screen,game);
-
-        System.out.println(
-                "mouse screen: " + pos.x + ", " + pos.y +
-                        " -> game: " + game.x + ", " + game.y
-        );
-        System.out.println(
-                "viewport: scale=" + scaleMult +
-                        " offset=" + offsetX + ", " + offsetY
-        );
         return new Vec2(game.x,game.y);
     }
 }
