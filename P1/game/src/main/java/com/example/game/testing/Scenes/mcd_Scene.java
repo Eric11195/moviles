@@ -37,4 +37,8 @@ public abstract class mcd_Scene implements Scene {
         entityList.add(new mcd_Entity(this));
         return entityList.get(entityList.size()-1);
     }
+
+    public ArrayList<mcd_Entity> getEntityList() {
+        return entityList;
+    }
 }

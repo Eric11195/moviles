@@ -66,4 +66,5 @@ public class mcd_Entity {
     public Engine getEngine(){
         return myScene.getEngine();
     }
+    public mcd_Scene getMyScene(){return myScene;}
 }
