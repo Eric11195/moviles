@@ -18,6 +18,7 @@ public abstract class InputBase {
     public void update(screenToGamePos posTranslator) {
         lastFrameEvents.clear();
         for (TouchEvent evt : new ArrayList<>(eventList)) {
+            if(evt==null)continue;
             TouchEvent evtClone = evt.clone();
             evtClone.pos = posTranslator.toGamePos(evt.pos);
             lastFrameEvents.add(evtClone);
