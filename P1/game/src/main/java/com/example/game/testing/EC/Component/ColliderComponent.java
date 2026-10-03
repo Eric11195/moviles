@@ -24,35 +24,74 @@ public class ColliderComponent implements mcd_Component {
     }
     ArrayList<ColliderData> colliders = new ArrayList<ColliderData>();
 
-    public ColliderComponent(int _rad, Vec2 _offset){
-        ColliderData single = new ColliderData();
-        single.rad = _rad;
-        single.offset = _offset;
-        colliders.add(single);
-    }
+    Vec2 center;
+
+    // Creates a single circular collider with _rad radius
     public ColliderComponent(int _rad){
         ColliderData single = new ColliderData();
         single.rad = _rad;
         single.offset = new Vec2(0,0);
         colliders.add(single);
     }
-    public ColliderComponent(int _rad, int _x, int _n, float _rot){
-        int origin = -(_x * (_n-1))/2;
+
+    // Creates a single circular collider with _rad radius and displaced _offset from its origin.
+    public ColliderComponent(int _rad, Vec2 _offset){
+        ColliderData single = new ColliderData();
+        single.rad = _rad;
+        single.offset = _offset;
+        colliders.add(single);
+    }
+
+    // Creates _n circular colliders with _rad radius in a horizontal line, with _x spacing in between.
+    public ColliderComponent(int _rad, int _x, int _n){
+        center = new Vec2(0,0);
+        Vec2 origin = new Vec2(center.x-((float) (_x * (_n - 1)) /2),center.y);
+
         for (int i = 0; i<_n; i++){
             ColliderData single = new ColliderData();
             single.rad = _rad;
-            Vec2 pos = new Vec2(origin+(_x*i),0);
-            pos = new Vec2(pos.x*cos(_rot)-pos.y*sin(_rot),
-                    pos.x*sin(_rot)+pos.y*cos(_rot));
+            single.offset =  new Vec2(origin.x+(_x*i),origin.y);
+            colliders.add(single);
+        }
+    }
+
+    // Creates _n circular colliders with _rad radius in a horizontal line, with _x spacing in between and a _rad rotation (in radians) from its center (0,0).
+    public ColliderComponent(int _rad, int _x, int _n, float _rot){
+        center = new Vec2(0,0);
+        Vec2 origin = new Vec2(center.x-((float) (_x * (_n - 1)) /2),center.y);
+
+        for (int i = 0; i<_n; i++){
+            ColliderData single = new ColliderData();
+            single.rad = _rad;
+            Vec2 pos = new Vec2(origin.x+(_x*i),origin.y);
+            pos = new Vec2(center.x + (pos.x-center.x)*cos(_rot)-(pos.y-center.y)*sin(_rot),
+                    center.y + (pos.x-center.x)*sin(_rot)+(pos.y-center.y)*cos(_rot));
             single.offset = pos;
             colliders.add(single);
         }
     }
 
+    // Creates _n circular colliders with _rad radius in a horizontal line, with _x spacing in between and a _rad rotation (in radians) from its _center.
+    public ColliderComponent(int _rad, int _x, int _n, float _rot, Vec2 _center){
+        center = _center;
+        Vec2 origin = new Vec2(center.x-((float) (_x * (_n - 1)) /2),center.y);
+
+        for (int i = 0; i<_n; i++){
+            ColliderData single = new ColliderData();
+            single.rad = _rad;
+            Vec2 pos = new Vec2(origin.x+(_x*i),origin.y);
+            pos = new Vec2(center.x + (pos.x-center.x)*cos(_rot)-(pos.y-center.y)*sin(_rot),
+                    center.y + (pos.x-center.x)*sin(_rot)+(pos.y-center.y)*cos(_rot));
+            single.offset = pos;
+            colliders.add(single);
+        }
+    }
+
+    // Rotates all colliders _rot degrees from their center point.
     public void rotate(float _rot){
         colliders.forEach(col -> {
-            col.offset = new Vec2(col.offset.x*cos(_rot)-col.offset.y*sin(_rot),
-                    col.offset.x*sin(_rot)+col.offset.y*cos(_rot));
+            col.offset = new Vec2(center.x + (col.offset.x-center.x)*cos(_rot)-(col.offset.y-center.y)*sin(_rot),
+                    center.y + (col.offset.x-center.x)*sin(_rot)+(col.offset.y-center.y)*cos(_rot));
         });
     }
 
@@ -67,12 +106,13 @@ public class ColliderComponent implements mcd_Component {
         return temp;
     }
 
-    public static boolean overlaps(TransformComponent _tr, TransformComponent _other_tr,
+    private static boolean overlaps(TransformComponent _tr, TransformComponent _other_tr,
                                    ColliderData _cd, ColliderData _other_cd){
         return ((_tr.pos.add(_cd.offset)).sub(_other_tr.pos.add(_other_cd.offset)).length()
                 < _cd.rad + _other_cd.rad);
     }
 
+    // Checks if any colliders between two entities are overlapping.
     public static boolean checkAllOverlaps(mcd_Entity ent, mcd_Entity other_ent){
         boolean collided = false;
         TransformComponent _tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
