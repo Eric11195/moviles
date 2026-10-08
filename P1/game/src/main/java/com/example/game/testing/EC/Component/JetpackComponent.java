@@ -69,7 +69,7 @@ public class JetpackComponent implements mcd_Component{
                velocity += (float) (accel * dt);
            }
            velocity+= (float) (gravity*dt);
-            tr.pos.y+=velocity;
+            tr.pos.y+=velocity*dt;
             RespectBorders(tr);
             checkSpeed();
         }

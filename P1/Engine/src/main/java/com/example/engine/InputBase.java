@@ -19,11 +19,11 @@ public abstract class InputBase {
     }
     synchronized public void update(screenToGamePos posTranslator) {
         lastFrameEvents.forEach(eventPool::releaseItem);
+        lastFrameEvents.clear();
+        lastFrameEvents.addAll(eventList);
         lastFrameEvents.forEach((tE)->{
             tE.pos = posTranslator.toGamePos(tE.pos);
         });
-        lastFrameEvents.clear();
-        lastFrameEvents.addAll(eventList);
         eventList.clear();
     }
 }
