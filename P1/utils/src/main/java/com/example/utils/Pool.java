@@ -1,37 +1,41 @@
 package com.example.utils;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
-public class Pool <T extends mcd_Cloneable<T>>{
+public class Pool <T extends PoolObject<T>>{
     ArrayList<T> items;
+
+    PriorityQueue<Integer> available;
+    int lastIndex = 0;
+
     int capacity;
     Pool(int _capacity){
         capacity = _capacity;
         items = new ArrayList<>(capacity);
+        available = new PriorityQueue<>();
     }
     public void fill(T elem){
         for (int i = 0; i<capacity; ++i){
-            items.add(i, (T)elem.clone());
+            T temp = elem.clone();
+            temp.idx = i;
+            items.add(i, temp);
         }
-    }
-    boolean isFull(){
-        return items.size() == capacity;
     }
 
-    public T fetchItem (){
-        for (int i = 0; i<capacity; ++i){
-            if (items.get(i) != null) {
-                items.add(i,null);
-                return items.get(i);
+    public T fetchItem(){
+        if (available.isEmpty()){
+            if (lastIndex == capacity){
+                throw new IndexOutOfBoundsException("Pool Depleted");
             }
+            return items.get(lastIndex++);
         }
-        return null;
+        else {
+            return items.get(available.poll());
+        }
     }
 
     public void releaseItem(T item){
-        int i = 0;
-        while (i<capacity && items.get(i) != null) ++i;
-        if (i==capacity) return;
-        items.add(i,item);
+        available.add(item.idx);
     }
 }
