@@ -15,13 +15,16 @@ public class InputDesktop extends InputBase {
     public void registerCanvas(Canvas canvas){
         canvas.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                super.mouseClicked(mouseEvent);
+            public void mousePressed(MouseEvent mouseEvent) {
+                super.mousePressed(mouseEvent);
                 var temp = new TouchEvent();
                 temp.pos = new Vec2(mouseEvent.getX(), mouseEvent.getY());
                 temp.type = TouchEventType.DOWN;
                 temp.id = mouseEvent.getID();
-                eventList.add(temp);
+
+                synchronized (this) {
+                    eventList.add(temp);
+                }
             }
             @Override
             public void mouseReleased(MouseEvent mouseEvent){
@@ -30,7 +33,10 @@ public class InputDesktop extends InputBase {
                 temp.pos = new Vec2(mouseEvent.getX(), mouseEvent.getY());
                 temp.type = TouchEventType.UP;
                 temp.id = mouseEvent.getID();
-                eventList.add(temp);
+
+                synchronized (this) {
+                    eventList.add(temp);
+                }
             }
         });
     }

@@ -23,7 +23,7 @@ public class InputAndroid extends InputBase {
                     public boolean onTouch(View v, MotionEvent event) {
                         var temp = new TouchEvent();
                         temp.pos = new Vec2(event.getX(), event.getY());
-                        switch (event.getAction()){
+                        switch (event.getAction()) {
                             case ACTION_DOWN:
                             case ACTION_POINTER_DOWN:
                                 temp.type = TouchEventType.DOWN;
@@ -37,7 +37,10 @@ public class InputAndroid extends InputBase {
                                 break;
                         }
                         temp.id = event.getActionIndex();
-                        eventList.add(temp);
+
+                        synchronized (this) {
+                            eventList.add(temp);
+                        }
                         return true;
                     }
                 }

@@ -15,7 +15,7 @@ public abstract class InputBase {
     public final List<TouchEvent> getTouchEvents(){
         return lastFrameEvents;
     }
-    public void update(screenToGamePos posTranslator) {
+    synchronized public void update(screenToGamePos posTranslator) {
         lastFrameEvents.clear();
         lastFrameEvents.addAll(eventList);
         eventList.clear();
