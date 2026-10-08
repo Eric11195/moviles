@@ -21,7 +21,7 @@ public class InputAndroid extends InputBase {
                 new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        var temp = new TouchEvent();
+                        var temp = eventPool.fetchItem();
                         temp.pos = new Vec2(event.getX(), event.getY());
                         switch (event.getAction()) {
                             case ACTION_DOWN:

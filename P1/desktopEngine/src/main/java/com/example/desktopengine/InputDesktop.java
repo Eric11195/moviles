@@ -17,7 +17,7 @@ public class InputDesktop extends InputBase {
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 super.mousePressed(mouseEvent);
-                var temp = new TouchEvent();
+                var temp = eventPool.fetchItem();
                 temp.pos = new Vec2(mouseEvent.getX(), mouseEvent.getY());
                 temp.type = TouchEventType.DOWN;
                 temp.id = mouseEvent.getID();
@@ -28,8 +28,7 @@ public class InputDesktop extends InputBase {
             }
             @Override
             public void mouseReleased(MouseEvent mouseEvent){
-                super.mouseReleased(mouseEvent);
-                var temp = new TouchEvent();
+                var temp = eventPool.fetchItem();
                 temp.pos = new Vec2(mouseEvent.getX(), mouseEvent.getY());
                 temp.type = TouchEventType.UP;
                 temp.id = mouseEvent.getID();
