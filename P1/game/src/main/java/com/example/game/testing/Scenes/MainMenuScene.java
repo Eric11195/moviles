@@ -25,8 +25,7 @@ public class MainMenuScene extends mcd_Scene{
                   eng.setScene(new MainGameScene());
             }
         );
-        PlayerPrefab.createPlayer(this,new Vec2(100,100));
-        LaserPrefab.createLaser(this,new Vec2(0,0));
+
 //        button.addComponent(ComponentId.COLLIDER_COMPONENT,new ColliderComponent(30,75,5,(float)Math.PI/4,new Vec2(100,100)));
 //        ((ColliderComponent)button.getComponent(ComponentId.COLLIDER_COMPONENT)).rotate((float)Math.PI/4);
     }
