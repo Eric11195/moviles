@@ -62,7 +62,7 @@ public class LaserComponent implements mcd_Component{
     }
 
     @Override
-    public void update(mcd_Entity ent, double dt) {
+    public void update(mcd_Entity ent, float t,float dt) {
         //here we need to figure out if it is time to attack or not
         //the time would be after
         if(!is_attacking)

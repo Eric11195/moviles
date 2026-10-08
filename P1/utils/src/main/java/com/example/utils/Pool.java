@@ -10,7 +10,7 @@ public class Pool <T extends PoolObject<T>>{
     int lastIndex = 0;
 
     int capacity;
-    Pool(int _capacity){
+    public Pool(int _capacity){
         capacity = _capacity;
         items = new ArrayList<>(capacity);
         available = new PriorityQueue<>();

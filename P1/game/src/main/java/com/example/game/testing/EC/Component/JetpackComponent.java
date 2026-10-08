@@ -60,7 +60,7 @@ public class JetpackComponent implements mcd_Component{
         {}
 
     @Override
-    public void update(mcd_Entity ent, double dt) {
+    public void update(mcd_Entity ent, float t, float dt) {
         isInputDown(ent);
         //don't know right now how do i get the input for the click
         if(ent.hasComponent(ComponentId.TRANSFORM_COMPONENT)){
