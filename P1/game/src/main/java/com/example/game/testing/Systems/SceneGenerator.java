@@ -22,7 +22,7 @@ public class SceneGenerator implements mcd_System{
     public void update(mcd_Scene scene, float t, float dt){
         int i = circularArrayIndex;
         int lastIterableElem = (i+_obstacleList.size()-1)% _obstacleList.size();
-        if(i >= _obstacleList.size()) new RuntimeException("This should never happen");
+        if(i >= _obstacleList.size()) throw new RuntimeException("This should never happen");
         while(!_obstacleList.get(i).isActive()){
             mcd_Entity ent = _obstacleList.get(i);
             assert(ent!=null);
@@ -51,8 +51,14 @@ public class SceneGenerator implements mcd_System{
      */
     private boolean decideOnPossibleNewObstacle(mcd_Entity ent, float t, float dt){
         circularArrayIndex = (circularArrayIndex+1) % _obstacleList.size();
+        if(askIfSpawnNewObstacle(dt)){
+            System.out.println("Creame un obstaculo pide");
+            return true;
+        }
         return false;
-       // throw new Error("Unimplemented");
+    }
+    public boolean askIfSpawnNewObstacle(float dt){
+        return freeIdxCount > 0 && (1 < freeIdxCount*dt*Math.random());
     }
     private void initializeObstacleList(mcd_Scene scene, int obstacleScreenDensity){
         _obstacleList = new ArrayList<mcd_Entity>(obstacleScreenDensity);

@@ -1,4 +1,4 @@
-package com.example.game.testing.Systems;
+package com.example.game.testing.EC.Component;
 
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.mcd_Component;
