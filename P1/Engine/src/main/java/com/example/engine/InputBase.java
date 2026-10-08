@@ -11,13 +11,14 @@ public abstract class InputBase {
     public interface screenToGamePos{
         public Vec2 toGamePos(Vec2 screenPos);
     }
-    Pool<TouchEvent> eventPool = new Pool<>(CAPACITY);
+    protected final Pool<TouchEvent> eventPool = new Pool<>(CAPACITY, new TouchEvent());
     protected final List<TouchEvent> eventList = new ArrayList<>();;
     private final List<TouchEvent> lastFrameEvents = new ArrayList<>();
     public final List<TouchEvent> getTouchEvents(){
         return lastFrameEvents;
     }
     synchronized public void update(screenToGamePos posTranslator) {
+        lastFrameEvents.forEach(eventPool::releaseItem);
         lastFrameEvents.clear();
         lastFrameEvents.addAll(eventList);
         eventList.clear();
