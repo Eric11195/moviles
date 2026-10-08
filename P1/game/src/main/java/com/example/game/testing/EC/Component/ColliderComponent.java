@@ -133,9 +133,8 @@ public class ColliderComponent implements mcd_Component {
 
 
     @Override
-    public void update(mcd_Entity ent, float t, float dt) {
 
-    }
+    public void update(mcd_Entity ent, float t, float dt) {}
 
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g) {

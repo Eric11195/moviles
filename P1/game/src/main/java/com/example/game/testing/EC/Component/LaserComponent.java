@@ -25,10 +25,11 @@ public class LaserComponent implements mcd_Component{
     int index_rep;
 
     ColorEng color;
-    LaserComponent(int numRepetitions, int anim_duration)
+    public LaserComponent(int numRepetitions, int anim_duration)
     {
         num_rep=numRepetitions;
-        anim_timer = anim_dur =anim_duration;
+        anim_dur = anim_duration;
+        anim_timer =0;
         attack_dur = 10;
         is_attacking = false;
         index_rep = 0;
@@ -40,19 +41,24 @@ public class LaserComponent implements mcd_Component{
         {
             if(!is_attacking)
             {
-                if(anim_timer>anim_dur/2)
+                if(anim_timer<=anim_dur/2)
                 {
-
+                    // progress can only be 1 here at the start, but afterwards goes back to 0
                 //here we need to change the color
-                float progress =(float)( (anim_timer - anim_dur / 2f) / (anim_dur / 2f));
-                color.a = (int)(255 - 155 * progress);
+                    //fist half = dur_total-time_pased = anim_timer-anim_dur/2/anim_dur
+                    float progress = (float) (anim_timer/(anim_dur/2));
+                    color.a = (int)(255 - 155 * progress);
+                    color.a = Math.max(100,Math.min(255,color.a));
                 }
                 else
                 {
-                float progress = (float) (anim_timer / (anim_dur / 2f));
+
+                float progress =(float)( (anim_timer-(anim_dur/2))/(anim_dur/2));
                 color.a = (int) (100 + 155 * progress);
+                color.a = Math.max(100,Math.min(255,color.a));
                 }
             }
+            else{color.a = 255;}
             TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
 
             g.setColor(color);
@@ -62,18 +68,18 @@ public class LaserComponent implements mcd_Component{
     }
 
     @Override
-    public void update(mcd_Entity ent, float t,float dt) {
+    public void update(mcd_Entity ent,float t,float dt) {
         //here we need to figure out if it is time to attack or not
         //the time would be after
         if(!is_attacking)
         {
-            if(anim_timer>0)
+            if(anim_timer<anim_dur)
             {
-                anim_dur -=dt;
+                anim_timer +=dt;
             }
             else
             {
-                anim_timer = anim_dur;
+                anim_timer = 0;
                 num_rep--;
                 if(num_rep == 0){is_attacking = true;}
             }
@@ -89,7 +95,8 @@ public class LaserComponent implements mcd_Component{
                 else{  ent.rmComponent(ComponentId.COLLIDER_COMPONENT);}
             }
             else{
-                ent.addComponent(ComponentId.COLLIDER_COMPONENT, new ColliderComponent(10,10,1));
+                TransformComponent tr=(TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
+                ent.addComponent(ComponentId.COLLIDER_COMPONENT, new ColliderComponent(100,200,(int)tr.size.x/200));
             }
         }
     }

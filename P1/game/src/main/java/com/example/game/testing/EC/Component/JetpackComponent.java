@@ -30,7 +30,7 @@ public class JetpackComponent implements mcd_Component{
     }
     private  void RespectBorders(TransformComponent tr)
     {
-        tr.pos.y=Math.max(0,Math.min(600,tr.pos.y));
+        tr.pos.y=Math.max(0,Math.min(600-tr.size.y,tr.pos.y));
         if(tr.pos.y==0||tr.pos.y==600)
         {
             velocity=0;
@@ -60,7 +60,7 @@ public class JetpackComponent implements mcd_Component{
         {}
 
     @Override
-    public void update(mcd_Entity ent, float t, float dt) {
+    public void update(mcd_Entity ent, float t , float dt) {
         isInputDown(ent);
         //don't know right now how do i get the input for the click
         if(ent.hasComponent(ComponentId.TRANSFORM_COMPONENT)){

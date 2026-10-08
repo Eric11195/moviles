@@ -7,5 +7,6 @@ public enum ComponentId {
     IMAGE_COMPONENT,
     MOUSETOSCREEN_COMPONENT, //This is debug only. Should be erased when the input coordinates work as intended
     JETPACK_COMPONENT,
+    LASER_COMPONENT,
     COMPONENT_COUNT
 }
