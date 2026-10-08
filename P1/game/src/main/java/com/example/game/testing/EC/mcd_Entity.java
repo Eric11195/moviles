@@ -11,9 +11,13 @@ import java.util.List;
 public class mcd_Entity {
     mcd_Scene myScene;
     private boolean alive = true;
+    private boolean active;
+    public void setActive(boolean active){assert(!isCorrupt());this.active = active;}
+    public boolean isActive(){assert(!isCorrupt());return this.active;}
 
     public mcd_Entity(mcd_Scene scene){
         myScene = scene;
+        setActive(true);
     }
     private final List<mcd_Component> components =
             new ArrayList<>(
@@ -23,10 +27,12 @@ public class mcd_Entity {
                     )
             );
     public mcd_Component getComponent(ComponentId id){
+        assert(!isCorrupt());
         if(!hasComponent(id)) throw new RuntimeException("Cannot access non existing component");
         return components.get(getCmpIdx(id));
     }
     public boolean hasComponent(ComponentId id){
+        assert(!isCorrupt());
         return components.get(getCmpIdx(id)) != null;
     }
 
@@ -44,26 +50,38 @@ public class mcd_Entity {
     }
     //Removes the component
     public void rmComponent(ComponentId id){
+        assert(!isCorrupt());
         if(!hasComponent(id)) throw new RuntimeException("Component already exists new one cannot be created");
         components.set(getCmpIdx(id), null);
     }
-    public void update(double dt){
-        for(mcd_Component cmp : components){
-            if(cmp!=null) cmp.update(this,dt);
-        }
+    public void update(float t, float dt){
+        assert(!isCorrupt());
+        if(this.active)
+            for(mcd_Component cmp : components){
+                if(cmp!=null) cmp.update(this,t,dt);
+            }
     }
     public void render(GraphicsInterface gi){
-        for(mcd_Component cmp : components){
-            if(cmp!=null) cmp.render(this,gi);
-        }
+        assert(!isCorrupt());
+        if(this.active)
+            for(mcd_Component cmp : components){
+                if(cmp!=null) cmp.render(this,gi);
+            }
     }
     public void destroyThisEntity(){
-        alive = false;
+        assert(!isCorrupt());alive = false;
     }
     public boolean getAlive(){
-        return alive;
+        assert(!isCorrupt());return alive;
     }
     public Engine getEngine(){
-        return myScene.getEngine();
+        assert(!isCorrupt());return myScene.getEngine();
+    }
+
+    public boolean isCorrupt(){
+        return myScene==null;
+    }
+    public void setAsCorrupt() {
+        myScene = null;
     }
 }

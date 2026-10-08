@@ -172,9 +172,9 @@ public class GraphicsAndroid implements GraphicsInterface {
         can = null;
     }
     @Override
-    public void render(Engine eng, double dt){
+    public void render(Engine eng){
         if(startRender()) {
-            eng.getCurrentScene().render(this, dt);
+            eng.getCurrentScene().render(this);
             endRender();
         }
     }

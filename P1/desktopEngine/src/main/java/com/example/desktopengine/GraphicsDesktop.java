@@ -86,7 +86,7 @@ public class GraphicsDesktop implements GraphicsInterface {
         graphics.scale(scaleMult, scaleMult);
     }
     @Override
-    public void render(Engine eng, double dt){
+    public void render(Engine eng){
         do {
             do {
                 this.graphics = (Graphics2D)this.buf.getDrawGraphics();
@@ -100,7 +100,7 @@ public class GraphicsDesktop implements GraphicsInterface {
 
                     this.graphics.setTransform(transformation);
 
-                    eng.getCurrentScene().render(this, dt);
+                    eng.getCurrentScene().render(this);
 
                     calculateInverseMatrix();
                 }

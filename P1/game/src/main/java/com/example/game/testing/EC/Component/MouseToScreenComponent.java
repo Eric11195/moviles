@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class MouseToScreenComponent implements mcd_Component {
     ArrayList<Vec2> inputPos = new ArrayList<>();
     @Override
-    public void update(mcd_Entity ent, double dt) {
+    public void update(mcd_Entity ent, float t, float dt) {
         Engine eng = ent.getEngine();
         for(TouchEvent evt :eng.getInput().getTouchEvents()){
             inputPos.add(evt.pos);

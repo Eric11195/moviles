@@ -18,7 +18,7 @@ public class TransformComponent implements mcd_Component {
     }
 
     @Override
-    public void update(mcd_Entity ent, double dt) {
+    public void update(mcd_Entity ent, float t, float dt) {
 
     }
 

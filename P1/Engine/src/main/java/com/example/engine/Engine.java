@@ -12,6 +12,7 @@ public class Engine implements Runnable{
 
     private volatile boolean running;
     private Scene currentScene;
+    private Scene upcomingScene=null;
 
     protected Engine(GraphicsInterface graphics, InputBase input, AudioInterface audio) {
         this.graphics = graphics;
@@ -24,7 +25,8 @@ public class Engine implements Runnable{
     }
 
     public void setScene(Scene scn){
-        this.currentScene = scn;
+        assert(scn != null);
+        upcomingScene = scn;
     }
 
     public GraphicsInterface getGraphics() {return graphics;}
@@ -74,12 +76,9 @@ public class Engine implements Runnable{
             throw new RuntimeException("run() should not be called directly");
         }
         while(this.running && !this.correctlyResumedBoolean());
-
-        this.start();
         
         while(this.running){
             this.update();
-
         }
     }
     /** Returns true if everything was correctly setup after calling resume
@@ -89,9 +88,9 @@ public class Engine implements Runnable{
         return true;
     }
 
-    private double dt;
+    private float dt;
     //time since start
-    private double t;
+    private float t;
     private long lastFrameTime;
     long prevTime = 0;
     int frames = 0;
@@ -101,7 +100,6 @@ public class Engine implements Runnable{
         prevTime = lastFrameTime; // Informes de FPS
         frames = 0;
         dt = t = 0;
-        currentScene.start(this);
     }
 
     protected void update(){
@@ -109,12 +107,19 @@ public class Engine implements Runnable{
         long nanoElapsedTime = currentTime - lastFrameTime;
         lastFrameTime = currentTime;
 
-        currentScene.update(this,dt);
+        if(this.upcomingScene!=null){
+            if(this.currentScene != null)
+                this.currentScene.cleanup(this);
+            this.currentScene = upcomingScene;
+            this.currentScene.start(this);
+        }
+
+        currentScene.update(this,t,dt);
         this.render();
         input.update(this.graphics::getPointInWindowPos);
         // Informe de FPS
-        dt = (double) nanoElapsedTime / 1.0E9;
-        t = (double) currentTime / 1.0E9;
+        dt = (float)(nanoElapsedTime / 1.0E9);
+        t =  (float)(currentTime / 1.0E9);
         if (currentTime - prevTime > 1000000000l) {
             long fps = frames * 1000000000l / (currentTime - prevTime);
             //System.out.println("" + fps + " fps");
@@ -124,6 +129,6 @@ public class Engine implements Runnable{
         ++frames;
     }
     protected void render(){
-        graphics.render(this,dt);
+        graphics.render(this);
     }
 }

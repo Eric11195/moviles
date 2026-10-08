@@ -3,7 +3,7 @@ package com.example.engine;
 import com.example.utils.Vec2;
 
 public interface GraphicsInterface {
-    public void render(Engine eng, double dt);
+    public void render(Engine eng);
     public void drawImage(ImageEng img, Vec2 src_pos, Vec2 src_size, Vec2 dst_pos, Vec2 dst_size);
     public void drawImage(ImageEng img, Vec2 pos, Vec2 size);
     public void drawImage(ImageEng img, Vec2 pos);

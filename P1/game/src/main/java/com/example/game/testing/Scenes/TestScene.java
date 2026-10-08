@@ -17,12 +17,17 @@ public class TestScene implements Scene {
     }
 
     @Override
-    public void update(Engine eng, double dt) {
+    public void cleanup(Engine eng) {
 
     }
 
     @Override
-    public void render(GraphicsInterface g, double dt) {
+    public void update(Engine eng, float t, float dt) {
+
+    }
+
+    @Override
+    public void render(GraphicsInterface g) {
         g.clear(new ColorEng(0,0,255,255));
         g.setColor(new ColorEng(255,255,255,255));
         g.drawCircle(new Vec2(50,50),50,true);
