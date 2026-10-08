@@ -5,7 +5,7 @@ import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.engine.GraphicsInterface;
-
+import com.example.game.testing.constants.Constants;
 import com.example.utils.Vec2;
 
 import javax.swing.ComponentInputMap;
@@ -96,7 +96,7 @@ public class LaserComponent implements mcd_Component{
             }
             else{
                 TransformComponent tr=(TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
-                ent.addComponent(ComponentId.COLLIDER_COMPONENT, new ColliderComponent(100,200,(int)tr.size.x/200));
+                ent.addComponent(ComponentId.COLLIDER_COMPONENT, new ColliderComponent(100,200,1,0,new Vec2(0,tr.size.y/2)));
             }
         }
     }
