@@ -65,9 +65,8 @@ public class JetpackComponent implements mcd_Component{
         //don't know right now how do i get the input for the click
         if(ent.hasComponent(ComponentId.TRANSFORM_COMPONENT)){
             TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
-           if (is_flying)
-           {
-             velocity += (float) (accel*dt);
+           if (is_flying) {
+               velocity += (float) (accel * dt);
            }
            velocity+= (float) (gravity*dt);
             tr.pos.y+=velocity;

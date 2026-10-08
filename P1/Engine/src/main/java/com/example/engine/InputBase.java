@@ -26,6 +26,4 @@ public abstract class InputBase {
         lastFrameEvents.addAll(eventList);
         eventList.clear();
     }
-
-
 }

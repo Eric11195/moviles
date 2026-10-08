@@ -25,7 +25,10 @@ public class ImageComponent implements mcd_Component {
     public void render(mcd_Entity ent, GraphicsInterface g) {
         if(ent.hasComponent(ComponentId.TRANSFORM_COMPONENT)){
             TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
-            if(dirty) img = g.createImage(filePath);
+            if(dirty) {
+                img = g.createImage(filePath);
+                dirty = false;
+            }
             g.drawImage(img,tr.pos,tr.size);
         }
     }

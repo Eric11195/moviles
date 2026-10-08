@@ -123,7 +123,7 @@ public class Engine implements Runnable{
         t =  (float)(currentTime / 1.0E9);
         if (currentTime - prevTime > 1000000000l) {
             long fps = frames * 1000000000l / (currentTime - prevTime);
-            //System.out.println("" + fps + " fps");
+            System.out.println("" + fps + " fps");
             frames = 0;
             prevTime = currentTime;
         }

@@ -76,6 +76,7 @@ public class ButtonComponent implements mcd_Component {
         return false;
     }
     public boolean inside(TransformComponent tr, Vec2 ptr){
+        System.out.println("Position ("+tr.pos.x+","+tr.pos.y+")  Size ("+tr.size.x+","+tr.size.y+") -> Ptr ("+ptr.x+','+ptr.y+')');
         return tr.pos.x < ptr.x && tr.pos.x+tr.size.x >ptr.x &&
                 tr.pos.y < ptr.y && tr.pos.y +tr.size.y > ptr.y;
     }

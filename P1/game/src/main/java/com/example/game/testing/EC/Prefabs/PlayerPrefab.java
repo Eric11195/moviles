@@ -17,6 +17,5 @@ public class PlayerPrefab {
         ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent(pos, new Vec2(200,40)));
         ent.addComponent(ComponentId.IMAGE_COMPONENT, new ImageComponent("test_image.jpg"));
         return ent;
-
     }
 }

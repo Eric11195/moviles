@@ -23,7 +23,7 @@ public class ImageDesktop implements ImageEng {
                 image_path
         ).toAbsolutePath().toString();
 
-        System.out.println("Searching for image in: " + fullPath);
+        //System.out.println("Searching for image in: " + fullPath);
 
         try {
             img = ImageIO.read(new File(fullPath));
