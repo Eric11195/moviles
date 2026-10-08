@@ -8,4 +8,5 @@ java {
 dependencies {
     implementation project(':engine')
     implementation project(':utils')
+    implementation project(':utils')
 }

@@ -84,4 +84,5 @@ public class mcd_Entity {
     public void setAsCorrupt() {
         myScene = null;
     }
+    public mcd_Scene getMyScene(){return myScene;}
 }
