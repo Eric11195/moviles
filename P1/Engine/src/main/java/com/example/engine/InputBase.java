@@ -9,6 +9,7 @@ import java.util.List;
 public abstract class InputBase {
     final static int CAPACITY = 30;
     final TouchEventType state_this_frame = new TouchEventType(TouchEventType.None);
+    private boolean pressed = false;
     public interface screenToGamePos{
         public Vec2 toGamePos(Vec2 screenPos);
     }
@@ -22,18 +23,16 @@ public abstract class InputBase {
         lastFrameEvents.forEach(eventPool::releaseItem);
         lastFrameEvents.clear();
         lastFrameEvents.addAll(eventList);
-        state_this_frame.unset(TouchEventType.MOVE);
+        state_this_frame.setNone();
         lastFrameEvents.forEach((tE)->{
             tE.pos = posTranslator.toGamePos(tE.pos);
             state_this_frame.or(tE.type);
-            if(tE.type.contains(TouchEventType.DOWN)){
-                state_this_frame.xor(TouchEventType.UP);
-            }
-            if(tE.type.contains(TouchEventType.UP)){
-                state_this_frame.xor(TouchEventType.DOWN);
-            }
         });
+        pressed = (pressed&&!upThisFrame() || (downThisFrame()));
         eventList.clear();
+    }
+    public boolean pressed(){
+        return pressed;
     }
     public boolean downThisFrame(){
         return state_this_frame.contains(TouchEventType.DOWN);

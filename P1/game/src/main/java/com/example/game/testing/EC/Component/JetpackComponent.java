@@ -33,7 +33,7 @@ public class JetpackComponent implements mcd_Component{
     }
     private void isInputDown(mcd_Entity ent)
     {
-        is_flying = ent.getEngine().getInput().downThisFrame();
+        is_flying = ent.getEngine().getInput().pressed();
     }
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g)
