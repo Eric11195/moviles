@@ -52,13 +52,15 @@ public class SceneGenerator implements mcd_System{
     private boolean decideOnPossibleNewObstacle(mcd_Entity ent, float t, float dt){
         circularArrayIndex = (circularArrayIndex+1) % _obstacleList.size();
         if(askIfSpawnNewObstacle(dt)){
-            System.out.println("Creame un obstaculo pide");
+            System.out.println("Creame un obstaculo pibe");
             return true;
         }
         return false;
     }
     public boolean askIfSpawnNewObstacle(float dt){
-        return freeIdxCount > 0 && (1 < freeIdxCount*dt*Math.random());
+        float probability = freeIdxCount*dt;
+        
+        return freeIdxCount > 0 && (1 < probability* Math.random());
     }
     private void initializeObstacleList(mcd_Scene scene, int obstacleScreenDensity){
         _obstacleList = new ArrayList<mcd_Entity>(obstacleScreenDensity);
