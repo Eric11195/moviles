@@ -59,7 +59,7 @@ public class SceneGenerator implements mcd_System{
     }
     public boolean askIfSpawnNewObstacle(float dt){
         float probability = freeIdxCount*dt;
-        
+
         return freeIdxCount > 0 && (1 < probability* Math.random());
     }
     private void initializeObstacleList(mcd_Scene scene, int obstacleScreenDensity){
