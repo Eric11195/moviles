@@ -18,14 +18,26 @@ public class ZapperComponent extends Obstacle{
     public final Vec2 start;
     public final Vec2 end;
 
-    public ZapperComponent(mcd_Entity ent, float spawnTime, float speedMult, Vec2 yStartEnd) {
-        super(spawnTime, speedMult);
+    /**
+     * @param outStart returns here the first point of the zapper
+     * @param outEnd returns here the second point of the zapper
+     * @param yStartEnd gets here the info of the height allowed Vec2(miny,maxy)
+     */
+    public static void getProvisionalZapperData(Vec2 yStartEnd, Vec2 outStart, Vec2 outEnd){
         float random_zaper_width = MIN_ZAPPER_WIDTH + (float)Math.random()*ZAPPER_DELTA_WIDTH;
+        outStart.x = LOGIC_WINDOW_SIZE.x;
+        outStart.y = yStartEnd.x;
+        outEnd.x = LOGIC_WINDOW_SIZE.x+random_zaper_width;
+        outEnd.y = yStartEnd.y;
+    }
+
+    public ZapperComponent(mcd_Entity ent, float spawnTime, float speedMult, Vec2 start, Vec2 end) {
+        super(spawnTime, speedMult);
         assert(ent.hasComponent(ComponentId.TRANSFORM_COMPONENT));
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
-        tr.pos = new Vec2(LOGIC_WINDOW_SIZE.x, yStartEnd.x);
+        tr.pos = new Vec2(start.x, start.y);
         this.start = new Vec2(0,0);
-        this.end = new Vec2(random_zaper_width,yStartEnd.y-yStartEnd.x);
+        this.end = new Vec2(end.x-start.x,end.y-start.y);
         assert(this.start.x >= this.end.x);
         scrolledTime = calculateScrolledTime(spawnTime, speedMult);
     }

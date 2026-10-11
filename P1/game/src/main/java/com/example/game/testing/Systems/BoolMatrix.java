@@ -18,7 +18,7 @@ public class BoolMatrix {
     }
     private int getBitsetPos(int x, int y){
         int result = y*width+x;
-        System.out.println("BitsetPos Conversion: ("+x+','+y+") -> "+result);
+//        System.out.println("BitsetPos Conversion: ("+x+','+y+") -> "+result);
         assert(result >= 0 && result < x*y);
         return result;
     }

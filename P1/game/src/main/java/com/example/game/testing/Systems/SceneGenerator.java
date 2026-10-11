@@ -76,18 +76,20 @@ public class SceneGenerator implements mcd_System{
     private boolean decideOnPossibleNewObstacle(mcd_Entity ent, float t, float dt){
         if(askIfSpawnNewObstacle(dt)){
             System.out.println("Creame un obstaculo pibe");
-            setUpNewObstacle(_obstacleList.get(_circularArrayIndex), t, dt);
-            --obstacleAcumSpawn;
-            _circularArrayIndex = (_circularArrayIndex +1) % _obstacleList.size();
-            return true;
+            if(setUpNewObstacle(_obstacleList.get(_circularArrayIndex), t, dt)) {
+                --obstacleAcumSpawn;
+                _circularArrayIndex = (_circularArrayIndex + 1) % _obstacleList.size();
+                return true;
+            }
         }
         return false;
     }
-    public void setUpNewObstacle(mcd_Entity obstacle, float t, float dt){
-        TransformComponent tr = (TransformComponent) obstacle.getComponent(ComponentId.TRANSFORM_COMPONENT);
+    public boolean setUpNewObstacle(mcd_Entity obstacle, float t, float dt){
+        //TransformComponent tr = (TransformComponent) obstacle.getComponent(ComponentId.TRANSFORM_COMPONENT);
         //ImageComponent img = (ImageComponent) obstacle.getComponent(ComponentId.IMAGE_COMPONENT);
-        createRandomObstacleComp(obstacle,t,dt);
+        if(!createRandomObstacleComp(obstacle,t,dt))return false;
         obstacle.setActive(true);
+        return true;
     }
 
     DangerMatrix dangerMatrix= new DangerMatrix(3);
@@ -107,10 +109,11 @@ public class SceneGenerator implements mcd_System{
         }
         return dangerMatrix.getFreeHeightRange(LOGIC_WINDOW_SIZE.x);
     }
-    public void createRandomObstacleComp(mcd_Entity ent, float t, float dt){
-        createZapper(ent,t);
+    public boolean createRandomObstacleComp(mcd_Entity ent, float t, float dt){
+        return createZapper(ent,t);
+
     }
-    public void createZapper(mcd_Entity ent, float t){
+    public boolean createZapper(mcd_Entity ent, float t){
         Vec2 space =
                 getSafeVerticalSpaceForObstacleSoPlayerCanPass(
                         getVerticalSafeZone(),
@@ -118,13 +121,18 @@ public class SceneGenerator implements mcd_System{
                 );
         //Space is really the from and to of y axis that the zapper will ocuppy
         //So x does not mean x axis at all
-        float delta = space.y-space.x;
+        Vec2 start=new Vec2(),end=new Vec2();
+        float delta = Math.abs(space.y-space.x);
         space.y = space.x + delta * (float)Math.random();
         space.x = space.x + delta * (float)Math.random();
+        System.out.println("Delta: "+ delta+ " Y_RANGE: ("+space.x+","+space.y+')');
+        ZapperComponent.getProvisionalZapperData(space,start,end);
+        if(!dangerMatrix.checkLine(start,end)) return false;
         ent.setComponent(
                 ComponentId.OBSTACLE_COMPONENT,
-                new ZapperComponent(ent, t, speedMult, space)
+                new ZapperComponent(ent, t, speedMult, start, end)
         );
+        return true;
     }
 
     /**
