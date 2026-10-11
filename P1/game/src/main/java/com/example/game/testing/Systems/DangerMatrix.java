@@ -1,7 +1,7 @@
 package com.example.game.testing.Systems;
 
+import static com.example.game.testing.constants.Constants.DANGER_MATRIX_PRECALCULATED_SPACE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
-import static com.example.game.testing.constants.Constants.MAX_ZAPPER_WIDTH;
 
 import com.example.utils.Vec2;
 
@@ -9,7 +9,7 @@ public class DangerMatrix extends BoolMatrix{
     int zonesPxSize;
     int pointCheckingDensity;
     public DangerMatrix(int zonesPxSize){
-        super((int)Math.ceil((LOGIC_WINDOW_SIZE.x+MAX_ZAPPER_WIDTH)/zonesPxSize), (int)Math.ceil(LOGIC_WINDOW_SIZE.y/zonesPxSize));
+        super((int)Math.ceil((LOGIC_WINDOW_SIZE.x+DANGER_MATRIX_PRECALCULATED_SPACE)/zonesPxSize), (int)Math.ceil(LOGIC_WINDOW_SIZE.y/zonesPxSize));
         this.zonesPxSize = zonesPxSize;
         this.pointCheckingDensity = (int)Math.floor(Math.sqrt(zonesPxSize));
     }
@@ -48,7 +48,7 @@ public class DangerMatrix extends BoolMatrix{
      * This modifies the given vector
      */
     private Vec2 sanitize(Vec2 p){
-        p.x = Math.min(LOGIC_WINDOW_SIZE.x+MAX_ZAPPER_WIDTH, Math.max(0, p.x));
+        p.x = Math.min(LOGIC_WINDOW_SIZE.x+DANGER_MATRIX_PRECALCULATED_SPACE, Math.max(0, p.x));
         p.y = Math.min(LOGIC_WINDOW_SIZE.y, Math.max(0,p.y));
         return p;
     }
