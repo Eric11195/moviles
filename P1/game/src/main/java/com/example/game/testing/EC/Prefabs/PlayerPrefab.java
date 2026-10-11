@@ -1,6 +1,7 @@
 package com.example.game.testing.EC.Prefabs;
 
-import com.example.game.testing.EC.Component.ButtonComponent;
+import static com.example.game.testing.constants.Constants.PLAYER_DIMENSIONS;
+
 import com.example.game.testing.EC.Component.ImageComponent;
 import com.example.game.testing.EC.Component.JetpackComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
@@ -14,7 +15,7 @@ public class PlayerPrefab {
     {
         mcd_Entity ent = my_scene.createEntity();
         ent.addComponent(ComponentId.JETPACK_COMPONENT, new JetpackComponent(-35.0f));
-        ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent(pos, new Vec2(200,40)));
+        ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent(pos, PLAYER_DIMENSIONS));
         ent.addComponent(ComponentId.IMAGE_COMPONENT, new ImageComponent("test_image.jpg"));
         return ent;
     }

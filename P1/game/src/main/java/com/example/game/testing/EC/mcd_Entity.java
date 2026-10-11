@@ -36,9 +36,20 @@ public class mcd_Entity {
         return components.get(getCmpIdx(id)) != null;
     }
 
-    public void addComponent(ComponentId id, mcd_Component cmp){
+    public mcd_Component addComponent(ComponentId id, mcd_Component cmp){
         if(hasComponent(id)) throw new RuntimeException("Component already exists new one cannot be created");
-        components.set(getCmpIdx(id), cmp);
+        return setComponent(id,cmp);
+    }
+
+    /**
+     * Sets the component to the value cmp. Even if it already exists.
+     * @param id
+     * @param cmp
+     */
+    public mcd_Component setComponent(ComponentId id, mcd_Component cmp){
+        int cmpIdx = getCmpIdx(id);
+        components.set(cmpIdx, cmp);
+        return components.get(cmpIdx);
     }
 
     public mcd_Entity createNewEntity(){

@@ -1,5 +1,7 @@
 package com.example.game.testing.Scenes;
 
+import static com.example.game.testing.constants.Constants.PLAYER_X_POS;
+
 import com.example.engine.Engine;
 import com.example.game.testing.EC.Prefabs.LaserPrefab;
 import com.example.game.testing.EC.Prefabs.PlayerPrefab;
@@ -9,9 +11,8 @@ import com.example.utils.Vec2;
 public class MainGameScene extends mcd_Scene{
     @Override
     public void start(Engine eng) {
-        //System.out.println("Quiero llorar Toni");
         addSystem(new SceneGenerator(this, 2));
-        PlayerPrefab.createPlayer(this,new Vec2(100,100));
+        PlayerPrefab.createPlayer(this,new Vec2(PLAYER_X_POS,100));
         //LaserPrefab.createLaser(this,new Vec2(0,0));
     }
 
