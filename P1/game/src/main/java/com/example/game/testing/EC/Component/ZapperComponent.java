@@ -38,7 +38,6 @@ public class ZapperComponent extends Obstacle{
         tr.pos = new Vec2(start.x, start.y);
         this.start = new Vec2(0,0);
         this.end = new Vec2(end.x-start.x,end.y-start.y);
-        assert(this.start.x >= this.end.x);
         scrolledTime = calculateScrolledTime(spawnTime, speedMult);
     }
 
@@ -51,7 +50,7 @@ public class ZapperComponent extends Obstacle{
     public void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm) {
         Vec2 firstPt = getActualStartPos(tr);
         Vec2 secondPt = getActualEndPos(tr);
-        System.out.println("Line From ("+firstPt.x+","+firstPt.y+") -> ("+secondPt.x+','+secondPt.y+')');
+        //System.out.println("Line From ("+firstPt.x+","+firstPt.y+") -> ("+secondPt.x+','+secondPt.y+')');
         dm.drawLine(
                 getActualStartPos(tr),
                 getActualEndPos(tr)

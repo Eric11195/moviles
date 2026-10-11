@@ -1,8 +1,19 @@
 package com.example.game.testing.Systems;
 
 import static com.example.game.testing.constants.Constants.DANGER_MATRIX_PRECALCULATED_SPACE;
+import static com.example.game.testing.constants.Constants.GRAVITY_FORCE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
+import static com.example.game.testing.constants.Constants.MAX_PLAYER_FALL_SPEED;
+import static com.example.game.testing.constants.Constants.MAX_PLAYER_UPWARDS_SPEED;
+import static com.example.game.testing.constants.Constants.Y_PLAYER_ACCEL;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.example.game.testing.EC.Component.TransformComponent;
+import com.example.game.testing.EC.Component.VelocityComponent;
+import com.example.game.testing.EC.ComponentId;
+import com.example.game.testing.EC.mcd_Entity;
 import com.example.utils.Vec2;
 
 public class DangerMatrix extends BoolMatrix{
@@ -40,6 +51,7 @@ public class DangerMatrix extends BoolMatrix{
         }
         return true;
     }
+
     public void drawSquare(Vec2 x0y0, Vec2 size){
         set(getConvertedPos(x0y0),getConvertedPos(size), true);
     }
@@ -47,9 +59,9 @@ public class DangerMatrix extends BoolMatrix{
      * Converts the vector so it cannot fail in danger matrix
      * This modifies the given vector
      */
-    private Vec2 sanitize(Vec2 p){
-        p.x = Math.min(LOGIC_WINDOW_SIZE.x+DANGER_MATRIX_PRECALCULATED_SPACE, Math.max(0, p.x));
-        p.y = Math.min(LOGIC_WINDOW_SIZE.y, Math.max(0,p.y));
+    private Vec2 sanitize(Vec2 p) {
+        p.x = Math.max(0, Math.min(getWidth() - 1, p.x));
+        p.y = Math.max(0, Math.min(getHeight() - 1, p.y));
         return p;
     }
     public Vec2 getConvertedPos(Vec2 pos){
@@ -74,4 +86,301 @@ public class DangerMatrix extends BoolMatrix{
         }
         return new Vec2(start.y, end.y);
     }
+//    private static class State {
+//        final int yCell;
+//        final int vyBin;
+//
+//        State(int yCell, int vyBin) {
+//            this.yCell = yCell;
+//            this.vyBin = vyBin;
+//        }
+//
+//        @Override
+//        public boolean equals(Object obj) {
+//            if (this == obj) return true;
+//            if (!(obj instanceof State)) return false;
+//
+//            State other = (State) obj;
+//            return yCell == other.yCell
+//                    && vyBin == other.vyBin;
+//        }
+//
+//        @Override
+//        public int hashCode() {
+//            return 31 * yCell + vyBin;
+//        }
+//    }
+
+    public boolean ensureTraversability(
+        mcd_Entity playerEnt,
+        float playerHorizontalSpeed,
+        float dt
+    ){
+        TransformComponent playerTr = (TransformComponent) playerEnt.getComponent(ComponentId.TRANSFORM_COMPONENT);
+        VelocityComponent playerVel = (VelocityComponent) playerEnt.getComponent(ComponentId.VELOCITY_COMPONENT);
+        return ensureTraversability(
+            playerTr.pos.x, playerTr.pos.y,
+            playerTr.size.x, playerTr.size.y,
+            playerVel.velocity.y,
+            playerHorizontalSpeed
+        );
+    }
+
+    public boolean ensureTraversability(
+            float playerXStartPos,
+            float playerYStartPos,
+            float playerWidth,
+            float playerHeight,
+            float initialVy,
+            float horizontalSpeed
+    ) {
+        if (horizontalSpeed <= 0 || zonesPxSize <= 0
+                || playerWidth <= 0 || playerHeight <= 0) {
+            throw new IllegalArgumentException("Invalid parameters");
+        }
+
+        // Coarse velocity quantization to reduce the state count.
+        final float vyStep = 50f;
+        final float dt = zonesPxSize / horizontalSpeed;
+
+        final int yCount = getHeight();
+        final int vCount = 2 * (int) Math.ceil(MAX_PLAYER_UPWARDS_SPEED / vyStep) + 1;
+        final int zeroV = vCount / 2;
+
+        final int startX = Math.min(getWidth() - 1,
+                Math.max(0, (int) (playerXStartPos / zonesPxSize)));
+
+        final int startY = Math.round(playerYStartPos / zonesPxSize);
+        final int startV = Math.max(0, Math.min(vCount - 1,
+                Math.round(initialVy / vyStep) + zeroV));
+
+        if (startY < 0 || startY >= yCount) return false;
+
+        boolean[][] current = new boolean[yCount][vCount];
+        boolean[][] next = new boolean[yCount][vCount];
+
+        current[startY][startV] = true;
+
+        // Reused collision lookup.
+        boolean[] safeY = new boolean[yCount];
+
+        for (int x = startX; x >= 0; --x) {
+            // Precompute valid character positions in this column.
+            for (int y = 0; y < yCount; ++y) {
+                safeY[y] = isCharacterFree(
+                        x * (float) zonesPxSize,
+                        y * (float) zonesPxSize,
+                        playerWidth,
+                        playerHeight
+                );
+            }
+
+            // Discard states that are no longer collision-free.
+            boolean any = false;
+
+            for (int y = 0; y < yCount; ++y) {
+                for (int v = 0; v < vCount; ++v) {
+                    if (!current[y][v]) continue;
+
+                    if (!safeY[y]) {
+                        current[y][v] = false;
+                    } else {
+                        any = true;
+                    }
+                }
+            }
+
+            if (!any) return false;
+
+            if (x == 0) return true;
+
+            // Clear the reusable destination array.
+            for (int y = 0; y < yCount; ++y) {
+                java.util.Arrays.fill(next[y], false);
+            }
+
+            for (int y = 0; y < yCount; ++y) {
+                for (int v = 0; v < vCount; ++v) {
+                    if (!current[y][v]) continue;
+
+                    float vy = (v - zeroV) * vyStep;
+
+                    // Two possible actions: gravity or thrust.
+                    for (int action = 0; action < 2; ++action) {
+                        float acceleration = GRAVITY_FORCE
+                                - (action == 1 ? Y_PLAYER_ACCEL : 0);
+
+                        float newVy = Math.max(-MAX_PLAYER_UPWARDS_SPEED,
+                                Math.min(MAX_PLAYER_FALL_SPEED,
+                                        vy + acceleration * dt));
+
+                        float newY = y * (float) zonesPxSize
+                                + newVy * dt;
+
+                        int ny = Math.round(newY / zonesPxSize);
+                        int nv = Math.max(0, Math.min(vCount - 1,
+                                Math.round(newVy / vyStep) + zeroV));
+
+                        if (ny < 0 || ny >= yCount) continue;
+                        if (!safeY[ny]) continue;
+
+                        next[ny][nv] = true;
+                    }
+                }
+            }
+
+            boolean[][] temp = current;
+            current = next;
+            next = temp;
+        }
+
+        return false;
+    }
+
+
+//    private boolean ensureTraversability(
+//            float playerXStartPos,
+//            float playerYStartPos,
+//            float playerWidth,
+//            float playerHeight,
+//            float initialVy,
+//            float horizontalSpeed,
+//            float dt
+//    ) {
+//        if (horizontalSpeed <= 0 || dt <= 0
+//                || zonesPxSize <= 0 || playerWidth <= 0
+//                || playerHeight <= 0) {
+//            throw new IllegalArgumentException("Invalid movement parameters");
+//        }
+//
+//        // Velocity discretization. Smaller values are more accurate,
+//        // but increase the number of states.
+//        float vyStep = Math.max(1f, zonesPxSize / 4f);
+//
+//        int startXCell = Math.min(
+//                getWidth() - 1,
+//                Math.max(0, (int) Math.floor(
+//                        playerXStartPos / zonesPxSize))
+//        );
+//
+//        int minYCell = 0;
+//        int maxYCell = (int) Math.floor(
+//                (getHeight() * (float) zonesPxSize - playerHeight)
+//                        / zonesPxSize
+//        );
+//
+//        if (maxYCell < minYCell) return false;
+//
+//        Set<State> reachable = new HashSet<>();
+//
+//        reachable.add(new State(
+//                Math.round(playerYStartPos / zonesPxSize),
+//                Math.round(initialVy / vyStep)
+//        ));
+//
+//        // Search from the starting column to the left edge.
+//        for (int xCell = startXCell; xCell >= 0; --xCell) {
+//            float x = xCell * (float) zonesPxSize;
+//
+//            Set<State> next = new HashSet<>();
+//
+//            for (State state : reachable) {
+//                float y = state.yCell * (float) zonesPxSize;
+//                float vy = state.vyBin * vyStep;
+//
+//                // Each horizontal step takes this much time.
+//                float stepTime = zonesPxSize / horizontalSpeed;
+//
+//                // Sample the trajectory in smaller time steps to avoid
+//                // skipping thin obstacles.
+//                int samples = Math.max(
+//                        1, (int) Math.ceil(stepTime / dt)
+//                );
+//                float subDt = stepTime / samples;
+//
+//                // Action 0: gravity only.
+//                // Action 1: upward thrust in addition to gravity.
+//                for (int action = 0; action < 2; ++action) {
+//                    float simY = y;
+//                    float simVy = vy;
+//                    boolean valid = true;
+//
+//                    for (int i = 0; i < samples; ++i) {
+//                        float acceleration = com.example.game.testing.constants.Constants.GRAVITY_FORCE;
+//
+//                        if (action == 1) {
+//                            acceleration -= com.example.game.testing.constants.Constants.Y_PLAYER_ACCEL;
+//                        }
+//
+//                        simVy = Math.max(
+//                                -MAX_PLAYER_UPWARDS_SPEED,
+//                                Math.min(MAX_PLAYER_FALL_SPEED,
+//                                        simVy + acceleration * subDt)
+//                        );
+//
+//                        simY += simVy * subDt;
+//
+//                        if (simY < 0
+//                                || simY + playerHeight
+//                                > getHeight() * (float) zonesPxSize
+//                                || !isCharacterFree(
+//                                x, simY, playerWidth, playerHeight
+//                        )) {
+//                            valid = false;
+//                            break;
+//                        }
+//                    }
+//
+//                    if (!valid) continue;
+//
+//                    int newYCell = Math.round(simY / zonesPxSize);
+//                    int newVyBin = Math.round(simVy / vyStep);
+//
+//                    if (newYCell >= minYCell
+//                            && newYCell <= maxYCell) {
+//                        next.add(new State(newYCell, newVyBin));
+//                    }
+//                }
+//            }
+//
+//            if (next.isEmpty()) return false;
+//
+//            reachable = next;
+//        }
+//
+//        return !reachable.isEmpty();
+//    }
+
+    /**
+     * Checks every grid cell touched by the character's bounding box.
+     */
+    private boolean isCharacterFree(
+            float x, float y, float playerWidth, float playerHeight
+    ) {
+        int minX = (int) Math.floor(x / zonesPxSize);
+        int minY = (int) Math.floor(y / zonesPxSize);
+
+        // Subtract a tiny epsilon so an edge exactly on a cell boundary
+        // does not count as overlapping the next cell.
+        int maxX = (int) Math.floor(
+                (x + playerWidth - 0.001f) / zonesPxSize
+        );
+        int maxY = (int) Math.floor(
+                (y + playerHeight - 0.001f) / zonesPxSize
+        );
+
+        for (int cx = minX; cx <= maxX; ++cx) {
+            for (int cy = minY; cy <= maxY; ++cy) {
+                if (cx < 0 || cx >= getWidth()
+                        || cy < 0 || cy >= getHeight()) {
+                    return false;
+                }
+
+                if (get(cx, cy)) return false;
+            }
+        }
+
+        return true;
+    }
+
 }

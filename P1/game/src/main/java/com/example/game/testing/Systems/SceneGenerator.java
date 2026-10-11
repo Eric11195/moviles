@@ -20,14 +20,18 @@ import java.awt.Component;
 import java.awt.Image;
 import java.util.ArrayList;
 
+import javax.xml.crypto.dsig.Transform;
+
 public class SceneGenerator implements mcd_System{
     int _circularArrayIndex;
     int _freeIdxCount;
     float speedMult = 150.0f;
     ArrayList<mcd_Entity> _obstacleList;
+    mcd_Entity playerEnt;
     //@param density marks the highest amount of obstacles in screen at the same time
-    public SceneGenerator(mcd_Scene scene, int obstacleScreenDensity){
+    public SceneGenerator(mcd_Scene scene, mcd_Entity playerEnt ,int obstacleScreenDensity){
         initializeObstacleList(scene,obstacleScreenDensity);
+        this.playerEnt = playerEnt;
     }
 
     @Override
@@ -36,6 +40,7 @@ public class SceneGenerator implements mcd_System{
         int lastIterableElem = (i+_obstacleList.size()-1)% _obstacleList.size();
         if(i >= _obstacleList.size()) throw new RuntimeException("This should never happen");
         updateActiveObstacleCount();
+        setupDangerMatrixWithAlreadyExistingObjects();
         addProbabilityToObstacleSpawn(dt);
         while(!_obstacleList.get(i).isActive()){
             mcd_Entity ent = _obstacleList.get(i);
@@ -75,7 +80,7 @@ public class SceneGenerator implements mcd_System{
      */
     private boolean decideOnPossibleNewObstacle(mcd_Entity ent, float t, float dt){
         if(askIfSpawnNewObstacle(dt)){
-            System.out.println("Creame un obstaculo pibe");
+            //System.out.println("Creame un obstaculo pibe");
             if(setUpNewObstacle(_obstacleList.get(_circularArrayIndex), t, dt)) {
                 --obstacleAcumSpawn;
                 _circularArrayIndex = (_circularArrayIndex + 1) % _obstacleList.size();
@@ -93,12 +98,7 @@ public class SceneGenerator implements mcd_System{
     }
 
     DangerMatrix dangerMatrix= new DangerMatrix(3);
-    /**
-     *
-     * @return (y1,y2) so that y1<y2 and player will not be harmed in that zone.
-     * Consider y1,y2 as points at the rightmost screen position
-     */
-    public Vec2 getVerticalSafeZone(){
+    public void setupDangerMatrixWithAlreadyExistingObjects(){
         dangerMatrix.reset();
         for(mcd_Entity ent : _obstacleList){
             if(!ent.isActive()) continue;
@@ -107,13 +107,20 @@ public class SceneGenerator implements mcd_System{
                     dangerMatrix
             );
         }
+    }
+    /**
+     *
+     * @return (y1,y2) so that y1<y2 and player will not be harmed in that zone.
+     * Consider y1,y2 as points at the rightmost screen position
+     */
+    public Vec2 getVerticalSafeZone(){
         return dangerMatrix.getFreeHeightRange(LOGIC_WINDOW_SIZE.x);
     }
     public boolean createRandomObstacleComp(mcd_Entity ent, float t, float dt){
-        return createZapper(ent,t);
+        return createZapper(ent,t, dt);
 
     }
-    public boolean createZapper(mcd_Entity ent, float t){
+    public boolean createZapper(mcd_Entity ent, float t, float dt){
         Vec2 space =
                 getSafeVerticalSpaceForObstacleSoPlayerCanPass(
                         getVerticalSafeZone(),
@@ -125,9 +132,11 @@ public class SceneGenerator implements mcd_System{
         float delta = Math.abs(space.y-space.x);
         space.y = space.x + delta * (float)Math.random();
         space.x = space.x + delta * (float)Math.random();
-        System.out.println("Delta: "+ delta+ " Y_RANGE: ("+space.x+","+space.y+')');
+        //System.out.println("Delta: "+ delta+ " Y_RANGE: ("+space.x+","+space.y+')');
         ZapperComponent.getProvisionalZapperData(space,start,end);
         if(!dangerMatrix.checkLine(start,end)) return false;
+        dangerMatrix.drawLine(start,end);
+        if(!dangerMatrix.ensureTraversability(playerEnt,speedMult,dt)) return false;
         ent.setComponent(
                 ComponentId.OBSTACLE_COMPONENT,
                 new ZapperComponent(ent, t, speedMult, start, end)
