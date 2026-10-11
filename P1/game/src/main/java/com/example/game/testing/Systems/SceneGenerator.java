@@ -3,6 +3,7 @@ package com.example.game.testing.Systems;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.MIN_ZAPPER_HEIGHT;
 import static com.example.game.testing.constants.Constants.PLAYER_DIMENSIONS;
+import static com.example.game.testing.constants.Constants.PLAYER_MARGINS;
 import static com.example.game.testing.constants.Constants.PLAYER_X_POS;
 
 import com.example.engine.GraphicsInterface;
@@ -47,8 +48,11 @@ public class SceneGenerator implements mcd_System{
         }
     }
     float obstacleAcumSpawn = 0;
-    final float AVERAGE_OBSTACLES_PER_SECOND = 1;
+    final double obstacleSpawnLoteryProbability = 0.00000001;
+    final float obstacleLotteryAmount = 1.0f;
+    final float AVERAGE_OBSTACLES_PER_SECOND = 0.5f;
     public void addProbabilityToObstacleSpawn(float dt){
+        obstacleAcumSpawn += (dt*Math.random() < obstacleSpawnLoteryProbability) ? obstacleLotteryAmount : 0;
         float probability = AVERAGE_OBSTACLES_PER_SECOND*(float)Math.random()*dt*((float) _freeIdxCount /_obstacleList.size());
         obstacleAcumSpawn += probability;
         //System.out.println("Obstacle Acum: "+obstacleAcumSpawn);
@@ -112,6 +116,8 @@ public class SceneGenerator implements mcd_System{
                         getVerticalSafeZone(),
                         MIN_ZAPPER_HEIGHT
                 );
+        //Space is really the from and to of y axis that the zapper will ocuppy
+        //So x does not mean x axis at all
         float delta = space.y-space.x;
         space.y = space.x + delta * (float)Math.random();
         space.x = space.x + delta * (float)Math.random();
@@ -127,7 +133,7 @@ public class SceneGenerator implements mcd_System{
      * @return Vec2(yUp, yDown)
      */
     public Vec2 getSafeVerticalSpaceForObstacleSoPlayerCanPass(Vec2 freeYRange, float minObstacleHeight){
-        float randomRange = (float)Math.random() * (LOGIC_WINDOW_SIZE.y-PLAYER_DIMENSIONS.y);
+        float randomRange = (float)Math.random() * (LOGIC_WINDOW_SIZE.y-PLAYER_DIMENSIONS.y- PLAYER_MARGINS.y);
         if(randomRange < minObstacleHeight){
             //choose space under randomRange
             return new Vec2(randomRange, freeYRange.y);
