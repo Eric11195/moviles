@@ -17,5 +17,6 @@ public class Constants {
     public static final float MIN_ZAPPER_WIDTH = 60;
     public static final float MAX_ZAPPER_WIDTH = 160;
     public static final float ZAPPER_DELTA_WIDTH = MAX_ZAPPER_WIDTH - MIN_ZAPPER_WIDTH;
+    public static final float MIN_ZAPPER_HEIGHT = 10;
 
 }

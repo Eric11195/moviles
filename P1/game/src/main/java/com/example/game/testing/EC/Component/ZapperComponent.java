@@ -37,7 +37,13 @@ public class ZapperComponent extends Obstacle{
 
     @Override
     public void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm) {
-        dm.drawLine(getActualStartPos(tr),getActualEndPos(tr));
+        Vec2 firstPt = getActualStartPos(tr);
+        Vec2 secondPt = getActualEndPos(tr);
+        System.out.println("Line From ("+firstPt.x+","+firstPt.y+") -> ("+secondPt.x+','+secondPt.y+')');
+        dm.drawLine(
+                getActualStartPos(tr),
+                getActualEndPos(tr)
+        );
     }
     public Vec2 getActualStartPos(TransformComponent tr){
         return tr.pos.add(start);

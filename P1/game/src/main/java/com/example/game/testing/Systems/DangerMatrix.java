@@ -8,7 +8,7 @@ public class DangerMatrix extends BoolMatrix{
     int zonesPxSize;
     int pointCheckingDensity;
     public DangerMatrix(int zonesPxSize){
-        super((int)LOGIC_WINDOW_SIZE.x/zonesPxSize, (int)LOGIC_WINDOW_SIZE.y/zonesPxSize);
+        super((int)Math.ceil(LOGIC_WINDOW_SIZE.x/zonesPxSize), (int)Math.ceil(LOGIC_WINDOW_SIZE.y/zonesPxSize));
         this.zonesPxSize = zonesPxSize;
         this.pointCheckingDensity = (int)Math.floor(Math.sqrt(zonesPxSize));
     }
@@ -17,7 +17,7 @@ public class DangerMatrix extends BoolMatrix{
     }
     public void drawLine(Vec2 startPt, Vec2 endPt){
         Vec2 delta = endPt.sub(startPt);
-        int repetitions = (int)Math.ceil(delta.length() / zonesPxSize);
+        int repetitions = (int)Math.floor(delta.length() / zonesPxSize);
         Vec2 pt = startPt;
         for(int i = 0; i < repetitions; ++i){
             set(getConvertedPos(pt), true);
@@ -27,11 +27,20 @@ public class DangerMatrix extends BoolMatrix{
     public void drawSquare(Vec2 x0y0, Vec2 size){
         set(getConvertedPos(x0y0),getConvertedPos(size), true);
     }
+    /**
+     * Converts the vector so it cannot fail in danger matrix
+     * This modifies the given vector
+     */
+    private Vec2 sanitize(Vec2 p){
+        p.x = Math.min(LOGIC_WINDOW_SIZE.x, Math.max(0, p.x));
+        p.y = Math.min(LOGIC_WINDOW_SIZE.y, Math.max(0,p.y));
+        return p;
+    }
     public Vec2 getConvertedPos(Vec2 pos){
-        return new Vec2(
+        return sanitize(new Vec2(
             pos.x/zonesPxSize,
             pos.y/zonesPxSize
-        );
+        ));
     }
 
     /**

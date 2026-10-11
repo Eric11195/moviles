@@ -17,7 +17,10 @@ public class BoolMatrix {
         this.bitSet.clear();
     }
     private int getBitsetPos(int x, int y){
-        return y*width+x;
+        int result = y*width+x;
+        System.out.println("BitsetPos Conversion: ("+x+','+y+") -> "+result);
+        assert(result >= 0 && result < x*y);
+        return result;
     }
     private int getBitsetPos(Vec2 pt){
         return getBitsetPos((int)Math.round(pt.x),(int)Math.round(pt.y));

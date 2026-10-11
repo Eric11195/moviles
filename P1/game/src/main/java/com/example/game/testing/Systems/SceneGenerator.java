@@ -1,6 +1,8 @@
 package com.example.game.testing.Systems;
 
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
+import static com.example.game.testing.constants.Constants.MIN_ZAPPER_HEIGHT;
+import static com.example.game.testing.constants.Constants.PLAYER_DIMENSIONS;
 import static com.example.game.testing.constants.Constants.PLAYER_X_POS;
 
 import com.example.engine.GraphicsInterface;
@@ -20,7 +22,7 @@ import java.util.ArrayList;
 public class SceneGenerator implements mcd_System{
     int _circularArrayIndex;
     int _freeIdxCount;
-    float speedMult = 5.0f;
+    float speedMult = 150.0f;
     ArrayList<mcd_Entity> _obstacleList;
     //@param density marks the highest amount of obstacles in screen at the same time
     public SceneGenerator(mcd_Scene scene, int obstacleScreenDensity){
@@ -68,11 +70,11 @@ public class SceneGenerator implements mcd_System{
      * @return true if new obstacle was created, false otherwise
      */
     private boolean decideOnPossibleNewObstacle(mcd_Entity ent, float t, float dt){
-        int currentIdx = _circularArrayIndex;
-        _circularArrayIndex = (_circularArrayIndex +1) % _obstacleList.size();
         if(askIfSpawnNewObstacle(dt)){
             System.out.println("Creame un obstaculo pibe");
-            setUpNewObstacle(_obstacleList.get(currentIdx), t, dt);
+            setUpNewObstacle(_obstacleList.get(_circularArrayIndex), t, dt);
+            --obstacleAcumSpawn;
+            _circularArrayIndex = (_circularArrayIndex +1) % _obstacleList.size();
             return true;
         }
         return false;
@@ -80,7 +82,7 @@ public class SceneGenerator implements mcd_System{
     public void setUpNewObstacle(mcd_Entity obstacle, float t, float dt){
         TransformComponent tr = (TransformComponent) obstacle.getComponent(ComponentId.TRANSFORM_COMPONENT);
         //ImageComponent img = (ImageComponent) obstacle.getComponent(ComponentId.IMAGE_COMPONENT);
-        Obstacle obs = (Obstacle) obstacle.setComponent(ComponentId.OBSTACLE_COMPONENT, getRandomObstacleComp(obstacle, t,dt));
+        createRandomObstacleComp(obstacle,t,dt);
         obstacle.setActive(true);
     }
 
@@ -101,15 +103,44 @@ public class SceneGenerator implements mcd_System{
         }
         return dangerMatrix.getFreeHeightRange(LOGIC_WINDOW_SIZE.x);
     }
-    public Obstacle getRandomObstacleComp(mcd_Entity ent, float t, float dt){
-        Vec2 freeYRange =getVerticalSafeZone();
-        return new ZapperComponent(ent, t, speedMult, freeYRange);
+    public void createRandomObstacleComp(mcd_Entity ent, float t, float dt){
+        createZapper(ent,t);
+    }
+    public void createZapper(mcd_Entity ent, float t){
+        Vec2 space =
+                getSafeVerticalSpaceForObstacleSoPlayerCanPass(
+                        getVerticalSafeZone(),
+                        MIN_ZAPPER_HEIGHT
+                );
+        float delta = space.y-space.x;
+        space.y = space.x + delta * (float)Math.random();
+        space.x = space.x + delta * (float)Math.random();
+        ent.setComponent(
+                ComponentId.OBSTACLE_COMPONENT,
+                new ZapperComponent(ent, t, speedMult, space)
+        );
+    }
+
+    /**
+     * returns a vec 2 with y coordinates where it would be ok to put an obstacle.
+     * This ensures player can pass between obstacles
+     * @return Vec2(yUp, yDown)
+     */
+    public Vec2 getSafeVerticalSpaceForObstacleSoPlayerCanPass(Vec2 freeYRange, float minObstacleHeight){
+        float randomRange = (float)Math.random() * (LOGIC_WINDOW_SIZE.y-PLAYER_DIMENSIONS.y);
+        if(randomRange < minObstacleHeight){
+            //choose space under randomRange
+            return new Vec2(randomRange, freeYRange.y);
+        }else if(LOGIC_WINDOW_SIZE.y-randomRange < minObstacleHeight){
+            //choose space above randomRange
+            return new Vec2(freeYRange.x, randomRange);
+        }else{
+            //Choose either
+            return (Math.random() > 0.5) ? new Vec2(freeYRange.x, randomRange) : new Vec2(randomRange, freeYRange.y);
+        }
     }
     public boolean askIfSpawnNewObstacle(float dt){
-        if(obstacleAcumSpawn > 1 && _freeIdxCount > 0){
-            --obstacleAcumSpawn;
-            return true;
-        }else return false;
+        return obstacleAcumSpawn > 1 && _freeIdxCount > 0;
     }
     private void initializeObstacleList(mcd_Scene scene, int obstacleScreenDensity){
         _obstacleList = new ArrayList<mcd_Entity>(obstacleScreenDensity);

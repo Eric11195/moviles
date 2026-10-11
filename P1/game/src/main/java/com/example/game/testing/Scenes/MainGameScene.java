@@ -11,7 +11,7 @@ import com.example.utils.Vec2;
 public class MainGameScene extends mcd_Scene{
     @Override
     public void start(Engine eng) {
-        addSystem(new SceneGenerator(this, 2));
+        addSystem(new SceneGenerator(this, 4));
         PlayerPrefab.createPlayer(this,new Vec2(PLAYER_X_POS,100));
         //LaserPrefab.createLaser(this,new Vec2(0,0));
     }
