@@ -36,12 +36,12 @@ public class ColliderComponent implements mcd_Component {
     }
 
     // Creates a single circular collider with _rad radius
-    public ColliderComponent(int _rad){
+    public ColliderComponent(float _rad){
         addSingleCollider(new Vec2(0,0),_rad);
     }
 
     // Creates a single circular collider with _rad radius and displaced _offset from its origin.
-    public ColliderComponent(int _rad, Vec2 _offset){
+    public ColliderComponent(float _rad, Vec2 _offset){
         addSingleCollider(_offset,_rad);
     }
 

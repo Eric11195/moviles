@@ -2,7 +2,6 @@ package com.example.game.testing.EC;
 
 public enum ComponentId {
     TRANSFORM_COMPONENT,
-    COLLIDER_COMPONENT,
     BUTTON_COMPONENT,
     IMAGE_COMPONENT,
     OBSTACLE_COMPONENT,
@@ -10,5 +9,6 @@ public enum ComponentId {
     JETPACK_COMPONENT,
     VELOCITY_COMPONENT,
     LASER_COMPONENT,
+    COLLIDER_COMPONENT,
     COMPONENT_COUNT
 }

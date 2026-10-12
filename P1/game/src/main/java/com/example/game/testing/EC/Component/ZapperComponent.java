@@ -55,12 +55,9 @@ public class ZapperComponent extends Obstacle{
         //Other one bigger on the last point
         col.addSingleCollider(end, ZAPPER_HEAD_RADIUS);
         //Create several smaller ones in between them. So that the player cannot cross it
-        Vec2 delta = end.sub(start);
-        delta.normalize();
-        delta.mul(ZAPPER_HEAD_RADIUS+ZAPPER_LINE_WIDTH/2);
         col.addColliderLine(
-            start.add(delta),
-            end.add(delta.mul(-1)),
+            start,
+            end,
             ZAPPER_LINE_WIDTH,
             ZAPPER_MAX_COLLIDERS
         );
@@ -87,7 +84,6 @@ public class ZapperComponent extends Obstacle{
     public Vec2 getActualEndPos(TransformComponent tr){
         return tr.pos.add(end);
     }
-
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g){
         g.setColor(ColorEng.RED);
