@@ -9,9 +9,9 @@ import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.utils.Vec2;
 
 public class ButtonPrefab {
-    public static mcd_Entity createButton(mcd_Scene scene, Vec2 pos, String text, ButtonComponent.ButtonClickFunction clickFunc){
+    public static mcd_Entity createButton(mcd_Scene scene, Vec2 pos, Vec2 size, String text, ButtonComponent.ButtonClickFunction clickFunc){
         mcd_Entity ent = scene.createEntity();
-        ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent(pos, new Vec2(100,40)));
+        ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent(pos, size));
         ent.addComponent(ComponentId.BUTTON_COMPONENT, new ButtonComponent(text,clickFunc));
         return ent;
     }
