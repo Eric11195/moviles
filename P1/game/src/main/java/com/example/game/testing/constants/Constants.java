@@ -23,6 +23,9 @@ public class Constants {
         public static final float MAX_ZAPPER_WIDTH = DANGER_MATRIX_PRECALCULATED_SPACE *0.6f;
         public static final float ZAPPER_DELTA_WIDTH = MAX_ZAPPER_WIDTH - MIN_ZAPPER_WIDTH;
         public static final float MIN_ZAPPER_HEIGHT = 10;
+        public static final float ZAPPER_HEAD_RADIUS = 8;
+        public static final float ZAPPER_LINE_WIDTH = 5;
+        public static final int ZAPPER_MAX_COLLIDERS = 10;
 
         // LASER
         public static final float LASER_HEIGHT = LOGIC_WINDOW_SIZE.y/5.0f;

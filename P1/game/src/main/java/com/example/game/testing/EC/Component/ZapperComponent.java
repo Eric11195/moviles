@@ -3,6 +3,9 @@ package com.example.game.testing.EC.Component;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.MIN_ZAPPER_WIDTH;
 import static com.example.game.testing.constants.Constants.ZAPPER_DELTA_WIDTH;
+import static com.example.game.testing.constants.Constants.ZAPPER_HEAD_RADIUS;
+import static com.example.game.testing.constants.Constants.ZAPPER_LINE_WIDTH;
+import static com.example.game.testing.constants.Constants.ZAPPER_MAX_COLLIDERS;
 
 import com.example.engine.ColorEng;
 import com.example.engine.GraphicsInterface;
@@ -39,12 +42,28 @@ public class ZapperComponent extends Obstacle{
         this.start = new Vec2(0,0);
         this.end = new Vec2(end.x-start.x,end.y-start.y);
         scrolledTime = calculateScrolledTime(spawnTime, speedMult);
-        generateColliders();
+        generateColliders(ent);
     }
-    private void generateColliders(){
+    private void generateColliders(mcd_Entity ent){
+        if(!ent.hasComponent(ComponentId.COLLIDER_COMPONENT)){
+            ent.addComponent(ComponentId.COLLIDER_COMPONENT, new ColliderComponent());
+        }
+        ColliderComponent col = (ColliderComponent)ent.getComponent(ComponentId.COLLIDER_COMPONENT);
+        col.clearColliders();
         //Create one bigger on the first point
+        col.addSingleCollider(start, ZAPPER_HEAD_RADIUS);
         //Other one bigger on the last point
+        col.addSingleCollider(end, ZAPPER_HEAD_RADIUS);
         //Create several smaller ones in between them. So that the player cannot cross it
+        Vec2 delta = end.sub(start);
+        delta.normalize();
+        delta.mul(ZAPPER_HEAD_RADIUS+ZAPPER_LINE_WIDTH/2);
+        col.addColliderLine(
+            start.add(delta),
+            end.add(delta.mul(-1)),
+            ZAPPER_LINE_WIDTH,
+            ZAPPER_MAX_COLLIDERS
+        );
     }
 
     @Override
