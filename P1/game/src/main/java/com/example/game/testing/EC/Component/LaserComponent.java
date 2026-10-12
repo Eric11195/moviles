@@ -1,16 +1,20 @@
 package com.example.game.testing.EC.Component;
 
+import static com.example.game.testing.constants.Constants.LASER_HEIGHT;
+import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
+
 import com.example.engine.ColorEng;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.engine.GraphicsInterface;
+import com.example.game.testing.Systems.DangerMatrix;
 import com.example.game.testing.constants.Constants;
 import com.example.utils.Vec2;
 
 import javax.swing.ComponentInputMap;
 
-public class LaserComponent implements mcd_Component{
+public class LaserComponent extends Obstacle {
 
     //number of times it has to appear and dissapear for it to "attack".
     int num_rep;
@@ -25,8 +29,9 @@ public class LaserComponent implements mcd_Component{
     int index_rep;
 
     ColorEng color;
-    public LaserComponent(int numRepetitions, int anim_duration)
+    public LaserComponent(mcd_Entity ent, int numRepetitions, int anim_duration)
     {
+        super(0,0);
         num_rep=numRepetitions;
         anim_dur = anim_duration;
         anim_timer =0;
@@ -34,6 +39,18 @@ public class LaserComponent implements mcd_Component{
         is_attacking = false;
         index_rep = 0;
         color = new ColorEng(255,0,0,255);
+
+        if(!ent.hasComponent(ComponentId.COLLIDER_COMPONENT))
+            ent.addComponent(ComponentId.COLLIDER_COMPONENT, new ColliderComponent());
+
+        ColliderComponent col =  (ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT);
+        col.clearColliders();
+        col.addColliderLine(
+                new Vec2(0,LASER_HEIGHT/2),
+                new Vec2(LOGIC_WINDOW_SIZE.x,LASER_HEIGHT/2),
+                LASER_HEIGHT,
+                10
+        );
     }
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g) {
@@ -52,10 +69,9 @@ public class LaserComponent implements mcd_Component{
                 }
                 else
                 {
-
-                float progress =(float)( (anim_timer-(anim_dur/2))/(anim_dur/2));
-                color.a = (int) (100 + 155 * progress);
-                color.a = Math.max(100,Math.min(255,color.a));
+                    float progress =(float)( (anim_timer-(anim_dur/2))/(anim_dur/2));
+                    color.a = (int) (100 + 155 * progress);
+                    color.a = Math.max(100,Math.min(255,color.a));
                 }
             }
             else{color.a = 255;}
@@ -65,6 +81,17 @@ public class LaserComponent implements mcd_Component{
             g.drawRectangle(tr.pos,tr.size,true);
 
         }
+    }
+
+    @Override
+    public float calculateScrolledTime(float spawnTime, float speedMult) {
+        throw new RuntimeException("Unimplemented");
+        //return 0;
+    }
+
+    @Override
+    public void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm) {
+        throw new RuntimeException("Unimplemented");
     }
 
     @Override
@@ -93,10 +120,6 @@ public class LaserComponent implements mcd_Component{
                     attack_dur-=dt;
                 }
                 else{  ent.rmComponent(ComponentId.COLLIDER_COMPONENT);}
-            }
-            else{
-                TransformComponent tr=(TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
-                ent.addComponent(ComponentId.COLLIDER_COMPONENT, new ColliderComponent(100,200,1,0,new Vec2(0,tr.size.y/2)));
             }
         }
     }

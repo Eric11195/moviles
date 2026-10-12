@@ -39,6 +39,12 @@ public class ZapperComponent extends Obstacle{
         this.start = new Vec2(0,0);
         this.end = new Vec2(end.x-start.x,end.y-start.y);
         scrolledTime = calculateScrolledTime(spawnTime, speedMult);
+        generateColliders();
+    }
+    private void generateColliders(){
+        //Create one bigger on the first point
+        //Other one bigger on the last point
+        //Create several smaller ones in between them. So that the player cannot cross it
     }
 
     @Override

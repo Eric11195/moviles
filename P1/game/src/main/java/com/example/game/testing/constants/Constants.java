@@ -25,6 +25,6 @@ public class Constants {
         public static final float MIN_ZAPPER_HEIGHT = 10;
 
         // LASER
-        public static final Vec2 LASER_DIMENSIONS = new Vec2(LOGIC_WINDOW_SIZE.x, LOGIC_WINDOW_SIZE.y/2);
+        public static final float LASER_HEIGHT = LOGIC_WINDOW_SIZE.y/5.0f;
 
 }

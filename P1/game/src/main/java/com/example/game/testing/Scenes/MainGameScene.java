@@ -16,7 +16,7 @@ public class MainGameScene extends mcd_Scene{
     public void start(Engine eng) {
         mcd_Entity playerTransform = PlayerPrefab.createPlayer(this,new Vec2(PLAYER_X_POS,100));
         addSystem(new SceneGenerator(this, playerTransform, 4));
-        //LaserPrefab.createLaser(this,new Vec2(0,0));
+        LaserPrefab.createLaser(this,0);
     }
 
     @Override
