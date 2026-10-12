@@ -20,6 +20,8 @@ public class Constants {
 
     //OBSTACLES
     public static final int DANGER_MATRIX_PRECALCULATED_SPACE = (int)(LOGIC_WINDOW_SIZE.x * 0.5f);
+        // SCENE GENERATOR
+        public static final int DANGER_MATRIX_PX_TILE_SIZE = 3;
 
         // ZAPPERS
         public static final float MIN_ZAPPER_WIDTH = 60;
@@ -29,6 +31,7 @@ public class Constants {
         public static final float ZAPPER_HEAD_RADIUS = 8;
         public static final float ZAPPER_LINE_WIDTH = 5;
         public static final int ZAPPER_MAX_COLLIDERS = 10;
+        public static final float MAX_ZAPPER_LENGTH = 100;
 
         // LASER
         public static final float LASER_HEIGHT = LOGIC_WINDOW_SIZE.y/5.0f;

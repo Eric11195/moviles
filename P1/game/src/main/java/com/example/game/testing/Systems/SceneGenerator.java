@@ -1,5 +1,6 @@
 package com.example.game.testing.Systems;
 
+import static com.example.game.testing.constants.Constants.DANGER_MATRIX_PX_TILE_SIZE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.MIN_ZAPPER_HEIGHT;
 import static com.example.game.testing.constants.Constants.PLAYER_DIMENSIONS;
@@ -97,7 +98,7 @@ public class SceneGenerator implements mcd_System{
         return true;
     }
 
-    DangerMatrix dangerMatrix= new DangerMatrix(3);
+    DangerMatrix dangerMatrix= new DangerMatrix(DANGER_MATRIX_PX_TILE_SIZE);
     public void setupDangerMatrixWithAlreadyExistingObjects(){
         dangerMatrix.reset();
         for(mcd_Entity ent : _obstacleList){

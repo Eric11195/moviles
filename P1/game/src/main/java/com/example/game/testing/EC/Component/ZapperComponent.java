@@ -1,6 +1,7 @@
 package com.example.game.testing.EC.Component;
 
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
+import static com.example.game.testing.constants.Constants.MAX_ZAPPER_LENGTH;
 import static com.example.game.testing.constants.Constants.MIN_ZAPPER_WIDTH;
 import static com.example.game.testing.constants.Constants.ZAPPER_DELTA_WIDTH;
 import static com.example.game.testing.constants.Constants.ZAPPER_HEAD_RADIUS;
@@ -24,7 +25,7 @@ public class ZapperComponent extends Obstacle{
     /**
      * @param outStart returns here the first point of the zapper
      * @param outEnd returns here the second point of the zapper
-     * @param yStartEnd gets here the info of the height allowed Vec2(miny,maxy)
+     * @param yStartEnd gets here the info of the height allowed Vec2(minY,maxY)
      */
     public static void getProvisionalZapperData(Vec2 yStartEnd, Vec2 outStart, Vec2 outEnd){
         float random_zaper_width = MIN_ZAPPER_WIDTH + (float)Math.random()*ZAPPER_DELTA_WIDTH;
@@ -32,6 +33,13 @@ public class ZapperComponent extends Obstacle{
         outStart.y = yStartEnd.x;
         outEnd.x = LOGIC_WINDOW_SIZE.x+random_zaper_width;
         outEnd.y = yStartEnd.y;
+        Vec2 delta = outEnd.sub(outStart);
+        float excessLength = delta.length() - MAX_ZAPPER_LENGTH;
+        if(excessLength > 0){
+            delta.normalize();
+            Vec2 toSubstract = delta.mul(-excessLength);
+            outEnd.set(outEnd.add(toSubstract));
+        }
     }
 
     public ZapperComponent(mcd_Entity ent, float spawnTime, float speedMult, Vec2 start, Vec2 end) {
@@ -72,10 +80,18 @@ public class ZapperComponent extends Obstacle{
     public void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm) {
         Vec2 firstPt = getActualStartPos(tr);
         Vec2 secondPt = getActualEndPos(tr);
-        //System.out.println("Line From ("+firstPt.x+","+firstPt.y+") -> ("+secondPt.x+','+secondPt.y+')');
         dm.drawLine(
-                getActualStartPos(tr),
-                getActualEndPos(tr)
+            firstPt,
+            secondPt
+        );
+        float half_size = ZAPPER_HEAD_RADIUS/2.0f;
+        dm.drawSquare(
+            firstPt.add(new Vec2(-half_size,-half_size)),
+            new Vec2(ZAPPER_HEAD_RADIUS, ZAPPER_HEAD_RADIUS)
+        );
+        dm.drawSquare(
+            secondPt.add(new Vec2(-half_size,-half_size)),
+            new Vec2(ZAPPER_HEAD_RADIUS, ZAPPER_HEAD_RADIUS)
         );
     }
     public Vec2 getActualStartPos(TransformComponent tr){
@@ -92,7 +108,7 @@ public class ZapperComponent extends Obstacle{
     }
 
     public float width(){
-        return end.x-start.x;
+        return Math.abs(end.x-start.x);
     }
     public float height(){
         return Math.abs(end.y-start.y);
