@@ -7,11 +7,19 @@ public class ColorEng {
     public final static ColorEng BLUE = new ColorEng(0,0,255,255);
     public final static ColorEng WHITE = new ColorEng(255,255,255,255);
     public final static ColorEng BLACK = new ColorEng(0,0,0,255);
+    public final static ColorEng GREY = new ColorEng(0xFF565656);
     public ColorEng(int r, int g, int b, int a){
         this.r = r;
         this.g = g;
         this.b = b;
         this.a = a;
+    }
+    //This consumes argb format
+    public ColorEng(int color){
+        this.r = (color >> 16) & 0xff;
+        this.g = (color >> 8) & 0xff;
+        this.b = color & 0xff;
+        this.a = (color >> 24) & 0xff;
     }
     public int getColorAsInt(){
         // Variables a, r, g, b should be integers between 0 and 255

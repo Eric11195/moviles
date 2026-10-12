@@ -1,5 +1,7 @@
 package com.example.desktopengine;
 
+import static com.example.engine.constants.EngineConstants.LOGIC_WINDOW_HEIGHT;
+import static com.example.engine.constants.EngineConstants.LOGIC_WINDOW_WIDTH;
 import static com.example.utils.Utils.getNonDeformingAspectData;
 
 import com.example.engine.ColorEng;
@@ -7,6 +9,7 @@ import com.example.engine.FontEng;
 import com.example.engine.ImageEng;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
+import com.example.engine.constants.EngineConstants;
 import com.example.utils.Utils;
 import com.example.utils.Vec2;
 
@@ -30,6 +33,15 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 public class GraphicsDesktop implements GraphicsInterface {
+
+    ColorEng toColorEng(Color clr){
+        return new ColorEng(
+            clr.getRed(),
+            clr.getGreen(),
+            clr.getBlue(),
+            clr.getAlpha()
+        );
+    }
     private JFrame mainJFrame;
     Graphics2D graphics;
     BufferStrategy buf;
@@ -51,7 +63,7 @@ public class GraphicsDesktop implements GraphicsInterface {
         });
 
         // Give the canvas an explicit size
-        canvas.setPreferredSize(new Dimension(600, 400));
+        canvas.setPreferredSize(new Dimension(LOGIC_WINDOW_WIDTH, LOGIC_WINDOW_HEIGHT));
         mainJFrame.add(canvas);
         mainJFrame.pack();
         mainJFrame.setVisible(true);
@@ -103,6 +115,7 @@ public class GraphicsDesktop implements GraphicsInterface {
                     eng.getCurrentScene().render(this);
 
                     calculateInverseMatrix();
+                    drawOutOfScreenBands();
                 }
                 finally {
                     this.graphics.dispose();
@@ -111,6 +124,43 @@ public class GraphicsDesktop implements GraphicsInterface {
             } while(this.buf.contentsRestored());
             this.buf.show();
         } while(this.buf.contentsLost());
+    }
+    ColorEng bandsColor = EngineConstants.OUT_OF_BOUNDS_BANDS_COLOR;
+    @Override
+    public void setBandsColor(ColorEng clr){
+        bandsColor = clr;
+    }
+    private void drawOutOfScreenBands(){
+        this.graphics.setTransform(new AffineTransform());
+        ColorEng auxKeep = toColorEng(this.graphics.getColor());
+        setColor(bandsColor);
+        int width = getWidth(), height = getHeight();
+        //Above rect
+        drawRectangle(
+            new Vec2(0,0),
+            new Vec2(width, this.offsetY),
+            true
+        );
+        //Below rect
+        drawRectangle(
+            new Vec2(0, this.offsetY+LOGIC_WINDOW_HEIGHT*scaleMult),
+            new Vec2(width, this.offsetY),
+            true
+        );
+        //Right rect
+        drawRectangle(
+            new Vec2(0, this.offsetY),
+            new Vec2(this.offsetX, height),
+            true
+        );
+        //Left rect
+        drawRectangle(
+            new Vec2(this.offsetX+LOGIC_WINDOW_WIDTH*scaleMult, this.offsetY),
+            new Vec2(this.offsetX, height),
+            true
+        );
+        //Restore previous color
+        setColor(auxKeep);
     }
     @Override
     public void drawImage(ImageEng img, Vec2 src_pos, Vec2 src_size, Vec2 dst_pos, Vec2 dst_size) {
@@ -131,15 +181,19 @@ public class GraphicsDesktop implements GraphicsInterface {
     public void clear(ColorEng color){
         if (graphics == null) return;
         clearColor = color;
+        ColorEng auxKeep = toColorEng(graphics.getColor());
         setColor(color);
         // Fill canvas area with clear color
         graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        setColor(auxKeep);
     }
     public void clear(){
         if (graphics == null) return;
+        ColorEng auxKeep = toColorEng(graphics.getColor());
         setColor(clearColor);
         // Fill canvas area with clear color
         graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        setColor(auxKeep);
     }
     @Override
     public void setColor(ColorEng color){
