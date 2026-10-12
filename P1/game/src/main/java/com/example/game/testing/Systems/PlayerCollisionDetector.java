@@ -17,14 +17,14 @@ public class PlayerCollisionDetector implements mcd_System {
 
     @Override
     public void update(mcd_Scene scene, float t, float dt) {
-//        for(mcd_Entity ent : scene.getEntityList()){
-//            if(ent == player || !ent.hasComponent(ComponentId.COLLIDER_COMPONENT)) continue;
-//            if(checkAllOverlaps(player,ent)){
-//                //Player dies
-//                playerCollided(scene);
-//                break;
-//            }
-//        }
+        for(mcd_Entity ent : scene.getEntityList()){
+            if(ent == player || !ent.hasComponent(ComponentId.COLLIDER_COMPONENT)) continue;
+            if(checkAllOverlaps(player,ent)){
+                //Player dies
+                playerCollided(scene);
+                break;
+            }
+        }
     }
 
     public void playerCollided(mcd_Scene scene){

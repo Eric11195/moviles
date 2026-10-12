@@ -192,15 +192,14 @@ public class ColliderComponent implements mcd_Component {
         ArrayList<ColliderData> _cc = ((ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT)).colliders;
         ArrayList<ColliderData> _other_cc = ((ColliderComponent) other_ent.getComponent(ComponentId.COLLIDER_COMPONENT)).colliders;
 
-        int i = 0;
-        int j = 0;
-        while (!collided && i<_cc.size()){
-            while (!collided && j<_other_cc.size()){
-                collided = overlaps(_tr,_other_tr,_cc.get(i),_other_cc.get(j));
+        for(ColliderData collider1 : _cc){
+            for(ColliderData collider2 : _other_cc){
+                if(overlaps(_tr, _other_tr, collider1, collider2)){
+                    return true;
+                }
             }
         }
-
-        return collided;
+        return false;
     }
 
 
