@@ -53,7 +53,7 @@ public class DangerMatrix extends BoolMatrix{
     }
 
     public void drawSquare(Vec2 x0y0, Vec2 size){
-        set(getConvertedPos(x0y0),getConvertedPos(size), true);
+        set(getConvertedPos(x0y0),getConvertedPos(x0y0.add(size)), true);
     }
     /**
      * Converts the vector so it cannot fail in danger matrix

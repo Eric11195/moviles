@@ -4,6 +4,7 @@ import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
+import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.DangerMatrix;
 
 public abstract class Obstacle implements mcd_Component {
@@ -36,5 +37,7 @@ public abstract class Obstacle implements mcd_Component {
 
         return scrolledTime > time;
     }
+
+    public abstract void onPlayerCollision(mcd_Entity ent, mcd_Scene scene);
 
 }

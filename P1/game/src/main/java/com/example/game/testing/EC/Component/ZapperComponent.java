@@ -11,6 +11,8 @@ import com.example.engine.ColorEng;
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
+import com.example.game.testing.Scenes.LoseMenuScene;
+import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.DangerMatrix;
 import com.example.utils.Vec2;
 
@@ -89,6 +91,12 @@ public class ZapperComponent extends Obstacle{
         g.setColor(ColorEng.RED);
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
         g.drawLine(getActualStartPos(tr),getActualEndPos(tr));
+    }
+
+    @Override
+    public void onPlayerCollision(mcd_Entity ent, mcd_Scene scene) {
+        // FATAL
+        scene.getEngine().setScene(new LoseMenuScene());
     }
 
     public float width(){
