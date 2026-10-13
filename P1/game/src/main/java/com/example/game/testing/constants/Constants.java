@@ -21,7 +21,7 @@ public class Constants {
     //OBSTACLES
     public static final int DANGER_MATRIX_PRECALCULATED_SPACE = (int)(LOGIC_WINDOW_SIZE.x * 0.5f);
         // SCENE GENERATOR
-        public static final int DANGER_MATRIX_PX_TILE_SIZE = 3;
+        public static final int DANGER_MATRIX_PX_TILE_SIZE = 2;
 
         // ZAPPERS
         public static final float MIN_ZAPPER_WIDTH = 60;

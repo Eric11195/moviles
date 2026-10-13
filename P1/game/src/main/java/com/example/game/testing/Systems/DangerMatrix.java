@@ -18,11 +18,9 @@ import com.example.utils.Vec2;
 
 public class DangerMatrix extends BoolMatrix{
     int zonesPxSize;
-    int pointCheckingDensity;
     public DangerMatrix(int zonesPxSize){
         super((int)Math.ceil((LOGIC_WINDOW_SIZE.x+DANGER_MATRIX_PRECALCULATED_SPACE)/zonesPxSize), (int)Math.ceil(LOGIC_WINDOW_SIZE.y/zonesPxSize));
         this.zonesPxSize = zonesPxSize;
-        this.pointCheckingDensity = (int)Math.floor(Math.sqrt(zonesPxSize));
     }
     public void reset(){
         clear();
@@ -43,7 +41,7 @@ public class DangerMatrix extends BoolMatrix{
      */
     public boolean checkLine(Vec2 startPt, Vec2 endPt){
         Vec2 delta = endPt.sub(startPt);
-        int repetitions = (int)Math.ceil(delta.length() / zonesPxSize);
+        int repetitions = (int)Math.ceil(delta.length() / (zonesPxSize/5.0f));
         Vec2 pt = startPt;
         for(int i = 0; i < repetitions; ++i){
             if(get(getConvertedPos(pt))) return false;
