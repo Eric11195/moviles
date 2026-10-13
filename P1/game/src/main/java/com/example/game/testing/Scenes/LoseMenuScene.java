@@ -6,7 +6,7 @@ import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
 import com.example.engine.Engine;
 
-public class LooseMenuScene extends mcd_Scene{
+public class LoseMenuScene extends mcd_Scene{
     @Override
     public void start(Engine eng) {
         createButton(

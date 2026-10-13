@@ -8,6 +8,8 @@ import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.engine.GraphicsInterface;
+import com.example.game.testing.Scenes.LoseMenuScene;
+import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.DangerMatrix;
 import com.example.game.testing.constants.Constants;
 import com.example.utils.Vec2;
@@ -83,6 +85,12 @@ public class LaserComponent extends Obstacle {
             g.drawRectangle(tr.pos,tr.size,true);
 
         }
+    }
+
+    @Override
+    public void onPlayerCollision(mcd_Entity ent, mcd_Scene scene) {
+        // FATAL
+        scene.getEngine().setScene(new LoseMenuScene());
     }
 
     @Override
