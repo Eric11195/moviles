@@ -126,10 +126,12 @@ public class ZapperComponent extends Obstacle{
 
     @Override
     public JSONObject serialize(){
+        JSONObject zapper = new JSONObject();
         JSONObject jo = super.serialize();
         jo.put("start",start);
         jo.put("end", end);
-        return jo;
+        zapper.put("Zapper",jo);
+        return zapper;
     }
 
 }
