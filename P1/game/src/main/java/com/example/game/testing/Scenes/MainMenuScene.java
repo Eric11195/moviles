@@ -20,14 +20,24 @@ public class MainMenuScene extends mcd_Scene{
     }
     @Override
     public void start(Engine eng) {
+        float quartY = LOGIC_WINDOW_SIZE.y/4;
         createButton(
             this,
-            LOGIC_WINDOW_SIZE.mul(0.5f).add(DEFAULT_BUTTON_SIZE.mul(-0.5f)),
+            LOGIC_WINDOW_SIZE.mul(0.5f).add(new Vec2(0,-quartY)).add(DEFAULT_BUTTON_SIZE.mul(-0.5f)),
             DEFAULT_BUTTON_SIZE,
             "START GAME",
             () ->{
                 eng.setScene(new MainGameScene());
             }
+        );
+        createButton(
+                this,
+                LOGIC_WINDOW_SIZE.mul(0.5f).add(new Vec2(0,quartY)).add(DEFAULT_BUTTON_SIZE.mul(-0.5f)),
+                DEFAULT_BUTTON_SIZE,
+                "GENERATE_LEVEL",
+                () ->{
+                    eng.setScene(new LevelGeneratorToJSON());
+                }
         );
     }
 }

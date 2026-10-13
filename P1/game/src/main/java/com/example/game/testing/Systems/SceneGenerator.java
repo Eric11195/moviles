@@ -30,7 +30,7 @@ public class SceneGenerator implements mcd_System{
     ArrayList<mcd_Entity> _obstacleList;
     mcd_Entity playerEnt;
     //@param density marks the highest amount of obstacles in screen at the same time
-    public SceneGenerator(mcd_Scene scene, mcd_Entity playerEnt ,int obstacleScreenDensity){
+    public SceneGenerator(mcd_Scene scene, mcd_Entity playerEnt, int obstacleScreenDensity){
         initializeObstacleList(scene,obstacleScreenDensity);
         this.playerEnt = playerEnt;
     }

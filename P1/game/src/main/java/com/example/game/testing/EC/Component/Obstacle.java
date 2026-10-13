@@ -5,8 +5,12 @@ import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.DangerMatrix;
+import com.example.game.testing.utils.mcd_Serializable;
 
-public abstract class Obstacle implements mcd_Component {
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+public abstract class Obstacle implements mcd_Component, mcd_Serializable {
     private float spawnTime;
     protected float scrolledTime;
     private float speedMult;
@@ -35,6 +39,12 @@ public abstract class Obstacle implements mcd_Component {
     public boolean onScreen(float time){
 
         return scrolledTime > time;
+    }
+
+    public JSONObject serialize(){
+        JSONObject jo = new JSONObject();
+        jo.put("spawnTime", spawnTime);
+        return jo;
     }
 
 }

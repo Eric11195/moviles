@@ -112,7 +112,7 @@ public class Engine implements Runnable{
                 this.currentScene.cleanup(this);
             this.currentScene = upcomingScene;
             this.currentScene.start(this);
-            this.upcomingScene =null;
+            this.upcomingScene = this.currentScene == this.upcomingScene? null : this.upcomingScene;
         }
 
         currentScene.update(this,t,dt);

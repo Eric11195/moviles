@@ -12,7 +12,7 @@ import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
 
 public class JetpackComponent implements mcd_Component{
-    boolean is_flying;
+    boolean isFlying;
     private void checkSpeed(mcd_Entity playerEnt)
     {
         VelocityComponent velComp = (VelocityComponent) playerEnt.getComponent(ComponentId.VELOCITY_COMPONENT);
@@ -35,14 +35,14 @@ public class JetpackComponent implements mcd_Component{
     public void applyThrustAndGravity(mcd_Entity ent, float dt){
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
         VelocityComponent vel = (VelocityComponent) ent.getComponent(ComponentId.VELOCITY_COMPONENT);
-        if (is_flying) {
+        if (isFlying) {
             vel.velocity.y += -Y_PLAYER_ACCEL * dt;
         }
         vel.velocity.y+= GRAVITY_FORCE*dt;
     }
     private void isInputDown(mcd_Entity ent)
     {
-        is_flying = ent.getEngine().getInput().pressed();
+        isFlying = ent.getEngine().getInput().pressed();
     }
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g)
@@ -57,5 +57,8 @@ public class JetpackComponent implements mcd_Component{
             checkSpeed(ent);
         }
 
+    }
+    public void setIsFlying(boolean value){
+        isFlying = value;
     }
 }

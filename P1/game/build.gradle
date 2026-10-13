@@ -9,4 +9,5 @@ dependencies {
     implementation project(':engine')
     implementation project(':utils')
     implementation project(':utils')
+    implementation 'org.json:json:20260814'
 }

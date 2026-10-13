@@ -15,6 +15,8 @@ import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.DangerMatrix;
 import com.example.utils.Vec2;
 
+import org.json.JSONObject;
+
 /**
  * The electrical lines danger
  */
@@ -112,6 +114,14 @@ public class ZapperComponent extends Obstacle{
     }
     public float height(){
         return Math.abs(end.y-start.y);
+    }
+
+    @Override
+    public JSONObject serialize(){
+        JSONObject jo = super.serialize();
+        jo.put("start",start);
+        jo.put("end", end);
+        return jo;
     }
 
 }

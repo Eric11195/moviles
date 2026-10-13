@@ -12,6 +12,8 @@ import com.example.game.testing.Systems.DangerMatrix;
 import com.example.game.testing.constants.Constants;
 import com.example.utils.Vec2;
 
+import org.json.JSONObject;
+
 import javax.swing.ComponentInputMap;
 
 public class LaserComponent extends Obstacle {
@@ -122,5 +124,10 @@ public class LaserComponent extends Obstacle {
                 else{  ent.rmComponent(ComponentId.COLLIDER_COMPONENT);}
             }
         }
+    }
+
+    @Override
+    public JSONObject serialize() {
+        return null;
     }
 }
