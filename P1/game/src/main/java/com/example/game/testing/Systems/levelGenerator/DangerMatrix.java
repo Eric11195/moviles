@@ -1,4 +1,4 @@
-package com.example.game.testing.Systems;
+package com.example.game.testing.Systems.levelGenerator;
 
 import static com.example.game.testing.constants.Constants.DANGER_MATRIX_PRECALCULATED_SPACE;
 import static com.example.game.testing.constants.Constants.GRAVITY_FORCE;
@@ -6,9 +6,6 @@ import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.MAX_PLAYER_FALL_SPEED;
 import static com.example.game.testing.constants.Constants.MAX_PLAYER_UPWARDS_SPEED;
 import static com.example.game.testing.constants.Constants.Y_PLAYER_ACCEL;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.Component.VelocityComponent;

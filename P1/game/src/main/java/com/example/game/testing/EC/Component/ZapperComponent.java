@@ -1,5 +1,6 @@
 package com.example.game.testing.EC.Component;
 
+import static com.example.game.testing.EC.Component.ObstacleId.OBSTACLE_ZAPPER;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.MAX_ZAPPER_LENGTH;
 import static com.example.game.testing.constants.Constants.MIN_ZAPPER_WIDTH;
@@ -7,6 +8,7 @@ import static com.example.game.testing.constants.Constants.ZAPPER_DELTA_WIDTH;
 import static com.example.game.testing.constants.Constants.ZAPPER_HEAD_RADIUS;
 import static com.example.game.testing.constants.Constants.ZAPPER_LINE_WIDTH;
 import static com.example.game.testing.constants.Constants.ZAPPER_MAX_COLLIDERS;
+import static com.example.game.testing.utils.JSON_HELPER.fromJSON;
 
 import com.example.engine.ColorEng;
 import com.example.engine.GraphicsInterface;
@@ -14,7 +16,8 @@ import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.LoseMenuScene;
 import com.example.game.testing.Scenes.mcd_Scene;
-import com.example.game.testing.Systems.DangerMatrix;
+import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
+import com.example.game.testing.Systems.levelGenerator.ObstacleFactory;
 import com.example.utils.Vec2;
 
 import org.json.JSONObject;
@@ -43,6 +46,15 @@ public class ZapperComponent extends Obstacle{
             delta.normalize();
             Vec2 toSubstract = delta.mul(-excessLength);
             outEnd.set(outEnd.add(toSubstract));
+        }
+    }
+    public static class ZapperComponentSerialized implements ObstacleFactory {
+        float spawnTime;
+        Vec2 start,end;
+
+        @Override
+        public void instantiate(mcd_Scene scene, mcd_Entity ent, float levelSpeed, float t) {
+
         }
     }
 
@@ -126,12 +138,18 @@ public class ZapperComponent extends Obstacle{
 
     @Override
     public JSONObject serialize(){
-        JSONObject zapper = new JSONObject();
         JSONObject jo = super.serialize();
         jo.put("start",start);
         jo.put("end", end);
-        zapper.put("Zapper",jo);
-        return zapper;
+        jo.put("id",OBSTACLE_ZAPPER);
+        return jo;
+    }
+    public static ZapperComponentSerialized deserialize(JSONObject obj){
+        ZapperComponentSerialized zcs = new ZapperComponentSerialized();
+        zcs.end = fromJSON((JSONObject) obj.get("end"));
+        zcs.start = fromJSON((JSONObject) obj.get("start"));
+        zcs.spawnTime = getSpawnTime(obj);
+        return zcs;
     }
 
 }

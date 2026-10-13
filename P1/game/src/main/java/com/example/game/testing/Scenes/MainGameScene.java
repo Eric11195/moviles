@@ -3,12 +3,9 @@ package com.example.game.testing.Scenes;
 import static com.example.game.testing.constants.Constants.PLAYER_X_POS;
 
 import com.example.engine.Engine;
-import com.example.game.testing.EC.Component.TransformComponent;
-import com.example.game.testing.EC.ComponentId;
-import com.example.game.testing.EC.Prefabs.LaserPrefab;
 import com.example.game.testing.EC.Prefabs.PlayerPrefab;
 import com.example.game.testing.EC.mcd_Entity;
-import com.example.game.testing.Systems.LevelGeneratorParams;
+import com.example.game.testing.Systems.levelGenerator.LevelGeneratorParams;
 import com.example.game.testing.Systems.PlayerCollisionDetector;
 import com.example.game.testing.Systems.SceneGenerator;
 import com.example.utils.Vec2;

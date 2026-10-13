@@ -1,12 +1,12 @@
 package com.example.game.testing.Scenes;
 
+import static com.example.game.testing.utils.JSON_HELPER.toJSON;
+
 import com.example.engine.Engine;
-import com.example.game.testing.Systems.LevelGenerator;
-import com.example.game.testing.Systems.LevelGeneratorParams;
+import com.example.game.testing.Systems.levelGenerator.LevelGenerator;
+import com.example.game.testing.Systems.levelGenerator.LevelGeneratorParams;
 
 import org.json.JSONObject;
-
-import java.io.FileWriter;
 
 public class LevelGeneratorToJSON extends mcd_Scene {
     @Override
@@ -17,16 +17,7 @@ public class LevelGeneratorToJSON extends mcd_Scene {
                 getShortLevelParams()
         );
         String file_name = "EasyLevel01";
-
-        try {
-            String json = jo.toString();
-            FileWriter fw = new FileWriter(file_name+".json");
-            fw.write(json);
-            fw.close();
-            System.out.println("JSON written to file "+file_name+".json succesfully");
-        }catch(java.io.IOException e){
-            e.printStackTrace();
-        }
+        toJSON(file_name, jo);
         eng.setScene(new MainMenuScene());
     }
     private static LevelGeneratorParams getShortLevelParams(){

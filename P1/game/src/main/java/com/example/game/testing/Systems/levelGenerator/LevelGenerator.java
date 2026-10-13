@@ -1,17 +1,20 @@
-package com.example.game.testing.Systems;
+package com.example.game.testing.Systems.levelGenerator;
 
 import static com.example.game.testing.EC.Prefabs.PlayerPrefab.createPlayer;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.PLAYER_DIMENSIONS;
 import static com.example.game.testing.constants.Constants.PLAYER_X_POS;
-import static com.example.game.testing.utils.ToJSON.toJSON;
+import static com.example.game.testing.utils.JSON_HELPER.toJSON;
 
 import com.example.engine.Engine;
 import com.example.game.testing.EC.Component.JetpackComponent;
 import com.example.game.testing.EC.Component.Obstacle;
+import com.example.game.testing.EC.Component.ObstacleId;
+import com.example.game.testing.EC.Component.ZapperComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
+import com.example.game.testing.Systems.SceneGenerator;
 import com.example.game.testing.utils.mcd_Serializable;
 import com.example.utils.Vec2;
 
@@ -19,7 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
+import java.util.List;
 
 public class LevelGenerator implements mcd_Serializable {
     float levelInitialSpeed;
@@ -74,8 +77,39 @@ public class LevelGenerator implements mcd_Serializable {
     public JSONObject serialize() {
         JSONObject jo = new JSONObject();
         jo.put("LevelSpeed",levelInitialSpeed);
-        jo.put("levelDurationInSeconds", levelDurationInSeconds);
+        jo.put("LevelDurationInSeconds", levelDurationInSeconds);
         jo.put("ObstacleList", toJSON(obstacleCompleteList));
         return jo;
+    }
+
+    public static class LevelGeneratorSerialized {
+        float levelInitialSpeed;
+        float levelDurationInSeconds;
+        List<ObstacleFactory> obsFactory = new ArrayList<ObstacleFactory>();
+    }
+
+    public static void deserialize(JSONObject obj) {
+        LevelGeneratorSerialized lgp = new LevelGeneratorSerialized();
+        lgp.levelInitialSpeed = obj.getFloat("LevelSpeed");
+        lgp.levelDurationInSeconds = obj.getFloat("LevelDurationInSeconds");
+        JSONArray ja = obj.getJSONArray("ObstacleList");
+        for(int i = 0; i < ja.length(); ++i){
+            JSONObject jo = ja.getJSONObject(i);
+            switch (jo.getEnum(ObstacleId.class,"id")){
+                case OBSTACLE_ZAPPER:
+                    lgp.obsFactory.add(ZapperComponent.deserialize(jo));
+                    break;
+                case OBSTACLE_COIN:
+                    break;
+                case OBSTACLE_COUNT:
+                    break;
+                case OBSTACLE_LASER:
+                    break;
+                case OBSTACLE_MISSILE:
+                    break;
+                default:
+                    throw new RuntimeException("That type of obstacle has a non valid id");
+            }
+        }
     }
 }

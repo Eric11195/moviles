@@ -5,29 +5,25 @@ import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.MIN_ZAPPER_HEIGHT;
 import static com.example.game.testing.constants.Constants.PLAYER_DIMENSIONS;
 import static com.example.game.testing.constants.Constants.PLAYER_MARGINS;
-import static com.example.game.testing.constants.Constants.PLAYER_X_POS;
 
 import com.example.engine.GraphicsInterface;
-import com.example.game.testing.EC.Component.ImageComponent;
 import com.example.game.testing.EC.Component.Obstacle;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.Component.ZapperComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
+import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
+import com.example.game.testing.Systems.levelGenerator.LevelGeneratorParams;
 import com.example.utils.Vec2;
 
-import java.awt.Component;
-import java.awt.Image;
 import java.util.ArrayList;
 
-import javax.xml.crypto.dsig.Transform;
-
 public class SceneGenerator implements mcd_System{
-    int _circularArrayIndex;
+    public int _circularArrayIndex;
     int _freeIdxCount;
     LevelGeneratorParams params;
-    ArrayList<mcd_Entity> _obstacleList;
+    public ArrayList<mcd_Entity> _obstacleList;
     float speedMult;
     mcd_Entity playerEnt;
     //@param density marks the highest amount of obstacles in screen at the same time

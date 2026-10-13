@@ -5,18 +5,14 @@ import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
 import com.example.engine.ColorEng;
 import com.example.game.testing.EC.ComponentId;
-import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.Scenes.LoseMenuScene;
 import com.example.game.testing.Scenes.mcd_Scene;
-import com.example.game.testing.Systems.DangerMatrix;
-import com.example.game.testing.constants.Constants;
+import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
 import com.example.utils.Vec2;
 
 import org.json.JSONObject;
-
-import javax.swing.ComponentInputMap;
 
 public class LaserComponent extends Obstacle {
 
@@ -137,5 +133,7 @@ public class LaserComponent extends Obstacle {
     @Override
     public JSONObject serialize() {
         return null;
+    }
+    public void deserialize(JSONObject obj) {
     }
 }

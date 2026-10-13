@@ -5,10 +5,9 @@ import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
-import com.example.game.testing.Systems.DangerMatrix;
+import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
 import com.example.game.testing.utils.mcd_Serializable;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 public abstract class Obstacle implements mcd_Component, mcd_Serializable {
@@ -47,6 +46,10 @@ public abstract class Obstacle implements mcd_Component, mcd_Serializable {
         JSONObject jo = new JSONObject();
         jo.put("spawnTime", spawnTime);
         return jo;
+    }
+
+    public static float getSpawnTime(JSONObject jo){
+        return jo.getFloat("spawnTime");
     }
 
     public abstract void onPlayerCollision(mcd_Entity ent, mcd_Scene scene);
