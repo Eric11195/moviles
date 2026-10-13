@@ -2,6 +2,7 @@ package com.example.game.testing.Scenes;
 
 import com.example.engine.Engine;
 import com.example.game.testing.Systems.LevelGenerator;
+import com.example.game.testing.Systems.LevelGeneratorParams;
 
 import org.json.JSONObject;
 
@@ -28,8 +29,8 @@ public class LevelGeneratorToJSON extends mcd_Scene {
         }
         eng.setScene(new MainMenuScene());
     }
-    private static LevelGenerator.LevelGeneratorParams getShortLevelParams(){
-        LevelGenerator.LevelGeneratorParams lg = new LevelGenerator.LevelGeneratorParams();
+    private static LevelGeneratorParams getShortLevelParams(){
+        LevelGeneratorParams lg = new LevelGeneratorParams();
         lg.levelDurationInSeconds = 15;
         lg.levelInitialSpeed = 50;
         lg.maxNumberOfSimultaneousObstacles = 4;

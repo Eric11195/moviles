@@ -30,27 +30,6 @@ public class LevelGenerator implements mcd_Serializable {
     JetpackComponent playerJetpack;
     mcd_Entity player;
 
-    public static class LevelGeneratorParams{
-        //Px speed per second. The obstacles move that much towards the left of the screen
-        public float levelInitialSpeed;
-        public float levelDurationInSeconds;
-        public int maxNumberOfSimultaneousObstacles;
-        /**
-         * What are the chances of having an explosive obstacle creation
-         * Moment in which the obstacle creator receives a huge boosts on tokens.
-         */
-        public double obstacleExplosiveCreationChance;
-        /**
-         * When obstacleExplosiveCreationChance happens.
-         * How many token obstacles to add to the obstacle creator in that second. Float number.
-         */
-        public float obstacleExplosiveCreationBoost;
-        /**
-         * each second this amount of obstacle are created by default
-         */
-        public float obstacleLinearCreationPerSecond;
-    }
-
     public static final float artificialDeltaTime = 0.16f;
     public static JSONObject generateNewLevel(mcd_Scene scene, Engine eng, LevelGeneratorParams params){
         float currentTime = 0;
@@ -62,11 +41,12 @@ public class LevelGenerator implements mcd_Serializable {
                 scene,
                 new Vec2(PLAYER_X_POS,LOGIC_WINDOW_SIZE.y-PLAYER_DIMENSIONS.y)
         );
+        lg.player.rmComponent(ComponentId.PLAYER_INPUT_COMPONENT);
         lg.playerJetpack = (JetpackComponent) lg.player.getComponent(ComponentId.JETPACK_COMPONENT);
         lg.sg = new SceneGenerator(
                 scene,
                 lg.player,
-                params.maxNumberOfSimultaneousObstacles
+                params
         );
         while(currentTime < params.levelDurationInSeconds){
             lg.update(currentTime, artificialDeltaTime);

@@ -6,6 +6,8 @@ public enum ComponentId {
     IMAGE_COMPONENT,
     OBSTACLE_COMPONENT,
     MOUSETOSCREEN_COMPONENT, //This is debug only. Should be erased when the input coordinates work as intended
+
+    PLAYER_INPUT_COMPONENT,
     JETPACK_COMPONENT,
     VELOCITY_COMPONENT,
     LASER_COMPONENT,

@@ -26,12 +26,15 @@ import javax.xml.crypto.dsig.Transform;
 public class SceneGenerator implements mcd_System{
     int _circularArrayIndex;
     int _freeIdxCount;
-    float speedMult = 150.0f;
+    LevelGeneratorParams params;
     ArrayList<mcd_Entity> _obstacleList;
+    float speedMult;
     mcd_Entity playerEnt;
     //@param density marks the highest amount of obstacles in screen at the same time
-    public SceneGenerator(mcd_Scene scene, mcd_Entity playerEnt, int obstacleScreenDensity){
-        initializeObstacleList(scene,obstacleScreenDensity);
+    public SceneGenerator(mcd_Scene scene, mcd_Entity playerEnt, LevelGeneratorParams params){
+        this.params = params;
+        this.speedMult = this.params.levelInitialSpeed;
+        initializeObstacleList(scene);
         this.playerEnt = playerEnt;
     }
 
@@ -54,14 +57,10 @@ public class SceneGenerator implements mcd_System{
         }
     }
     float obstacleAcumSpawn = 0;
-    final double obstacleSpawnLoteryProbability = 0.00000001;
-    final float obstacleLotteryAmount = 1.0f;
-    final float AVERAGE_OBSTACLES_PER_SECOND = 0.5f;
     public void addProbabilityToObstacleSpawn(float dt){
-        obstacleAcumSpawn += (dt*Math.random() < obstacleSpawnLoteryProbability) ? obstacleLotteryAmount : 0;
-        float probability = AVERAGE_OBSTACLES_PER_SECOND*(float)Math.random()*dt*((float) _freeIdxCount /_obstacleList.size());
+        obstacleAcumSpawn += (dt*Math.random() < params.obstacleExplosiveCreationChance) ? params.obstacleExplosiveCreationBoost : 0;
+        float probability = params.obstacleLinearCreationPerSecond*dt;
         obstacleAcumSpawn += probability;
-        //System.out.println("Obstacle Acum: "+obstacleAcumSpawn);
     }
     public void updateActiveObstacleCount(){
         _freeIdxCount = 0;
@@ -137,10 +136,10 @@ public class SceneGenerator implements mcd_System{
         ZapperComponent.getProvisionalZapperData(space,start,end);
         if(!dangerMatrix.checkLine(start,end)) return false;
         dangerMatrix.drawLine(start,end);
-        if(!dangerMatrix.ensureTraversability(playerEnt,speedMult,dt)) return false;
+        if(!dangerMatrix.ensureTraversability(playerEnt,this.speedMult,dt)) return false;
         ent.setComponent(
                 ComponentId.OBSTACLE_COMPONENT,
-                new ZapperComponent(ent, t, speedMult, start, end)
+                new ZapperComponent(ent, t, this.speedMult, start, end)
         );
         return true;
     }
@@ -166,9 +165,9 @@ public class SceneGenerator implements mcd_System{
     public boolean askIfSpawnNewObstacle(float dt){
         return obstacleAcumSpawn > 1 && _freeIdxCount > 0;
     }
-    private void initializeObstacleList(mcd_Scene scene, int obstacleScreenDensity){
-        _obstacleList = new ArrayList<mcd_Entity>(obstacleScreenDensity);
-        for(int i = 0; i < obstacleScreenDensity; ++i){
+    private void initializeObstacleList(mcd_Scene scene){
+        _obstacleList = new ArrayList<mcd_Entity>(params.maxNumberOfSimultaneousObstacles);
+        for(int i = 0; i < params.maxNumberOfSimultaneousObstacles; ++i){
             mcd_Entity ent = scene.createEntity();
             ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
             //ent.addComponent(ComponentId.IMAGE_COMPONENT, new ImageComponent(""));
@@ -176,6 +175,6 @@ public class SceneGenerator implements mcd_System{
             _obstacleList.add(ent);
         }
         _circularArrayIndex =0;
-        _freeIdxCount = obstacleScreenDensity;
+        _freeIdxCount = params.maxNumberOfSimultaneousObstacles;
     }
 }

@@ -40,23 +40,17 @@ public class JetpackComponent implements mcd_Component{
         }
         vel.velocity.y+= GRAVITY_FORCE*dt;
     }
-    private void isInputDown(mcd_Entity ent)
-    {
-        isFlying = ent.getEngine().getInput().pressed();
-    }
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g)
     {}
 
     @Override
     public void update(mcd_Entity ent, float t , float dt) {
-        isInputDown(ent);
         if(ent.hasComponent(ComponentId.TRANSFORM_COMPONENT)){
             respectBorders(ent);
             applyThrustAndGravity(ent, dt);
             checkSpeed(ent);
         }
-
     }
     public void setIsFlying(boolean value){
         isFlying = value;

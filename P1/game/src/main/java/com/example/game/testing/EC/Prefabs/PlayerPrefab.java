@@ -5,6 +5,7 @@ import static com.example.game.testing.constants.Constants.PLAYER_DIMENSIONS;
 import com.example.game.testing.EC.Component.ColliderComponent;
 import com.example.game.testing.EC.Component.ImageComponent;
 import com.example.game.testing.EC.Component.JetpackComponent;
+import com.example.game.testing.EC.Component.PlayerInputComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.Component.VelocityComponent;
 import com.example.game.testing.EC.ComponentId;
@@ -20,6 +21,7 @@ public class PlayerPrefab {
         ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent(pos, PLAYER_DIMENSIONS));
         ent.addComponent(ComponentId.IMAGE_COMPONENT, new ImageComponent("test_image.jpg"));
         ent.addComponent(ComponentId.VELOCITY_COMPONENT, new VelocityComponent());
+        ent.addComponent(ComponentId.PLAYER_INPUT_COMPONENT, new PlayerInputComponent());
         float playerRad = Math.min(PLAYER_DIMENSIONS.x,PLAYER_DIMENSIONS.y)/2;
         Vec2 playerCenter = new Vec2(
           PLAYER_DIMENSIONS.x/2,
