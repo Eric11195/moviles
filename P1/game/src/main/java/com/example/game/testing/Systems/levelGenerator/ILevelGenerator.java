@@ -14,6 +14,10 @@ public abstract class ILevelGenerator implements mcd_System {
     protected int _freeIdxCount;
     public int _circularArrayIndex;
     protected float speedMult;
+    mcd_Entity player = null;
+    public void setPlayer(mcd_Entity player){
+        this.player = player;
+    }
     protected ILevelGenerator(mcd_Scene scene, LevelGeneratorParams params){
         this.params = params;
         this.speedMult = this.params.levelInitialSpeed;

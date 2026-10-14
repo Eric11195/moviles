@@ -6,15 +6,18 @@ import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
+import com.example.game.testing.Systems.levelGenerator.LevelGeneratorParams;
+import com.example.game.testing.Systems.levelGenerator.ProceduralLevelGenerator;
 import com.example.game.testing.utils.FontLibrary;
 import com.example.utils.Vec2;
 import com.sun.java.accessibility.util.TopLevelWindowListener;
+import com.sun.tools.javac.Main;
 
 import java.awt.Button;
 
 public class MainMenuScene extends mcd_Scene{
-    public MainMenuScene(){
-        super();
+    public MainMenuScene(Engine eng){
+        super(eng);
     }
     @Override
     public void start(Engine eng) {
@@ -43,7 +46,17 @@ public class MainMenuScene extends mcd_Scene{
             DEFAULT_BUTTON_SIZE,
             "INFINITE MODE",
             () ->{
-                eng.setScene(new MainGameScene());
+                LevelGeneratorParams lgp = new LevelGeneratorParams();
+                lgp.levelDurationInSeconds = -1;
+                lgp.levelInitialSpeed = 150;
+                lgp.maxNumberOfSimultaneousObstacles = 4;
+                lgp.obstacleExplosiveCreationBoost = 1.5f;
+                lgp.obstacleExplosiveCreationChance = 0.000000001;
+                lgp.obstacleLinearCreationPerSecond = 0.8f;
+                MainGameScene mgs = new MainGameScene(eng);
+                ProceduralLevelGenerator plg = new ProceduralLevelGenerator(mgs,lgp, false);
+                mgs.setLevelGen(plg);
+                eng.setScene(mgs);
             }
         );
         createButton(
@@ -52,7 +65,7 @@ public class MainMenuScene extends mcd_Scene{
             DEFAULT_BUTTON_SIZE,
             "RETOS",
             () ->{
-                eng.setScene(new MainGameScene());
+                eng.setScene(new LevelSelectorScene(eng));
             }
         );
         createButton(
@@ -61,7 +74,7 @@ public class MainMenuScene extends mcd_Scene{
             DEFAULT_BUTTON_SIZE,
             "GENERATE LEVELS",
             () ->{
-                eng.setScene(new LevelGeneratorToJSON());
+                eng.setScene(new LevelGeneratorToJSON(eng));
             }
         );
     }

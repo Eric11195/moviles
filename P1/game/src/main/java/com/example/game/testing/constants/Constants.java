@@ -5,9 +5,10 @@ import com.example.utils.Vec2;
 public class Constants {
     public static final Vec2 LOGIC_WINDOW_SIZE = new Vec2(600,400);
 
-    //PLAYER
     public static final int PLAYER_X_POS =(int) LOGIC_WINDOW_SIZE.x/5;
     public static final Vec2 PLAYER_DIMENSIONS= new Vec2(LOGIC_WINDOW_SIZE.x/12, LOGIC_WINDOW_SIZE.y/10);
+    //PLAYER
+    public static final float PLAYER_STARTING_Y_POS = LOGIC_WINDOW_SIZE.y-PLAYER_DIMENSIONS.y;
     public static final Vec2 PLAYER_MARGINS = new Vec2(PLAYER_DIMENSIONS.x/2, PLAYER_DIMENSIONS.y/2);
     //Vertical upwards
     public static final float MAX_PLAYER_UPWARDS_SPEED = 120;

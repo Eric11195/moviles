@@ -1,10 +1,13 @@
 package com.example.game.testing.Systems.levelGenerator;
 
+import static com.example.game.testing.EC.Prefabs.PlayerPrefab.createPlayer;
 import static com.example.game.testing.constants.Constants.DANGER_MATRIX_PX_TILE_SIZE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.MIN_ZAPPER_HEIGHT;
 import static com.example.game.testing.constants.Constants.PLAYER_DIMENSIONS;
 import static com.example.game.testing.constants.Constants.PLAYER_MARGINS;
+import static com.example.game.testing.constants.Constants.PLAYER_STARTING_Y_POS;
+import static com.example.game.testing.constants.Constants.PLAYER_X_POS;
 
 import com.example.game.testing.EC.Component.Obstacle;
 import com.example.game.testing.EC.Component.TransformComponent;
@@ -15,11 +18,9 @@ import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.utils.Vec2;
 
 public class ProceduralLevelGenerator extends ILevelGenerator {
-    mcd_Entity playerEnt;
     //@param density marks the highest amount of obstacles in screen at the same time
-    public ProceduralLevelGenerator(mcd_Scene scene, mcd_Entity playerEnt, LevelGeneratorParams params){
+    public ProceduralLevelGenerator(mcd_Scene scene, LevelGeneratorParams params, boolean simulatedOnly){
         super(scene, params);
-        this.playerEnt = playerEnt;
     }
 
 
@@ -33,6 +34,7 @@ public class ProceduralLevelGenerator extends ILevelGenerator {
 
     @Override
     public boolean setUpNewObstacle(mcd_Entity obstacle, float t, float dt){
+        if(player == null) throw new RuntimeException("Player entity must be set before this call");
         //TransformComponent tr = (TransformComponent) obstacle.getComponent(ComponentId.TRANSFORM_COMPONENT);
         //ImageComponent img = (ImageComponent) obstacle.getComponent(ComponentId.IMAGE_COMPONENT);
         if(!createRandomObstacleComp(obstacle,t,dt)) return false;
@@ -80,7 +82,7 @@ public class ProceduralLevelGenerator extends ILevelGenerator {
         ZapperComponent.getProvisionalZapperData(space,start,end);
         if(!dangerMatrix.checkLine(start,end)) return false;
         dangerMatrix.drawLine(start,end);
-        if(!dangerMatrix.ensureTraversability(playerEnt,this.speedMult,dt)) return false;
+        if(!dangerMatrix.ensureTraversability(player,this.speedMult,dt)) return false;
         ent.setComponent(
                 ComponentId.OBSTACLE_COMPONENT,
                 new ZapperComponent(ent, t, this.speedMult, start, end)

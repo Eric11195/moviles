@@ -10,6 +10,9 @@ import com.example.game.testing.Systems.levelGenerator.LevelGeneratorParams;
 import org.json.JSONObject;
 
 public class LevelGeneratorToJSON extends mcd_Scene {
+    public LevelGeneratorToJSON(Engine eng){
+        super(eng);
+    }
     @Override
     public void start(Engine eng) {
         JSONObject joLow = LevelGenerator.generateNewLevel(
@@ -29,13 +32,13 @@ public class LevelGeneratorToJSON extends mcd_Scene {
         );
         IFileStorage fileStorage = eng.getFileStorage();
         fileStorage.setRelativePath("Assets/Levels");
-        String file_name_easy = "EasyLevel01";
+        String file_name_easy = "Level1";
         toJSON(fileStorage, file_name_easy, joLow);
-        String file_name_mid = "MidLevel02";
+        String file_name_mid = "Level2";
         toJSON(fileStorage, file_name_mid, joMid);
-        String file_name_hard = "HardLevel01";
+        String file_name_hard = "Level3";
         toJSON(fileStorage, file_name_hard, joHard);
-        eng.setScene(new MainMenuScene());
+        eng.setScene(new MainMenuScene(eng));
     }
     private static LevelGeneratorParams getEasyLevelParams(){
         LevelGeneratorParams lg = new LevelGeneratorParams();

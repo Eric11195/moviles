@@ -1,6 +1,8 @@
 package com.example.game.testing.EC.Prefabs;
 
 import static com.example.game.testing.constants.Constants.PLAYER_DIMENSIONS;
+import static com.example.game.testing.constants.Constants.PLAYER_STARTING_Y_POS;
+import static com.example.game.testing.constants.Constants.PLAYER_X_POS;
 
 import com.example.game.testing.EC.Component.ColliderComponent;
 import com.example.game.testing.EC.Component.ImageComponent;
@@ -14,11 +16,11 @@ import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.utils.Vec2;
 public class PlayerPrefab {
 
-    public static mcd_Entity createPlayer(mcd_Scene my_scene, Vec2 pos)
+    public static mcd_Entity createPlayer(mcd_Scene my_scene)
     {
         mcd_Entity ent = my_scene.createEntity();
         ent.addComponent(ComponentId.JETPACK_COMPONENT, new JetpackComponent());
-        ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent(pos, PLAYER_DIMENSIONS));
+        ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent(new Vec2(PLAYER_X_POS,PLAYER_STARTING_Y_POS), PLAYER_DIMENSIONS));
         ent.addComponent(ComponentId.IMAGE_COMPONENT, new ImageComponent("test_image.jpg"));
         ent.addComponent(ComponentId.VELOCITY_COMPONENT, new VelocityComponent());
         ent.addComponent(ComponentId.PLAYER_INPUT_COMPONENT, new PlayerInputComponent());

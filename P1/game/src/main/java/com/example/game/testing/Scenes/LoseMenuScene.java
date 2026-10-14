@@ -7,6 +7,10 @@ import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import com.example.engine.Engine;
 
 public class LoseMenuScene extends mcd_Scene{
+    public LoseMenuScene(Engine myEngine) {
+        super(myEngine);
+    }
+
     @Override
     public void start(Engine eng) {
         createButton(
@@ -15,7 +19,7 @@ public class LoseMenuScene extends mcd_Scene{
             DEFAULT_BUTTON_SIZE,
             "Return to Main Menu",
             () ->{
-                eng.setScene(new MainMenuScene());
+                eng.setScene(new MainMenuScene(eng));
             });
     }
 }

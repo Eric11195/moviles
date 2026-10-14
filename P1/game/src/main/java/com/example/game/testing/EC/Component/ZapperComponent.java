@@ -18,9 +18,12 @@ import com.example.game.testing.Scenes.LoseMenuScene;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.levelGenerator.ObstacleFactory;
+import com.example.game.testing.utils.JSON_HELPER;
 import com.example.utils.Vec2;
 
 import org.json.JSONObject;
+
+import javax.xml.crypto.dsig.Transform;
 
 /**
  * The electrical lines danger
@@ -52,9 +55,10 @@ public class ZapperComponent extends Obstacle{
         Vec2 start,end;
         @Override
         public void instantiate(mcd_Scene scene, mcd_Entity ent, float levelSpeed, float t) {
-
+            ent.setComponent(ComponentId.OBSTACLE_COMPONENT, new ZapperComponent(ent,t, levelSpeed, start,end));
         }
     }
+    mcd_Entity myEnt;
 
     public ZapperComponent(mcd_Entity ent, float spawnTime, float speedMult, Vec2 start, Vec2 end) {
         super(spawnTime, speedMult);
@@ -64,6 +68,7 @@ public class ZapperComponent extends Obstacle{
         this.start = new Vec2(0,0);
         this.end = new Vec2(end.x-start.x,end.y-start.y);
         scrolledTime = calculateScrolledTime(spawnTime, speedMult);
+        this.myEnt = ent;
         generateColliders(ent);
     }
     private void generateColliders(mcd_Entity ent){
@@ -124,7 +129,7 @@ public class ZapperComponent extends Obstacle{
     @Override
     public void onPlayerCollision(mcd_Entity ent, mcd_Scene scene) {
         // FATAL
-        scene.getEngine().setScene(new LoseMenuScene());
+        scene.getEngine().setScene(new LoseMenuScene(scene.getEngine()));
     }
 
     public float width(){
@@ -137,15 +142,16 @@ public class ZapperComponent extends Obstacle{
     @Override
     public JSONObject serialize(){
         JSONObject jo = super.serialize();
-        jo.put("start",start);
-        jo.put("end", end);
+        TransformComponent tr = (TransformComponent) myEnt.getComponent(ComponentId.TRANSFORM_COMPONENT);
+        jo.put("start", JSON_HELPER.toJSON(tr.pos));
+        jo.put("end", JSON_HELPER.toJSON(end.add(tr.pos)));
         jo.put("id",OBSTACLE_ZAPPER);
         return jo;
     }
     public static ZapperComponentSerialized deserialize(JSONObject obj){
         ZapperComponentSerialized zcs = new ZapperComponentSerialized();
-        zcs.end = fromJSON((JSONObject) obj.get("end"));
-        zcs.start = fromJSON((JSONObject) obj.get("start"));
+        zcs.end = fromJSON((JSONObject) obj.getJSONObject("end"));
+        zcs.start = fromJSON((JSONObject) obj.getJSONObject("start"));
         zcs.spawnTime = getSpawnTime(obj);
         return zcs;
     }

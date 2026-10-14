@@ -11,17 +11,20 @@ import java.util.ArrayList;
 public abstract class mcd_Scene implements Scene {
     protected ArrayList<mcd_Entity> entityList = new ArrayList<mcd_Entity>();
     protected ArrayList<mcd_System> systemList = new ArrayList<mcd_System>();
-    private Engine my_engine;
+    private Engine myEngine;
+    protected mcd_Scene(Engine myEngine){
+        this.myEngine = myEngine;
+    }
     public Engine getEngine(){
-        return my_engine;
+        return myEngine;
     }
     @Override
     public void update(Engine eng, float t, float dt) {
-        my_engine = eng;
-        for(mcd_Entity ents : entityList){
+        myEngine = eng;
+        for(mcd_Entity ents : new ArrayList<>(entityList)){
             ents.update(t, dt);
         }
-        for(mcd_System sys : systemList){
+        for(mcd_System sys : new ArrayList<>(systemList)){
             sys.update(this, t,dt);
         }
         //erases entities that are no longer alive

@@ -92,10 +92,10 @@ public class Engine implements Runnable{
         return true;
     }
 
-    private float dt;
+    private float dt=0;
     public float getDt(){return dt;}
     //time since start
-    private float t;
+    private float t=0;
     public float getTime(){return t;}
     private long lastFrameTime;
     long prevTime = 0;
@@ -113,12 +113,16 @@ public class Engine implements Runnable{
         long nanoElapsedTime = currentTime - lastFrameTime;
         lastFrameTime = currentTime;
 
-        if(this.upcomingScene!=null){
-            if(this.currentScene != null)
-                this.currentScene.cleanup(this);
-            this.currentScene = upcomingScene;
-            this.currentScene.start(this);
-            this.upcomingScene = this.currentScene == this.upcomingScene? null : this.upcomingScene;
+        if (upcomingScene != null) {
+            Scene nextScene = upcomingScene;
+            upcomingScene = null;
+
+            if (currentScene != null) {
+                currentScene.cleanup(this);
+            }
+
+            currentScene = nextScene;
+            currentScene.start(this);
         }
 
         currentScene.update(this,t,dt);

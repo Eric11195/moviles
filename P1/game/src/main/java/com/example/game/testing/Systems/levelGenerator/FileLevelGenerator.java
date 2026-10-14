@@ -10,7 +10,7 @@ public class FileLevelGenerator extends ILevelGenerator {
     List<ObstacleFactory> obstaclesBeComing;
     float startTime;
 
-    FileLevelGenerator(mcd_Scene scene, LevelGenerator.LevelGeneratorSerialized lgs){
+    public FileLevelGenerator(mcd_Scene scene, LevelGenerator.LevelGeneratorSerialized lgs){
         super(scene, lgs.levelGeneratorParams);
         obstaclesBeComing = lgs.obsFactory;
         current_idx = 0;
@@ -25,6 +25,7 @@ public class FileLevelGenerator extends ILevelGenerator {
     @Override
     protected boolean setUpNewObstacle(mcd_Entity ent, float t, float dt) {
         obstaclesBeComing.get(current_idx).instantiate(ent.getMyScene(), ent, speedMult, t);
+        ent.setActive(true);
         ++current_idx;
         return true;
     }

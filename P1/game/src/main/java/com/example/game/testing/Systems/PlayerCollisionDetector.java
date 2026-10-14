@@ -30,7 +30,7 @@ public class PlayerCollisionDetector implements mcd_System {
     }
 
     public void playerCollided(mcd_Scene scene){
-        scene.getEngine().setScene(new LoseMenuScene());
+        scene.getEngine().setScene(new LoseMenuScene(scene.getEngine()));
     }
 
     @Override

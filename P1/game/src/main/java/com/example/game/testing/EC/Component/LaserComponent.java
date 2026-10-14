@@ -86,7 +86,7 @@ public class LaserComponent extends Obstacle {
     @Override
     public void onPlayerCollision(mcd_Entity ent, mcd_Scene scene) {
         // FATAL
-        scene.getEngine().setScene(new LoseMenuScene());
+        scene.getEngine().setScene(new LoseMenuScene(scene.getEngine()));
     }
 
     @Override

@@ -6,24 +6,34 @@ import com.example.engine.Engine;
 import com.example.game.testing.EC.Prefabs.PlayerPrefab;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.CoinSystem;
+import com.example.game.testing.Systems.levelGenerator.ILevelGenerator;
 import com.example.game.testing.Systems.levelGenerator.LevelGeneratorParams;
 import com.example.game.testing.Systems.PlayerCollisionDetector;
 import com.example.game.testing.Systems.levelGenerator.ProceduralLevelGenerator;
 import com.example.utils.Vec2;
 
 public class MainGameScene extends mcd_Scene{
+    ILevelGenerator levelGen = null;
+
+    public MainGameScene(Engine myEngine) {
+        super(myEngine);
+    }
+
+    public void setLevelGen(ILevelGenerator levelGen){
+        if(this.levelGen!=null){
+            throw new RuntimeException("You must not call setLevelGen again once levelGen is correctly set up");
+        }
+        this.levelGen = levelGen;
+    }
     @Override
     public void start(Engine eng) {
-        mcd_Entity player = PlayerPrefab.createPlayer(this,new Vec2(PLAYER_X_POS,100));
-        LevelGeneratorParams lgp = new LevelGeneratorParams();
-        lgp.levelDurationInSeconds = -1;
-        lgp.levelInitialSpeed = 150;
-        lgp.maxNumberOfSimultaneousObstacles = 4;
-        lgp.obstacleExplosiveCreationBoost = 1.5f;
-        lgp.obstacleExplosiveCreationChance = 0.000000001;
-        lgp.obstacleLinearCreationPerSecond = 0.8f;
-        addSystem(new ProceduralLevelGenerator(this, player, lgp));
+        if(levelGen==null){
+            throw new RuntimeException("You must call setLevelGen before this function");
+        }
+        mcd_Entity player = PlayerPrefab.createPlayer(this);
+        levelGen.setPlayer(player);
         addSystem(new PlayerCollisionDetector(player));
         addSystem(CoinSystem.getInstance());
+        addSystem(levelGen);
     }
 }

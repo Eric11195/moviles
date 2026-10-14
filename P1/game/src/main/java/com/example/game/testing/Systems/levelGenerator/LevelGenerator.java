@@ -38,17 +38,15 @@ public class LevelGenerator implements mcd_Serializable {
         LevelGenerator lg = new LevelGenerator();
         lg.lgp = params;
         lg.myScene = scene;
-        lg.player = createPlayer(
-                scene,
-                new Vec2(PLAYER_X_POS,LOGIC_WINDOW_SIZE.y-PLAYER_DIMENSIONS.y)
-        );
+        lg.player = createPlayer(scene);
         lg.player.rmComponent(ComponentId.PLAYER_INPUT_COMPONENT);
         lg.playerJetpack = (JetpackComponent) lg.player.getComponent(ComponentId.JETPACK_COMPONENT);
         lg.sg = new ProceduralLevelGenerator(
                 scene,
-                lg.player,
-                lg.lgp
+                lg.lgp,
+                true
         );
+        lg.sg.setPlayer(lg.player);
         int loop_count = 0;
         while(currentTime < params.levelDurationInSeconds){
             lg.update(currentTime, ARTIFICIAL_DELTA_TIME);
@@ -86,9 +84,9 @@ public class LevelGenerator implements mcd_Serializable {
         List<ObstacleFactory> obsFactory = new ArrayList<ObstacleFactory>();
     }
 
-    public static void deserialize(JSONObject obj) {
+    public static LevelGeneratorSerialized deserialize(JSONObject obj) {
         LevelGeneratorSerialized lgp = new LevelGeneratorSerialized();
-        lgp.levelGeneratorParams = LevelGeneratorParams.deserialize(obj.getJSONObject("LevelGeneratotParams"));
+        lgp.levelGeneratorParams = LevelGeneratorParams.deserialize(obj.getJSONObject("LevelGeneratorParams"));
         JSONArray ja = obj.getJSONArray("ObstacleList");
         for(int i = 0; i < ja.length(); ++i){
             JSONObject jo = ja.getJSONObject(i);
@@ -108,5 +106,6 @@ public class LevelGenerator implements mcd_Serializable {
                     throw new RuntimeException("That type of obstacle has a non valid id");
             }
         }
+        return lgp;
     }
 }
