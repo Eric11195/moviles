@@ -5,7 +5,7 @@ import com.example.engine.Engine;
 
 public class DesktopEngine extends Engine{
     public DesktopEngine(int width, int height){
-        super(new GraphicsDesktop(), new InputDesktop(), new AudioDesktop());
+        super(new GraphicsDesktop(), new InputDesktop(), new AudioDesktop(), new FileStorageDesktop());
         ((InputDesktop)getInput()).registerCanvas(((GraphicsDesktop)getGraphics()).getCanvas());
     }
     @Override

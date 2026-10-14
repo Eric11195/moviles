@@ -1,6 +1,8 @@
 package com.example.engine;
 import com.example.engine.audio.AudioInterface;
 
+import java.nio.file.FileSystem;
+
 public class Engine implements Runnable{
     private Thread gameThread;
 
@@ -9,15 +11,17 @@ public class Engine implements Runnable{
     private final InputBase input;
 
     private final AudioInterface audio;
+    private final IFileStorage fileStorage;
 
     private volatile boolean running;
     private Scene currentScene;
     private Scene upcomingScene=null;
 
-    protected Engine(GraphicsInterface graphics, InputBase input, AudioInterface audio) {
+    protected Engine(GraphicsInterface graphics, InputBase input, AudioInterface audio, IFileStorage fileStorage) {
         this.graphics = graphics;
         this.input = input;
         this.audio = audio;
+        this.fileStorage = fileStorage;
     }
 
     public Scene getCurrentScene() {
@@ -31,9 +35,9 @@ public class Engine implements Runnable{
 
     public GraphicsInterface getGraphics() {return graphics;}
 
-    public InputBase getInput() {return input;}
-
-    public AudioInterface getAudio() {return audio;}
+    public InputBase getInput() {return input; }
+    public AudioInterface getAudio() {return audio; }
+    public IFileStorage getFileStorage(){return fileStorage; }
 
     public boolean getRunning() {
         return running;
@@ -123,8 +127,8 @@ public class Engine implements Runnable{
         // Informe de FPS
         dt = (float)(nanoElapsedTime / 1.0E9);
         t =  (float)(currentTime / 1.0E9);
-        if (currentTime - prevTime > 1000000000l) {
-            long fps = frames * 1000000000l / (currentTime - prevTime);
+        if (currentTime - prevTime > 1000000000L) {
+            long fps = frames * 1000000000L / (currentTime - prevTime);
             System.out.println("" + fps + " fps");
             frames = 0;
             prevTime = currentTime;

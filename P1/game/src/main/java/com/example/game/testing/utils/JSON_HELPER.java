@@ -1,4 +1,5 @@
 package com.example.game.testing.utils;
+import com.example.engine.IFileStorage;
 import com.example.utils.Vec2;
 
 import org.json.JSONArray;
@@ -44,23 +45,20 @@ public class JSON_HELPER {
         return jo;
     }
 
-    public static void toJSON(String file_name, JSONObject jo){
+    public static void toJSON(IFileStorage fileStorage, String file_name, JSONObject jo){
         try {
             String json = jo.toString();
-            FileWriter fw = new FileWriter(file_name+".json");
-            fw.write(json);
-            fw.close();
-            System.out.println("JSON written to file "+file_name+".json succesfully");
+            fileStorage.write(file_name+".json", json);
+            System.out.println("In path: "+ fileStorage.getCurrentPath()+"\nJSON written to file "+file_name+".json succesfully");
         }catch(java.io.IOException e){
             e.printStackTrace();
         }
     }
 
-    public static JSONObject fromJSON(String file_name){
+    public static JSONObject fromJSON(IFileStorage fileStorage, String file_name){
         try {
-            FileReader fr = new FileReader(file_name + ".json");
-            JSONObject jo = new JSONObject(fr.toString());
-            return jo;
+            String content = fileStorage.read(file_name+".json");
+            return new JSONObject(content);
         }catch(java.io.IOException e){
             e.printStackTrace();
         }

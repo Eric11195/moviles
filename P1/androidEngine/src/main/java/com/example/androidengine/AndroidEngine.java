@@ -17,7 +17,7 @@ public class AndroidEngine extends Engine{
     public AndroidEngine(
             AppCompatActivity activity,
             int surfaceViewId) {
-        super(new GraphicsAndroid(activity, surfaceViewId),new InputAndroid(),new AudioAndroid(activity));
+        super(new GraphicsAndroid(activity, surfaceViewId),new InputAndroid(),new AudioAndroid(activity), new FileStorageAndroid(activity));
 
         SurfaceView surface =
                 activity.findViewById(surfaceViewId);
