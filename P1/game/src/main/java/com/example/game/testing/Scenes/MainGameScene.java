@@ -8,8 +8,7 @@ import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.CoinSystem;
 import com.example.game.testing.Systems.levelGenerator.LevelGeneratorParams;
 import com.example.game.testing.Systems.PlayerCollisionDetector;
-import com.example.game.testing.Systems.SceneGenerator;
-import com.example.game.testing.utils.FontLibrary;
+import com.example.game.testing.Systems.levelGenerator.ProceduralLevelGenerator;
 import com.example.utils.Vec2;
 
 public class MainGameScene extends mcd_Scene{
@@ -23,7 +22,7 @@ public class MainGameScene extends mcd_Scene{
         lgp.obstacleExplosiveCreationBoost = 1.5f;
         lgp.obstacleExplosiveCreationChance = 0.000000001;
         lgp.obstacleLinearCreationPerSecond = 0.8f;
-        addSystem(new SceneGenerator(this, player, lgp));
+        addSystem(new ProceduralLevelGenerator(this, player, lgp));
         addSystem(new PlayerCollisionDetector(player));
         addSystem(CoinSystem.getInstance());
     }

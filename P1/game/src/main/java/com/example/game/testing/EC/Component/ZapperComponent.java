@@ -48,10 +48,8 @@ public class ZapperComponent extends Obstacle{
             outEnd.set(outEnd.add(toSubstract));
         }
     }
-    public static class ZapperComponentSerialized implements ObstacleFactory {
-        float spawnTime;
+    public static class ZapperComponentSerialized extends ObstacleFactory {
         Vec2 start,end;
-
         @Override
         public void instantiate(mcd_Scene scene, mcd_Entity ent, float levelSpeed, float t) {
 

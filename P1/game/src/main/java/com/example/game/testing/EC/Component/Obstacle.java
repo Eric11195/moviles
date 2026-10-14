@@ -44,7 +44,7 @@ public abstract class Obstacle implements mcd_Component, mcd_Serializable {
 
     public JSONObject serialize(){
         JSONObject jo = new JSONObject();
-        jo.put("spawnTime", spawnTime);
+        jo.put("spawnTime", Float.valueOf(spawnTime));
         return jo;
     }
 

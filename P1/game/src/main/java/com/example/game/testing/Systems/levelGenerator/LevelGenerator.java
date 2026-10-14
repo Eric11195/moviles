@@ -14,7 +14,6 @@ import com.example.game.testing.EC.Component.ZapperComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
-import com.example.game.testing.Systems.SceneGenerator;
 import com.example.game.testing.utils.mcd_Serializable;
 import com.example.utils.Vec2;
 
@@ -25,22 +24,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LevelGenerator implements mcd_Serializable {
-    float levelInitialSpeed;
-    float levelDurationInSeconds;
-    int maxSimultaneousObstacleCount;
-    SceneGenerator sg;
+    LevelGeneratorParams lgp;
+    ProceduralLevelGenerator sg;
     ArrayList<Obstacle> obstacleCompleteList = new ArrayList<>();
     mcd_Scene myScene;
     JetpackComponent playerJetpack;
     mcd_Entity player;
 
     private static final float ARTIFICIAL_DELTA_TIME = 0.02f;
+    private LevelGeneratorParams params;
     public static JSONObject generateNewLevel(mcd_Scene scene, Engine eng, LevelGeneratorParams params){
         float currentTime = 0;
         LevelGenerator lg = new LevelGenerator();
-        lg.levelInitialSpeed = params.levelInitialSpeed;
-        lg.levelDurationInSeconds = params.levelDurationInSeconds;
-        lg.maxSimultaneousObstacleCount = params.maxNumberOfSimultaneousObstacles;
+        lg.lgp = params;
         lg.myScene = scene;
         lg.player = createPlayer(
                 scene,
@@ -48,10 +44,10 @@ public class LevelGenerator implements mcd_Serializable {
         );
         lg.player.rmComponent(ComponentId.PLAYER_INPUT_COMPONENT);
         lg.playerJetpack = (JetpackComponent) lg.player.getComponent(ComponentId.JETPACK_COMPONENT);
-        lg.sg = new SceneGenerator(
+        lg.sg = new ProceduralLevelGenerator(
                 scene,
                 lg.player,
-                params
+                lg.lgp
         );
         int loop_count = 0;
         while(currentTime < params.levelDurationInSeconds){
@@ -80,25 +76,19 @@ public class LevelGenerator implements mcd_Serializable {
     @Override
     public JSONObject serialize() {
         JSONObject jo = new JSONObject();
-        jo.put("LevelSpeed",levelInitialSpeed);
-        jo.put("LevelDurationInSeconds", levelDurationInSeconds);
+        jo.put("LevelGeneratorParams", lgp.serialize());
         jo.put("ObstacleList", toJSON(obstacleCompleteList));
-        jo.put("MaxSimultaneousObstacleCount", maxSimultaneousObstacleCount);
         return jo;
     }
 
     public static class LevelGeneratorSerialized {
-        float levelInitialSpeed;
-        float levelDurationInSeconds;
-        int maxSimultaneousObstacles;
+        LevelGeneratorParams levelGeneratorParams;
         List<ObstacleFactory> obsFactory = new ArrayList<ObstacleFactory>();
     }
 
     public static void deserialize(JSONObject obj) {
         LevelGeneratorSerialized lgp = new LevelGeneratorSerialized();
-        lgp.levelInitialSpeed = obj.getFloat("LevelSpeed");
-        lgp.levelDurationInSeconds = obj.getFloat("LevelDurationInSeconds");
-        lgp.maxSimultaneousObstacles = obj.getInt("MaxSimultaneousObstacleCount");
+        lgp.levelGeneratorParams = LevelGeneratorParams.deserialize(obj.getJSONObject("LevelGeneratotParams"));
         JSONArray ja = obj.getJSONArray("ObstacleList");
         for(int i = 0; i < ja.length(); ++i){
             JSONObject jo = ja.getJSONObject(i);

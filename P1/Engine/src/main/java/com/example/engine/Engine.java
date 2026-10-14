@@ -89,8 +89,10 @@ public class Engine implements Runnable{
     }
 
     private float dt;
+    public float getDt(){return dt;}
     //time since start
     private float t;
+    public float getTime(){return t;}
     private long lastFrameTime;
     long prevTime = 0;
     int frames = 0;
