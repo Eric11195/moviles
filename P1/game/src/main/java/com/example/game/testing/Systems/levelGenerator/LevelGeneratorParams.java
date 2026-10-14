@@ -40,7 +40,7 @@ public class LevelGeneratorParams implements mcd_Serializable {
         lgp.levelInitialSpeed = jo.getFloat("levelInitialSpeed");
         lgp.maxNumberOfSimultaneousObstacles = jo.getInt("maxNumberOfSimultaneousObstacles");
         lgp.obstacleExplosiveCreationBoost = jo.getFloat("obstacleExplosiveCreationBoost");
-        lgp.obstacleExplosiveCreationChance = jo.getFloat("obstacleExplosiveCreationChance");
+        lgp.obstacleExplosiveCreationChance = jo.getDouble("obstacleExplosiveCreationChance");
         lgp.obstacleLinearCreationPerSecond = jo.getFloat("obstacleLinearCreationPerSecond");
         return lgp;
     }
