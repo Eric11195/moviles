@@ -64,7 +64,6 @@ public class ProceduralLevelGenerator extends ILevelGenerator {
     }
     public boolean createRandomObstacleComp(mcd_Entity ent, float t, float dt){
         return createZapper(ent,t, dt);
-
     }
     public boolean createZapper(mcd_Entity ent, float t, float dt){
         Vec2 space =
@@ -87,6 +86,11 @@ public class ProceduralLevelGenerator extends ILevelGenerator {
                 ComponentId.OBSTACLE_COMPONENT,
                 new ZapperComponent(ent, t, this.speedMult, start, end)
         );
+        return true;
+    }
+    public boolean createCoin(mcd_Entity ent, float t, float dt){
+
+
         return true;
     }
 

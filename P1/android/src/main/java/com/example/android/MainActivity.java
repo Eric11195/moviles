@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         AndroidEngine eng = new AndroidEngine(this, R.id.mainSurfaceView);
-        eng.setScene(new MainMenuScene());
+        eng.setScene(new MainMenuScene(eng));
         eng.resume();
     }
 }
