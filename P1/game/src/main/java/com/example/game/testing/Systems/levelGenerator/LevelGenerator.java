@@ -26,7 +26,7 @@ import java.util.List;
 public class LevelGenerator implements mcd_Serializable {
     LevelGeneratorParams lgp;
     ProceduralLevelGenerator sg;
-    ArrayList<Obstacle> obstacleCompleteList = new ArrayList<>();
+    ArrayList<JSONObject> obstacleCompleteList = new ArrayList<>();
     mcd_Scene myScene;
     JetpackComponent playerJetpack;
     mcd_Entity player;
@@ -58,24 +58,27 @@ public class LevelGenerator implements mcd_Serializable {
     private void update(float t, float dt){
         int index_before = this.sg._circularArrayIndex;
         this.sg.update(myScene, t, dt);
-        this.playerJetpack.setIsFlying(Math.random() > 0.5f);
-        this.player.update(t,dt);
         int index_after = this.sg._circularArrayIndex;
         while(index_before != index_after){
             this.obstacleCompleteList.add(
-                    (Obstacle)
+                    ((Obstacle)
                     this.sg._obstacleList
                         .get(index_before)
-                        .getComponent(ComponentId.OBSTACLE_COMPONENT)
+                        .getComponent(ComponentId.OBSTACLE_COMPONENT)).serialize()
             );
             index_before = (index_before+1) % this.sg._obstacleList.size();
+        }
+        this.playerJetpack.setIsFlying(Math.random() > 0.5f);
+        this.player.update(t,dt);
+        for(mcd_Entity obs : sg._obstacleList){
+            obs.update(t,dt);
         }
     }
     @Override
     public JSONObject serialize() {
         JSONObject jo = new JSONObject();
         jo.put("LevelGeneratorParams", lgp.serialize());
-        jo.put("ObstacleList", toJSON(obstacleCompleteList));
+        jo.put("ObstacleList", obstacleCompleteList);
         return jo;
     }
 
