@@ -16,7 +16,7 @@ public class Constants {
     public static final float MAX_PLAYER_FALL_SPEED = 160;
 
     //UI
-    public static final Vec2 DEFAULT_BUTTON_SIZE = new Vec2(LOGIC_WINDOW_SIZE.x*0.4f,LOGIC_WINDOW_SIZE.y*0.2f);
+    public static final Vec2 DEFAULT_BUTTON_SIZE = new Vec2(LOGIC_WINDOW_SIZE.x*0.25f,LOGIC_WINDOW_SIZE.y*0.15f);
 
     //OBSTACLES
     public static final int DANGER_MATRIX_PRECALCULATED_SPACE = (int)(LOGIC_WINDOW_SIZE.x * 0.5f);

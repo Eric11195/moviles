@@ -1,11 +1,11 @@
-package com.example.game.testing.Systems;
+package com.example.game.testing.Systems.levelGenerator;
 
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
-import com.example.game.testing.Systems.levelGenerator.LevelGeneratorParams;
+import com.example.game.testing.Systems.mcd_System;
 
 import java.util.ArrayList;
 

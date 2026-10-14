@@ -2,7 +2,6 @@ package com.example.game.testing.Systems.levelGenerator;
 
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
-import com.example.game.testing.Systems.ILevelGenerator;
 
 import java.util.List;
 

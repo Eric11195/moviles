@@ -12,7 +12,6 @@ import com.example.game.testing.EC.Component.ZapperComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
-import com.example.game.testing.Systems.ILevelGenerator;
 import com.example.utils.Vec2;
 
 public class ProceduralLevelGenerator extends ILevelGenerator {
