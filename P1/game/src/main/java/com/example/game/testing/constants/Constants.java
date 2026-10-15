@@ -37,4 +37,8 @@ public class Constants {
         // LASER
         public static final float LASER_HEIGHT = LOGIC_WINDOW_SIZE.y/5.0f;
 
+        // COIN
+        public static final int MAX_COINS = 5;
+
+
 }

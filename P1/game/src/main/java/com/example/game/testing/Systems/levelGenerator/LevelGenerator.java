@@ -1,9 +1,6 @@
 package com.example.game.testing.Systems.levelGenerator;
 
 import static com.example.game.testing.EC.Prefabs.PlayerPrefab.createPlayer;
-import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
-import static com.example.game.testing.constants.Constants.PLAYER_DIMENSIONS;
-import static com.example.game.testing.constants.Constants.PLAYER_X_POS;
 import static com.example.game.testing.utils.JSON_HELPER.toJSON;
 
 import com.example.engine.Engine;
@@ -15,7 +12,6 @@ import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.utils.mcd_Serializable;
-import com.example.utils.Vec2;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -56,9 +52,9 @@ public class LevelGenerator implements mcd_Serializable {
         return lg.serialize();
     }
     private void update(float t, float dt){
-        int index_before = this.sg._circularArrayIndex;
+        int index_before = this.sg._obstacleArrayIndex;
         this.sg.update(myScene, t, dt);
-        int index_after = this.sg._circularArrayIndex;
+        int index_after = this.sg._obstacleArrayIndex;
         while(index_before != index_after){
             this.obstacleCompleteList.add(
                     ((Obstacle)
