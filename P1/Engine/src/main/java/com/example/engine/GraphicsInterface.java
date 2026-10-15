@@ -9,7 +9,6 @@ public interface GraphicsInterface {
     public void drawImage(ImageEng img, Vec2 pos);
     public void clear(ColorEng color);
     public void setColor(ColorEng color);
-    public void setBandsColor(ColorEng clr);
     public void setStrokeWidth(int pxWidth);
     public void drawRectangle(Vec2 pos, Vec2 size, boolean fill);
     public void drawRoundRectangle(Vec2 pos, Vec2 size, float arc, boolean fill);

@@ -122,7 +122,6 @@ public class GraphicsDesktop implements GraphicsInterface {
                     eng.getCurrentScene().render(this);
 
                     calculateInverseMatrix();
-                    //drawOutOfScreenBands();
                 }
                 finally {
                     this.graphics.dispose();
@@ -131,43 +130,6 @@ public class GraphicsDesktop implements GraphicsInterface {
             } while(this.buf.contentsRestored());
             this.buf.show();
         } while(this.buf.contentsLost());
-    }
-    ColorEng bandsColor = EngineConstants.OUT_OF_BOUNDS_BANDS_COLOR;
-    @Override
-    public void setBandsColor(ColorEng clr){
-        bandsColor = clr;
-    }
-    private void drawOutOfScreenBands(){
-        this.graphics.setTransform(new AffineTransform());
-        ColorEng auxKeep = toColorEng(this.graphics.getColor());
-        setColor(bandsColor);
-        int width = getWidth(), height = getHeight();
-        //Above rect
-        drawRectangle(
-            new Vec2(0,0),
-            new Vec2(width, this.offsetY),
-            true
-        );
-        //Below rect
-        drawRectangle(
-            new Vec2(0, this.offsetY+LOGIC_WINDOW_HEIGHT*scaleMult),
-            new Vec2(width, this.offsetY),
-            true
-        );
-        //Right rect
-        drawRectangle(
-            new Vec2(0, this.offsetY),
-            new Vec2(this.offsetX, height),
-            true
-        );
-        //Left rect
-        drawRectangle(
-            new Vec2(this.offsetX+LOGIC_WINDOW_WIDTH*scaleMult, this.offsetY),
-            new Vec2(this.offsetX, height),
-            true
-        );
-        //Restore previous color
-        setColor(auxKeep);
     }
     @Override
     public void drawImage(ImageEng img, Vec2 src_pos, Vec2 src_size, Vec2 dst_pos, Vec2 dst_size) {

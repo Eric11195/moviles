@@ -171,48 +171,10 @@ public class GraphicsAndroid implements GraphicsInterface {
     //render what has been rendered on screen in between startRender() and this call
     public void endRender(){
         assert(can!=null);
-        renderOutOfBoundsBands();
         surface.unlockCanvasAndPost(can);
         can = null;
     }
-    ColorEng outOfBoundsBandsColor = EngineConstants.OUT_OF_BOUNDS_BANDS_COLOR;
-    @Override
-    public void setBandsColor(ColorEng clr){
-        outOfBoundsBandsColor = clr;
-    }
-    public void renderOutOfBoundsBands(){
-        can.setMatrix(new Matrix());
-        //this.graphics.setTransform(new AffineTransform());
-        ColorEng auxKeep = new ColorEng(this.paint.getColor());
-        setColor(outOfBoundsBandsColor);
-        int width = getWidth(), height = getHeight();
-        //Above rect
-        drawRectangle(
-                new Vec2(0,0),
-                new Vec2(width, this.offsetY),
-                true
-        );
-        //Below rect
-        drawRectangle(
-                new Vec2(0, this.offsetY+LOGIC_WINDOW_HEIGHT*scaleMult),
-                new Vec2(width, this.offsetY),
-                true
-        );
-        //Right rect
-        drawRectangle(
-                new Vec2(0, this.offsetY),
-                new Vec2(this.offsetX, height),
-                true
-        );
-        //Left rect
-        drawRectangle(
-                new Vec2(this.offsetX+LOGIC_WINDOW_WIDTH*scaleMult, this.offsetY),
-                new Vec2(this.offsetX, height),
-                true
-        );
-        //Restore previous color
-        setColor(auxKeep);
-    }
+
     @Override
     public void render(Engine eng){
         if(startRender()) {
