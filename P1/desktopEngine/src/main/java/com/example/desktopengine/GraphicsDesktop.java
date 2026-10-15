@@ -107,8 +107,7 @@ public class GraphicsDesktop implements GraphicsInterface {
 
                     clear();
 
-                    transformation.translate(offsetX, offsetY);
-                    transformation.scale(scaleMult, scaleMult);
+                    applyViewport();
 
                     this.graphics.setTransform(transformation);
 
