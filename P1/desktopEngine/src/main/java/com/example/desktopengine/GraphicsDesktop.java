@@ -47,6 +47,7 @@ public class GraphicsDesktop implements GraphicsInterface {
     BufferStrategy buf;
     Canvas canvas;
     FontDesktop current_font = new FontDesktop();
+    AffineTransform originalTransform;
     GraphicsDesktop(){
         mainJFrame = new JFrame("Desktop Engine");
         mainJFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -72,6 +73,7 @@ public class GraphicsDesktop implements GraphicsInterface {
 
         buf = canvas.getBufferStrategy();
         graphics = (Graphics2D) buf.getDrawGraphics();
+        this.originalTransform = (AffineTransform) this.graphics.getTransform().clone();
     }
     @Override
     public int getWidth() {
@@ -103,18 +105,24 @@ public class GraphicsDesktop implements GraphicsInterface {
             do {
                 this.graphics = (Graphics2D)this.buf.getDrawGraphics();
                 try {
-                    transformation.setToIdentity();
+                    //transformation.setToIdentity();
+//                    System.out.println("id: "+new AffineTransform());
+//                    System.out.println("og: "+this.originalTransform+'\n');
+                    transformation.setTransform(this.originalTransform);
 
                     clear();
 
                     applyViewport();
-
-                    this.graphics.setTransform(transformation);
+                    // Store the combined viewport + logical transform.
+                    this.transformation = new AffineTransform(
+                            this.graphics.getTransform()
+                    );
+                    //this.graphics.setTransform(transformation);
 
                     eng.getCurrentScene().render(this);
 
                     calculateInverseMatrix();
-                    drawOutOfScreenBands();
+                    //drawOutOfScreenBands();
                 }
                 finally {
                     this.graphics.dispose();
