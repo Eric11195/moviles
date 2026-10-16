@@ -48,6 +48,14 @@ public abstract class mcd_Scene implements Scene {
     public void cleanup(Engine eng){
         entityList.clear();
     }
+    @Override
+    public void pause(Engine eng){
+
+    }
+    @Override
+    public void resume(Engine eng){
+
+    }
 
     public mcd_Entity createEntity(){
         entityList.add(new mcd_Entity(this));

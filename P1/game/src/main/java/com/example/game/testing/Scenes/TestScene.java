@@ -22,6 +22,16 @@ public class TestScene implements Scene {
     }
 
     @Override
+    public void resume(Engine eng) {
+
+    }
+
+    @Override
+    public void pause(Engine eng) {
+
+    }
+
+    @Override
     public void update(Engine eng, float t, float dt) {
 
     }

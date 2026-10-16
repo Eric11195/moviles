@@ -2,6 +2,8 @@ package com.example.engine;
 import com.example.engine.audio.AudioInterface;
 
 import java.nio.file.FileSystem;
+import java.util.ArrayList;
+import java.util.Queue;
 
 public abstract class Engine implements Runnable{
     private Thread gameThread;
@@ -15,7 +17,23 @@ public abstract class Engine implements Runnable{
 
     private volatile boolean running;
     private Scene currentScene;
-    private Scene upcomingScene=null;
+    //This class allows to delay the operations on scene managemente until end of frame
+    private static class sceneOperation{
+        sceneOperation(op o, Scene s){
+            myOp = o;
+            scn = s;
+        }
+        op myOp;
+        Scene scn;
+    };
+    private static enum op{
+        push,
+        pop,
+        set
+    }
+
+    ArrayList<Scene> sceneStack = new ArrayList<Scene>();
+    ArrayList<sceneOperation> sceneOpQueue=new ArrayList<sceneOperation>();
 
     protected Engine(GraphicsInterface graphics, InputBase input, AudioInterface audio, IFileStorage fileStorage) {
         this.graphics = graphics;
@@ -28,9 +46,31 @@ public abstract class Engine implements Runnable{
         return currentScene;
     }
 
+    /**
+     * Changes currents scene to scn.
+     * Start will be called on the new scene
+     * @param scn
+     */
     public void setScene(Scene scn){
         assert(scn != null);
-        upcomingScene = scn;
+        sceneOpQueue.add(new sceneOperation(op.set,scn));
+    }
+
+    /**
+     * Changes current scene to scn. Does not eliminate the previous scene
+     * @param scn
+     */
+    public void pushScene(Scene scn){
+        assert(scn!=null);
+        sceneOpQueue.add(new sceneOperation(op.push, scn));
+    }
+
+    /**
+     * Removes current scene from the queue. If there was a previous one that will be set as active now
+     * @param
+     */
+    public void popScene(){
+        sceneOpQueue.add(new sceneOperation(op.pop, null));
     }
 
     public GraphicsInterface getGraphics() {return graphics;}
@@ -108,22 +148,59 @@ public abstract class Engine implements Runnable{
         dt = t = 0;
     }
 
+    private void manageSceneOperations(){
+        for(sceneOperation op : sceneOpQueue){
+            switch(op.myOp){
+                case pop: {
+                    Scene poppedScene = sceneStack.get(sceneStack.size() - 1);
+                    poppedScene.pause(this);
+                    poppedScene.cleanup(this);
+                    sceneStack.remove(sceneStack.size() - 1);
+                    if (!sceneOpQueue.isEmpty()) {
+                        Scene newCurrentScene = sceneStack.get(sceneStack.size()-1);
+                        newCurrentScene.resume(this);
+                    }
+                }
+                break;
+                case push:{
+                    if(!sceneStack.isEmpty()) {
+                        Scene previousScene = sceneStack.get(sceneStack.size() - 1);
+                        previousScene.pause(this);
+                    }
+                    sceneStack.add(op.scn);
+                    Scene newScene = sceneStack.get(sceneStack.size()-1);
+                    newScene.start(this);
+                    newScene.resume(this);
+                }
+                break;
+                case set:{
+                    for(int i = sceneStack.size()-1; i>=0; --i){
+                        Scene scn = sceneStack.get(sceneStack.size()-1);
+                        scn.pause(this);
+                        scn.cleanup(this);
+                    }
+                    sceneStack.add(op.scn);
+                    Scene newScene = sceneStack.get(sceneStack.size()-1);
+                    newScene.start(this);
+                    newScene.resume(this);
+                }
+                break;
+                default:
+                    throw new RuntimeException("Non valid scene operation used");
+            }
+        }
+        sceneOpQueue.clear();
+        if(sceneStack.isEmpty())
+            throw new RuntimeException("Scene stack cannot be empty before calling update. You must use pushScene, or setScene");
+        currentScene = sceneStack.get(sceneStack.size()-1);
+    }
+
     protected void update(){
         long currentTime = System.nanoTime();
         long nanoElapsedTime = currentTime - lastFrameTime;
         lastFrameTime = currentTime;
 
-        if (upcomingScene != null) {
-            Scene nextScene = upcomingScene;
-            upcomingScene = null;
-
-            if (currentScene != null) {
-                currentScene.cleanup(this);
-            }
-
-            currentScene = nextScene;
-            currentScene.start(this);
-        }
+        manageSceneOperations();
 
         currentScene.update(this,t,dt);
         this.render(this.getGraphics());

@@ -42,7 +42,7 @@ public class MainGameScene extends mcd_Scene{
             new Vec2(pauseButtonSize,pauseButtonSize),
             "||",
             ()->{
-                eng.setScene(new PauseMenu(eng, this));
+                eng.pushScene(new PauseMenu(eng, this));
             }
         );
         mcd_Entity player = PlayerPrefab.createPlayer(this);

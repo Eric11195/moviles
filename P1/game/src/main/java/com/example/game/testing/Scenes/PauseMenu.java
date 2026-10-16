@@ -19,7 +19,7 @@ public class PauseMenu extends mcd_Scene{
     public void start(Engine eng) {
         Vec2 pos = new Vec2(LOGIC_WINDOW_SIZE.x/2.0f-DEFAULT_BUTTON_SIZE.x/2.0f,LOGIC_WINDOW_SIZE.y/3.0f-DEFAULT_BUTTON_SIZE.y/2.0f);
         //Spawn resume button
-        createButton(this, pos, DEFAULT_BUTTON_SIZE, "RESUME", ()->{eng.setScene(subScene);});
+        createButton(this, pos, DEFAULT_BUTTON_SIZE, "RESUME", ()->{eng.popScene();});
         //Spawn exit button
         Vec2 secondButtonPos = pos.clone();
         secondButtonPos.y*=2;
