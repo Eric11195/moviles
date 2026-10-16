@@ -45,7 +45,6 @@ public class Vec2 implements Serializable {
     public Vec2(Vec2 toCopy) {
         this(toCopy.x, toCopy.y);
     }
-
     /** Zero out this vector. */
     public final void setZero() {
         x = 0.0f;

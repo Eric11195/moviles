@@ -1,5 +1,8 @@
 package com.example.game.testing.Scenes;
 
+import static com.example.game.testing.EC.Prefabs.ButtonPrefab.createButton;
+import static com.example.game.testing.constants.Constants.DEFAULT_BUTTON_SIZE;
+import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.PLAYER_X_POS;
 
 import com.example.engine.Engine;
@@ -15,7 +18,7 @@ import com.example.utils.Vec2;
 public class MainGameScene extends mcd_Scene{
     ILevelGenerator levelGen = null;
 
-    public MainGameScene(Engine myEngine) {
+    protected MainGameScene(Engine myEngine) {
         super(myEngine);
     }
 
@@ -30,6 +33,18 @@ public class MainGameScene extends mcd_Scene{
         if(levelGen==null){
             throw new RuntimeException("You must call setLevelGen before this function");
         }
+        int pauseButtonSize = 40;
+        createButton(
+            this,
+            new Vec2(LOGIC_WINDOW_SIZE.x-pauseButtonSize,
+                    0
+            ),
+            new Vec2(pauseButtonSize,pauseButtonSize),
+            "||",
+            ()->{
+                eng.setScene(new PauseMenu(eng, this));
+            }
+        );
         mcd_Entity player = PlayerPrefab.createPlayer(this);
         levelGen.setPlayer(player);
         addSystem(new PlayerCollisionDetector(player));
