@@ -44,7 +44,7 @@ public class GraphicsDesktop implements GraphicsInterface {
     }
     private JFrame mainJFrame;
     Graphics2D graphics;
-    BufferStrategy buf;
+    public BufferStrategy buf;
     Canvas canvas;
     FontDesktop current_font = new FontDesktop();
     AffineTransform originalTransform;
@@ -98,38 +98,6 @@ public class GraphicsDesktop implements GraphicsInterface {
     public void applyViewport() {
         graphics.translate(offsetX, offsetY);
         graphics.scale(scaleMult, scaleMult);
-    }
-    @Override
-    public void render(Engine eng){
-        do {
-            do {
-                this.graphics = (Graphics2D)this.buf.getDrawGraphics();
-                try {
-                    //transformation.setToIdentity();
-//                    System.out.println("id: "+new AffineTransform());
-//                    System.out.println("og: "+this.originalTransform+'\n');
-                    transformation.setTransform(this.originalTransform);
-
-                    clear();
-
-                    applyViewport();
-                    // Store the combined viewport + logical transform.
-                    this.transformation = new AffineTransform(
-                            this.graphics.getTransform()
-                    );
-                    //this.graphics.setTransform(transformation);
-
-                    eng.getCurrentScene().render(this);
-
-                    calculateInverseMatrix();
-                }
-                finally {
-                    this.graphics.dispose();
-                    //Elimina el contexto gráfico y libera recursos del sistema realacionado
-                }
-            } while(this.buf.contentsRestored());
-            this.buf.show();
-        } while(this.buf.contentsLost());
     }
     @Override
     public void drawImage(ImageEng img, Vec2 src_pos, Vec2 src_size, Vec2 dst_pos, Vec2 dst_size) {
@@ -300,6 +268,26 @@ public class GraphicsDesktop implements GraphicsInterface {
 
         transformation = new AffineTransform(storedTransform);
         graphics.setTransform(transformation);
+    }
+
+    @Override
+    public void prepareFrame() {
+        this.graphics = (Graphics2D)this.buf.getDrawGraphics();
+        transformation.setTransform(this.originalTransform);
+
+        clear();
+
+        applyViewport();
+        // Store the combined viewport + logical transform.
+        this.transformation = new AffineTransform(
+                this.graphics.getTransform()
+        );
+    }
+
+    @Override
+    public void endFrame() {
+        calculateInverseMatrix();
+        this.graphics.dispose();
     }
 
     public JFrame getFrame(){

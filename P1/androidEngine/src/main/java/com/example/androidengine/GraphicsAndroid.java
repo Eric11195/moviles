@@ -168,19 +168,29 @@ public class GraphicsAndroid implements GraphicsInterface {
         can.restore();
     }
 
-    //render what has been rendered on screen in between startRender() and this call
-    public void endRender(){
-        assert(can!=null);
-        surface.unlockCanvasAndPost(can);
-        can = null;
+    @Override
+    public void prepareFrame() {
+        assert(can == null);
+
+        can = surface.lockCanvas();
+
+        if (can == null) {
+            Log.d("DRAW", "Canvas is NULL!");
+            //return false;
+            assert(false);
+        }
+
+        can.drawColor(clearColor.getColorAsInt());
+        can.setMatrix(viewportMatrix);
+
+        //return true;
     }
 
     @Override
-    public void render(Engine eng){
-        if(startRender()) {
-            eng.getCurrentScene().render(this);
-            endRender();
-        }
+    public void endFrame() {
+        assert(can!=null);
+        surface.unlockCanvasAndPost(can);
+        can = null;
     }
 
     //src refers to the part of the src image that will be rendered, dst refers to the destination pos and size in the viewport

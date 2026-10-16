@@ -3,7 +3,7 @@ import com.example.engine.audio.AudioInterface;
 
 import java.nio.file.FileSystem;
 
-public class Engine implements Runnable{
+public abstract class Engine implements Runnable{
     private Thread gameThread;
 
     private final GraphicsInterface graphics;
@@ -126,7 +126,7 @@ public class Engine implements Runnable{
         }
 
         currentScene.update(this,t,dt);
-        this.render();
+        this.render(this.getGraphics());
         input.update(this.graphics::getPointInWindowPos);
         // Informe de FPS
         dt = (float)(nanoElapsedTime / 1.0E9);
@@ -139,7 +139,5 @@ public class Engine implements Runnable{
         }
         ++frames;
     }
-    protected void render(){
-        graphics.render(this);
-    }
+    protected abstract void render(GraphicsInterface g);
 }

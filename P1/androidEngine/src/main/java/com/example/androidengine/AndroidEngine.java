@@ -52,8 +52,9 @@ public class AndroidEngine extends Engine{
         return readyToStart;
     }
     @Override
-    public void update(){
-        super.update();
-        getInput().getTouchEvents().forEach(evt -> {Log.d("AndroidEngine","EVENT LOGGED");});
+    protected void render(GraphicsInterface g){
+        g.prepareFrame();
+        this.getCurrentScene().render(g);
+        g.endFrame();
     }
 }
