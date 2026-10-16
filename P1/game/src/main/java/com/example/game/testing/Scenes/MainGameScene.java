@@ -17,6 +17,7 @@ import com.example.utils.Vec2;
 
 public class MainGameScene extends mcd_Scene{
     ILevelGenerator levelGen = null;
+    float gameTime;
 
     protected MainGameScene(Engine myEngine) {
         super(myEngine);
@@ -29,10 +30,16 @@ public class MainGameScene extends mcd_Scene{
         this.levelGen = levelGen;
     }
     @Override
+    public void update(Engine eng, float t, float dt){
+        super.update(eng, gameTime, dt);
+        gameTime += dt;
+    }
+    @Override
     public void start(Engine eng) {
         if(levelGen==null){
             throw new RuntimeException("You must call setLevelGen before this function");
         }
+        gameTime = 0;
         int pauseButtonSize = 40;
         createButton(
             this,
