@@ -193,7 +193,6 @@ public abstract class Engine implements Runnable{
                     throw new RuntimeException("Non valid scene operation used");
             }
         }
-        sceneOpQueue.clear();
         if(sceneStack.isEmpty())
             throw new RuntimeException("Scene stack cannot be empty before calling update. You must use pushScene, or setScene");
         currentScene = sceneStack.get(sceneStack.size()-1);

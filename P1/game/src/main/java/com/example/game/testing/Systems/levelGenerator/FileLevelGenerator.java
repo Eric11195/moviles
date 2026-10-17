@@ -8,18 +8,16 @@ import java.util.List;
 public class FileLevelGenerator extends ILevelGenerator {
     int current_idx;
     List<ObstacleFactory> obstaclesBeComing;
-    float startTime;
 
     public FileLevelGenerator(mcd_Scene scene, LevelGenerator.LevelGeneratorSerialized lgs){
         super(scene, lgs.levelGeneratorParams);
         obstaclesBeComing = lgs.obsFactory;
         current_idx = 0;
-        startTime = scene.getEngine().getTime();
     }
 
     @Override
     protected boolean askIfSpawnNewObstacle(float t, float dt) {
-        return current_idx < obstaclesBeComing.size() && t-startTime >= obstaclesBeComing.get(current_idx).spawnTime;
+        return current_idx < obstaclesBeComing.size() && t >= obstaclesBeComing.get(current_idx).spawnTime;
     }
 
     @Override
