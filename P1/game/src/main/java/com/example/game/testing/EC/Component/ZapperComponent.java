@@ -73,9 +73,6 @@ public class ZapperComponent extends Obstacle{
         generateColliders(ent);
     }
     private void generateColliders(mcd_Entity ent){
-        if(!ent.hasComponent(ComponentId.COLLIDER_COMPONENT)){
-            ent.addComponent(ComponentId.COLLIDER_COMPONENT, new ColliderComponent());
-        }
         ColliderComponent col = (ColliderComponent)ent.getComponent(ComponentId.COLLIDER_COMPONENT);
         col.clearColliders();
         //Create one bigger on the first point

@@ -4,15 +4,18 @@ import static com.example.game.testing.constants.Constants.DANGER_MATRIX_PRECALC
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.MISSILE_MOVE_SPEED;
 import static com.example.game.testing.constants.Constants.MISSILE_RADIUS;
+import static com.example.game.testing.constants.Constants.PLAYER_DIMENSIONS;
+import static com.example.game.testing.constants.Constants.PLAYER_X_POS;
 import static com.example.game.testing.constants.Constants.WARNING_TIME;
-import static com.example.game.testing.utils.JSON_HELPER.fromJSON;
 import static com.example.game.testing.utils.StartPlayerDead.startPlayerDead;
 
+import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.levelGenerator.ObstacleFactory;
+import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
 
 import org.json.JSONObject;
@@ -42,12 +45,12 @@ public class MissileComponent extends WarnedObstacle {
         generateCollider(ent);
         setTransform(ent, yPos);
         scrolledTime = calculateScrolledTime(spawnTime,speedMult);
-
     }
     private void setTransform(mcd_Entity ent, float yPos){
         myTransform = (TransformComponent)ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
         myTransform.pos.x = LOGIC_WINDOW_SIZE.x;
         myTransform.pos.y = yPos;
+        myTransform.size.x = myTransform.size.y = MISSILE_RADIUS*2;
     }
 
     @Override
@@ -64,14 +67,26 @@ public class MissileComponent extends WarnedObstacle {
 
     @Override
     public float calculateScrolledTime(float spawnTime, float speedMult) {
-        return spawnTime + WARNING_TIME + LOGIC_WINDOW_SIZE.x/(speedMult+MISSILE_MOVE_SPEED);
+        return spawnTime + WARNING_TIME + (MISSILE_RADIUS*2 + LOGIC_WINDOW_SIZE.x)/(speedMult+MISSILE_MOVE_SPEED);
     }
 
     @Override
     public void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm) {
-        float realXPos = tr.pos.x - getTimeTillSpawn() * xSpeed;
-        if(realXPos < LOGIC_WINDOW_SIZE.x+DANGER_MATRIX_PRECALCULATED_SPACE) {
-            dm.drawSquare(new Vec2(realXPos, tr.pos.y - tr.size.y), tr.size);
+//        float realXPos = tr.pos.x - getTimeTillSpawn() * xSpeed;
+//        if(realXPos < LOGIC_WINDOW_SIZE.x+DANGER_MATRIX_PRECALCULATED_SPACE) {
+//            dm.drawSquare(new Vec2(realXPos, tr.pos.y - tr.size.y), tr.size);
+//        }
+        final float timeOfCollision = getTimeTillSpawn() + (LOGIC_WINDOW_SIZE.x-PLAYER_X_POS+PLAYER_DIMENSIONS.x)/(speedMult+MISSILE_MOVE_SPEED);
+        float futureX = tr.pos.x - xSpeed * timeOfCollision;
+
+        // Only consider the missile while it is relevant
+        // to the predicted scene.
+        if (futureX < LOGIC_WINDOW_SIZE.x+DANGER_MATRIX_PRECALCULATED_SPACE) {
+            // Mark the missile's predicted position at time t.
+            dm.drawSquare(
+                    new Vec2(futureX, tr.pos.y),
+                    new Vec2(MISSILE_RADIUS*2,MISSILE_RADIUS*2)
+            );
         }
     }
 
@@ -92,4 +107,16 @@ public class MissileComponent extends WarnedObstacle {
         mcs.spawnTime = getSpawnTime(obj);
         return mcs;
     }
+    @Override
+    public void update(mcd_Entity ent, float t, float dt){
+        super.update(ent,t,dt);
+    }
+    @Override
+    public void render(mcd_Entity ent, GraphicsInterface g){
+        super.render(ent, g);
+        TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
+        g.setColor(ColorLibrary.Blue);
+        g.drawRectangle(tr.pos, tr.size, true);
+    }
+
 }

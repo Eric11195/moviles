@@ -21,8 +21,8 @@ public abstract class WarnedObstacle extends Obstacle{
     @Override
     public void update(mcd_Entity ent, float t, float dt){
         super.update(ent,t,dt);
-        if(spawnTime + WARNING_TIME < t && activated){
-            activated = false;
+        if(spawnTime + WARNING_TIME < t && !activated){
+            activated = true;
             activateObstacle(ent, t, dt);
         }
         timeTillSpawn -= dt;

@@ -4,12 +4,15 @@ import static com.example.game.testing.EC.Prefabs.PlayerPrefab.createPlayer;
 import static com.example.game.testing.constants.Constants.DANGER_MATRIX_PX_TILE_SIZE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.MIN_ZAPPER_HEIGHT;
+import static com.example.game.testing.constants.Constants.MISSILE_RADIUS;
 import static com.example.game.testing.constants.Constants.PLAYER_DIMENSIONS;
 import static com.example.game.testing.constants.Constants.PLAYER_MARGINS;
 import static com.example.game.testing.constants.Constants.PLAYER_STARTING_Y_POS;
 import static com.example.game.testing.constants.Constants.PLAYER_X_POS;
 
+import com.example.game.testing.EC.Component.MissileComponent;
 import com.example.game.testing.EC.Component.Obstacle;
+import com.example.game.testing.EC.Component.ObstacleId;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.Component.ZapperComponent;
 import com.example.game.testing.EC.ComponentId;
@@ -63,7 +66,33 @@ public class ProceduralLevelGenerator extends ILevelGenerator {
         return dangerMatrix.getFreeHeightRange(LOGIC_WINDOW_SIZE.x);
     }
     public boolean createRandomObstacleComp(mcd_Entity ent, float t, float dt){
-        return createZapper(ent,t, dt);
+        switch(chooseObstacleType()){
+            case OBSTACLE_LASER:
+                return false;
+            case OBSTACLE_MISSILE:
+                return createMissile(ent, t, dt);
+            case OBSTACLE_ZAPPER:
+                return createZapper(ent,t, dt);
+            default:
+                throw new RuntimeException("Invalid obstacle type");
+        }
+    }
+    public ObstacleId chooseObstacleType(){
+        return ObstacleId.OBSTACLE_MISSILE;
+    }
+    public boolean createMissile(mcd_Entity ent, float t, float dt){
+        Vec2 space =
+            getSafeVerticalSpaceForObstacleSoPlayerCanPass(
+                getVerticalSafeZone(),
+                MISSILE_RADIUS*2
+            );
+        float y = space.x + (space.y-space.x)*(float)Math.random();
+        MissileComponent mis = (MissileComponent) ent.setComponent(
+          ComponentId.OBSTACLE_COMPONENT,
+          new MissileComponent(ent, t, this.speedMult, y)
+        );
+        mis.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix);
+        return dangerMatrix.ensureTraversability(player,this.speedMult,dt);
     }
     public boolean createZapper(mcd_Entity ent, float t, float dt){
         Vec2 space =
