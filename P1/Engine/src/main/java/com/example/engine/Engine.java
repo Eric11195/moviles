@@ -3,6 +3,7 @@ import com.example.engine.audio.AudioInterface;
 
 import java.nio.file.FileSystem;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 
 public abstract class Engine implements Runnable{
@@ -149,7 +150,9 @@ public abstract class Engine implements Runnable{
     }
 
     private void manageSceneOperations(){
-        for(sceneOperation op : sceneOpQueue){
+        List<sceneOperation> operationsToProcess = new ArrayList<>(sceneOpQueue);
+        sceneOpQueue.clear();
+        for(sceneOperation op : operationsToProcess){
             switch(op.myOp){
                 case pop: {
                     Scene poppedScene = sceneStack.get(sceneStack.size() - 1);
@@ -179,6 +182,7 @@ public abstract class Engine implements Runnable{
                         scn.pause(this);
                         scn.cleanup(this);
                     }
+                    sceneStack.clear();
                     sceneStack.add(op.scn);
                     Scene newScene = sceneStack.get(sceneStack.size()-1);
                     newScene.start(this);
