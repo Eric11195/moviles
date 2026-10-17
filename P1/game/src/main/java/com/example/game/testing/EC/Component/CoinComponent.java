@@ -37,12 +37,14 @@ public class CoinComponent extends Obstacle {
         super(_ent, spawnTime, speedMult);
         myEnt = _ent;
         value = _value;
+        scrolledTime = calculateScrolledTime(spawnTime, speedMult);
     }
 
     public CoinComponent(mcd_Entity _ent ,float spawnTime, float speedMult) {
         super(_ent, spawnTime, speedMult);
         myEnt = _ent;
         value = 1;
+        scrolledTime = calculateScrolledTime(spawnTime, speedMult);
     }
 
 

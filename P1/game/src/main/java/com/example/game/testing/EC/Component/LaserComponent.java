@@ -43,6 +43,7 @@ public class LaserComponent extends Obstacle {
 
         setUpCollider((ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT));
         setUpSpeed((VelocityComponent) ent.getComponent(ComponentId.VELOCITY_COMPONENT));
+        scrolledTime = calculateScrolledTime(spawnTime, speedMult);
     }
     private void setUpSpeed(VelocityComponent vel){
         vel.velocity.x = 0;
