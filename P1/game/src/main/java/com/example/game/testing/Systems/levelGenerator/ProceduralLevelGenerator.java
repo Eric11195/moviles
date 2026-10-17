@@ -78,7 +78,7 @@ public class ProceduralLevelGenerator extends ILevelGenerator {
         }
     }
     public ObstacleId chooseObstacleType(){
-        return Math.random() > 0.7f ? ObstacleId.OBSTACLE_MISSILE : ObstacleId.OBSTACLE_ZAPPER;
+        return Math.random() > 0.8f ? ObstacleId.OBSTACLE_MISSILE : ObstacleId.OBSTACLE_ZAPPER;
     }
     public boolean createMissile(mcd_Entity ent, float t, float dt){
         Vec2 space =

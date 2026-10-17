@@ -35,7 +35,7 @@ public class Constants {
         public static final float MAX_ZAPPER_LENGTH = 100;
 
         // MISILES
-        public static final float MISSILE_MOVE_SPEED = 80;
+        public static final float MISSILE_MOVE_SPEED = 180;
         public static final float MISSILE_RADIUS = 30;
 
         // LASER

@@ -90,16 +90,16 @@ public class LevelGenerator implements mcd_Serializable {
         JSONArray ja = obj.getJSONArray("ObstacleList");
         for(int i = 0; i < ja.length(); ++i){
             JSONObject jo = ja.getJSONObject(i);
-            switch (jo.getEnum(ObstacleId.class,"id")){
+            switch (ObstacleId.valueOf(jo.getString("id"))){
                 case OBSTACLE_ZAPPER:
                     lgp.obsFactory.add(ZapperComponent.deserialize(jo));
                     break;
                 case OBSTACLE_COIN:
                     break;
                 case OBSTACLE_LASER:
-                    lgp.obsFactory.add(MissileComponent.deserialize(jo));
                     break;
                 case OBSTACLE_MISSILE:
+                    lgp.obsFactory.add(MissileComponent.deserialize(jo));
                     break;
                 default:
                     throw new RuntimeException("That type of obstacle has a non valid id");

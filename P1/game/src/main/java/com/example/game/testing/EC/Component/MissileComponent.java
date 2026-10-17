@@ -1,5 +1,6 @@
 package com.example.game.testing.EC.Component;
 
+import static com.example.game.testing.EC.Component.ObstacleId.OBSTACLE_MISSILE;
 import static com.example.game.testing.constants.Constants.DANGER_MATRIX_PRECALCULATED_SPACE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.MISSILE_MOVE_SPEED;
@@ -99,6 +100,7 @@ public class MissileComponent extends WarnedObstacle {
     public JSONObject serialize(){
         JSONObject jo = super.serialize();
         jo.put("y", Double.valueOf(myTransform.pos.y));
+        jo.put("id", OBSTACLE_MISSILE);
         return jo;
     }
     public static MissileComponentSerialized deserialize(JSONObject obj){
