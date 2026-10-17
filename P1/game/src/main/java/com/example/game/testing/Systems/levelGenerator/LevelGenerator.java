@@ -5,6 +5,7 @@ import static com.example.game.testing.utils.JSON_HELPER.toJSON;
 
 import com.example.engine.Engine;
 import com.example.game.testing.EC.Component.JetpackComponent;
+import com.example.game.testing.EC.Component.MissileComponent;
 import com.example.game.testing.EC.Component.Obstacle;
 import com.example.game.testing.EC.Component.ObstacleId;
 import com.example.game.testing.EC.Component.ZapperComponent;
@@ -95,9 +96,8 @@ public class LevelGenerator implements mcd_Serializable {
                     break;
                 case OBSTACLE_COIN:
                     break;
-                case OBSTACLE_COUNT:
-                    break;
                 case OBSTACLE_LASER:
+                    lgp.obsFactory.add(MissileComponent.deserialize(jo));
                     break;
                 case OBSTACLE_MISSILE:
                     break;

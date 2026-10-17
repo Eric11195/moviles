@@ -45,12 +45,12 @@ public abstract class Obstacle implements mcd_Component, mcd_Serializable {
 
     public JSONObject serialize(){
         JSONObject jo = new JSONObject();
-        jo.put("spawnTime", Float.valueOf(spawnTime));
+        jo.put("spawnTime", Double.valueOf(spawnTime));
         return jo;
     }
 
     public static float getSpawnTime(JSONObject jo){
-        return jo.getFloat("spawnTime");
+        return (float)jo.getDouble("spawnTime");
     }
 
     public abstract void onPlayerCollision(mcd_Entity ent, mcd_Scene scene);
