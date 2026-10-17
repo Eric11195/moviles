@@ -13,7 +13,7 @@ import org.json.JSONObject;
 public abstract class Obstacle implements mcd_Component, mcd_Serializable {
     protected final float spawnTime;
     protected float scrolledTime;
-    private float speedMult;
+    protected float speedMult;
 
     /**
      *
