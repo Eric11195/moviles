@@ -1,5 +1,6 @@
 package com.example.game.testing.EC.Component;
 
+import static com.example.game.testing.constants.Constants.DANGER_MATRIX_PRECALCULATED_SPACE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.MISSILE_MOVE_SPEED;
 import static com.example.game.testing.constants.Constants.MISSILE_RADIUS;
@@ -51,7 +52,9 @@ public class MissileComponent extends WarnedObstacle {
     @Override
     public void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm) {
         float realXPos = tr.pos.x - getTimeTillSpawn() * xSpeed;
-        dm.drawSquare(new Vec2(realXPos,tr.pos.y-tr.size.y), tr.size);
+        if(realXPos < LOGIC_WINDOW_SIZE.x+DANGER_MATRIX_PRECALCULATED_SPACE) {
+            dm.drawSquare(new Vec2(realXPos, tr.pos.y - tr.size.y), tr.size);
+        }
     }
 
     @Override
