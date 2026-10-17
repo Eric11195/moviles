@@ -2,6 +2,7 @@ package com.example.game.testing.EC.Component;
 
 import static com.example.game.testing.constants.Constants.LASER_HEIGHT;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
+import static com.example.game.testing.utils.StartPlayerDead.startPlayerDead;
 
 import com.example.engine.ColorEng;
 import com.example.game.testing.EC.ComponentId;
@@ -31,7 +32,7 @@ public class LaserComponent extends Obstacle {
     ColorEng color;
     public LaserComponent(mcd_Entity ent, int numRepetitions, int anim_duration)
     {
-        super(0,0);
+        super(ent, 0,0);
         num_rep=numRepetitions;
         anim_dur = anim_duration;
         anim_timer =0;
@@ -40,10 +41,14 @@ public class LaserComponent extends Obstacle {
         index_rep = 0;
         color = new ColorEng(255,0,0,255);
 
-        if(!ent.hasComponent(ComponentId.COLLIDER_COMPONENT))
-            ent.addComponent(ComponentId.COLLIDER_COMPONENT, new ColliderComponent());
-
-        ColliderComponent col =  (ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT);
+        setUpCollider((ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT));
+        setUpSpeed((VelocityComponent) ent.getComponent(ComponentId.VELOCITY_COMPONENT));
+    }
+    private void setUpSpeed(VelocityComponent vel){
+        vel.velocity.x = 0;
+        vel.velocity.y = 0;
+    }
+    private void setUpCollider(ColliderComponent col){
         col.clearColliders();
         col.addColliderLine(
                 new Vec2(0,LASER_HEIGHT/2),
@@ -86,7 +91,7 @@ public class LaserComponent extends Obstacle {
     @Override
     public void onPlayerCollision(mcd_Entity ent, mcd_Scene scene) {
         // FATAL
-        scene.getEngine().setScene(new LoseMenuScene(scene.getEngine()));
+        startPlayerDead(scene.getEngine(), ent);
     }
 
     @Override

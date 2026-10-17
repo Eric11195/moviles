@@ -2,6 +2,7 @@ package com.example.game.testing.Systems.levelGenerator;
 
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.Component.TransformComponent;
+import com.example.game.testing.EC.Component.VelocityComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
@@ -105,6 +106,7 @@ public abstract class ILevelGenerator implements mcd_System {
         for(int i = 0; i < params.maxNumberOfSimultaneousObstacles; ++i){
             mcd_Entity ent = scene.createEntity();
             ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
+            ent.addComponent(ComponentId.VELOCITY_COMPONENT, new VelocityComponent());
             //ent.addComponent(ComponentId.IMAGE_COMPONENT, new ImageComponent(""));
             ent.setActive(false);
             _obstacleList.add(ent);
@@ -116,6 +118,7 @@ public abstract class ILevelGenerator implements mcd_System {
         for (int i = 0; i < Constants.MAX_COINS;++i){
             mcd_Entity ent = scene.createEntity();
             ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
+            ent.addComponent(ComponentId.VELOCITY_COMPONENT, new VelocityComponent());
             //ent.addComponent(ComponentId.IMAGE_COMPONENT, new ImageComponent(""));
             ent.setActive(false);
             _coinList.add(ent);

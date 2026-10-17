@@ -34,13 +34,13 @@ public class CoinComponent extends Obstacle {
         }
     }
     public CoinComponent(mcd_Entity _ent ,float spawnTime, float speedMult, int _value) {
-        super(spawnTime, speedMult);
+        super(_ent, spawnTime, speedMult);
         myEnt = _ent;
         value = _value;
     }
 
     public CoinComponent(mcd_Entity _ent ,float spawnTime, float speedMult) {
-        super(spawnTime, speedMult);
+        super(_ent, spawnTime, speedMult);
         myEnt = _ent;
         value = 1;
     }

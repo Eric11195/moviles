@@ -34,11 +34,20 @@ public class Constants {
         public static final int ZAPPER_MAX_COLLIDERS = 10;
         public static final float MAX_ZAPPER_LENGTH = 100;
 
+        // MISILES
+        public static final float MISSILE_MOVE_SPEED = 40;
+        public static final float MISSILE_RADIUS = 30;
+
         // LASER
         public static final float LASER_HEIGHT = LOGIC_WINDOW_SIZE.y/5.0f;
 
         // COIN
         public static final int MAX_COINS = 5;
+
+    /**
+     * How long until an obstacle with warning appears from the first time it's hinted on screen
+     */
+    public static final float WARNING_TIME = 2;
 
 
 }

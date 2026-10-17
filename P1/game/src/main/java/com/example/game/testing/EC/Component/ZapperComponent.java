@@ -9,6 +9,7 @@ import static com.example.game.testing.constants.Constants.ZAPPER_HEAD_RADIUS;
 import static com.example.game.testing.constants.Constants.ZAPPER_LINE_WIDTH;
 import static com.example.game.testing.constants.Constants.ZAPPER_MAX_COLLIDERS;
 import static com.example.game.testing.utils.JSON_HELPER.fromJSON;
+import static com.example.game.testing.utils.StartPlayerDead.startPlayerDead;
 
 import com.example.engine.ColorEng;
 import com.example.engine.GraphicsInterface;
@@ -61,7 +62,7 @@ public class ZapperComponent extends Obstacle{
     mcd_Entity myEnt;
 
     public ZapperComponent(mcd_Entity ent, float spawnTime, float speedMult, Vec2 start, Vec2 end) {
-        super(spawnTime, speedMult);
+        super(ent, spawnTime, speedMult);
         assert(ent.hasComponent(ComponentId.TRANSFORM_COMPONENT));
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
         tr.pos = new Vec2(start.x, start.y);
@@ -128,8 +129,7 @@ public class ZapperComponent extends Obstacle{
 
     @Override
     public void onPlayerCollision(mcd_Entity ent, mcd_Scene scene) {
-        // FATAL
-        scene.getEngine().setScene(new LoseMenuScene(scene.getEngine()));
+        startPlayerDead(scene.getEngine(), ent);
     }
 
     public float width(){
