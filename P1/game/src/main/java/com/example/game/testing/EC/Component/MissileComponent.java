@@ -40,7 +40,7 @@ public class MissileComponent extends WarnedObstacle {
     public MissileComponent(mcd_Entity ent, float spawnTime, float speedMult, float yPos) {
         super(ent, spawnTime, speedMult);
         VelocityComponent vel = (VelocityComponent) ent.getComponent(ComponentId.VELOCITY_COMPONENT);
-        xSpeed = vel.velocity.x - MISSILE_MOVE_SPEED;
+        xSpeed = Math.abs(speedMult) + Math.abs(MISSILE_MOVE_SPEED);
         vel.velocity.x=0;
         vel.velocity.y=0;
         generateCollider(ent);
@@ -56,8 +56,9 @@ public class MissileComponent extends WarnedObstacle {
 
     @Override
     public void activateObstacle(mcd_Entity ent, float t, float dt) {
+        super.activateObstacle(ent,t,dt);
         VelocityComponent vel = (VelocityComponent) ent.getComponent(ComponentId.VELOCITY_COMPONENT);
-        vel.velocity.x = xSpeed;
+        vel.velocity.x = -xSpeed;
     }
 
     private void generateCollider(mcd_Entity ent){

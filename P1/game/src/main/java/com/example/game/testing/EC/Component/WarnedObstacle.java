@@ -2,10 +2,11 @@ package com.example.game.testing.EC.Component;
 
 import static com.example.game.testing.constants.Constants.WARNING_TIME;
 
+import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 
 public abstract class WarnedObstacle extends Obstacle{
-    boolean activated=false;
+    private boolean activated=false;
     float timeTillSpawn;
     /**
      *
@@ -16,6 +17,8 @@ public abstract class WarnedObstacle extends Obstacle{
     public WarnedObstacle(mcd_Entity ent, float spawnTime, float speedMult) {
         super(ent, spawnTime, speedMult);
         timeTillSpawn = WARNING_TIME;
+        WarningSign ws = (WarningSign) ent.getComponent(ComponentId.WARNING_COMPONENT);
+        ws.activateWarning();
     }
 
     @Override
@@ -31,5 +34,8 @@ public abstract class WarnedObstacle extends Obstacle{
         return timeTillSpawn;
     }
     //This is called once, when the time from the warning is finished
-    public abstract void activateObstacle(mcd_Entity ent, float t, float dt);
+    public void activateObstacle(mcd_Entity ent, float t, float dt){
+        WarningSign ws = (WarningSign) ent.getComponent(ComponentId.WARNING_COMPONENT);
+        ws.deactivateWarning();
+    }
 }

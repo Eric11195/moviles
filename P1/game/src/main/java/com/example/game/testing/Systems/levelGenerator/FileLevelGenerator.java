@@ -5,11 +5,11 @@ import com.example.game.testing.Scenes.mcd_Scene;
 
 import java.util.List;
 
-public class FileLevelGenerator extends ILevelGenerator {
+public class FileLevelGenerator extends BaseLevelGenerator {
     int current_idx;
     List<ObstacleFactory> obstaclesBeComing;
 
-    public FileLevelGenerator(mcd_Scene scene, LevelGenerator.LevelGeneratorSerialized lgs){
+    public FileLevelGenerator(mcd_Scene scene, LevelFileGenerator.LevelGeneratorSerialized lgs){
         super(scene, lgs.levelGeneratorParams);
         obstaclesBeComing = lgs.obsFactory;
         current_idx = 0;

@@ -1,14 +1,11 @@
 package com.example.game.testing.Systems.levelGenerator;
 
-import static com.example.game.testing.EC.Prefabs.PlayerPrefab.createPlayer;
 import static com.example.game.testing.constants.Constants.DANGER_MATRIX_PX_TILE_SIZE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.MIN_ZAPPER_HEIGHT;
 import static com.example.game.testing.constants.Constants.MISSILE_RADIUS;
 import static com.example.game.testing.constants.Constants.PLAYER_DIMENSIONS;
 import static com.example.game.testing.constants.Constants.PLAYER_MARGINS;
-import static com.example.game.testing.constants.Constants.PLAYER_STARTING_Y_POS;
-import static com.example.game.testing.constants.Constants.PLAYER_X_POS;
 
 import com.example.game.testing.EC.Component.MissileComponent;
 import com.example.game.testing.EC.Component.Obstacle;
@@ -20,7 +17,7 @@ import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.utils.Vec2;
 
-public class ProceduralLevelGenerator extends ILevelGenerator {
+public class ProceduralLevelGenerator extends BaseLevelGenerator {
     //@param density marks the highest amount of obstacles in screen at the same time
     public ProceduralLevelGenerator(mcd_Scene scene, LevelGeneratorParams params, boolean simulatedOnly){
         super(scene, params);

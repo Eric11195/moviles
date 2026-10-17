@@ -20,7 +20,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LevelGenerator implements mcd_Serializable {
+public class LevelFileGenerator implements mcd_Serializable {
     LevelGeneratorParams lgp;
     ProceduralLevelGenerator sg;
     ArrayList<JSONObject> obstacleCompleteList = new ArrayList<>();
@@ -32,7 +32,7 @@ public class LevelGenerator implements mcd_Serializable {
     private LevelGeneratorParams params;
     public static JSONObject generateNewLevel(mcd_Scene scene, Engine eng, LevelGeneratorParams params){
         float currentTime = 0;
-        LevelGenerator lg = new LevelGenerator();
+        LevelFileGenerator lg = new LevelFileGenerator();
         lg.lgp = params;
         lg.myScene = scene;
         lg.player = createPlayer(scene);

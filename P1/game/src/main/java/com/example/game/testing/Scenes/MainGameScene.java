@@ -1,29 +1,25 @@
 package com.example.game.testing.Scenes;
 
 import static com.example.game.testing.EC.Prefabs.ButtonPrefab.createButton;
-import static com.example.game.testing.constants.Constants.DEFAULT_BUTTON_SIZE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
-import static com.example.game.testing.constants.Constants.PLAYER_X_POS;
 
 import com.example.engine.Engine;
 import com.example.game.testing.EC.Prefabs.PlayerPrefab;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.CoinSystem;
-import com.example.game.testing.Systems.levelGenerator.ILevelGenerator;
-import com.example.game.testing.Systems.levelGenerator.LevelGeneratorParams;
+import com.example.game.testing.Systems.levelGenerator.BaseLevelGenerator;
 import com.example.game.testing.Systems.PlayerCollisionDetector;
-import com.example.game.testing.Systems.levelGenerator.ProceduralLevelGenerator;
 import com.example.utils.Vec2;
 
 public class MainGameScene extends mcd_Scene{
-    ILevelGenerator levelGen = null;
+    BaseLevelGenerator levelGen = null;
     float gameTime;
 
     protected MainGameScene(Engine myEngine) {
         super(myEngine);
     }
 
-    public void setLevelGen(ILevelGenerator levelGen){
+    public void setLevelGen(BaseLevelGenerator levelGen){
         if(this.levelGen!=null){
             throw new RuntimeException("You must not call setLevelGen again once levelGen is correctly set up");
         }

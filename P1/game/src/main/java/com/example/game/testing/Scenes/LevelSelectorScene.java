@@ -5,9 +5,8 @@ import static com.example.game.testing.constants.Constants.DEFAULT_BUTTON_SIZE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
 import com.example.engine.Engine;
-import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.levelGenerator.FileLevelGenerator;
-import com.example.game.testing.Systems.levelGenerator.LevelGenerator;
+import com.example.game.testing.Systems.levelGenerator.LevelFileGenerator;
 import com.example.game.testing.utils.JSON_HELPER;
 import com.example.utils.Vec2;
 
@@ -46,7 +45,7 @@ public class LevelSelectorScene extends mcd_Scene{
         mainScene.setLevelGen(
             new FileLevelGenerator(
                 mainScene,
-                LevelGenerator.deserialize(obj)
+                LevelFileGenerator.deserialize(obj)
             )
         );
         eng.setScene(mainScene);

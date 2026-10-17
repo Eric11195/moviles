@@ -4,7 +4,7 @@ import static com.example.game.testing.utils.JSON_HELPER.toJSON;
 
 import com.example.engine.Engine;
 import com.example.engine.IFileStorage;
-import com.example.game.testing.Systems.levelGenerator.LevelGenerator;
+import com.example.game.testing.Systems.levelGenerator.LevelFileGenerator;
 import com.example.game.testing.Systems.levelGenerator.LevelGeneratorParams;
 
 import org.json.JSONObject;
@@ -15,17 +15,17 @@ public class LevelGeneratorToJSON extends mcd_Scene {
     }
     @Override
     public void start(Engine eng) {
-        JSONObject joLow = LevelGenerator.generateNewLevel(
+        JSONObject joLow = LevelFileGenerator.generateNewLevel(
                 this,
                 eng,
                 getEasyLevelParams()
         );
-        JSONObject joMid = LevelGenerator.generateNewLevel(
+        JSONObject joMid = LevelFileGenerator.generateNewLevel(
                 this,
                 eng,
                 getMediumLevelParams()
         );
-        JSONObject joHard = LevelGenerator.generateNewLevel(
+        JSONObject joHard = LevelFileGenerator.generateNewLevel(
                 this,
                 eng,
                 getHardLevelParams()

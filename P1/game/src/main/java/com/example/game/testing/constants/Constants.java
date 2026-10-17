@@ -35,7 +35,7 @@ public class Constants {
         public static final float MAX_ZAPPER_LENGTH = 100;
 
         // MISILES
-        public static final float MISSILE_MOVE_SPEED = 180;
+        public static final float MISSILE_MOVE_SPEED = LOGIC_WINDOW_SIZE.x*2;
         public static final float MISSILE_RADIUS = 30;
 
         // LASER
@@ -48,6 +48,7 @@ public class Constants {
      * How long until an obstacle with warning appears from the first time it's hinted on screen
      */
     public static final float WARNING_TIME = 2;
+    public static final float WARNING_RADIUS = 30;
 
 
 }

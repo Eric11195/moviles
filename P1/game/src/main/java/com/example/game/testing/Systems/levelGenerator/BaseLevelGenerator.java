@@ -4,6 +4,7 @@ import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.Component.ColliderComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.Component.VelocityComponent;
+import com.example.game.testing.EC.Component.WarningSign;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
@@ -12,7 +13,7 @@ import com.example.game.testing.constants.Constants;
 
 import java.util.ArrayList;
 
-public abstract class ILevelGenerator implements mcd_System {
+public abstract class BaseLevelGenerator implements mcd_System {
     protected LevelGeneratorParams params;
     protected int _freeIdxCount;
     public int _obstacleArrayIndex;
@@ -22,7 +23,7 @@ public abstract class ILevelGenerator implements mcd_System {
     public void setPlayer(mcd_Entity player){
         this.player = player;
     }
-    protected ILevelGenerator(mcd_Scene scene, LevelGeneratorParams params){
+    protected BaseLevelGenerator(mcd_Scene scene, LevelGeneratorParams params){
         this.params = params;
         this.speedMult = this.params.levelInitialSpeed;
         initializeObstacleList(scene);
@@ -109,6 +110,7 @@ public abstract class ILevelGenerator implements mcd_System {
             ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
             ent.addComponent(ComponentId.VELOCITY_COMPONENT, new VelocityComponent());
             ent.addComponent(ComponentId.COLLIDER_COMPONENT, new ColliderComponent());
+            ent.addComponent(ComponentId.WARNING_COMPONENT, new WarningSign());
             //ent.addComponent(ComponentId.IMAGE_COMPONENT, new ImageComponent(""));
             ent.setActive(false);
             _obstacleList.add(ent);
