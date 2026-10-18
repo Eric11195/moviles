@@ -50,5 +50,6 @@ public class Constants {
     public static final float WARNING_TIME = 2;
     public static final float WARNING_RADIUS = 30;
 
+        public static final float LASER_WIDTH = LOGIC_WINDOW_SIZE.x;
 
 }

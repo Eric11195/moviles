@@ -3,6 +3,7 @@ package com.example.game.testing.EC.Component;
 import static com.example.game.testing.constants.Constants.LASER_HEIGHT;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.utils.StartPlayerDead.startPlayerDead;
+import static com.example.game.testing.constants.Constants.PLAYER_X_POS;
 
 import com.example.engine.ColorEng;
 import com.example.game.testing.EC.ComponentId;
@@ -20,10 +21,10 @@ public class LaserComponent extends Obstacle {
     //number of times it has to appear and dissapear for it to "attack".
     int num_rep;
     //duration of 1 of the numRep animations.
-    double anim_dur;
-    double anim_timer;
+    float anim_dur;
+    float anim_timer;
 
-    double attack_dur;
+    float attack_dur;
 
     boolean is_attacking;
 
@@ -33,6 +34,11 @@ public class LaserComponent extends Obstacle {
     public LaserComponent(mcd_Entity ent, int numRepetitions, int anim_duration)
     {
         super(ent, 0,0);
+
+        if(!ent.hasComponent(ComponentId.DRAW_RECTANGLE_COMPONENT))
+        {
+            ent.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT,new DrawRectangleComponent());
+        }
         num_rep=numRepetitions;
         anim_dur = anim_duration;
         anim_timer =0;
@@ -51,12 +57,7 @@ public class LaserComponent extends Obstacle {
     }
     private void setUpCollider(ColliderComponent col){
         col.clearColliders();
-        col.addColliderLine(
-                new Vec2(0,LASER_HEIGHT/2),
-                new Vec2(LOGIC_WINDOW_SIZE.x,LASER_HEIGHT/2),
-                LASER_HEIGHT,
-                10
-        );
+
     }
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g) {
@@ -67,7 +68,7 @@ public class LaserComponent extends Obstacle {
                 if(anim_timer<=anim_dur/2)
                 {
                     // progress can only be 1 here at the start, but afterwards goes back to 0
-                //here we need to change the color
+                    //here we need to change the color
                     //fist half = dur_total-time_pased = anim_timer-anim_dur/2/anim_dur
                     float progress = (float) (anim_timer/(anim_dur/2));
                     color.a = (int)(255 - 155 * progress);
@@ -81,11 +82,8 @@ public class LaserComponent extends Obstacle {
                 }
             }
             else{color.a = 255;}
-            TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
-
-            g.setColor(color);
-            g.drawRectangle(tr.pos,tr.size,true);
-
+            DrawRectangleComponent draw = (DrawRectangleComponent) ent.getComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
+            draw.color = color;
         }
     }
 
@@ -102,7 +100,15 @@ public class LaserComponent extends Obstacle {
     }
 
     @Override
-    public void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm) {
+    public void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm,float t, float dt) {
+        //draw a rectangle in a position far away but takinf into account the point in time,
+        //the number of loops left and the time it keeps attacking
+        float pos_left =(anim_dur- anim_timer+anim_dur*num_rep)*speedMult;
+
+        float sizeX = attack_dur*speedMult;
+        Vec2 size= new Vec2(sizeX,LASER_HEIGHT);
+        Vec2 pos = new Vec2(tr.pos.x+pos_left,tr.pos.y);
+        dm.drawSquare(pos,size);
         throw new RuntimeException("Unimplemented");
     }
 
@@ -120,18 +126,33 @@ public class LaserComponent extends Obstacle {
             {
                 anim_timer = 0;
                 num_rep--;
-                if(num_rep == 0){is_attacking = true;}
+                if(num_rep == 0)
+                {
+                    is_attacking = true;
+                    ColliderComponent colliderComponent= (ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT);
+
+                    //need the player_pos in the X axis for this
+                    Vec2 aux = new Vec2(PLAYER_X_POS,LASER_HEIGHT/2);
+                    colliderComponent.addSingleCollider(aux,LASER_HEIGHT/2);
+                }
+
             }
         }
         else
         {
             if(ent.hasComponent(ComponentId.COLLIDER_COMPONENT))
             {
+
                 if(attack_dur>0)
                 {
                     attack_dur-=dt;
                 }
-                else{  ent.rmComponent(ComponentId.COLLIDER_COMPONENT);}
+                else
+                {
+                    ColliderComponent colliderComponent= (ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT);
+                    colliderComponent.clearColliders();
+
+                }
             }
         }
     }

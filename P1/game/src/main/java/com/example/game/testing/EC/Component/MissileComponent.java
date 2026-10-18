@@ -73,7 +73,7 @@ public class MissileComponent extends WarnedObstacle {
     }
 
     @Override
-    public void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm) {
+    public void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm, float t, float dt) {
 //        float realXPos = tr.pos.x - getTimeTillSpawn() * xSpeed;
 //        if(realXPos < LOGIC_WINDOW_SIZE.x+DANGER_MATRIX_PRECALCULATED_SPACE) {
 //            dm.drawSquare(new Vec2(realXPos, tr.pos.y - tr.size.y), tr.size);

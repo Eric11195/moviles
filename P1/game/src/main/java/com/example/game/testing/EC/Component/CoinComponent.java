@@ -54,7 +54,7 @@ public class CoinComponent extends Obstacle {
     }
 
     @Override
-    public void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm) {
+    public void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm,float t,float dt) {
         dm.drawSquare(tr.pos, tr.size);
     }
 

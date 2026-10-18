@@ -94,7 +94,7 @@ public class ZapperComponent extends Obstacle{
     }
 
     @Override
-    public void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm) {
+    public void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm, float t, float dt) {
         Vec2 firstPt = getActualStartPos(tr);
         Vec2 secondPt = getActualEndPos(tr);
         dm.drawLine(

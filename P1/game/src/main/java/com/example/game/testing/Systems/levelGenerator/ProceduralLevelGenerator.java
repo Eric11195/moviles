@@ -44,13 +44,13 @@ public class ProceduralLevelGenerator extends BaseLevelGenerator {
     }
 
     DangerMatrix dangerMatrix= new DangerMatrix(DANGER_MATRIX_PX_TILE_SIZE);
-    public void setupDangerMatrixWithAlreadyExistingObjects(){
+    public void setupDangerMatrixWithAlreadyExistingObjects(float t, float dt){
         dangerMatrix.reset();
         for(mcd_Entity ent : _obstacleList){
             if(!ent.isActive()) continue;
             ((Obstacle)ent.getComponent(ComponentId.OBSTACLE_COMPONENT)).drawSelfInDangerMatrix(
                     (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT),
-                    dangerMatrix
+                    dangerMatrix, t,  dt
             );
         }
     }
@@ -88,7 +88,7 @@ public class ProceduralLevelGenerator extends BaseLevelGenerator {
           ComponentId.OBSTACLE_COMPONENT,
           new MissileComponent(ent, t, this.speedMult, y)
         );
-        mis.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix);
+        mis.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix,t,dt);
         return dangerMatrix.ensureTraversability(player,this.speedMult,dt);
     }
     public boolean createZapper(mcd_Entity ent, float t, float dt){
@@ -147,7 +147,7 @@ public class ProceduralLevelGenerator extends BaseLevelGenerator {
 
     @Override
     protected void updateObstacleSpawnConditions(float t, float dt) {
-        setupDangerMatrixWithAlreadyExistingObjects();
+        setupDangerMatrixWithAlreadyExistingObjects(t,dt);
         addProbabilityToObstacleSpawn(dt);
     }
 }

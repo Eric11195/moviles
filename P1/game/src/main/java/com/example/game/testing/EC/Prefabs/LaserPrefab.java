@@ -2,6 +2,7 @@ package com.example.game.testing.EC.Prefabs;
 import static com.example.game.testing.constants.Constants.LASER_HEIGHT;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
+import com.example.game.testing.EC.Component.ColliderComponent;
 import com.example.game.testing.EC.Component.ImageComponent;
 import com.example.game.testing.EC.Component.LaserComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
@@ -15,6 +16,7 @@ public class LaserPrefab {
         mcd_Entity ent = my_scene.createEntity();
         ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent(new Vec2(0,yPos), new Vec2(LOGIC_WINDOW_SIZE.x,LASER_HEIGHT)));
         ent.addComponent(ComponentId.LASER_COMPONENT, new LaserComponent(ent,3,4));
+        ent.addComponent(ComponentId.COLLIDER_COMPONENT, new ColliderComponent());
         return ent;
 
     }

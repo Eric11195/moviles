@@ -11,7 +11,9 @@ import com.example.game.testing.utils.mcd_Serializable;
 import org.json.JSONObject;
 
 public abstract class Obstacle implements mcd_Component, mcd_Serializable {
+
     protected final float spawnTime;
+
     protected float scrolledTime;
     protected float speedMult;
 
@@ -31,7 +33,7 @@ public abstract class Obstacle implements mcd_Component, mcd_Serializable {
         //scrolledTime = calculateScrolledTime(spawnTime, speedMult);
     }
     public abstract float calculateScrolledTime(float spawnTime, float speedMult);
-    public abstract void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm);
+    public abstract void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm,float t, float dt);
     @Override
     public void update(mcd_Entity ent, float t, float dt) {
         if(!onScreen(t)) ent.setActive(false);
@@ -56,5 +58,10 @@ public abstract class Obstacle implements mcd_Component, mcd_Serializable {
     }
 
     public abstract void onPlayerCollision(mcd_Entity ent, mcd_Scene scene);
+
+    public void setSpeedMult(float f)
+    {
+        speedMult = f;
+    }
 
 }
