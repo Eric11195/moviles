@@ -1,6 +1,4 @@
 package com.example.engine;
-import static com.example.engine.constants.EngineConstants.DEFAULT_LOGIC_WINDOW_HEIGHT;
-import static com.example.engine.constants.EngineConstants.DEFAULT_LOGIC_WINDOW_WIDTH;
 
 import com.example.engine.audio.AudioInterface;
 
