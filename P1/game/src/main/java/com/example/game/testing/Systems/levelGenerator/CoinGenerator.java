@@ -1,6 +1,7 @@
 package com.example.game.testing.Systems.levelGenerator;
 
 import com.example.game.testing.EC.mcd_Entity;
+import com.example.game.testing.Scenes.mcd_Scene;
 
 public class CoinGenerator extends Generator{
     @Override
@@ -9,17 +10,17 @@ public class CoinGenerator extends Generator{
     }
 
     @Override
-    protected boolean setUpNewObstacle(mcd_Entity ent, float t, float dt) {
+    protected boolean setUpNewObstacle(mcd_Entity ent, float t, float dt, float speedMult) {
         return false;
     }
 
     @Override
-    protected void updateObstacleSpawnConditions(float t, float dt) {
+    public void addProbabilityToObstacleSpawn(float dt) {
 
     }
 
     @Override
-    public void addProbabilityToObstacleSpawn(float dt) {
+    protected void initializeObstacleList(mcd_Scene scene) {
 
     }
 }

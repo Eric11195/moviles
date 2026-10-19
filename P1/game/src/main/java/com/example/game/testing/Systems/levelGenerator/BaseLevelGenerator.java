@@ -71,13 +71,13 @@ public abstract class BaseLevelGenerator implements mcd_System {
      * @return true if new obstacle was created, false otherwise
      */
     private boolean decideOnPossibleNewObstacle(mcd_Entity ent, float t, float dt){
-        if(askIfSpawnNewObstacle(t,dt)){
+//        if(askIfSpawnNewObstacle(t,dt)){
             //System.out.println("Creame un obstaculo pibe");
 //            if(setUpNewObstacle(_obstacleList.get(_obstacleArrayIndex), t, dt)) {
 //                _obstacleArrayIndex = (_obstacleArrayIndex + 1) % _obstacleList.size();
 //                return true;
 //            }
-        }
+//        }
         return false;
     }
     protected abstract boolean setUpNewObstacle(mcd_Entity ent, float t, float dt);
