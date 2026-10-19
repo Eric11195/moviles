@@ -1,6 +1,7 @@
 package com.example.game.testing.EC.Component;
 
 import static com.example.game.testing.constants.Constants.LASER_HEIGHT;
+import static com.example.game.testing.constants.Constants.LASER_WIDTH;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.utils.StartPlayerDead.startPlayerDead;
 import static com.example.game.testing.constants.Constants.PLAYER_X_POS;
@@ -12,8 +13,9 @@ import com.example.engine.GraphicsInterface;
 import com.example.game.testing.Scenes.LoseMenuScene;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
+import com.example.game.testing.Systems.levelGenerator.ObstacleFactory;
 import com.example.utils.Vec2;
-
+import static com.example.game.testing.EC.Component.ObstacleId.OBSTACLE_LASER;
 import org.json.JSONObject;
 
 public class LaserComponent extends WarnedObstacle {
@@ -31,7 +33,17 @@ public class LaserComponent extends WarnedObstacle {
     int index_rep;
 
     ColorEng color;
-    public LaserComponent(mcd_Entity ent, int numRepetitions, int anim_duration, float speed)
+    mcd_Entity myEnt;
+
+    public static class LaserComponentSerialized extends ObstacleFactory {
+        float yPos;
+        @Override
+        public void instantiate(mcd_Scene scene, mcd_Entity ent, float levelSpeed, float t) {
+            TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
+            ent.setComponent(ComponentId.OBSTACLE_COMPONENT, new LaserComponent(ent,3,2,0,yPos));
+        }
+    }
+    public LaserComponent(mcd_Entity ent, int numRepetitions, int anim_duration, float speed,float posY)
     {
         super(ent, 0,0);
 
@@ -51,6 +63,12 @@ public class LaserComponent extends WarnedObstacle {
         setUpSpeed((VelocityComponent) ent.getComponent(ComponentId.VELOCITY_COMPONENT));
         speedMult =speed;
         scrolledTime = calculateScrolledTime(spawnTime, speedMult);
+        myEnt = ent;
+        TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
+        tr.pos.y = posY;
+        tr.size.x = LASER_WIDTH;
+        tr.size.y = LASER_HEIGHT;
+        tr.pos.x =0;
     }
     private void setUpSpeed(VelocityComponent vel){
         vel.velocity.x = 0;
@@ -164,8 +182,16 @@ public class LaserComponent extends WarnedObstacle {
 
     @Override
     public JSONObject serialize() {
-        return null;
+        JSONObject jo = super.serialize();
+        TransformComponent tr = (TransformComponent) myEnt.getComponent(ComponentId.TRANSFORM_COMPONENT);
+        jo.put("id", OBSTACLE_LASER);
+        jo.put("y", Double.valueOf(tr.pos.y));
+        return jo;
     }
-    public void deserialize(JSONObject obj) {
+    public static LaserComponentSerialized deserialize(JSONObject obj) {
+        LaserComponentSerialized lcs = new LaserComponentSerialized();
+        lcs.yPos = (float)obj.getDouble("y");
+        lcs.spawnTime = getSpawnTime(obj);
+    return lcs;
     }
 }
