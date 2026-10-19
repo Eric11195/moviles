@@ -15,7 +15,7 @@ public class LaserPrefab {
     {
         mcd_Entity ent = my_scene.createEntity();
         ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent(new Vec2(0,yPos), new Vec2(LOGIC_WINDOW_SIZE.x,LASER_HEIGHT)));
-        ent.addComponent(ComponentId.LASER_COMPONENT, new LaserComponent(ent,3,4,0));
+        ent.addComponent(ComponentId.LASER_COMPONENT, new LaserComponent(ent,3,4,0,0));
         ent.addComponent(ComponentId.COLLIDER_COMPONENT, new ColliderComponent());
         return ent;
 
