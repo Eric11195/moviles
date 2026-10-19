@@ -48,6 +48,8 @@ public class LevelGeneratorToJSON extends mcd_Scene {
         lg.obstacleExplosiveCreationBoost = 1;
         lg.obstacleLinearCreationPerSecond = 0.8f;
         lg.obstacleExplosiveCreationChance = 0.00000001;
+        lg.augmentSpeedEachXPixels = 300;
+        lg.augmentSpeedByYEachXPixels = 30;
         return lg;
     }
     public static LevelGeneratorParams getMediumLevelParams(){
@@ -58,6 +60,8 @@ public class LevelGeneratorToJSON extends mcd_Scene {
         lg.obstacleExplosiveCreationBoost = 1.6f;
         lg.obstacleLinearCreationPerSecond = 0.6f;
         lg.obstacleExplosiveCreationChance = 0.00000001;
+        lg.augmentSpeedEachXPixels = 200;
+        lg.augmentSpeedByYEachXPixels = 30;
         return lg;
     }
     public static LevelGeneratorParams getHardLevelParams(){
@@ -68,6 +72,8 @@ public class LevelGeneratorToJSON extends mcd_Scene {
         lg.obstacleExplosiveCreationBoost = 0.7f;
         lg.obstacleLinearCreationPerSecond = 1.2f;
         lg.obstacleExplosiveCreationChance = 0.000001;
+        lg.augmentSpeedEachXPixels = 100;
+        lg.augmentSpeedByYEachXPixels = 30;
         return lg;
     }
 

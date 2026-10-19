@@ -8,6 +8,8 @@ import org.json.JSONObject;
 public class LevelGeneratorParams implements mcd_Serializable {
     //Px speed per second. The obstacles move that much towards the left of the screen
     public float levelInitialSpeed;
+    public int augmentSpeedEachXPixels;
+    public float augmentSpeedByYEachXPixels;
     public float levelDurationInSeconds;
     public int maxNumberOfSimultaneousObstacles;
     /**
@@ -32,6 +34,8 @@ public class LevelGeneratorParams implements mcd_Serializable {
         jo.put("obstacleExplosiveCreationChance", Double.valueOf(obstacleExplosiveCreationChance));
         jo.put("obstacleExplosiveCreationBoost", Double.valueOf(obstacleExplosiveCreationBoost));
         jo.put("obstacleLinearCreationPerSecond", Double.valueOf(obstacleLinearCreationPerSecond));
+        jo.put("augmentSpeedEachXPixels", augmentSpeedEachXPixels);
+        jo.put("augmentSpeedByYEachXPixels", Double.valueOf(augmentSpeedByYEachXPixels));
         return jo;
     }
     public static LevelGeneratorParams deserialize(JSONObject jo){
@@ -42,6 +46,8 @@ public class LevelGeneratorParams implements mcd_Serializable {
         lgp.obstacleExplosiveCreationBoost = (float)jo.getDouble("obstacleExplosiveCreationBoost");
         lgp.obstacleExplosiveCreationChance = (float)jo.getDouble("obstacleExplosiveCreationChance");
         lgp.obstacleLinearCreationPerSecond = (float)jo.getDouble("obstacleLinearCreationPerSecond");
+        lgp.augmentSpeedByYEachXPixels = (float)jo.getDouble("augmentSpeedByYEachXPixels");
+        lgp.augmentSpeedEachXPixels = jo.getInt("augmentSpeedEachXPixels");
         return lgp;
     }
 }
