@@ -1,13 +1,9 @@
 package com.example.engine;
 
+import java.awt.Color;
+
 public class ColorEng {
     public int r,g,b,a;
-    public final static ColorEng RED = new ColorEng(255,0,0,255);
-    public final static ColorEng GREEN = new ColorEng(0,255,0,255);
-    public final static ColorEng BLUE = new ColorEng(0,0,255,255);
-    public final static ColorEng WHITE = new ColorEng(255,255,255,255);
-    public final static ColorEng BLACK = new ColorEng(0,0,0,255);
-    public final static ColorEng GREY = new ColorEng(0xFF565656);
     public ColorEng(int r, int g, int b, int a){
         this.r = r;
         this.g = g;
@@ -24,5 +20,13 @@ public class ColorEng {
     public int getColorAsInt(){
         // Variables a, r, g, b should be integers between 0 and 255
         return (a & 0xff) << 24 | (r & 0xff) << 16 | (g & 0xff) << 8 | (b & 0xff);
+    }
+    public ColorEng clone() throws CloneNotSupportedException {
+        ColorEng colorEng = (ColorEng) super.clone();
+        colorEng.r = this.r;
+        colorEng.g = this.g;
+        colorEng.b = this.b;
+        colorEng.a = this.a;
+        return colorEng;
     }
 }

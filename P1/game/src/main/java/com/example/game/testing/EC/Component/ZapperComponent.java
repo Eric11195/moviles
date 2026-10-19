@@ -19,10 +19,14 @@ import com.example.game.testing.Scenes.LoseMenuScene;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.levelGenerator.ObstacleFactory;
+import com.example.game.testing.utils.ColorLibrary;
+import com.example.game.testing.utils.FontLibrary;
 import com.example.game.testing.utils.JSON_HELPER;
 import com.example.utils.Vec2;
 
 import org.json.JSONObject;
+
+import java.awt.Color;
 
 import javax.xml.crypto.dsig.Transform;
 
@@ -119,7 +123,7 @@ public class ZapperComponent extends Obstacle{
     }
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g){
-        g.setColor(ColorEng.RED);
+        g.setColor(ColorLibrary.Red);
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
         g.drawLine(getActualStartPos(tr),getActualEndPos(tr));
     }
