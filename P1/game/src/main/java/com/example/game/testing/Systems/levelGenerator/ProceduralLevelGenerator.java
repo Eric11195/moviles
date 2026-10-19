@@ -108,7 +108,7 @@ public class ProceduralLevelGenerator extends BaseLevelGenerator {
         float y = space.x + (space.y-space.x)*(float)Math.random();
 
         LaserComponent laser = (LaserComponent) ent.setComponent(ComponentId.OBSTACLE_COMPONENT
-        ,new LaserComponent(ent,3,2,this.speedMult,y));
+        ,new LaserComponent(ent,this.speedMult,y));
         laser.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix,t,dt);
         return dangerMatrix.ensureTraversability(player,this.speedMult,dt);
     }
