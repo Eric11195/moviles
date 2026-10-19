@@ -16,7 +16,7 @@ import com.example.utils.Vec2;
 
 import org.json.JSONObject;
 
-public class LaserComponent extends Obstacle {
+public class LaserComponent extends WarnedObstacle {
 
     //number of times it has to appear and dissapear for it to "attack".
     int num_rep;
@@ -31,7 +31,7 @@ public class LaserComponent extends Obstacle {
     int index_rep;
 
     ColorEng color;
-    public LaserComponent(mcd_Entity ent, int numRepetitions, int anim_duration)
+    public LaserComponent(mcd_Entity ent, int numRepetitions, int anim_duration, float speed)
     {
         super(ent, 0,0);
 
@@ -49,6 +49,7 @@ public class LaserComponent extends Obstacle {
 
         setUpCollider((ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT));
         setUpSpeed((VelocityComponent) ent.getComponent(ComponentId.VELOCITY_COMPONENT));
+        speedMult =speed;
         scrolledTime = calculateScrolledTime(spawnTime, speedMult);
     }
     private void setUpSpeed(VelocityComponent vel){
@@ -95,7 +96,8 @@ public class LaserComponent extends Obstacle {
 
     @Override
     public float calculateScrolledTime(float spawnTime, float speedMult) {
-        throw new RuntimeException("Unimplemented");
+
+        return (spawnTime + (anim_dur*num_rep)*speedMult);
         //return 0;
     }
 
@@ -103,13 +105,11 @@ public class LaserComponent extends Obstacle {
     public void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm,float t, float dt) {
         //draw a rectangle in a position far away but takinf into account the point in time,
         //the number of loops left and the time it keeps attacking
-        float pos_left =(anim_dur- anim_timer+anim_dur*num_rep)*speedMult;
-
-        float sizeX = attack_dur*speedMult;
+        float pos_left =  (t-scrolledTime);
+        float sizeX = attack_dur;
         Vec2 size= new Vec2(sizeX,LASER_HEIGHT);
         Vec2 pos = new Vec2(tr.pos.x+pos_left,tr.pos.y);
         dm.drawSquare(pos,size);
-        throw new RuntimeException("Unimplemented");
     }
 
     @Override
@@ -151,7 +151,7 @@ public class LaserComponent extends Obstacle {
                 {
                     ColliderComponent colliderComponent= (ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT);
                     colliderComponent.clearColliders();
-
+                    ent.setActive(false);
                 }
             }
         }

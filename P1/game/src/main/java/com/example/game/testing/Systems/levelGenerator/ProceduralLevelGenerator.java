@@ -1,6 +1,8 @@
 package com.example.game.testing.Systems.levelGenerator;
 
 import static com.example.game.testing.constants.Constants.DANGER_MATRIX_PX_TILE_SIZE;
+import static com.example.game.testing.constants.Constants.LASER_HEIGHT;
+import static com.example.game.testing.constants.Constants.LASER_WIDTH;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.MIN_ZAPPER_HEIGHT;
 import static com.example.game.testing.constants.Constants.MISSILE_RADIUS;
@@ -12,6 +14,7 @@ import com.example.game.testing.EC.Component.Obstacle;
 import com.example.game.testing.EC.Component.ObstacleId;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.Component.ZapperComponent;
+import com.example.game.testing.EC.Component.LaserComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
@@ -65,7 +68,7 @@ public class ProceduralLevelGenerator extends BaseLevelGenerator {
     public boolean createRandomObstacleComp(mcd_Entity ent, float t, float dt){
         switch(chooseObstacleType()){
             case OBSTACLE_LASER:
-                return false;
+                return createLaser(ent, t, dt);
             case OBSTACLE_MISSILE:
                 return createMissile(ent, t, dt);
             case OBSTACLE_ZAPPER:
@@ -75,7 +78,10 @@ public class ProceduralLevelGenerator extends BaseLevelGenerator {
         }
     }
     public ObstacleId chooseObstacleType(){
-        return Math.random() > 0.8f ? ObstacleId.OBSTACLE_MISSILE : ObstacleId.OBSTACLE_ZAPPER;
+        double d= Math.random();
+        if(d<0.2) return ObstacleId.OBSTACLE_LASER;
+        if(d<0.7) return ObstacleId.OBSTACLE_ZAPPER;
+        return ObstacleId.OBSTACLE_MISSILE;
     }
     public boolean createMissile(mcd_Entity ent, float t, float dt){
         Vec2 space =
@@ -89,6 +95,25 @@ public class ProceduralLevelGenerator extends BaseLevelGenerator {
           new MissileComponent(ent, t, this.speedMult, y)
         );
         mis.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix,t,dt);
+        return dangerMatrix.ensureTraversability(player,this.speedMult,dt);
+    }
+    public  boolean createLaser(mcd_Entity ent, float t, float dt)
+    {
+        Vec2 space =
+                getSafeVerticalSpaceForObstacleSoPlayerCanPass(
+                        getVerticalSafeZone(),
+                        LASER_HEIGHT*1.5f
+                );
+        TransformComponent tr =(TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
+        float y = space.x + (space.y-space.x)*(float)Math.random();
+        tr.pos.x = 0;
+        tr.pos.y = y;
+        tr.size.x = LASER_WIDTH;
+        tr.size.y = LASER_HEIGHT;
+
+        LaserComponent laser = (LaserComponent) ent.setComponent(ComponentId.OBSTACLE_COMPONENT
+        ,new LaserComponent(ent,3,2,this.speedMult));
+        laser.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix,t,dt);
         return dangerMatrix.ensureTraversability(player,this.speedMult,dt);
     }
     public boolean createZapper(mcd_Entity ent, float t, float dt){
