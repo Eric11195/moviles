@@ -1,7 +1,5 @@
 package com.example.androidengine;
 
-import static com.example.engine.constants.EngineConstants.LOGIC_WINDOW_HEIGHT;
-import static com.example.engine.constants.EngineConstants.LOGIC_WINDOW_WIDTH;
 import static com.example.utils.Utils.getNonDeformingAspectData;
 
 import android.graphics.Canvas;
@@ -18,10 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.engine.ColorEng;
 import com.example.engine.FontEng;
 import com.example.engine.ImageEng;
-import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
-import com.example.engine.constants.EngineConstants;
-import com.example.utils.Utils;
 import com.example.utils.Vec2;
 
 public class GraphicsAndroid implements GraphicsInterface {
@@ -33,10 +28,12 @@ public class GraphicsAndroid implements GraphicsInterface {
     private FontAndroid font = new FontAndroid();
 
     private final AppCompatActivity activity;
-    public GraphicsAndroid(AppCompatActivity activity, int id){
+    public GraphicsAndroid(AppCompatActivity activity, int id, int width, int height){
         this.activity = activity;
         assert(surface == null);
         assert(can == null);
+        this._logicWindowHeight = height;
+        this._logicWindowWidth = width;
         surf = activity.findViewById(id);
         surf.setZOrderOnTop(true);
         surface = surf.getHolder();
@@ -53,7 +50,7 @@ public class GraphicsAndroid implements GraphicsInterface {
                             int format,
                             int width,
                             int height) {
-                        com.example.utils.Utils.NonDeformingAspectData data = getNonDeformingAspectData(width,height);
+                        com.example.utils.Utils.NonDeformingAspectData data = getNonDeformingAspectData(width,height, _logicWindowWidth, _logicWindowHeight);
                         setViewport(data.scale_mult,data.offset_x,data.offset_y);
                     }
 
@@ -225,6 +222,13 @@ public class GraphicsAndroid implements GraphicsInterface {
         drawImage(img, pos,new Vec2(img.getWidth(), img.getHeight()));
     }
 
+    private int _logicWindowWidth;
+    private int _logicWindowHeight;
+    @Override
+    public void setWindowLogicSize(int width, int height){
+        _logicWindowHeight = height;
+        _logicWindowWidth = width;
+    }
     ColorEng clearColor = new ColorEng(255,255,255,255);
     // fills the entire display with the given color
     @Override

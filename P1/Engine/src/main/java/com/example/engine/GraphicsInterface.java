@@ -6,6 +6,7 @@ public interface GraphicsInterface {
     public void drawImage(ImageEng img, Vec2 src_pos, Vec2 src_size, Vec2 dst_pos, Vec2 dst_size);
     public void drawImage(ImageEng img, Vec2 pos, Vec2 size);
     public void drawImage(ImageEng img, Vec2 pos);
+    public void setWindowLogicSize(int width, int height);
     public void clear(ColorEng color);
     public void setColor(ColorEng color);
     public void setStrokeWidth(int pxWidth);

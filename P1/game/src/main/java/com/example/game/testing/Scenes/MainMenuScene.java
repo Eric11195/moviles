@@ -22,6 +22,7 @@ public class MainMenuScene extends mcd_Scene{
     @Override
     public void start(Engine eng) {
         GraphicsInterface g = eng.getGraphics();
+        g.setWindowLogicSize((int)LOGIC_WINDOW_SIZE.x, (int)LOGIC_WINDOW_SIZE.y);
         
         FontLibrary.createFont(g, FontLibrary.FontName.STANDARD,16);
         FontLibrary.createFont(g, FontLibrary.FontName.HEADER,72);

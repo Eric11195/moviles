@@ -1,4 +1,7 @@
 package com.example.engine;
+import static com.example.engine.constants.EngineConstants.DEFAULT_LOGIC_WINDOW_HEIGHT;
+import static com.example.engine.constants.EngineConstants.DEFAULT_LOGIC_WINDOW_WIDTH;
+
 import com.example.engine.audio.AudioInterface;
 
 import java.nio.file.FileSystem;
@@ -18,6 +21,8 @@ public abstract class Engine implements Runnable{
 
     private volatile boolean running;
     private Scene currentScene;
+
+
     //This class allows to delay the operations on scene managemente until end of frame
     private static class sceneOperation{
         sceneOperation(op o, Scene s){
@@ -27,6 +32,7 @@ public abstract class Engine implements Runnable{
         op myOp;
         Scene scn;
     };
+
     private static enum op{
         push,
         pop,
@@ -34,7 +40,7 @@ public abstract class Engine implements Runnable{
     }
 
     ArrayList<Scene> sceneStack = new ArrayList<Scene>();
-    ArrayList<sceneOperation> sceneOpQueue=new ArrayList<sceneOperation>();
+    ArrayList<Engine.sceneOperation> sceneOpQueue=new ArrayList<Engine.sceneOperation>();
 
     protected Engine(GraphicsInterface graphics, InputBase input, AudioInterface audio, IFileStorage fileStorage) {
         this.graphics = graphics;

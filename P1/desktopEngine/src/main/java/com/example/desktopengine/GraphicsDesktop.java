@@ -1,15 +1,11 @@
 package com.example.desktopengine;
 
-import static com.example.engine.constants.EngineConstants.LOGIC_WINDOW_HEIGHT;
-import static com.example.engine.constants.EngineConstants.LOGIC_WINDOW_WIDTH;
 import static com.example.utils.Utils.getNonDeformingAspectData;
 
 import com.example.engine.ColorEng;
 import com.example.engine.FontEng;
 import com.example.engine.ImageEng;
-import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
-import com.example.engine.constants.EngineConstants;
 import com.example.utils.Utils;
 import com.example.utils.Vec2;
 
@@ -48,9 +44,11 @@ public class GraphicsDesktop implements GraphicsInterface {
     Canvas canvas;
     FontDesktop current_font = new FontDesktop();
     AffineTransform originalTransform;
-    GraphicsDesktop(){
+    GraphicsDesktop(int width, int height){
         mainJFrame = new JFrame("Desktop Engine");
         mainJFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        setWindowLogicSize(width,height);
 
         canvas = new Canvas();
 
@@ -58,13 +56,13 @@ public class GraphicsDesktop implements GraphicsInterface {
 
             @Override
             public void componentResized(ComponentEvent e) {
-            Utils.NonDeformingAspectData data = getNonDeformingAspectData(getWidth(),getHeight());
+            Utils.NonDeformingAspectData data = getNonDeformingAspectData(getWidth(),getHeight(), _logicWindowWidth, _logicWindowHeight);
             setViewport(data.scale_mult,data.offset_x,data.offset_y);
             }
         });
 
         // Give the canvas an explicit size
-        canvas.setPreferredSize(new Dimension(LOGIC_WINDOW_WIDTH, LOGIC_WINDOW_HEIGHT));
+        canvas.setPreferredSize(new Dimension(_logicWindowWidth, _logicWindowHeight));
         mainJFrame.add(canvas);
         mainJFrame.pack();
         mainJFrame.setVisible(true);
@@ -113,6 +111,15 @@ public class GraphicsDesktop implements GraphicsInterface {
     public void drawImage(ImageEng img, Vec2 pos){
         drawImage(img, pos, new Vec2(img.getWidth(), img.getHeight()));
     }
+
+    private int _logicWindowWidth;
+    private int _logicWindowHeight;
+    @Override
+    public void setWindowLogicSize(int width, int height){
+        _logicWindowHeight = height;
+        _logicWindowWidth = width;
+    }
+
     ColorEng clearColor = new ColorEng(255,255,255,255);
     @Override
     public void clear(ColorEng color){
