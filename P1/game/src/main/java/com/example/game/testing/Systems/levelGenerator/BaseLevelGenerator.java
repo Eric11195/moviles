@@ -66,15 +66,15 @@ public abstract class BaseLevelGenerator implements mcd_System {
         if(j >= _coinList.size()) throw new RuntimeException("This should never happen");
 //        updateActiveObstacleCount();
 //        updateObstacleSpawnConditions(t,dt);
-        while(!_coinList.get(j).isActive()){
-            mcd_Entity ent = _coinList.get(j);
-            assert(ent!=null);
-            //if we create a new obstacle we try to repeat the process for the next free
-            //Otherwise, we dont want to create new obstacles this frame
-            if(!decideOnPossibleNewObstacle(ent, t, dt)) break;
-            if(j==lastIterableCoin) break;
-            j = (j+1) % _coinList.size();
-        }
+//        while(!_coinList.get(j).isActive()){
+//            mcd_Entity ent = _coinList.get(j);
+//            assert(ent!=null);
+//            //if we create a new obstacle we try to repeat the process for the next free
+//            //Otherwise, we dont want to create new obstacles this frame
+//            if(!decideOnPossibleNewObstacle(ent, t, dt)) break;
+//            if(j==lastIterableCoin) break;
+//            j = (j+1) % _coinList.size();
+//        }
 
     }
     Vec2 distanceTextPos = new Vec2(0,0);

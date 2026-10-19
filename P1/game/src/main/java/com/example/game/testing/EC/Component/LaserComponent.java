@@ -40,12 +40,12 @@ public class LaserComponent extends WarnedObstacle {
         @Override
         public void instantiate(mcd_Scene scene, mcd_Entity ent, float levelSpeed, float t) {
             TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
-            ent.setComponent(ComponentId.OBSTACLE_COMPONENT, new LaserComponent(ent,2,yPos));
+            ent.setComponent(ComponentId.OBSTACLE_COMPONENT, new LaserComponent(ent,t,2,yPos));
         }
     }
-    public LaserComponent(mcd_Entity ent, float speed,float posY)
+    public LaserComponent(mcd_Entity ent,float spawnTime, float speed,float posY)
     {
-        super(ent, 0,0);
+        super(ent, spawnTime,0);
 
         if(!ent.hasComponent(ComponentId.DRAW_RECTANGLE_COMPONENT))
         {
@@ -106,6 +106,7 @@ public class LaserComponent extends WarnedObstacle {
         ent.rmComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
         ColliderComponent colliderComponent= (ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT);
         colliderComponent.clearColliders();
+
         ent.setActive(false);
 
     }
@@ -117,7 +118,7 @@ public class LaserComponent extends WarnedObstacle {
 
     @Override
     public float calculateScrolledTime(float spawnTime, float speedMult) {
-        return spawnTime+(LASER_ANIM_TIME*LASER_ANIM_NUM)+LASER_ATTACK_DUR;
+        return (spawnTime+(LASER_ANIM_TIME*LASER_ANIM_NUM)+LASER_ATTACK_DUR);
         //return 0;
     }
 
@@ -162,7 +163,8 @@ public class LaserComponent extends WarnedObstacle {
         {
             if(ent.hasComponent(ComponentId.COLLIDER_COMPONENT))
             {
-                if(t == scrolledTime){disable(ent);}
+                if(t >= scrolledTime)
+                {disable(ent);}
                 //time to die == t;
             }
         }
