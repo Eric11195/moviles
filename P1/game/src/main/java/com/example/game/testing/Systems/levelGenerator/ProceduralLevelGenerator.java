@@ -138,11 +138,6 @@ public class ProceduralLevelGenerator extends BaseLevelGenerator {
         );
         return true;
     }
-    public boolean createCoin(mcd_Entity ent, float t, float dt){
-
-
-        return true;
-    }
 
     /**
      * returns a vec 2 with y coordinates where it would be ok to put an obstacle.

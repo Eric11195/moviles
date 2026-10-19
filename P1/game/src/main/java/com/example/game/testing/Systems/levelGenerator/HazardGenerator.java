@@ -5,7 +5,7 @@ import com.example.game.testing.EC.mcd_Entity;
 public class HazardGenerator extends Generator{
     @Override
     protected boolean askIfSpawnNewObstacle(float t, float dt) {
-        return false;
+        return obstacleAcumSpawn > 1 && _freeIdxCount > 0;
     }
 
     @Override
