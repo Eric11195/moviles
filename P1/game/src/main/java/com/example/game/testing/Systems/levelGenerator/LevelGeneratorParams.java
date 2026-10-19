@@ -26,22 +26,22 @@ public class LevelGeneratorParams implements mcd_Serializable {
     public float obstacleLinearCreationPerSecond;
     public JSONObject serialize(){
         JSONObject jo = new JSONObject();
-        jo.put("levelInitialSpeed", Float.valueOf(levelInitialSpeed));
-        jo.put("levelDurationInSeconds", Float.valueOf(levelDurationInSeconds));
-        jo.put("maxNumberOfSimultaneousObstacles", Float.valueOf(maxNumberOfSimultaneousObstacles));
+        jo.put("levelInitialSpeed", Double.valueOf(levelInitialSpeed));
+        jo.put("levelDurationInSeconds", Double.valueOf(levelDurationInSeconds));
+        jo.put("maxNumberOfSimultaneousObstacles", Double.valueOf(maxNumberOfSimultaneousObstacles));
         jo.put("obstacleExplosiveCreationChance", Double.valueOf(obstacleExplosiveCreationChance));
-        jo.put("obstacleExplosiveCreationBoost", Float.valueOf(obstacleExplosiveCreationBoost));
-        jo.put("obstacleLinearCreationPerSecond", Float.valueOf(obstacleLinearCreationPerSecond));
+        jo.put("obstacleExplosiveCreationBoost", Double.valueOf(obstacleExplosiveCreationBoost));
+        jo.put("obstacleLinearCreationPerSecond", Double.valueOf(obstacleLinearCreationPerSecond));
         return jo;
     }
     public static LevelGeneratorParams deserialize(JSONObject jo){
         LevelGeneratorParams lgp = new LevelGeneratorParams();
-        lgp.levelDurationInSeconds = jo.getFloat("levelDurationInSeconds");
-        lgp.levelInitialSpeed = jo.getFloat("levelInitialSpeed");
+        lgp.levelDurationInSeconds = (float)jo.getDouble("levelDurationInSeconds");
+        lgp.levelInitialSpeed = (float)jo.getDouble("levelInitialSpeed");
         lgp.maxNumberOfSimultaneousObstacles = jo.getInt("maxNumberOfSimultaneousObstacles");
-        lgp.obstacleExplosiveCreationBoost = jo.getFloat("obstacleExplosiveCreationBoost");
-        lgp.obstacleExplosiveCreationChance = jo.getDouble("obstacleExplosiveCreationChance");
-        lgp.obstacleLinearCreationPerSecond = jo.getFloat("obstacleLinearCreationPerSecond");
+        lgp.obstacleExplosiveCreationBoost = (float)jo.getDouble("obstacleExplosiveCreationBoost");
+        lgp.obstacleExplosiveCreationChance = (float)jo.getDouble("obstacleExplosiveCreationChance");
+        lgp.obstacleLinearCreationPerSecond = (float)jo.getDouble("obstacleLinearCreationPerSecond");
         return lgp;
     }
 }

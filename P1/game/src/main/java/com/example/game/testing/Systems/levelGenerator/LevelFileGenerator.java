@@ -24,7 +24,7 @@ import java.util.List;
 public class LevelFileGenerator implements mcd_Serializable {
     LevelGeneratorParams lgp;
     ProceduralLevelGenerator sg;
-    ArrayList<JSONObject> obstacleCompleteList = new ArrayList<>();
+    JSONArray obstacleCompleteList = new JSONArray();
     mcd_Scene myScene;
     JetpackComponent playerJetpack;
     mcd_Entity player;
@@ -58,7 +58,7 @@ public class LevelFileGenerator implements mcd_Serializable {
         this.sg.update(myScene, t, dt);
         int index_after = this.sg._obstacleArrayIndex;
         while(index_before != index_after){
-            this.obstacleCompleteList.add(
+            this.obstacleCompleteList.put(
                     ((Obstacle)
                     this.sg._obstacleList
                         .get(index_before)

@@ -19,7 +19,7 @@ public class LevelSelectorScene extends mcd_Scene{
     @Override
     public void start(Engine eng) {
         int BUTTON_COUNT = 3;
-        eng.getFileStorage().setRelativePath("assets/Levels");
+        eng.getFileStorage().setRelativePath("Assets/Levels");
         for(int i = 1; i <= BUTTON_COUNT; ++i){
             Vec2 pos = new Vec2(
                 LOGIC_WINDOW_SIZE.x/2.0f-0.5f*DEFAULT_BUTTON_SIZE.x,

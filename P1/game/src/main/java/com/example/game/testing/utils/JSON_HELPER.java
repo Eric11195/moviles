@@ -40,8 +40,8 @@ public class JSON_HELPER {
     }
     public static JSONObject toJSON(Vec2 v){
         JSONObject jo = new JSONObject();
-        jo.put("x",v.x);
-        jo.put("y",v.y);
+        jo.put("x",(double)v.x);
+        jo.put("y",(double)v.y);
         return jo;
     }
 
@@ -66,8 +66,8 @@ public class JSON_HELPER {
     }
     public static Vec2 fromJSON(JSONObject v){
         return new Vec2(
-            v.getFloat("x"),
-            v.getFloat("y")
+                (float)v.getDouble("x"),
+                (float)v.getDouble("y")
         );
     }
 }
