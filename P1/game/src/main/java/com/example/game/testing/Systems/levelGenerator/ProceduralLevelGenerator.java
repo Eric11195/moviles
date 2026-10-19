@@ -20,18 +20,22 @@ import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.utils.Vec2;
 
+import java.util.ArrayList;
+
 public class ProceduralLevelGenerator extends BaseLevelGenerator {
     //@param density marks the highest amount of obstacles in screen at the same time
     public ProceduralLevelGenerator(mcd_Scene scene, LevelGeneratorParams params, boolean simulatedOnly){
         super(scene, params);
     }
 
+    ArrayList<Generator> generators = new ArrayList<>();
 
     float obstacleAcumSpawn = 0;
     public void addProbabilityToObstacleSpawn(float dt){
-        obstacleAcumSpawn += (dt*Math.random() < params.obstacleExplosiveCreationChance) ? params.obstacleExplosiveCreationBoost : 0;
-        float probability = params.obstacleLinearCreationPerSecond*dt;
-        obstacleAcumSpawn += probability;
+        generators.forEach(gnr->gnr.addProbabilityToObstacleSpawn(dt));
+//        obstacleAcumSpawn += (dt*Math.random() < params.obstacleExplosiveCreationChance) ? params.obstacleExplosiveCreationBoost : 0;
+//        float probability = params.obstacleLinearCreationPerSecond*dt;
+//        obstacleAcumSpawn += probability;
     }
 
 
@@ -49,13 +53,8 @@ public class ProceduralLevelGenerator extends BaseLevelGenerator {
     DangerMatrix dangerMatrix= new DangerMatrix(DANGER_MATRIX_PX_TILE_SIZE);
     public void setupDangerMatrixWithAlreadyExistingObjects(float t, float dt){
         dangerMatrix.reset();
-        for(mcd_Entity ent : _obstacleList){
-            if(!ent.isActive()) continue;
-            ((Obstacle)ent.getComponent(ComponentId.OBSTACLE_COMPONENT)).drawSelfInDangerMatrix(
-                    (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT),
-                    dangerMatrix, t,  dt
-            );
-        }
+        generators.forEach(gnr ->
+        {gnr.setupDangerMatrixWithAlreadyExistingObjects(t, dt, dangerMatrix);});
     }
     /**
      *
@@ -167,11 +166,14 @@ public class ProceduralLevelGenerator extends BaseLevelGenerator {
 
     @Override
     protected boolean askIfSpawnNewObstacle(float t, float dt) {
-        return obstacleAcumSpawn > 1 && _freeIdxCount > 0;
+//        return obstacleAcumSpawn > 1 && _freeIdxCount > 0;
+        return true;
     }
 
     @Override
     protected void updateObstacleSpawnConditions(float t, float dt) {
+        generators.forEach(gnr ->
+                gnr.setupDangerMatrixWithAlreadyExistingObjects(t,dt,dangerMatrix));
         setupDangerMatrixWithAlreadyExistingObjects(t,dt);
         addProbabilityToObstacleSpawn(dt);
     }

@@ -53,23 +53,23 @@ public class LevelFileGenerator implements mcd_Serializable {
         return lg.serialize();
     }
     private void update(float t, float dt){
-        int index_before = this.sg._obstacleArrayIndex;
-        this.sg.update(myScene, t, dt);
-        int index_after = this.sg._obstacleArrayIndex;
-        while(index_before != index_after){
-            this.obstacleCompleteList.add(
-                    ((Obstacle)
-                    this.sg._obstacleList
-                        .get(index_before)
-                        .getComponent(ComponentId.OBSTACLE_COMPONENT)).serialize()
-            );
-            index_before = (index_before+1) % this.sg._obstacleList.size();
-        }
-        this.playerJetpack.setIsFlying(Math.random() > 0.5f);
-        this.player.update(t,dt);
-        for(mcd_Entity obs : sg._obstacleList){
-            obs.update(t,dt);
-        }
+//        int index_before = this.sg._obstacleArrayIndex;
+//        this.sg.update(myScene, t, dt);
+//        int index_after = this.sg._obstacleArrayIndex;
+//        while(index_before != index_after){
+//            this.obstacleCompleteList.add(
+//                    ((Obstacle)
+//                    this.sg._obstacleList
+//                        .get(index_before)
+//                        .getComponent(ComponentId.OBSTACLE_COMPONENT)).serialize()
+//            );
+//            index_before = (index_before+1) % this.sg._obstacleList.size();
+//        }
+//        this.playerJetpack.setIsFlying(Math.random() > 0.5f);
+//        this.player.update(t,dt);
+//        for(mcd_Entity obs : sg._obstacleList){
+//            obs.update(t,dt);
+//        }
     }
     @Override
     public JSONObject serialize() {
