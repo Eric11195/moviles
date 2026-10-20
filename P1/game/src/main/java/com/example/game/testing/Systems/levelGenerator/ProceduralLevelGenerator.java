@@ -110,7 +110,12 @@ public class ProceduralLevelGenerator extends BaseLevelGenerator {
         LaserComponent laser = (LaserComponent) ent.setComponent(ComponentId.OBSTACLE_COMPONENT
         ,new LaserComponent(ent,t,this.speedMult,y));
         laser.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix,t,dt);
-        return dangerMatrix.ensureTraversability(player,this.speedMult,dt);
+        boolean sol=dangerMatrix.ensureTraversability(player,this.speedMult,dt);
+        if(!sol)
+        {
+            ent.rmComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
+        }
+        return sol;
     }
     public boolean createZapper(mcd_Entity ent, float t, float dt){
         Vec2 space =
