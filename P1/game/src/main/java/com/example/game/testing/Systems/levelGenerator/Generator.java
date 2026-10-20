@@ -25,6 +25,17 @@ public abstract class Generator {
     float obstacleAcumSpawn = 0;
     protected LevelGeneratorParams params;
 
+    public Generator(mcd_Scene _scene, LevelGeneratorParams _params, DangerMatrix _dangerMatrix) {
+        params = _params;
+        initializeObstacleList(_scene);
+        setDangerMatrix(_dangerMatrix);
+    }
+    public void setPlayer(mcd_Entity _player){
+        player = _player;
+    }
+    public void setDangerMatrix (DangerMatrix _dangerMatrix){
+        dangerMatrix = _dangerMatrix;
+    }
     public void setupDangerMatrixWithAlreadyExistingObjects(float t, float dt){
         for(mcd_Entity ent : _obstacleList){
             if(!ent.isActive()) continue;

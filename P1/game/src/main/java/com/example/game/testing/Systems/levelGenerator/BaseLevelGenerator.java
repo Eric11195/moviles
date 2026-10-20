@@ -16,9 +16,13 @@ import java.util.ArrayList;
 public abstract class BaseLevelGenerator implements mcd_System {
     protected LevelGeneratorParams params;
     protected float speedMult;
+    public ArrayList<Generator> generators = new ArrayList<>();
+
     mcd_Entity player = null;
+
     public void setPlayer(mcd_Entity player){
         this.player = player;
+        generators.forEach(gnr -> gnr.setPlayer(player));
     }
     protected BaseLevelGenerator(mcd_Scene scene, LevelGeneratorParams params){
         this.params = params;
@@ -28,6 +32,8 @@ public abstract class BaseLevelGenerator implements mcd_System {
 
     @Override
     public void update(mcd_Scene scene, float t, float dt){
+        generators.forEach(gnr->gnr.update(t,dt,speedMult));
+
 //        int i = _obstacleArrayIndex;
 //        int lastIterableElem = (i+_obstacleList.size()-1)% _obstacleList.size();
 //        if(i >= _obstacleList.size()) throw new RuntimeException("This should never happen");

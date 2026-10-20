@@ -21,6 +21,10 @@ import com.example.utils.Vec2;
 import java.util.ArrayList;
 
 public class HazardGenerator extends Generator{
+    public HazardGenerator(mcd_Scene _scene, LevelGeneratorParams _params, DangerMatrix _dangerMatrix) {
+        super(_scene, _params,_dangerMatrix);
+    }
+
     @Override
     protected boolean askIfSpawnNewObstacle(float t, float dt) {
         return obstacleAcumSpawn > 1 && _freeIdxCount > 0;

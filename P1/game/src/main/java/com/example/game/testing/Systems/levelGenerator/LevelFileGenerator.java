@@ -43,6 +43,7 @@ public class LevelFileGenerator implements mcd_Serializable {
                 lg.lgp,
                 true
         );
+        lg.sg.generators.add(new HazardGenerator(scene,lg.lgp,lg.sg.dangerMatrix));
         lg.sg.setPlayer(lg.player);
         int loop_count = 0;
         while(currentTime < params.levelDurationInSeconds){
@@ -53,23 +54,26 @@ public class LevelFileGenerator implements mcd_Serializable {
         return lg.serialize();
     }
     private void update(float t, float dt){
-//        int index_before = this.sg._obstacleArrayIndex;
-//        this.sg.update(myScene, t, dt);
-//        int index_after = this.sg._obstacleArrayIndex;
-//        while(index_before != index_after){
-//            this.obstacleCompleteList.add(
-//                    ((Obstacle)
-//                    this.sg._obstacleList
-//                        .get(index_before)
-//                        .getComponent(ComponentId.OBSTACLE_COMPONENT)).serialize()
-//            );
-//            index_before = (index_before+1) % this.sg._obstacleList.size();
-//        }
-//        this.playerJetpack.setIsFlying(Math.random() > 0.5f);
-//        this.player.update(t,dt);
-//        for(mcd_Entity obs : sg._obstacleList){
-//            obs.update(t,dt);
-//        }
+        this.sg.generators.forEach(gnr->{
+            int index_before =gnr._obstacleArrayIndex;
+            gnr.update(t, dt,sg.speedMult);
+            int index_after = gnr._obstacleArrayIndex;
+            while(index_before != index_after){
+                this.obstacleCompleteList.add(
+                        ((Obstacle)
+                                gnr._obstacleList
+                                        .get(index_before)
+                                        .getComponent(ComponentId.OBSTACLE_COMPONENT)).serialize()
+                );
+                index_before = (index_before+1) % gnr._obstacleList.size();
+            }
+            this.playerJetpack.setIsFlying(Math.random() > 0.5f);
+            this.player.update(t,dt);
+            for(mcd_Entity obs : gnr._obstacleList){
+                obs.update(t,dt);
+            }
+        });
+
     }
     @Override
     public JSONObject serialize() {

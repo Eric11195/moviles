@@ -31,10 +31,11 @@ public class ProceduralLevelGenerator extends BaseLevelGenerator {
     @Override
     public void update(mcd_Scene scene, float t, float dt){
         dangerMatrix.reset();
-        generators.forEach(gnr->gnr.update(t,dt,speedMult));
+        super.update(scene,t,dt);
     }
-    ArrayList<Generator> generators = new ArrayList<>();
-
+    public void setDangerMatrixToGenerators(){
+        generators.forEach(gnr->gnr.setDangerMatrix(dangerMatrix));
+    }
 
     @Override
     public boolean setUpNewObstacle(mcd_Entity obstacle, float t, float dt){
@@ -47,7 +48,7 @@ public class ProceduralLevelGenerator extends BaseLevelGenerator {
         return true;
     }
 
-    DangerMatrix dangerMatrix= new DangerMatrix(DANGER_MATRIX_PX_TILE_SIZE);
+    public DangerMatrix dangerMatrix= new DangerMatrix(DANGER_MATRIX_PX_TILE_SIZE);
     public void setupDangerMatrixWithAlreadyExistingObjects(float t, float dt){
 //        generators.forEach(gnr ->
 //        {gnr.setupDangerMatrixWithAlreadyExistingObjects(t, dt);});
