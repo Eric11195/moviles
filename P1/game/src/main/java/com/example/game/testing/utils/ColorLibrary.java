@@ -12,4 +12,5 @@ public class ColorLibrary {
     public static final ColorEng Magenta = new ColorEng(255,0,255,255);
     public static final ColorEng White = new ColorEng(255,255,255,255);
     public static final ColorEng Gold = new ColorEng(255,200,75,255);
+    public static final ColorEng DarkGold = new ColorEng(200,100,25,255);
 }

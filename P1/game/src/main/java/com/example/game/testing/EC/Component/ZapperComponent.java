@@ -123,9 +123,15 @@ public class ZapperComponent extends Obstacle{
     }
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g){
-        g.setColor(ColorLibrary.Red);
+        g.setStrokeWidth(2);
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
-        g.drawLine(getActualStartPos(tr),getActualEndPos(tr));
+        ColliderComponent collider = (ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT);
+        collider.colliders.forEach(col ->{
+            g.setColor(ColorLibrary.Yellow);
+            g.drawCircle(tr.pos.add(col),col.rad,true);
+            g.setColor(ColorLibrary.Gold);
+            g.drawCircle(tr.pos.add(col),col.rad,false);
+        });
     }
 
     @Override

@@ -67,9 +67,12 @@ public class CoinComponent extends Obstacle {
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g) {
         super.render(ent, g);
+        g.setStrokeWidth(2);
         g.setColor(ColorLibrary.Gold);
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
         g.drawCircle(tr.pos,tr.size.x,true);
+        g.setColor(ColorLibrary.DarkGold);
+        g.drawCircle(tr.pos,tr.size.x,false);
     }
 
 

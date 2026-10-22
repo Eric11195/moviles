@@ -21,7 +21,7 @@ public class ColliderComponent implements mcd_Component {
     }
     ArrayList<CollisionData> collisions = new ArrayList<CollisionData>();
 
-    private static class ColliderData extends Vec2{
+    public static class ColliderData extends Vec2{
         float rad;
         public ColliderData(Vec2 offset, float rad){
             this.x = offset.x;
@@ -209,10 +209,10 @@ public class ColliderComponent implements mcd_Component {
 
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g) {
-        colliders.forEach(col ->{
-            g.setColor(new ColorEng(255,0,0,255));
-            g.drawCircle(((TransformComponent)ent.getComponent(ComponentId.TRANSFORM_COMPONENT)).pos.add(col),
-                    col.rad, false);
-        });
+//        colliders.forEach(col ->{
+//            g.setColor(new ColorEng(255,0,0,255));
+//            g.drawCircle(((TransformComponent)ent.getComponent(ComponentId.TRANSFORM_COMPONENT)).pos.add(col),
+//                    col.rad, false);
+//        });
     }
 }
