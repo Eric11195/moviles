@@ -42,8 +42,7 @@ public class Constants {
         public static final float LASER_HEIGHT = LOGIC_WINDOW_SIZE.y/5.0f;
 
         // COIN
-        public static final int MAX_COINS = 5;
-
+        public static final float COIN_RADIUS = 10;
     /**
      * How long until an obstacle with warning appears from the first time it's hinted on screen
      */

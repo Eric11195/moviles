@@ -26,17 +26,10 @@ public class HazardGenerator extends Generator{
     }
 
     @Override
-    protected boolean askIfSpawnNewObstacle(float t, float dt) {
-        return obstacleAcumSpawn > 1 && _freeIdxCount > 0;
-    }
-
-    @Override
     public boolean setUpNewObstacle(mcd_Entity obstacle, float t, float dt, float speedMult){
         //TransformComponent tr = (TransformComponent) obstacle.getComponent(ComponentId.TRANSFORM_COMPONENT);
         //ImageComponent img = (ImageComponent) obstacle.getComponent(ComponentId.IMAGE_COMPONENT);
         if(!createRandomObstacleComp(obstacle,t,dt,speedMult)) return false;
-        obstacle.setActive(true);
-        --obstacleAcumSpawn;
         return true;
     }
 

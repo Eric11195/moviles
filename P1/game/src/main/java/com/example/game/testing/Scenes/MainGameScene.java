@@ -51,7 +51,9 @@ public class MainGameScene extends mcd_Scene{
         mcd_Entity player = PlayerPrefab.createPlayer(this);
         levelGen.setPlayer(player);
         addSystem(new PlayerCollisionDetector(player));
-        addSystem(CoinSystem.getInstance());
+        CoinSystem cs = CoinSystem.getInstance();
+        addSystem(cs);
+        cs.reset();
         addSystem(levelGen);
     }
 }

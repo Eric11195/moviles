@@ -28,7 +28,6 @@ public class FileObstacleGenerator extends Generator{
     @Override
     protected boolean setUpNewObstacle(mcd_Entity ent, float t, float dt, float speedMult) {
         obstaclesBeComing.get(current_idx).instantiate(ent.getMyScene(), ent, speedMult, t);
-        ent.setActive(true);
         ++current_idx;
         return true;
     }

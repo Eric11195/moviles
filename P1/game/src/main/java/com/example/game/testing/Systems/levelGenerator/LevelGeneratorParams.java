@@ -26,6 +26,7 @@ public class LevelGeneratorParams implements mcd_Serializable {
      * each second this amount of obstacle are created by default
      */
     public float obstacleLinearCreationPerSecond;
+    public float coinLinearCreationPerSecond;
     public JSONObject serialize(){
         JSONObject jo = new JSONObject();
         jo.put("levelInitialSpeed", Double.valueOf(levelInitialSpeed));
@@ -34,6 +35,7 @@ public class LevelGeneratorParams implements mcd_Serializable {
         jo.put("obstacleExplosiveCreationChance", Double.valueOf(obstacleExplosiveCreationChance));
         jo.put("obstacleExplosiveCreationBoost", Double.valueOf(obstacleExplosiveCreationBoost));
         jo.put("obstacleLinearCreationPerSecond", Double.valueOf(obstacleLinearCreationPerSecond));
+        jo.put("coinLinearCreationPerSecond", Double.valueOf(coinLinearCreationPerSecond));
         jo.put("augmentSpeedEachXPixels", augmentSpeedEachXPixels);
         jo.put("augmentSpeedByYEachXPixels", Double.valueOf(augmentSpeedByYEachXPixels));
         return jo;
@@ -46,6 +48,7 @@ public class LevelGeneratorParams implements mcd_Serializable {
         lgp.obstacleExplosiveCreationBoost = (float)jo.getDouble("obstacleExplosiveCreationBoost");
         lgp.obstacleExplosiveCreationChance = (float)jo.getDouble("obstacleExplosiveCreationChance");
         lgp.obstacleLinearCreationPerSecond = (float)jo.getDouble("obstacleLinearCreationPerSecond");
+        lgp.coinLinearCreationPerSecond = (float)jo.getDouble("coinLinearCreationPerSecond");
         lgp.augmentSpeedByYEachXPixels = (float)jo.getDouble("augmentSpeedByYEachXPixels");
         lgp.augmentSpeedEachXPixels = jo.getInt("augmentSpeedEachXPixels");
         return lgp;

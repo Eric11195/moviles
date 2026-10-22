@@ -111,9 +111,9 @@ public class LaserComponent extends WarnedObstacle {
 
     }
     @Override
-    public void onPlayerCollision(mcd_Entity ent, mcd_Scene scene) {
+    public void onPlayerCollision(mcd_Entity player, mcd_Entity ent, mcd_Scene scene) {
         // FATAL
-        startPlayerDead(scene.getEngine(), ent);
+        startPlayerDead(scene.getEngine(), player);
     }
 
     @Override

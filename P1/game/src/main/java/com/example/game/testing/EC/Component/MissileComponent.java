@@ -93,8 +93,8 @@ public class MissileComponent extends WarnedObstacle {
     }
 
     @Override
-    public void onPlayerCollision(mcd_Entity ent, mcd_Scene scene) {
-        startPlayerDead(scene.getEngine(), ent);
+    public void onPlayerCollision(mcd_Entity player, mcd_Entity ent, mcd_Scene scene) {
+        startPlayerDead(scene.getEngine(), player);
     }
 
     @Override

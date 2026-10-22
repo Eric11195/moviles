@@ -72,12 +72,16 @@ public abstract class Generator {
         if(askIfSpawnNewObstacle(t,dt)){
             if(setUpNewObstacle(_obstacleList.get(_obstacleArrayIndex), t, dt, speedMult)) {
                 _obstacleArrayIndex = (_obstacleArrayIndex + 1) % _obstacleList.size();
+                ent.setActive(true);
+                --obstacleAcumSpawn;
                 return true;
             }
         }
         return false;
     }
-    protected abstract boolean askIfSpawnNewObstacle(float t, float dt);
+    protected boolean askIfSpawnNewObstacle(float t, float dt) {
+        return obstacleAcumSpawn > 1 && _freeIdxCount > 0;
+    }
     protected abstract boolean setUpNewObstacle(mcd_Entity ent, float t, float dt, float speedMult);
     public abstract void addProbabilityToObstacleSpawn(float dt);
 

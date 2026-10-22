@@ -2,6 +2,7 @@ package com.example.game.testing.EC.Component;
 
 import static com.example.game.testing.EC.Component.ObstacleId.OBSTACLE_COIN;
 import static com.example.game.testing.EC.Component.ObstacleId.OBSTACLE_ZAPPER;
+import static com.example.game.testing.constants.Constants.COIN_RADIUS;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.utils.JSON_HELPER.fromJSON;
 
@@ -21,8 +22,6 @@ import org.json.JSONObject;
 public class CoinComponent extends Obstacle {
 
     int value;
-
-    boolean active = true;
 
     mcd_Entity myEnt;
 
@@ -50,7 +49,7 @@ public class CoinComponent extends Obstacle {
 
     @Override
     public float calculateScrolledTime(float spawnTime, float speedMult) {
-        return spawnTime+ (LOGIC_WINDOW_SIZE.x)/speedMult;
+        return spawnTime+ (LOGIC_WINDOW_SIZE.x + COIN_RADIUS*2)/speedMult;
     }
 
     @Override
@@ -59,22 +58,18 @@ public class CoinComponent extends Obstacle {
     }
 
     @Override
-    public void onPlayerCollision(mcd_Entity ent, mcd_Scene scene) {
+    public void onPlayerCollision(mcd_Entity player, mcd_Entity ent, mcd_Scene scene) {
         // ADD COIN
-        if (active) {
-            CoinSystem.getInstance().addValue(value);
-            active = false;
-        }
+        CoinSystem.getInstance().addValue(value);
+        ent.setActive(false);
     }
 
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g) {
         super.render(ent, g);
-        if (active){
-            g.setColor(ColorLibrary.Gold);
-            TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
-            g.drawCircle(tr.pos,tr.size.x/2,true);
-        }
+        g.setColor(ColorLibrary.Gold);
+        TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
+        g.drawCircle(tr.pos,tr.size.x,true);
     }
 
 
