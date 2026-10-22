@@ -20,160 +20,28 @@ import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.utils.Vec2;
 
+import java.util.ArrayList;
+
 public class ProceduralLevelGenerator extends BaseLevelGenerator {
     //@param density marks the highest amount of obstacles in screen at the same time
     public ProceduralLevelGenerator(mcd_Scene scene, LevelGeneratorParams params, boolean simulatedOnly){
         super(scene, params);
     }
 
-
-    float obstacleAcumSpawn = 0;
-    public void addProbabilityToObstacleSpawn(float dt){
-        obstacleAcumSpawn += (dt*Math.random() < params.obstacleExplosiveCreationChance) ? params.obstacleExplosiveCreationBoost : 0;
-        float probability = params.obstacleLinearCreationPerSecond*dt;
-        obstacleAcumSpawn += probability;
-    }
-
-
     @Override
-    public boolean setUpNewObstacle(mcd_Entity obstacle, float t, float dt){
-        if(player == null) throw new RuntimeException("Player entity must be set before this call");
-        //TransformComponent tr = (TransformComponent) obstacle.getComponent(ComponentId.TRANSFORM_COMPONENT);
-        //ImageComponent img = (ImageComponent) obstacle.getComponent(ComponentId.IMAGE_COMPONENT);
-        if(!createRandomObstacleComp(obstacle,t,dt)) return false;
-        obstacle.setActive(true);
-        --obstacleAcumSpawn;
-        return true;
+    public void update(mcd_Scene scene, float t, float dt){
+        updateDangerMatrix(t,dt);
+        super.update(scene,t,dt);
     }
 
-    DangerMatrix dangerMatrix= new DangerMatrix(DANGER_MATRIX_PX_TILE_SIZE);
+    public DangerMatrix dangerMatrix= new DangerMatrix(DANGER_MATRIX_PX_TILE_SIZE);
     public void setupDangerMatrixWithAlreadyExistingObjects(float t, float dt){
+        generators.forEach(gnr ->
+        {gnr.setupDangerMatrixWithAlreadyExistingObjects(t, dt);});
+    }
+
+    void updateDangerMatrix(float t, float dt){
         dangerMatrix.reset();
-        for(mcd_Entity ent : _obstacleList){
-            if(!ent.isActive()) continue;
-            ((Obstacle)ent.getComponent(ComponentId.OBSTACLE_COMPONENT)).drawSelfInDangerMatrix(
-                    (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT),
-                    dangerMatrix, t,  dt
-            );
-        }
-    }
-    /**
-     *
-     * @return (y1,y2) so that y1<y2 and player will not be harmed in that zone.
-     * Consider y1,y2 as points at the rightmost screen position
-     */
-    public Vec2 getVerticalSafeZone(){
-        return dangerMatrix.getFreeHeightRange(LOGIC_WINDOW_SIZE.x);
-    }
-    public boolean createRandomObstacleComp(mcd_Entity ent, float t, float dt){
-        switch(chooseObstacleType()){
-            case OBSTACLE_LASER:
-                return createLaser(ent, t, dt);
-            case OBSTACLE_MISSILE:
-                return createMissile(ent, t, dt);
-            case OBSTACLE_ZAPPER:
-                return createZapper(ent,t, dt);
-            default:
-                throw new RuntimeException("Invalid obstacle type");
-        }
-    }
-    public ObstacleId chooseObstacleType(){
-        double d= Math.random();
-        if(d<0.2) return ObstacleId.OBSTACLE_LASER;
-        if(d<0.7) return ObstacleId.OBSTACLE_ZAPPER;
-        return ObstacleId.OBSTACLE_MISSILE;
-    }
-    public boolean createMissile(mcd_Entity ent, float t, float dt){
-        Vec2 space =
-            getSafeVerticalSpaceForObstacleSoPlayerCanPass(
-                getVerticalSafeZone(),
-                MISSILE_RADIUS*2
-            );
-        float y = space.x + (space.y-space.x)*(float)Math.random();
-        MissileComponent mis = (MissileComponent) ent.setComponent(
-          ComponentId.OBSTACLE_COMPONENT,
-          new MissileComponent(ent, t, this.speedMult, y)
-        );
-        mis.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix,t,dt);
-        return dangerMatrix.ensureTraversability(player,this.speedMult,dt);
-    }
-    public  boolean createLaser(mcd_Entity ent, float t, float dt)
-    {
-        Vec2 space =
-                getSafeVerticalSpaceForObstacleSoPlayerCanPass(
-                        getVerticalSafeZone(),
-                        LASER_HEIGHT*1.5f
-                );
-        TransformComponent tr =(TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
-        float y = space.x + (space.y-space.x)*(float)Math.random();
-
-        LaserComponent laser = (LaserComponent) ent.setComponent(ComponentId.OBSTACLE_COMPONENT
-        ,new LaserComponent(ent,t,this.speedMult,y));
-        laser.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix,t,dt);
-        boolean sol=dangerMatrix.ensureTraversability(player,this.speedMult,dt);
-        if(!sol)
-        {
-            ent.rmComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
-        }
-        return sol;
-    }
-    public boolean createZapper(mcd_Entity ent, float t, float dt){
-        Vec2 space =
-                getSafeVerticalSpaceForObstacleSoPlayerCanPass(
-                        getVerticalSafeZone(),
-                        MIN_ZAPPER_HEIGHT
-                );
-        //Space is really the from and to of y axis that the zapper will ocuppy
-        //So x does not mean x axis at all
-        Vec2 start=new Vec2(),end=new Vec2();
-        float delta = Math.abs(space.y-space.x);
-        space.y = space.x + delta * (float)Math.random();
-        space.x = space.x + delta * (float)Math.random();
-        //System.out.println("Delta: "+ delta+ " Y_RANGE: ("+space.x+","+space.y+')');
-        ZapperComponent.getProvisionalZapperData(space,start,end);
-        if(!dangerMatrix.checkLine(start,end)) return false;
-        dangerMatrix.drawLine(start,end);
-        if(!dangerMatrix.ensureTraversability(player,this.speedMult,dt)) return false;
-        ent.setComponent(
-                ComponentId.OBSTACLE_COMPONENT,
-                new ZapperComponent(ent, t, this.speedMult, start, end)
-        );
-        return true;
-    }
-    public boolean createCoin(mcd_Entity ent, float t, float dt){
-
-
-        return true;
-    }
-
-    /**
-     * returns a vec 2 with y coordinates where it would be ok to put an obstacle.
-     * This ensures player can pass between obstacles
-     * @return Vec2(yUp, yDown)
-     */
-    public Vec2 getSafeVerticalSpaceForObstacleSoPlayerCanPass(Vec2 freeYRange, float minObstacleHeight){
-        float randomRange = (float)Math.random() * (LOGIC_WINDOW_SIZE.y-PLAYER_DIMENSIONS.y- PLAYER_MARGINS.y);
-        if(randomRange < minObstacleHeight){
-            //choose space under randomRange
-            return new Vec2(randomRange, freeYRange.y);
-        }else if(LOGIC_WINDOW_SIZE.y-randomRange < minObstacleHeight){
-            //choose space above randomRange
-            return new Vec2(freeYRange.x, randomRange);
-        }else{
-            //Choose either
-            return (Math.random() > 0.5) ? new Vec2(freeYRange.x, randomRange) : new Vec2(randomRange, freeYRange.y);
-        }
-    }
-
-
-    @Override
-    protected boolean askIfSpawnNewObstacle(float t, float dt) {
-        return obstacleAcumSpawn > 1 && _freeIdxCount > 0;
-    }
-
-    @Override
-    protected void updateObstacleSpawnConditions(float t, float dt) {
         setupDangerMatrixWithAlreadyExistingObjects(t,dt);
-        addProbabilityToObstacleSpawn(dt);
     }
 }

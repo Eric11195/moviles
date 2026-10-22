@@ -6,6 +6,7 @@ import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
+import com.example.game.testing.Systems.levelGenerator.HazardGenerator;
 import com.example.game.testing.Systems.levelGenerator.LevelGeneratorParams;
 import com.example.game.testing.Systems.levelGenerator.ProceduralLevelGenerator;
 import com.example.game.testing.utils.FontLibrary;
@@ -54,6 +55,7 @@ public class MainMenuScene extends mcd_Scene{
                 lgp.augmentSpeedByYEachXPixels = 20;
                 MainGameScene mgs = new MainGameScene(eng);
                 ProceduralLevelGenerator plg = new ProceduralLevelGenerator(mgs,lgp, false);
+                plg.generators.add(new HazardGenerator(mgs,lgp,plg.dangerMatrix));
                 mgs.setLevelGen(plg);
                 eng.setScene(mgs);
             }
