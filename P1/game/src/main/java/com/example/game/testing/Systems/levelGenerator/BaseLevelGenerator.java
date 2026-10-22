@@ -31,7 +31,7 @@ public abstract class BaseLevelGenerator implements mcd_System {
     protected BaseLevelGenerator(mcd_Scene scene, LevelGeneratorParams params){
         this.params = params;
         this.speedMult = this.params.levelInitialSpeed;
-        initializeObstacleList(scene);
+//        initializeObstacleList(scene);
     }
 
     @Override
@@ -87,57 +87,57 @@ public abstract class BaseLevelGenerator implements mcd_System {
         g.setFont(FontLibrary.getFont(STANDARD));
         g.drawText(Integer.toString((int)this.distanceAdvanced), distanceTextPos);
     }
-    protected abstract boolean askIfSpawnNewObstacle(float t, float dt);
-    /**
-     * Decides whether to create a new obstacle or not, and which type and position in the first case
-     * @param ent entity
-     * @param t time
-     * @param dt delta time
-     * @return true if new obstacle was created, false otherwise
-     */
-    private boolean decideOnPossibleNewObstacle(mcd_Entity ent, float t, float dt){
-//        if(askIfSpawnNewObstacle(t,dt)){
-            //System.out.println("Creame un obstaculo pibe");
-//            if(setUpNewObstacle(_obstacleList.get(_obstacleArrayIndex), t, dt)) {
-//                _obstacleArrayIndex = (_obstacleArrayIndex + 1) % _obstacleList.size();
-//                return true;
-//            }
-//        }
-        return false;
-    }
-    protected abstract boolean setUpNewObstacle(mcd_Entity ent, float t, float dt);
-    protected abstract void updateObstacleSpawnConditions(float t, float dt);
-    public void updateActiveObstacleCount(){
-//        _freeIdxCount = 0;
-//        for(mcd_Entity ent : _obstacleList){
-//            _freeIdxCount += ent.isActive() ? 0 : 1;
-//        }
-    }
-    private void initializeObstacleList(mcd_Scene scene){
-//        _obstacleList = new ArrayList<mcd_Entity>(params.maxNumberOfSimultaneousObstacles);
-//        for(int i = 0; i < params.maxNumberOfSimultaneousObstacles; ++i){
-//            mcd_Entity ent = scene.createEntity();
-//            ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
-//            ent.addComponent(ComponentId.VELOCITY_COMPONENT, new VelocityComponent());
-//            ent.addComponent(ComponentId.COLLIDER_COMPONENT, new ColliderComponent());
-//            ent.addComponent(ComponentId.WARNING_COMPONENT, new WarningSign());
-//            //ent.addComponent(ComponentId.IMAGE_COMPONENT, new ImageComponent(""));
-//            ent.setActive(false);
-//            _obstacleList.add(ent);
-//        }
-//        _obstacleArrayIndex = 0;
-//        _freeIdxCount = params.maxNumberOfSimultaneousObstacles;
-//
-//        _coinList = new ArrayList<mcd_Entity>(Constants.MAX_COINS);
-//        for (int i = 0; i < Constants.MAX_COINS;++i){
-//            mcd_Entity ent = scene.createEntity();
-//            ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
-//            ent.addComponent(ComponentId.VELOCITY_COMPONENT, new VelocityComponent());
-//            ent.addComponent(ComponentId.COLLIDER_COMPONENT, new ColliderComponent());
-//            //ent.addComponent(ComponentId.IMAGE_COMPONENT, new ImageComponent(""));
-//            ent.setActive(false);
-//            _coinList.add(ent);
-//        }
-//        _coinArrayIndex = 0;
-    }
+//    protected abstract boolean askIfSpawnNewObstacle(float t, float dt);
+//    /**
+//     * Decides whether to create a new obstacle or not, and which type and position in the first case
+//     * @param ent entity
+//     * @param t time
+//     * @param dt delta time
+//     * @return true if new obstacle was created, false otherwise
+//     */
+//    private boolean decideOnPossibleNewObstacle(mcd_Entity ent, float t, float dt){
+////        if(askIfSpawnNewObstacle(t,dt)){
+//            //System.out.println("Creame un obstaculo pibe");
+////            if(setUpNewObstacle(_obstacleList.get(_obstacleArrayIndex), t, dt)) {
+////                _obstacleArrayIndex = (_obstacleArrayIndex + 1) % _obstacleList.size();
+////                return true;
+////            }
+////        }
+//        return false;
+//    }
+//    protected abstract boolean setUpNewObstacle(mcd_Entity ent, float t, float dt);
+//    protected abstract void updateObstacleSpawnConditions(float t, float dt);
+//    public void updateActiveObstacleCount(){
+////        _freeIdxCount = 0;
+////        for(mcd_Entity ent : _obstacleList){
+////            _freeIdxCount += ent.isActive() ? 0 : 1;
+////        }
+//    }
+//    private void initializeObstacleList(mcd_Scene scene){
+////        _obstacleList = new ArrayList<mcd_Entity>(params.maxNumberOfSimultaneousObstacles);
+////        for(int i = 0; i < params.maxNumberOfSimultaneousObstacles; ++i){
+////            mcd_Entity ent = scene.createEntity();
+////            ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
+////            ent.addComponent(ComponentId.VELOCITY_COMPONENT, new VelocityComponent());
+////            ent.addComponent(ComponentId.COLLIDER_COMPONENT, new ColliderComponent());
+////            ent.addComponent(ComponentId.WARNING_COMPONENT, new WarningSign());
+////            //ent.addComponent(ComponentId.IMAGE_COMPONENT, new ImageComponent(""));
+////            ent.setActive(false);
+////            _obstacleList.add(ent);
+////        }
+////        _obstacleArrayIndex = 0;
+////        _freeIdxCount = params.maxNumberOfSimultaneousObstacles;
+////
+////        _coinList = new ArrayList<mcd_Entity>(Constants.MAX_COINS);
+////        for (int i = 0; i < Constants.MAX_COINS;++i){
+////            mcd_Entity ent = scene.createEntity();
+////            ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
+////            ent.addComponent(ComponentId.VELOCITY_COMPONENT, new VelocityComponent());
+////            ent.addComponent(ComponentId.COLLIDER_COMPONENT, new ColliderComponent());
+////            //ent.addComponent(ComponentId.IMAGE_COMPONENT, new ImageComponent(""));
+////            ent.setActive(false);
+////            _coinList.add(ent);
+////        }
+////        _coinArrayIndex = 0;
+//    }
 }

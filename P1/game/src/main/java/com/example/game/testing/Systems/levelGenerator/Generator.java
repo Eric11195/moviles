@@ -51,7 +51,6 @@ public abstract class Generator {
         if(i >= _obstacleList.size()) throw new RuntimeException("This should never happen");
         updateActiveObstacleCount();
         addProbabilityToObstacleSpawn(dt);
-        setupDangerMatrixWithAlreadyExistingObjects(t,dt);
 
         while(!_obstacleList.get(i).isActive()){
             mcd_Entity ent = _obstacleList.get(i);
@@ -82,9 +81,20 @@ public abstract class Generator {
     protected abstract boolean setUpNewObstacle(mcd_Entity ent, float t, float dt, float speedMult);
     public abstract void addProbabilityToObstacleSpawn(float dt);
 
+    /**
+     *
+     * @return (y1,y2) so that y1<y2 and player will not be harmed in that zone.
+     * Consider y1,y2 as points at the rightmost screen position
+     */
     public Vec2 getVerticalSafeZone(){
         return dangerMatrix.getFreeHeightRange(LOGIC_WINDOW_SIZE.x);
     }
+
+    /**
+     * returns a vec 2 with y coordinates where it would be ok to put an obstacle.
+     * This ensures player can pass between obstacles
+     * @return Vec2(yUp, yDown)
+     */
     public Vec2 getSafeVerticalSpaceForObstacleSoPlayerCanPass(Vec2 freeYRange, float minObstacleHeight){
         float randomRange = (float)Math.random() * (LOGIC_WINDOW_SIZE.y-PLAYER_DIMENSIONS.y- PLAYER_MARGINS.y);
         if(randomRange < minObstacleHeight){
