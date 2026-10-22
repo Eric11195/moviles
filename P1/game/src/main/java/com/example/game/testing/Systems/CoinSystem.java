@@ -23,6 +23,9 @@ public class CoinSystem implements mcd_System{
     public void addValue(int _val){
         totalValue += _val;
     }
+    public void reset(){
+        totalValue = 0;
+    }
 
     @Override
     public void update(mcd_Scene scene, float t, float dt) {

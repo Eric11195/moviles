@@ -129,8 +129,8 @@ public class ZapperComponent extends Obstacle{
     }
 
     @Override
-    public void onPlayerCollision(mcd_Entity ent, mcd_Scene scene) {
-        startPlayerDead(scene.getEngine(), ent);
+    public void onPlayerCollision(mcd_Entity player, mcd_Entity ent, mcd_Scene scene) {
+        startPlayerDead(scene.getEngine(), player);
     }
 
     public float width(){

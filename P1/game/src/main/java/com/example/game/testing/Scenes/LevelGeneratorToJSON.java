@@ -47,6 +47,7 @@ public class LevelGeneratorToJSON extends mcd_Scene {
         lg.maxNumberOfSimultaneousObstacles = 4;
         lg.obstacleExplosiveCreationBoost = 1;
         lg.obstacleLinearCreationPerSecond = 0.8f;
+        lg.coinLinearCreationPerSecond = 3.0f;
         lg.obstacleExplosiveCreationChance = 0.00000001;
         lg.augmentSpeedEachXPixels = 300;
         lg.augmentSpeedByYEachXPixels = 30;
@@ -59,6 +60,7 @@ public class LevelGeneratorToJSON extends mcd_Scene {
         lg.maxNumberOfSimultaneousObstacles = 8;
         lg.obstacleExplosiveCreationBoost = 1.6f;
         lg.obstacleLinearCreationPerSecond = 0.6f;
+        lg.coinLinearCreationPerSecond = 4.0f;
         lg.obstacleExplosiveCreationChance = 0.00000001;
         lg.augmentSpeedEachXPixels = 200;
         lg.augmentSpeedByYEachXPixels = 30;
@@ -71,6 +73,7 @@ public class LevelGeneratorToJSON extends mcd_Scene {
         lg.maxNumberOfSimultaneousObstacles = 12;
         lg.obstacleExplosiveCreationBoost = 0.7f;
         lg.obstacleLinearCreationPerSecond = 1.2f;
+        lg.coinLinearCreationPerSecond = 5.0f;
         lg.obstacleExplosiveCreationChance = 0.000001;
         lg.augmentSpeedEachXPixels = 100;
         lg.augmentSpeedByYEachXPixels = 30;

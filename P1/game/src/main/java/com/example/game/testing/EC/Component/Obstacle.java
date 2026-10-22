@@ -27,8 +27,6 @@ public abstract class Obstacle implements mcd_Component, mcd_Serializable {
         this.speedMult = speedMult;
         VelocityComponent vel =(VelocityComponent)ent.getComponent(ComponentId.VELOCITY_COMPONENT);
         vel.velocity.x = -this.speedMult;
-        WarningSign ws = (WarningSign) ent.getComponent(ComponentId.WARNING_COMPONENT);
-        ws.deactivateWarning();
         //EVERYONE MUST DO THIS ASSIGNMENT IT IS NOT AUTOMATIC
         //scrolledTime = calculateScrolledTime(spawnTime, speedMult);
     }
@@ -57,7 +55,7 @@ public abstract class Obstacle implements mcd_Component, mcd_Serializable {
         return (float)jo.getDouble("spawnTime");
     }
 
-    public abstract void onPlayerCollision(mcd_Entity ent, mcd_Scene scene);
+    public abstract void onPlayerCollision(mcd_Entity player, mcd_Entity ent, mcd_Scene scene);
 
     public void setSpeedMult(float f)
     {
