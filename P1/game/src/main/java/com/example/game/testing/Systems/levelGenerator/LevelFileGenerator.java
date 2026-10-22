@@ -5,6 +5,7 @@ import static com.example.game.testing.utils.JSON_HELPER.toJSON;
 
 import com.example.engine.Engine;
 import com.example.game.testing.EC.Component.JetpackComponent;
+import com.example.game.testing.EC.Component.LaserComponent;
 import com.example.game.testing.EC.Component.MissileComponent;
 import com.example.game.testing.EC.Component.Obstacle;
 import com.example.game.testing.EC.Component.ObstacleId;
@@ -23,7 +24,7 @@ import java.util.List;
 public class LevelFileGenerator implements mcd_Serializable {
     LevelGeneratorParams lgp;
     ProceduralLevelGenerator sg;
-    ArrayList<JSONObject> obstacleCompleteList = new ArrayList<>();
+    JSONArray obstacleCompleteList = new JSONArray();
     mcd_Scene myScene;
     JetpackComponent playerJetpack;
     mcd_Entity player;
@@ -59,7 +60,7 @@ public class LevelFileGenerator implements mcd_Serializable {
             gnr.update(t, dt,sg.speedMult);
             int index_after = gnr._obstacleArrayIndex;
             while(index_before != index_after){
-                this.obstacleCompleteList.add(
+                this.obstacleCompleteList.put(
                         ((Obstacle)
                                 gnr._obstacleList
                                         .get(index_before)
@@ -101,6 +102,7 @@ public class LevelFileGenerator implements mcd_Serializable {
                 case OBSTACLE_COIN:
                     break;
                 case OBSTACLE_LASER:
+                    lgp.obsFactory.add(LaserComponent.deserialize(jo));
                     break;
                 case OBSTACLE_MISSILE:
                     lgp.obsFactory.add(MissileComponent.deserialize(jo));

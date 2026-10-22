@@ -12,13 +12,14 @@ public class Utils {
     }
     public static NonDeformingAspectData getNonDeformingAspectData(
             float width,
-            float height) {
+            float height,
+            float gameWidth,
+            float gameHeight
+    ) {
 
         NonDeformingAspectData data =
                 new NonDeformingAspectData();
 
-        float gameWidth = 600;
-        float gameHeight = 400;
 
         float scaleX = width / gameWidth;
         float scaleY = height / gameHeight;

@@ -1,6 +1,10 @@
 package com.example.game.testing.EC.Component;
 
+import static com.example.game.testing.constants.Constants.LASER_ANIM_NUM;
+import static com.example.game.testing.constants.Constants.LASER_ANIM_TIME;
+import static com.example.game.testing.constants.Constants.LASER_ATTACK_DUR;
 import static com.example.game.testing.constants.Constants.LASER_HEIGHT;
+import static com.example.game.testing.constants.Constants.LASER_WIDTH;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.utils.StartPlayerDead.startPlayerDead;
 import static com.example.game.testing.constants.Constants.PLAYER_X_POS;
@@ -12,45 +16,59 @@ import com.example.engine.GraphicsInterface;
 import com.example.game.testing.Scenes.LoseMenuScene;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
+import com.example.game.testing.Systems.levelGenerator.ObstacleFactory;
 import com.example.utils.Vec2;
-
+import static com.example.game.testing.EC.Component.ObstacleId.OBSTACLE_LASER;
 import org.json.JSONObject;
 
 public class LaserComponent extends WarnedObstacle {
 
     //number of times it has to appear and dissapear for it to "attack".
-    int num_rep;
-    //duration of 1 of the numRep animations.
-    float anim_dur;
     float anim_timer;
-
-    float attack_dur;
 
     boolean is_attacking;
 
     int index_rep;
+    int loop_num;
 
     ColorEng color;
-    public LaserComponent(mcd_Entity ent, int numRepetitions, int anim_duration, float speed)
+    mcd_Entity myEnt;
+
+
+    public static class LaserComponentSerialized extends ObstacleFactory {
+        float yPos;
+        @Override
+        public void instantiate(mcd_Scene scene, mcd_Entity ent, float levelSpeed, float t) {
+            TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
+            ent.setComponent(ComponentId.OBSTACLE_COMPONENT, new LaserComponent(ent,t,2,yPos));
+        }
+    }
+    public LaserComponent(mcd_Entity ent,float spawnTime, float speed,float posY)
     {
-        super(ent, 0,0);
+        super(ent, spawnTime,0);
 
         if(!ent.hasComponent(ComponentId.DRAW_RECTANGLE_COMPONENT))
         {
             ent.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT,new DrawRectangleComponent());
         }
-        num_rep=numRepetitions;
-        anim_dur = anim_duration;
+
+
         anim_timer =0;
-        attack_dur = 10;
         is_attacking = false;
         index_rep = 0;
+        loop_num = 0;
         color = new ColorEng(255,0,0,255);
 
         setUpCollider((ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT));
         setUpSpeed((VelocityComponent) ent.getComponent(ComponentId.VELOCITY_COMPONENT));
         speedMult =speed;
         scrolledTime = calculateScrolledTime(spawnTime, speedMult);
+        myEnt = ent;
+        TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
+        tr.pos.y = posY;
+        tr.size.x = LASER_WIDTH;
+        tr.size.y = LASER_HEIGHT;
+        tr.pos.x =0;
     }
     private void setUpSpeed(VelocityComponent vel){
         vel.velocity.x = 0;
@@ -66,19 +84,15 @@ public class LaserComponent extends WarnedObstacle {
         {
             if(!is_attacking)
             {
-                if(anim_timer<=anim_dur/2)
+                if(loop_num%2!=0)
                 {
-                    // progress can only be 1 here at the start, but afterwards goes back to 0
-                    //here we need to change the color
-                    //fist half = dur_total-time_pased = anim_timer-anim_dur/2/anim_dur
-                    float progress = (float) (anim_timer/(anim_dur/2));
+                    float progress = (float) (anim_timer/(LASER_ANIM_TIME));
                     color.a = (int)(255 - 155 * progress);
                     color.a = Math.max(100,Math.min(255,color.a));
                 }
-                else
-                {
-                    float progress =(float)( (anim_timer-(anim_dur/2))/(anim_dur/2));
-                    color.a = (int) (100 + 155 * progress);
+                else{
+                    float progress = (float) (anim_timer/(LASER_ANIM_TIME));
+                    color.a = (int)(100 + 155 * progress);
                     color.a = Math.max(100,Math.min(255,color.a));
                 }
             }
@@ -92,6 +106,7 @@ public class LaserComponent extends WarnedObstacle {
         ent.rmComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
         ColliderComponent colliderComponent= (ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT);
         colliderComponent.clearColliders();
+
         ent.setActive(false);
 
     }
@@ -103,8 +118,7 @@ public class LaserComponent extends WarnedObstacle {
 
     @Override
     public float calculateScrolledTime(float spawnTime, float speedMult) {
-
-        return (spawnTime + (anim_dur*num_rep)*speedMult);
+        return (spawnTime+(LASER_ANIM_TIME*LASER_ANIM_NUM)+LASER_ATTACK_DUR);
         //return 0;
     }
 
@@ -113,8 +127,8 @@ public class LaserComponent extends WarnedObstacle {
         //draw a rectangle in a position far away but takinf into account the point in time,
         //the number of loops left and the time it keeps attacking
         float pos_left =  (t-scrolledTime);
-        float sizeX = attack_dur;
-        Vec2 size= new Vec2(sizeX,LASER_HEIGHT);
+        //need to re-write this
+        Vec2 size= new Vec2(LASER_ATTACK_DUR,LASER_HEIGHT);
         Vec2 pos = new Vec2(tr.pos.x+pos_left,tr.pos.y);
         dm.drawSquare(pos,size);
     }
@@ -125,15 +139,15 @@ public class LaserComponent extends WarnedObstacle {
         //the time would be after
         if(!is_attacking)
         {
-            if(anim_timer<anim_dur)
+            if(anim_timer<LASER_ANIM_TIME)
             {
                 anim_timer +=dt;
             }
             else
             {
                 anim_timer = 0;
-                num_rep--;
-                if(num_rep == 0)
+                loop_num++;
+                if(loop_num == LASER_ANIM_NUM)
                 {
                     is_attacking = true;
                     ColliderComponent colliderComponent= (ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT);
@@ -149,23 +163,25 @@ public class LaserComponent extends WarnedObstacle {
         {
             if(ent.hasComponent(ComponentId.COLLIDER_COMPONENT))
             {
-
-                if(attack_dur>0)
-                {
-                    attack_dur-=dt;
-                }
-                else
-                {
-                    disable(ent);
-                }
+                if(t >= scrolledTime)
+                {disable(ent);}
+                //time to die == t;
             }
         }
     }
 
     @Override
     public JSONObject serialize() {
-        return null;
+        JSONObject jo = super.serialize();
+        TransformComponent tr = (TransformComponent) myEnt.getComponent(ComponentId.TRANSFORM_COMPONENT);
+        jo.put("id", OBSTACLE_LASER);
+        jo.put("y", Double.valueOf(tr.pos.y));
+        return jo;
     }
-    public void deserialize(JSONObject obj) {
+    public static LaserComponentSerialized deserialize(JSONObject obj) {
+        LaserComponentSerialized lcs = new LaserComponentSerialized();
+        lcs.yPos = (float)obj.getDouble("y");
+        lcs.spawnTime = getSpawnTime(obj);
+    return lcs;
     }
 }

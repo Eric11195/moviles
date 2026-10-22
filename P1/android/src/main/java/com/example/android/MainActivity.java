@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        AndroidEngine eng = new AndroidEngine(this, R.id.mainSurfaceView);
+        AndroidEngine eng = new AndroidEngine(this, R.id.mainSurfaceView, 600,400);
         eng.setScene(new MainMenuScene(eng));
         eng.resume();
     }

@@ -36,38 +36,19 @@ public class AudioAndroid implements AudioInterface {
     @Override
     public SoundAndroid addSound(String file_path) {
         int aux = -1;
-        if (context != null) {
-            try {
+
                 AssetFileDescriptor afd = null;
-                // Try 1: Exact path as passed (e.g. "Mineral sparkle.mp3")
                 try {
                     afd = context.getAssets().openFd(file_path);
-                    Log.d("AudioAndroid", "Found sound at root: " + file_path);
-                } catch (Exception e1) {
-                    // Try 2: Prepend "audio/" if not already present
-                    try {
-                        afd = context.getAssets().openFd("audio/" + file_path);
-                        Log.d("AudioAndroid", "Found sound in audio/: " + file_path);
-                    } catch (Exception e2) {
-                        Log.e("AudioAndroid", "Sound file not found in assets: " + file_path);
-                    }
-                }
-
-                if (afd != null) {
+                    // Try 1: Exact path as passed (e.g. "Mineral sparkle.mp3")
                     aux = sound_pool.load(afd, 1);
                     afd.close();
+
+                }catch (Exception e)
+                {
+                    return null;
                 }
-            } catch (Exception e) {
-                Log.e("AudioAndroid", "Error loading sound: " + file_path, e);
-            }
-        } else {
-            // Fallback if context is not available
-            try {
-                aux = sound_pool.load(file_path, 1);
-            } catch (Exception e) {
-                Log.e("AudioAndroid", "Error loading sound without context: " + file_path, e);
-            }
-        }
+
         return new SoundAndroid(aux, file_path);
     }
 

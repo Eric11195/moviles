@@ -1,5 +1,7 @@
 package com.example.game.testing.Systems.levelGenerator;
 
+import static com.example.game.testing.utils.FontLibrary.FontName.STANDARD;
+
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.Component.ColliderComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
@@ -10,6 +12,8 @@ import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.mcd_System;
 import com.example.game.testing.constants.Constants;
+import com.example.game.testing.utils.FontLibrary;
+import com.example.utils.Vec2;
 
 import java.util.ArrayList;
 
@@ -19,7 +23,7 @@ public abstract class BaseLevelGenerator implements mcd_System {
     public ArrayList<Generator> generators = new ArrayList<>();
 
     mcd_Entity player = null;
-
+    float distanceAdvanced = 0;
     public void setPlayer(mcd_Entity player){
         this.player = player;
         generators.forEach(gnr -> gnr.setPlayer(player));
@@ -55,6 +59,17 @@ public abstract class BaseLevelGenerator implements mcd_System {
 //        if(j >= _coinList.size()) throw new RuntimeException("This should never happen");
 ////        updateActiveObstacleCount();
 ////        updateObstacleSpawnConditions(t,dt);
+
+        //TOMOVE
+        // float toAdd = dt*speedMult;
+        // if(((int)distanceAdvanced) / params.augmentSpeedEachXPixels != ((int)(distanceAdvanced+toAdd))/ params.augmentSpeedEachXPixels){
+        //     speedMult += params.augmentSpeedByYEachXPixels;
+        //     toAdd = dt*speedMult;
+        // }
+        // distanceAdvanced += toAdd;
+
+//        updateActiveObstacleCount();
+//        updateObstacleSpawnConditions(t,dt);
 //        while(!_coinList.get(j).isActive()){
 //            mcd_Entity ent = _coinList.get(j);
 //            assert(ent!=null);
@@ -66,8 +81,12 @@ public abstract class BaseLevelGenerator implements mcd_System {
 //        }
 
     }
+    Vec2 distanceTextPos = new Vec2(0,0);
     @Override
-    public void render(GraphicsInterface g){}
+    public void render(GraphicsInterface g){
+        g.setFont(FontLibrary.getFont(STANDARD));
+        g.drawText(Integer.toString((int)this.distanceAdvanced), distanceTextPos);
+    }
     protected abstract boolean askIfSpawnNewObstacle(float t, float dt);
     /**
      * Decides whether to create a new obstacle or not, and which type and position in the first case

@@ -11,10 +11,6 @@ import com.example.game.testing.Systems.levelGenerator.LevelGeneratorParams;
 import com.example.game.testing.Systems.levelGenerator.ProceduralLevelGenerator;
 import com.example.game.testing.utils.FontLibrary;
 import com.example.utils.Vec2;
-import com.sun.java.accessibility.util.TopLevelWindowListener;
-import com.sun.tools.javac.Main;
-
-import java.awt.Button;
 
 public class MainMenuScene extends mcd_Scene{
     public MainMenuScene(Engine eng){
@@ -23,6 +19,7 @@ public class MainMenuScene extends mcd_Scene{
     @Override
     public void start(Engine eng) {
         GraphicsInterface g = eng.getGraphics();
+        g.setWindowLogicSize((int)LOGIC_WINDOW_SIZE.x, (int)LOGIC_WINDOW_SIZE.y);
         
         FontLibrary.createFont(g, FontLibrary.FontName.STANDARD,16);
         FontLibrary.createFont(g, FontLibrary.FontName.HEADER,72);
@@ -54,6 +51,8 @@ public class MainMenuScene extends mcd_Scene{
                 lgp.obstacleExplosiveCreationBoost = 1.5f;
                 lgp.obstacleExplosiveCreationChance = 0.000000001;
                 lgp.obstacleLinearCreationPerSecond = 0.8f;
+                lgp.augmentSpeedEachXPixels = 200;
+                lgp.augmentSpeedByYEachXPixels = 20;
                 MainGameScene mgs = new MainGameScene(eng);
                 ProceduralLevelGenerator plg = new ProceduralLevelGenerator(mgs,lgp, false);
                 plg.generators.add(new HazardGenerator(mgs,lgp,plg.dangerMatrix));

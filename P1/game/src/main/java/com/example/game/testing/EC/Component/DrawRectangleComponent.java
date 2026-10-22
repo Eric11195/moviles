@@ -6,14 +6,17 @@ import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Component;
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.mcd_Entity;
+import com.example.game.testing.utils.ColorLibrary;
 
 public class DrawRectangleComponent implements mcd_Component {
     public ColorEng color;
-    DrawRectangleComponent()
-    {
 
-        color = ColorEng.RED;
-
+    public DrawRectangleComponent() {
+        try {
+            color = ColorLibrary.Red.clone();
+        }catch(CloneNotSupportedException ignored){
+            color = new ColorEng(255,0,0,255);
+        }
     }
 
     @Override
