@@ -113,7 +113,11 @@ public class HazardGenerator extends Generator{
         LaserComponent laser = (LaserComponent) ent.setComponent(ComponentId.OBSTACLE_COMPONENT
                 ,new LaserComponent(ent,3,2,speedMult));
         laser.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix,t,dt);
-        return dangerMatrix.ensureTraversability(player,speedMult,dt);
+        if (!dangerMatrix.ensureTraversability(player,speedMult,dt)) {
+            ent.rmComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
+            return false;
+        }
+        return true;
     }
     public boolean createZapper(mcd_Entity ent, float t, float dt, float speedMult){
         Vec2 space =
