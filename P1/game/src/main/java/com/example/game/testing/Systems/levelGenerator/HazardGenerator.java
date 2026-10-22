@@ -104,7 +104,7 @@ public class HazardGenerator extends Generator{
         tr.size.y = LASER_HEIGHT;
 
         LaserComponent laser = (LaserComponent) ent.setComponent(ComponentId.OBSTACLE_COMPONENT
-                ,new LaserComponent(ent,3,2,speedMult));
+                ,new LaserComponent(ent,t,2,speedMult));
         laser.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix,t,dt);
         if (!dangerMatrix.ensureTraversability(player,speedMult,dt)) {
             ent.rmComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);

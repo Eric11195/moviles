@@ -57,7 +57,7 @@ public class LaserComponent extends WarnedObstacle {
         is_attacking = false;
         index_rep = 0;
         loop_num = 0;
-        color = new ColorEng(255,0,0,255);
+        color = new ColorEng(255,255,0,255);
 
         setUpCollider((ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT));
         setUpSpeed((VelocityComponent) ent.getComponent(ComponentId.VELOCITY_COMPONENT));
@@ -69,6 +69,13 @@ public class LaserComponent extends WarnedObstacle {
         tr.size.x = LASER_WIDTH;
         tr.size.y = LASER_HEIGHT;
         tr.pos.x =0;
+        DrawRectangleComponent draw=  (DrawRectangleComponent)  ent.getComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
+        Vec2 rectSize = tr.size;
+        rectSize.x = rectSize.x/7.5f;
+        draw.addRectangle(tr.pos,rectSize);
+        draw.addRectangle(new Vec2((LOGIC_WINDOW_SIZE.x-rectSize.x),tr.pos.y),rectSize);
+
+        draw.color = color;
     }
     private void setUpSpeed(VelocityComponent vel){
         vel.velocity.x = 0;
@@ -155,6 +162,13 @@ public class LaserComponent extends WarnedObstacle {
                     //need the player_pos in the X axis for this
                     Vec2 aux = new Vec2(PLAYER_X_POS,LASER_HEIGHT/2);
                     colliderComponent.addSingleCollider(aux,LASER_HEIGHT/2);
+                    DrawRectangleComponent draw = (DrawRectangleComponent) ent.getComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
+                    TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
+                    draw.clearRectangles();
+                    draw.addRectangle(tr.pos,new Vec2(LOGIC_WINDOW_SIZE.x,tr.size.y));
+                    draw.color.r =255;
+                    draw.color.b =0;
+                    draw.color.g =0;
                 }
 
             }
