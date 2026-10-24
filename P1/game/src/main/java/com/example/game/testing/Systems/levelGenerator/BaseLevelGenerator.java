@@ -10,6 +10,7 @@ import com.example.game.testing.EC.Component.WarningSign;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
+import com.example.game.testing.Systems.DistanceSystem;
 import com.example.game.testing.Systems.mcd_System;
 import com.example.game.testing.constants.Constants;
 import com.example.game.testing.utils.FontLibrary;
@@ -23,7 +24,6 @@ public abstract class BaseLevelGenerator implements mcd_System {
     public ArrayList<Generator> generators = new ArrayList<>();
 
     mcd_Entity player = null;
-    float distanceAdvanced = 0;
     public void setPlayer(mcd_Entity player){
         this.player = player;
         generators.forEach(gnr -> gnr.setPlayer(player));
@@ -31,22 +31,25 @@ public abstract class BaseLevelGenerator implements mcd_System {
     protected BaseLevelGenerator(mcd_Scene scene, LevelGeneratorParams params){
         this.params = params;
         this.speedMult = this.params.levelInitialSpeed;
+        DistanceSystem.getInstance().reset();
     }
 
     @Override
     public void update(mcd_Scene scene, float t, float dt){
         generators.forEach(gnr->gnr.update(t,dt,speedMult));
         float toAdd = dt*speedMult;
-        if(((int)distanceAdvanced) / params.augmentSpeedEachXPixels != ((int)(distanceAdvanced+toAdd))/ params.augmentSpeedEachXPixels){
+        DistanceSystem ds = DistanceSystem.getInstance();
+        float distance = ds.getDistance();
+        if(((int)distance / params.augmentSpeedEachXPixels != ((int)(distance+toAdd))/ params.augmentSpeedEachXPixels)){
             speedMult += params.augmentSpeedByYEachXPixels;
             toAdd = dt*speedMult;
         }
-        distanceAdvanced += toAdd;
+        ds.addValue(toAdd);
     }
     Vec2 distanceTextPos = new Vec2(0,0);
     @Override
     public void render(GraphicsInterface g){
-        g.setFont(FontLibrary.getFont(STANDARD));
-        g.drawText(Integer.toString((int)this.distanceAdvanced), distanceTextPos);
+//        g.setFont(FontLibrary.getFont(STANDARD));
+//        g.drawText(Integer.toString((int)this.distanceAdvanced), distanceTextPos);
     }
 }

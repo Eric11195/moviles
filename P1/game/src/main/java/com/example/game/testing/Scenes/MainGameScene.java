@@ -7,6 +7,7 @@ import com.example.engine.Engine;
 import com.example.game.testing.EC.Prefabs.PlayerPrefab;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.CoinSystem;
+import com.example.game.testing.Systems.DistanceSystem;
 import com.example.game.testing.Systems.levelGenerator.BaseLevelGenerator;
 import com.example.game.testing.Systems.PlayerCollisionDetector;
 import com.example.utils.Vec2;
@@ -15,8 +16,31 @@ public class MainGameScene extends mcd_Scene{
     BaseLevelGenerator levelGen = null;
     float gameTime;
 
+    public static enum Retos{
+        none(0),
+        monedas(1),
+        distancia(1<<1);
+
+        Retos(int i) {
+            this.value = i;
+        }
+        int getValue(){
+            return this.value;
+        }
+        boolean is(Retos compareTo){
+            return (this.value & compareTo.value) == compareTo.value;
+        }
+        int value;
+    }
+
+    Retos retos;
     protected MainGameScene(Engine myEngine) {
         super(myEngine);
+        retos = Retos.none;
+    }
+    protected MainGameScene(Engine myEngine, Retos r){
+        super(myEngine);
+        this.retos = r;
     }
 
     public void setLevelGen(BaseLevelGenerator levelGen){
@@ -54,6 +78,25 @@ public class MainGameScene extends mcd_Scene{
         CoinSystem cs = CoinSystem.getInstance();
         addSystem(cs);
         cs.reset();
+        DistanceSystem ds = DistanceSystem.getInstance();
+        addSystem(ds);
+        ds.reset();
         addSystem(levelGen);
+
+        addRetosSystems(eng);
+    }
+    private void addRetosSystems(Engine eng){
+        boolean retoActivated = false;
+        if(this.retos.is(Retos.monedas)){
+            retoActivated=true;
+            //add win by coin system
+        }
+        if(this.retos.is(Retos.distancia)){
+            retoActivated=true;
+            //add win by distance system
+        }
+        if(retoActivated){
+            //add distance to goal system
+        }
     }
 }
