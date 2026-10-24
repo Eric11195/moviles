@@ -45,7 +45,7 @@ public class MainGameScene extends mcd_Scene{
         this.retos = r;
     }
     private int coinsToWin;
-    public void setMinCoinsToWin(int coins){
+    public void setCoinsToWin(int coins){
         this.coinsToWin = coins;
     }
     private float distanceToWin;

@@ -21,6 +21,6 @@ public class EndGameAfterXCoins implements mcd_System{
 
     @Override
     public void render(GraphicsInterface g) {
-
+        //render /60 (coins to win)
     }
 }

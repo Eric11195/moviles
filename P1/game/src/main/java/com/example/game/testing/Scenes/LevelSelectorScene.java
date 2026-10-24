@@ -20,28 +20,46 @@ public class LevelSelectorScene extends mcd_Scene{
     public void start(Engine eng) {
         int BUTTON_COUNT = 3;
         eng.getFileStorage().setRelativePath("Assets/Levels");
-        for(int i = 1; i <= BUTTON_COUNT; ++i){
-            Vec2 pos = new Vec2(
-                LOGIC_WINDOW_SIZE.x/2.0f-0.5f*DEFAULT_BUTTON_SIZE.x,
-                LOGIC_WINDOW_SIZE.y * ((float)i/(BUTTON_COUNT+1.0f)) - 0.5f*DEFAULT_BUTTON_SIZE.y
-            );
-            int finalI = i;
-            createButton(
+
+        final int[] numbers = {
+            20,
+            40,
+            60,
+            100,
+            200,
+            300
+        };
+
+        for(int j = 0; j < 2; ++j) {
+            for (int i = 1; i <= BUTTON_COUNT; ++i) {
+                int idx = BUTTON_COUNT*j+(i-1);
+                Vec2 pos = new Vec2(
+                        ((j+1)*LOGIC_WINDOW_SIZE.x / 3.0f) - 0.5f * DEFAULT_BUTTON_SIZE.x,
+                        LOGIC_WINDOW_SIZE.y * ((float) i / (BUTTON_COUNT + 1.0f)) - 0.5f * DEFAULT_BUTTON_SIZE.y
+                );
+                int finalI = i;
+                int finalJ = j;
+                createButton(
                     this,
                     pos,
                     DEFAULT_BUTTON_SIZE,
-                    "Level"+Integer.toString(i),
-                    ()->{loadLevel(eng,"Level"+Integer.toString(finalI));}
-            );
+                    numbers[idx]+" "+(j==0 ? "Coins":"Distance"),
+                    () -> {
+                        loadLevel(eng, "Level" + Integer.toString(finalI), finalJ==0, numbers[idx]);
+                    }
+                );
+            }
         }
     }
 
-    private void loadLevel(Engine eng, String filename){
+    private void loadLevel(Engine eng, String filename, boolean coins, int distCoinNumber){
         JSONObject obj = JSON_HELPER.fromJSON(eng.getFileStorage(),filename);
         if(obj==null){
             throw new RuntimeException("File level could not be found");
         }
-        MainGameScene mainScene = new MainGameScene(eng);
+        MainGameScene mainScene = new MainGameScene(eng, coins? MainGameScene.Retos.monedas : MainGameScene.Retos.distancia);
+        mainScene.setDistanceToWin(distCoinNumber * 100);
+        mainScene.setCoinsToWin(distCoinNumber);
         mainScene.setLevelGen(
             new FileLevelGenerator(
                 mainScene,
