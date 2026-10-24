@@ -15,69 +15,130 @@ public class LevelGeneratorToJSON extends mcd_Scene {
     }
     @Override
     public void start(Engine eng) {
-        JSONObject joLow = LevelFileGenerator.generateNewLevel(
+        //Coin Levels
+        JSONObject j1 = LevelFileGenerator.generateNewLevel(
                 this,
                 eng,
-                getEasyLevelParams()
+                getCoin1Params()
         );
-        JSONObject joMid = LevelFileGenerator.generateNewLevel(
+        JSONObject j2 = LevelFileGenerator.generateNewLevel(
                 this,
                 eng,
-                getMediumLevelParams()
+                getCoin2Params()
         );
-        JSONObject joHard = LevelFileGenerator.generateNewLevel(
+        JSONObject j3 = LevelFileGenerator.generateNewLevel(
                 this,
                 eng,
-                getHardLevelParams()
+                getCoin3Params()
+        );
+        //Distance Levels
+        JSONObject j4 = LevelFileGenerator.generateNewLevel(
+                this,
+                eng,
+                getDist1Params()
+        );
+        JSONObject j5 = LevelFileGenerator.generateNewLevel(
+                this,
+                eng,
+                getDist2Params()
+        );
+        JSONObject j6 = LevelFileGenerator.generateNewLevel(
+                this,
+                eng,
+                getDist3Params()
         );
         IFileStorage fileStorage = eng.getFileStorage();
         fileStorage.setRelativePath("Assets/Levels");
-        String file_name_easy = "Level1";
-        toJSON(fileStorage, file_name_easy, joLow);
-        String file_name_mid = "Level2";
-        toJSON(fileStorage, file_name_mid, joMid);
-        String file_name_hard = "Level3";
-        toJSON(fileStorage, file_name_hard, joHard);
+        toJSON(fileStorage, "Level1", j1);
+        toJSON(fileStorage, "Level2", j2);
+        toJSON(fileStorage, "Level3", j3);
+        toJSON(fileStorage, "Level4", j4);
+        toJSON(fileStorage, "Level5", j5);
+        toJSON(fileStorage, "Level6", j6);
         eng.setScene(new MainMenuScene(eng));
     }
-    private static LevelGeneratorParams getEasyLevelParams(){
+    private static LevelGeneratorParams getCoin1Params(){
         LevelGeneratorParams lg = new LevelGeneratorParams();
         lg.levelDurationInSeconds = 20;
-        lg.levelInitialSpeed = 100;
+        lg.levelInitialSpeed = 30;
         lg.maxNumberOfSimultaneousObstacles = 4;
         lg.obstacleExplosiveCreationBoost = 1;
         lg.obstacleLinearCreationPerSecond = 0.8f;
         lg.coinLinearCreationPerSecond = 3.0f;
         lg.obstacleExplosiveCreationChance = 0.00000001;
-        lg.augmentSpeedEachXPixels = 300;
-        lg.augmentSpeedByYEachXPixels = 30;
+        lg.augmentSpeedEachXPixels = 5000;
+        lg.augmentSpeedByYEachXPixels = 15;
+        lg.coinLinearCreationPerSecond = 1;
         return lg;
     }
-    public static LevelGeneratorParams getMediumLevelParams(){
+    public static LevelGeneratorParams getCoin2Params(){
         LevelGeneratorParams lg = new LevelGeneratorParams();
         lg.levelDurationInSeconds = 30;
-        lg.levelInitialSpeed = 150;
+        lg.levelInitialSpeed = 30;
         lg.maxNumberOfSimultaneousObstacles = 8;
         lg.obstacleExplosiveCreationBoost = 1.6f;
         lg.obstacleLinearCreationPerSecond = 0.6f;
         lg.coinLinearCreationPerSecond = 4.0f;
         lg.obstacleExplosiveCreationChance = 0.00000001;
-        lg.augmentSpeedEachXPixels = 200;
-        lg.augmentSpeedByYEachXPixels = 30;
+        lg.augmentSpeedEachXPixels = 5000;
+        lg.augmentSpeedByYEachXPixels = 25;
+        lg.coinLinearCreationPerSecond = 1;
         return lg;
     }
-    public static LevelGeneratorParams getHardLevelParams(){
+    public static LevelGeneratorParams getCoin3Params(){
         LevelGeneratorParams lg = new LevelGeneratorParams();
         lg.levelDurationInSeconds = 40;
-        lg.levelInitialSpeed = 200;
+        lg.levelInitialSpeed = 50;
         lg.maxNumberOfSimultaneousObstacles = 12;
         lg.obstacleExplosiveCreationBoost = 0.7f;
         lg.obstacleLinearCreationPerSecond = 1.2f;
         lg.coinLinearCreationPerSecond = 5.0f;
         lg.obstacleExplosiveCreationChance = 0.000001;
-        lg.augmentSpeedEachXPixels = 100;
-        lg.augmentSpeedByYEachXPixels = 30;
+        lg.augmentSpeedEachXPixels = 4000;
+        lg.augmentSpeedByYEachXPixels = 15;
+        lg.coinLinearCreationPerSecond = 1;
         return lg;
     }
-
+    private static LevelGeneratorParams getDist1Params(){
+        LevelGeneratorParams lg = new LevelGeneratorParams();
+        lg.levelDurationInSeconds = 20;
+        lg.levelInitialSpeed = 50;
+        lg.maxNumberOfSimultaneousObstacles = 4;
+        lg.obstacleExplosiveCreationBoost = 1;
+        lg.obstacleLinearCreationPerSecond = 0.8f;
+        lg.coinLinearCreationPerSecond = 3.0f;
+        lg.obstacleExplosiveCreationChance = 0.00000001;
+        lg.augmentSpeedEachXPixels = 7000;
+        lg.augmentSpeedByYEachXPixels = 30;
+        lg.coinLinearCreationPerSecond = 1;
+        return lg;
+    }
+    private static LevelGeneratorParams getDist2Params(){
+        LevelGeneratorParams lg = new LevelGeneratorParams();
+        lg.levelDurationInSeconds = 20;
+        lg.levelInitialSpeed = 50;
+        lg.maxNumberOfSimultaneousObstacles = 4;
+        lg.obstacleExplosiveCreationBoost = 1;
+        lg.obstacleLinearCreationPerSecond = 0.8f;
+        lg.coinLinearCreationPerSecond = 3.0f;
+        lg.obstacleExplosiveCreationChance = 0.00000001;
+        lg.augmentSpeedEachXPixels = 6000;
+        lg.augmentSpeedByYEachXPixels = 30;
+        lg.coinLinearCreationPerSecond = 1;
+        return lg;
+    }
+    private static LevelGeneratorParams getDist3Params(){
+        LevelGeneratorParams lg = new LevelGeneratorParams();
+        lg.levelDurationInSeconds = 20;
+        lg.levelInitialSpeed = 60;
+        lg.maxNumberOfSimultaneousObstacles = 4;
+        lg.obstacleExplosiveCreationBoost = 1;
+        lg.obstacleLinearCreationPerSecond = 0.8f;
+        lg.coinLinearCreationPerSecond = 3.0f;
+        lg.obstacleExplosiveCreationChance = 0.00000001;
+        lg.augmentSpeedEachXPixels = 5000;
+        lg.augmentSpeedByYEachXPixels = 30;
+        lg.coinLinearCreationPerSecond = 2;
+        return lg;
+    }
 }

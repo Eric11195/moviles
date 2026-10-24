@@ -37,7 +37,6 @@ public class LevelSelectorScene extends mcd_Scene{
                         ((j+1)*LOGIC_WINDOW_SIZE.x / 3.0f) - 0.5f * DEFAULT_BUTTON_SIZE.x,
                         LOGIC_WINDOW_SIZE.y * ((float) i / (BUTTON_COUNT + 1.0f)) - 0.5f * DEFAULT_BUTTON_SIZE.y
                 );
-                int finalI = i;
                 int finalJ = j;
                 createButton(
                     this,
@@ -45,7 +44,7 @@ public class LevelSelectorScene extends mcd_Scene{
                     DEFAULT_BUTTON_SIZE,
                     numbers[idx]+" "+(j==0 ? "Coins":"Distance"),
                     () -> {
-                        loadLevel(eng, "Level" + Integer.toString(finalI), finalJ==0, numbers[idx]);
+                        loadLevel(eng, "Level" + Integer.toString(idx+1), finalJ==0, numbers[idx]);
                     }
                 );
             }
