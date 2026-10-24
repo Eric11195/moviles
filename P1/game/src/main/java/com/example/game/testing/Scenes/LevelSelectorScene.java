@@ -50,6 +50,15 @@ public class LevelSelectorScene extends mcd_Scene{
                 );
             }
         }
+        createButton(
+            this,
+            new Vec2(0,LOGIC_WINDOW_SIZE.y-40),
+            new Vec2(40,40),
+            "Back",
+            () ->{
+                eng.setScene(new MainMenuScene(eng));
+            }
+        );
     }
 
     private void loadLevel(Engine eng, String filename, boolean coins, int distCoinNumber){
