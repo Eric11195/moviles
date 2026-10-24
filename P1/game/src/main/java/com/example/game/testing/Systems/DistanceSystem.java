@@ -36,7 +36,7 @@ public class DistanceSystem implements mcd_System{
     }
 
     final Vec2 pos = new Vec2(0,0);
-    final Vec2 size = new Vec2(150,100);
+    final Vec2 size = new Vec2(60,50);
     @Override
     public void render(GraphicsInterface g) {
         //render bar to goal

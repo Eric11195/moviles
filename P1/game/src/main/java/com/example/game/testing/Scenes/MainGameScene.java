@@ -10,6 +10,7 @@ import com.example.game.testing.Systems.CoinSystem;
 import com.example.game.testing.Systems.DistanceSystem;
 import com.example.game.testing.Systems.EndGameAfterXCoins;
 import com.example.game.testing.Systems.EndGameAfterXDistance;
+import com.example.game.testing.Systems.GameDistanceToEndOfLevelRenderer;
 import com.example.game.testing.Systems.levelGenerator.BaseLevelGenerator;
 import com.example.game.testing.Systems.PlayerCollisionDetector;
 import com.example.utils.Vec2;
@@ -109,6 +110,7 @@ public class MainGameScene extends mcd_Scene{
         }
         if(retoActivated){
             //add distance to goal system
+            addSystem(new GameDistanceToEndOfLevelRenderer(distanceToWin));
         }
     }
 }
