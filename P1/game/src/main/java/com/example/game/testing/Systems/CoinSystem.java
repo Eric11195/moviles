@@ -36,8 +36,8 @@ public class CoinSystem implements mcd_System{
     public int getCoins(){
         return totalValue;
     }
-    final Vec2 size = new Vec2(150,100);
-    final Vec2 pos = new Vec2(LOGIC_WINDOW_SIZE.x- size.x,0);
+    static public final Vec2 size = new Vec2(150,50);
+    static public final Vec2 pos = new Vec2(LOGIC_WINDOW_SIZE.x- size.x-50,30);
     @Override
     public void render(GraphicsInterface g) {
         String text = String.valueOf(totalValue);
