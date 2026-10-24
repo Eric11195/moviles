@@ -62,7 +62,7 @@ public class ButtonComponent implements mcd_Component {
     public boolean clickedDown(mcd_Entity ent){
         if(!ent.hasComponent(ComponentId.TRANSFORM_COMPONENT)) return false;
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
-        //Set hover if its the case
+        //Set hover if it's the case
         for(TouchEvent evt : ent.getEngine().getInput().getTouchEvents()){
             //System.out.println("Event: "+evt.pos.x+" , "+evt.pos.y);
             if(inside(tr, evt.pos)) {
