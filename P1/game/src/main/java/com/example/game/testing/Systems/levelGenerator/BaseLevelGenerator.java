@@ -11,6 +11,7 @@ import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.DistanceSystem;
+import com.example.game.testing.Systems.LevelSpeedSystem;
 import com.example.game.testing.Systems.mcd_System;
 import com.example.game.testing.constants.Constants;
 import com.example.game.testing.utils.FontLibrary;
@@ -20,7 +21,6 @@ import java.util.ArrayList;
 
 public abstract class BaseLevelGenerator implements mcd_System {
     protected LevelGeneratorParams params;
-    protected float speedMult;
     public ArrayList<Generator> generators = new ArrayList<>();
 
     mcd_Entity player = null;
@@ -30,13 +30,17 @@ public abstract class BaseLevelGenerator implements mcd_System {
     }
     protected BaseLevelGenerator(mcd_Scene scene, LevelGeneratorParams params){
         this.params = params;
-        this.speedMult = this.params.levelInitialSpeed;
+        com.example.game.testing.Systems.LevelSpeedSystem lss = LevelSpeedSystem.getInstance();
+        lss.reset();
+        lss.addValue(params.levelInitialSpeed);
         DistanceSystem.getInstance().reset();
     }
 
     @Override
     public void update(mcd_Scene scene, float t, float dt){
-        generators.forEach(gnr->gnr.update(t,dt,speedMult));
+        com.example.game.testing.Systems.LevelSpeedSystem lss = LevelSpeedSystem.getInstance();
+        float speedMult = lss.getSpeedMult();
+        generators.forEach(gnr->gnr.update(t,dt));
         float toAdd = dt*speedMult;
         DistanceSystem ds = DistanceSystem.getInstance();
         float distance = ds.getDistance();

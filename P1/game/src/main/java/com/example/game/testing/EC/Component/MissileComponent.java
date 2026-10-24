@@ -14,6 +14,7 @@ import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
+import com.example.game.testing.Systems.LevelSpeedSystem;
 import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.levelGenerator.ObstacleFactory;
 import com.example.game.testing.utils.ColorLibrary;
@@ -22,30 +23,27 @@ import com.example.utils.Vec2;
 import org.json.JSONObject;
 
 public class MissileComponent extends WarnedObstacle {
-    float xSpeed;
     TransformComponent myTransform;
 
     public static class MissileComponentSerialized extends ObstacleFactory {
         float yPos;
         @Override
-        public void instantiate(mcd_Scene scene, mcd_Entity ent, float levelSpeed, float t) {
-            ent.setComponent(ComponentId.OBSTACLE_COMPONENT, new MissileComponent(ent,t, levelSpeed, yPos));
+        public void instantiate(mcd_Scene scene, mcd_Entity ent, float t) {
+            ent.setComponent(ComponentId.OBSTACLE_COMPONENT, new MissileComponent(ent,t, yPos));
         }
     }
 
     /**
      * @param spawnTime
-     * @param speedMult how many px the scenery moves per frame
      */
-    public MissileComponent(mcd_Entity ent, float spawnTime, float speedMult, float yPos) {
-        super(ent, spawnTime, speedMult);
+    public MissileComponent(mcd_Entity ent, float spawnTime, float yPos) {
+        super(ent, spawnTime);
         VelocityComponent vel = (VelocityComponent) ent.getComponent(ComponentId.VELOCITY_COMPONENT);
-        xSpeed = Math.abs(speedMult) + Math.abs(MISSILE_MOVE_SPEED);
         vel.velocity.x=0;
         vel.velocity.y=0;
         generateCollider(ent);
         setTransform(ent, yPos);
-        scrolledTime = calculateScrolledTime(spawnTime,speedMult);
+        scrolledTime = calculateScrolledTime(spawnTime);
     }
     private void setTransform(mcd_Entity ent, float yPos){
         myTransform = (TransformComponent)ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
@@ -58,7 +56,6 @@ public class MissileComponent extends WarnedObstacle {
     public void activateObstacle(mcd_Entity ent, float t, float dt) {
         super.activateObstacle(ent,t,dt);
         VelocityComponent vel = (VelocityComponent) ent.getComponent(ComponentId.VELOCITY_COMPONENT);
-        vel.velocity.x = -xSpeed;
     }
 
     private void generateCollider(mcd_Entity ent){
@@ -68,8 +65,8 @@ public class MissileComponent extends WarnedObstacle {
     }
 
     @Override
-    public float calculateScrolledTime(float spawnTime, float speedMult) {
-        return spawnTime + WARNING_TIME + (MISSILE_RADIUS*2 + LOGIC_WINDOW_SIZE.x)/(speedMult+MISSILE_MOVE_SPEED);
+    public float calculateScrolledTime(float spawnTime) {
+        return spawnTime + WARNING_TIME + (MISSILE_RADIUS*2 + LOGIC_WINDOW_SIZE.x)/(LevelSpeedSystem.getInstance().getSpeedMult()+MISSILE_MOVE_SPEED);
     }
 
     @Override
@@ -78,8 +75,8 @@ public class MissileComponent extends WarnedObstacle {
 //        if(realXPos < LOGIC_WINDOW_SIZE.x+DANGER_MATRIX_PRECALCULATED_SPACE) {
 //            dm.drawSquare(new Vec2(realXPos, tr.pos.y - tr.size.y), tr.size);
 //        }
-        final float timeOfCollision = getTimeTillSpawn() + (LOGIC_WINDOW_SIZE.x-PLAYER_X_POS+PLAYER_DIMENSIONS.x)/(speedMult+MISSILE_MOVE_SPEED);
-        float futureX = tr.pos.x - xSpeed * timeOfCollision;
+        final float timeOfCollision = getTimeTillSpawn() + (LOGIC_WINDOW_SIZE.x-PLAYER_X_POS+PLAYER_DIMENSIONS.x)/(LevelSpeedSystem.getInstance().getSpeedMult()+MISSILE_MOVE_SPEED);
+        float futureX = tr.pos.x - (MISSILE_MOVE_SPEED+LevelSpeedSystem.getInstance().getSpeedMult()) * timeOfCollision;
 
         // Only consider the missile while it is relevant
         // to the predicted scene.
@@ -112,7 +109,14 @@ public class MissileComponent extends WarnedObstacle {
     }
     @Override
     public void update(mcd_Entity ent, float t, float dt){
+
         super.update(ent,t,dt);
+        VelocityComponent vel = (VelocityComponent) ent.getComponent(ComponentId.VELOCITY_COMPONENT);
+        if(activated) {
+            vel.velocity.x = -(MISSILE_MOVE_SPEED+ LevelSpeedSystem.getInstance().getSpeedMult());
+        }else{
+            vel.velocity.x = 0;
+        }
     }
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g){

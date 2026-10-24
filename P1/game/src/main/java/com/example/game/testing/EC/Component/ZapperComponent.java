@@ -17,6 +17,7 @@ import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.LoseMenuScene;
 import com.example.game.testing.Scenes.mcd_Scene;
+import com.example.game.testing.Systems.LevelSpeedSystem;
 import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.levelGenerator.ObstacleFactory;
 import com.example.game.testing.utils.ColorLibrary;
@@ -59,20 +60,20 @@ public class ZapperComponent extends Obstacle{
     public static class ZapperComponentSerialized extends ObstacleFactory {
         Vec2 start,end;
         @Override
-        public void instantiate(mcd_Scene scene, mcd_Entity ent, float levelSpeed, float t) {
-            ent.setComponent(ComponentId.OBSTACLE_COMPONENT, new ZapperComponent(ent,t, levelSpeed, start,end));
+        public void instantiate(mcd_Scene scene, mcd_Entity ent, float t) {
+            ent.setComponent(ComponentId.OBSTACLE_COMPONENT, new ZapperComponent(ent,t, start,end));
         }
     }
     mcd_Entity myEnt;
 
-    public ZapperComponent(mcd_Entity ent, float spawnTime, float speedMult, Vec2 start, Vec2 end) {
-        super(ent, spawnTime, speedMult);
+    public ZapperComponent(mcd_Entity ent, float spawnTime, Vec2 start, Vec2 end) {
+        super(ent, spawnTime);
         assert(ent.hasComponent(ComponentId.TRANSFORM_COMPONENT));
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
         tr.pos = new Vec2(start.x, start.y);
         this.start = new Vec2(0,0);
         this.end = new Vec2(end.x-start.x,end.y-start.y);
-        scrolledTime = calculateScrolledTime(spawnTime, speedMult);
+        scrolledTime = calculateScrolledTime(spawnTime);
         this.myEnt = ent;
         generateColliders(ent);
     }
@@ -93,8 +94,8 @@ public class ZapperComponent extends Obstacle{
     }
 
     @Override
-    public float calculateScrolledTime(float spawnTime, float speedMult) {
-        return spawnTime+ (width()+LOGIC_WINDOW_SIZE.x)/speedMult;
+    public float calculateScrolledTime(float spawnTime) {
+        return spawnTime+ (width()+LOGIC_WINDOW_SIZE.x)/ LevelSpeedSystem.getInstance().getSpeedMult();
     }
 
     @Override

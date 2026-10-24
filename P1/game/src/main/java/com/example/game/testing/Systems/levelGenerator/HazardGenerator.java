@@ -26,10 +26,10 @@ public class HazardGenerator extends Generator{
     }
 
     @Override
-    public boolean setUpNewObstacle(mcd_Entity obstacle, float t, float dt, float speedMult){
+    public boolean setUpNewObstacle(mcd_Entity obstacle, float t, float dt){
         //TransformComponent tr = (TransformComponent) obstacle.getComponent(ComponentId.TRANSFORM_COMPONENT);
         //ImageComponent img = (ImageComponent) obstacle.getComponent(ComponentId.IMAGE_COMPONENT);
-        if(!createRandomObstacleComp(obstacle,t,dt,speedMult)) return false;
+        if(!createRandomObstacleComp(obstacle,t,dt)) return false;
         return true;
     }
 
@@ -57,14 +57,14 @@ public class HazardGenerator extends Generator{
         _freeIdxCount = params.maxNumberOfSimultaneousObstacles;
     }
 
-    public boolean createRandomObstacleComp(mcd_Entity ent, float t, float dt, float speedMult){
+    public boolean createRandomObstacleComp(mcd_Entity ent, float t, float dt){
         switch(chooseObstacleType()){
             case OBSTACLE_LASER:
-                return createLaser(ent, t, dt, speedMult);
+                return createLaser(ent, t, dt);
             case OBSTACLE_MISSILE:
-                return createMissile(ent, t, dt, speedMult);
+                return createMissile(ent, t, dt);
             case OBSTACLE_ZAPPER:
-                return createZapper(ent,t, dt, speedMult);
+                return createZapper(ent,t, dt);
             default:
                 throw new RuntimeException("Invalid obstacle type");
         }
@@ -75,7 +75,7 @@ public class HazardGenerator extends Generator{
         if(d<0.7) return ObstacleId.OBSTACLE_ZAPPER;
         return ObstacleId.OBSTACLE_MISSILE;
     }
-    public boolean createMissile(mcd_Entity ent, float t, float dt, float speedMult){
+    public boolean createMissile(mcd_Entity ent, float t, float dt){
         Vec2 space =
                 getSafeVerticalSpaceForObstacleSoPlayerCanPass(
                         getVerticalSafeZone(),
@@ -84,12 +84,12 @@ public class HazardGenerator extends Generator{
         float y = space.x + (space.y-space.x)*(float)Math.random();
         MissileComponent mis = (MissileComponent) ent.setComponent(
                 ComponentId.OBSTACLE_COMPONENT,
-                new MissileComponent(ent, t, speedMult, y)
+                new MissileComponent(ent, t, y)
         );
         mis.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix,t,dt);
-        return dangerMatrix.ensureTraversability(player,speedMult,dt);
+        return dangerMatrix.ensureTraversability(player,dt);
     }
-    public  boolean createLaser(mcd_Entity ent, float t, float dt, float speedMult)
+    public  boolean createLaser(mcd_Entity ent, float t, float dt)
     {
         Vec2 space =
                 getSafeVerticalSpaceForObstacleSoPlayerCanPass(
@@ -104,15 +104,15 @@ public class HazardGenerator extends Generator{
         tr.size.y = LASER_HEIGHT;
 
         LaserComponent laser = (LaserComponent) ent.setComponent(ComponentId.OBSTACLE_COMPONENT
-                ,new LaserComponent(ent,t,2,speedMult));
+                ,new LaserComponent(ent,t,2));
         laser.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix,t,dt);
-        if (!dangerMatrix.ensureTraversability(player,speedMult,dt)) {
+        if (!dangerMatrix.ensureTraversability(player,dt)) {
             ent.rmComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
             return false;
         }
         return true;
     }
-    public boolean createZapper(mcd_Entity ent, float t, float dt, float speedMult){
+    public boolean createZapper(mcd_Entity ent, float t, float dt){
         Vec2 space =
                 getSafeVerticalSpaceForObstacleSoPlayerCanPass(
                         getVerticalSafeZone(),
@@ -128,10 +128,10 @@ public class HazardGenerator extends Generator{
         ZapperComponent.getProvisionalZapperData(space,start,end);
         if(!dangerMatrix.checkLine(start,end)) return false;
         dangerMatrix.drawLine(start,end);
-        if(!dangerMatrix.ensureTraversability(player,speedMult,dt)) return false;
+        if(!dangerMatrix.ensureTraversability(player,dt)) return false;
         ent.setComponent(
                 ComponentId.OBSTACLE_COMPONENT,
-                new ZapperComponent(ent, t, speedMult, start, end)
+                new ZapperComponent(ent, t, start, end)
         );
         return true;
     }

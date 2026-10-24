@@ -69,6 +69,7 @@ public class LevelGeneratorToJSON extends mcd_Scene {
         lg.augmentSpeedEachXPixels = 5000;
         lg.augmentSpeedByYEachXPixels = 15;
         lg.coinLinearCreationPerSecond = 1;
+        lg.maxNumberOfSimultaneousCoins = 10;
         return lg;
     }
     public static LevelGeneratorParams getCoin2Params(){
@@ -83,6 +84,7 @@ public class LevelGeneratorToJSON extends mcd_Scene {
         lg.augmentSpeedEachXPixels = 5000;
         lg.augmentSpeedByYEachXPixels = 25;
         lg.coinLinearCreationPerSecond = 1;
+        lg.maxNumberOfSimultaneousCoins = 10;
         return lg;
     }
     public static LevelGeneratorParams getCoin3Params(){
@@ -97,6 +99,7 @@ public class LevelGeneratorToJSON extends mcd_Scene {
         lg.augmentSpeedEachXPixels = 4000;
         lg.augmentSpeedByYEachXPixels = 15;
         lg.coinLinearCreationPerSecond = 1;
+        lg.maxNumberOfSimultaneousCoins = 10;
         return lg;
     }
     private static LevelGeneratorParams getDist1Params(){
@@ -111,6 +114,7 @@ public class LevelGeneratorToJSON extends mcd_Scene {
         lg.augmentSpeedEachXPixels = 7000;
         lg.augmentSpeedByYEachXPixels = 30;
         lg.coinLinearCreationPerSecond = 1;
+        lg.maxNumberOfSimultaneousCoins = 10;
         return lg;
     }
     private static LevelGeneratorParams getDist2Params(){
@@ -125,6 +129,7 @@ public class LevelGeneratorToJSON extends mcd_Scene {
         lg.augmentSpeedEachXPixels = 6000;
         lg.augmentSpeedByYEachXPixels = 30;
         lg.coinLinearCreationPerSecond = 1;
+        lg.maxNumberOfSimultaneousCoins = 10;
         return lg;
     }
     private static LevelGeneratorParams getDist3Params(){
@@ -139,6 +144,7 @@ public class LevelGeneratorToJSON extends mcd_Scene {
         lg.augmentSpeedEachXPixels = 5000;
         lg.augmentSpeedByYEachXPixels = 30;
         lg.coinLinearCreationPerSecond = 2;
+        lg.maxNumberOfSimultaneousCoins = 10;
         return lg;
     }
 }

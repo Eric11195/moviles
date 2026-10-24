@@ -26,8 +26,8 @@ public class FileObstacleGenerator extends Generator{
     }
 
     @Override
-    protected boolean setUpNewObstacle(mcd_Entity ent, float t, float dt, float speedMult) {
-        obstaclesBeComing.get(current_idx).instantiate(ent.getMyScene(), ent, speedMult, t);
+    protected boolean setUpNewObstacle(mcd_Entity ent, float t, float dt) {
+        obstaclesBeComing.get(current_idx).instantiate(ent.getMyScene(), ent, t);
         ++current_idx;
         return true;
     }
@@ -39,8 +39,9 @@ public class FileObstacleGenerator extends Generator{
 
     @Override
     protected void initializeObstacleList(mcd_Scene scene){
-        _obstacleList = new ArrayList<mcd_Entity>(params.maxNumberOfSimultaneousObstacles);
-        for(int i = 0; i < params.maxNumberOfSimultaneousObstacles; ++i){
+        int maxCount = params.maxNumberOfSimultaneousCoins+params.maxNumberOfSimultaneousObstacles;
+        _obstacleList = new ArrayList<mcd_Entity>(maxCount);
+        for(int i = 0; i < maxCount; ++i){
             mcd_Entity ent = scene.createEntity();
             ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
             ent.addComponent(ComponentId.VELOCITY_COMPONENT, new VelocityComponent());
@@ -51,6 +52,6 @@ public class FileObstacleGenerator extends Generator{
             _obstacleList.add(ent);
         }
         _obstacleArrayIndex = 0;
-        _freeIdxCount = params.maxNumberOfSimultaneousObstacles;
+        _freeIdxCount = maxCount;
     }
 }

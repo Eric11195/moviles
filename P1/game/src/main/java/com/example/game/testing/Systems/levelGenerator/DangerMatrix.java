@@ -11,6 +11,7 @@ import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.Component.VelocityComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
+import com.example.game.testing.Systems.LevelSpeedSystem;
 import com.example.utils.Vec2;
 
 public class DangerMatrix extends BoolMatrix{
@@ -84,7 +85,6 @@ public class DangerMatrix extends BoolMatrix{
 
     public boolean ensureTraversability(
         mcd_Entity playerEnt,
-        float playerHorizontalSpeed,
         float dt
     ){
         TransformComponent playerTr =
@@ -100,7 +100,7 @@ public class DangerMatrix extends BoolMatrix{
             playerTr.pos.x, playerTr.pos.y,
             playerTr.size.x, playerTr.size.y,
             playerVel.velocity.y,
-            playerHorizontalSpeed
+            LevelSpeedSystem.getInstance().getSpeedMult()
         );
     }
 

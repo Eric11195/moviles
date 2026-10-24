@@ -12,6 +12,7 @@ import com.example.game.testing.EC.Component.WarningSign;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
+import com.example.game.testing.Systems.LevelSpeedSystem;
 import com.example.utils.Vec2;
 
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public abstract class Generator {
             );
         }
     }
-    public void update(float t, float dt, float speedMult){
+    public void update(float t, float dt){
         int i = _obstacleArrayIndex;
         int lastIterableElem = (i+_obstacleList.size()-1)% _obstacleList.size();
         if(i >= _obstacleList.size()) throw new RuntimeException("This should never happen");
@@ -57,7 +58,7 @@ public abstract class Generator {
             assert(ent!=null);
             //if we create a new obstacle we try to repeat the process for the next free
             //Otherwise, we dont want to create new obstacles this frame
-            if(!decideOnPossibleNewObstacle(ent, t, dt,speedMult)) break;
+            if(!decideOnPossibleNewObstacle(ent, t, dt)) break;
             if(i==lastIterableElem) break;
             i = (i+1) % _obstacleList.size();
         }
@@ -68,9 +69,9 @@ public abstract class Generator {
             _freeIdxCount += ent.isActive() ? 0 : 1;
         }
     }
-    public boolean decideOnPossibleNewObstacle(mcd_Entity ent, float t, float dt, float speedMult){
+    public boolean decideOnPossibleNewObstacle(mcd_Entity ent, float t, float dt){
         if(askIfSpawnNewObstacle(t,dt)){
-            if(setUpNewObstacle(_obstacleList.get(_obstacleArrayIndex), t, dt, speedMult)) {
+            if(setUpNewObstacle(_obstacleList.get(_obstacleArrayIndex), t, dt)) {
                 _obstacleArrayIndex = (_obstacleArrayIndex + 1) % _obstacleList.size();
                 ent.setActive(true);
                 --obstacleAcumSpawn;
@@ -82,7 +83,7 @@ public abstract class Generator {
     protected boolean askIfSpawnNewObstacle(float t, float dt) {
         return obstacleAcumSpawn > 1 && _freeIdxCount > 0;
     }
-    protected abstract boolean setUpNewObstacle(mcd_Entity ent, float t, float dt, float speedMult);
+    protected abstract boolean setUpNewObstacle(mcd_Entity ent, float t, float dt);
     public abstract void addProbabilityToObstacleSpawn(float dt);
 
     /**

@@ -47,14 +47,15 @@ public class MainMenuScene extends mcd_Scene{
             () ->{
                 LevelGeneratorParams lgp = new LevelGeneratorParams();
                 lgp.levelDurationInSeconds = -1;
-                lgp.levelInitialSpeed = 150;
+                lgp.levelInitialSpeed = 70;
                 lgp.maxNumberOfSimultaneousObstacles = 4;
                 lgp.obstacleExplosiveCreationBoost = 1.5f;
                 lgp.obstacleExplosiveCreationChance = 0.000000001;
                 lgp.obstacleLinearCreationPerSecond = 0.8f;
                 lgp.coinLinearCreationPerSecond = 5.0f;
-                lgp.augmentSpeedEachXPixels = 200;
-                lgp.augmentSpeedByYEachXPixels = 20;
+                lgp.augmentSpeedEachXPixels = 100000;
+                lgp.augmentSpeedByYEachXPixels = 10;
+                lgp.maxNumberOfSimultaneousCoins = 20;
                 MainGameScene mgs = new MainGameScene(eng);
                 ProceduralLevelGenerator plg = new ProceduralLevelGenerator(mgs,lgp, false);
                 plg.generators.add(new HazardGenerator(mgs,lgp,plg.dangerMatrix));

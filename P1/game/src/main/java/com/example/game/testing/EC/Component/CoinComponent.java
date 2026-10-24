@@ -10,6 +10,7 @@ import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
+import com.example.game.testing.Systems.LevelSpeedSystem;
 import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.CoinSystem;
 import com.example.game.testing.Systems.levelGenerator.ObstacleFactory;
@@ -28,28 +29,28 @@ public class CoinComponent extends Obstacle {
     public static class CoinComponentSerialized extends ObstacleFactory{
         Vec2 pos;
         @Override
-        public void instantiate(mcd_Scene scene, mcd_Entity ent, float levelSpeed, float t) {
-            ent.setComponent(ComponentId.OBSTACLE_COMPONENT, new CoinComponent(ent,t, levelSpeed));
+        public void instantiate(mcd_Scene scene, mcd_Entity ent, float t) {
+            ent.setComponent(ComponentId.OBSTACLE_COMPONENT, new CoinComponent(ent,t));
         }
     }
-    public CoinComponent(mcd_Entity _ent ,float spawnTime, float speedMult, int _value) {
-        super(_ent, spawnTime, speedMult);
+    public CoinComponent(mcd_Entity _ent ,float spawnTime, int _value) {
+        super(_ent, spawnTime);
         myEnt = _ent;
         value = _value;
-        scrolledTime = calculateScrolledTime(spawnTime, speedMult);
+        scrolledTime = calculateScrolledTime(spawnTime);
     }
 
-    public CoinComponent(mcd_Entity _ent ,float spawnTime, float speedMult) {
-        super(_ent, spawnTime, speedMult);
+    public CoinComponent(mcd_Entity _ent ,float spawnTime) {
+        super(_ent, spawnTime);
         myEnt = _ent;
         value = 1;
-        scrolledTime = calculateScrolledTime(spawnTime, speedMult);
+        scrolledTime = calculateScrolledTime(spawnTime);
     }
 
 
     @Override
-    public float calculateScrolledTime(float spawnTime, float speedMult) {
-        return spawnTime+ (LOGIC_WINDOW_SIZE.x + COIN_RADIUS*2)/speedMult;
+    public float calculateScrolledTime(float spawnTime) {
+        return spawnTime+ (LOGIC_WINDOW_SIZE.x + COIN_RADIUS*2)/LevelSpeedSystem.getInstance().getSpeedMult();
     }
 
     @Override

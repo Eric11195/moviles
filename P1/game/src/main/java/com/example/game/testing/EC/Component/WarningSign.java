@@ -11,7 +11,7 @@ import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
 
 public class WarningSign implements mcd_Component {
-    boolean active = false;
+    protected boolean active = false;
     public void activateWarning(){
         active = true;
     }

@@ -57,7 +57,7 @@ public class LevelFileGenerator implements mcd_Serializable {
     private void update(float t, float dt){
         this.sg.generators.forEach(gnr->{
             int index_before =gnr._obstacleArrayIndex;
-            gnr.update(t, dt,sg.speedMult);
+            gnr.update(t, dt);
             int index_after = gnr._obstacleArrayIndex;
             while(index_before != index_after){
                 this.obstacleCompleteList.put(

@@ -6,16 +6,15 @@ import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 
 public abstract class WarnedObstacle extends Obstacle{
-    private boolean activated=false;
+    protected boolean activated=false;
     float timeTillSpawn;
     /**
      *
      * @param ent
      * @param spawnTime
-     * @param speedMult how many px the scenery moves per frame
      */
-    public WarnedObstacle(mcd_Entity ent, float spawnTime, float speedMult) {
-        super(ent, spawnTime, speedMult);
+    public WarnedObstacle(mcd_Entity ent, float spawnTime) {
+        super(ent, spawnTime);
         timeTillSpawn = WARNING_TIME;
         WarningSign ws = (WarningSign) ent.getComponent(ComponentId.WARNING_COMPONENT);
         ws.activateWarning();

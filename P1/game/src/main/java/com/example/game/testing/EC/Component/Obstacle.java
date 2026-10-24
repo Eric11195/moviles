@@ -5,6 +5,7 @@ import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
+import com.example.game.testing.Systems.LevelSpeedSystem;
 import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
 import com.example.game.testing.utils.mcd_Serializable;
 
@@ -15,25 +16,24 @@ public abstract class Obstacle implements mcd_Component, mcd_Serializable {
     protected final float spawnTime;
 
     protected float scrolledTime;
-    protected float speedMult;
 
     /**
      *
      * @param spawnTime
-     * @param speedMult how many px the scenery moves per frame
      */
-    public Obstacle(mcd_Entity ent, float spawnTime, float speedMult){
+    public Obstacle(mcd_Entity ent, float spawnTime){
         this.spawnTime = spawnTime;
-        this.speedMult = speedMult;
         VelocityComponent vel =(VelocityComponent)ent.getComponent(ComponentId.VELOCITY_COMPONENT);
-        vel.velocity.x = -this.speedMult;
+        vel.velocity.x = -LevelSpeedSystem.getInstance().getSpeedMult();
         //EVERYONE MUST DO THIS ASSIGNMENT IT IS NOT AUTOMATIC
-        //scrolledTime = calculateScrolledTime(spawnTime, speedMult);
+        //scrolledTime = calculateScrolledTime(spawnTime);
     }
-    public abstract float calculateScrolledTime(float spawnTime, float speedMult);
+    public abstract float calculateScrolledTime(float spawnTime);
     public abstract void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm,float t, float dt);
     @Override
     public void update(mcd_Entity ent, float t, float dt) {
+        VelocityComponent vel = (VelocityComponent)ent.getComponent(ComponentId.VELOCITY_COMPONENT);
+        vel.velocity.x = -LevelSpeedSystem.getInstance().getSpeedMult();
         if(!onScreen(t)) ent.setActive(false);
     }
 
@@ -56,10 +56,5 @@ public abstract class Obstacle implements mcd_Component, mcd_Serializable {
     }
 
     public abstract void onPlayerCollision(mcd_Entity player, mcd_Entity ent, mcd_Scene scene);
-
-    public void setSpeedMult(float f)
-    {
-        speedMult = f;
-    }
 
 }

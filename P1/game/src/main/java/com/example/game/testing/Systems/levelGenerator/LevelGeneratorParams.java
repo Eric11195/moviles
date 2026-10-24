@@ -12,6 +12,7 @@ public class LevelGeneratorParams implements mcd_Serializable {
     public float augmentSpeedByYEachXPixels;
     public float levelDurationInSeconds;
     public int maxNumberOfSimultaneousObstacles;
+    public int maxNumberOfSimultaneousCoins;
     /**
      * What are the chances of having an explosive obstacle creation
      * Moment in which the obstacle creator receives a huge boosts on tokens.
