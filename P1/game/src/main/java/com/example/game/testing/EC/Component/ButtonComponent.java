@@ -56,8 +56,7 @@ public class ButtonComponent implements mcd_Component {
         }
         g.drawRoundRectangle(tr.pos,tr.size,12.0f, true);
         g.setColor(textColor);
-        Vec2 final_pos = new Vec2(tr.pos.x+tr.size.x*0.5f, tr.pos.y+tr.size.y*0.75f);
-        g.drawText(button_text,final_pos);
+        g.drawText(button_text,tr.pos,tr.size);
     }
 
     public boolean clickedDown(mcd_Entity ent){

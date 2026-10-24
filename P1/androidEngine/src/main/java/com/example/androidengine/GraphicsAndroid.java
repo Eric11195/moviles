@@ -305,6 +305,51 @@ public class GraphicsAndroid implements GraphicsInterface {
 
         can.drawText(text, x, y, paint);
     }
+
+    @Override
+    public void drawText(String text, Vec2 x0y0Pos, Vec2 size) {
+        assert (can != null);
+
+        setStyle(true);
+        setFontStyle(font);
+
+        can.save();
+
+        can.clipRect(
+                x0y0Pos.x,
+                x0y0Pos.y,
+                x0y0Pos.x + size.x,
+                x0y0Pos.y + size.y
+        );
+
+        float originalSize = paint.getTextSize();
+        Paint.FontMetrics metrics = paint.getFontMetrics();
+
+        float textWidth = paint.measureText(text);
+        float textHeight = metrics.descent - metrics.ascent;
+
+        if (textWidth > 0 && textHeight > 0) {
+            float scale = Math.min(
+                    1f,
+                    Math.min(size.x / textWidth, size.y / textHeight)
+            );
+
+            paint.setTextSize(originalSize * scale);
+        }
+
+        metrics = paint.getFontMetrics();
+
+        float x = x0y0Pos.x + size.x / 2f;
+        float y = x0y0Pos.y + (size.y - (metrics.descent - metrics.ascent)) / 2f
+                - metrics.ascent;
+
+        paint.setTextAlign(Paint.Align.CENTER);
+        can.drawText(text, x, y, paint);
+
+        paint.setTextSize(originalSize);
+        can.restore();
+    }
+
     public void calculateInverseMatrix(){
         if (!viewportMatrix.invert(inverseViewportMatrix)) {
             inverseViewportMatrix.reset();

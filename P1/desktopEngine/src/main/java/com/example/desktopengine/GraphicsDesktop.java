@@ -13,10 +13,12 @@ import java.awt.BasicStroke;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Polygon;
+import java.awt.Shape;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.AffineTransform;
@@ -214,6 +216,48 @@ public class GraphicsDesktop implements GraphicsInterface {
         float y = pos.y - (metrics.getAscent() - metrics.getDescent()) / 2f;
 
         graphics.drawString(text, Math.round(x), Math.round(y));
+    }
+    @Override
+    public void drawText(String text, Vec2 x0y0Pos, Vec2 size) {
+        Font originalFont = current_font.getFont();
+        graphics.setFont(originalFont);
+
+        FontMetrics metrics = graphics.getFontMetrics();
+
+        float textWidth = metrics.stringWidth(text);
+        float textHeight = metrics.getAscent() + metrics.getDescent();
+
+        float scale = 1f;
+
+        if (textWidth > 0 && textHeight > 0) {
+            scale = Math.min(1f, Math.min(
+                    size.x / textWidth,
+                    size.y / textHeight
+            ));
+        }
+
+        Font scaledFont = originalFont.deriveFont(originalFont.getSize2D() * scale);
+        graphics.setFont(scaledFont);
+
+        metrics = graphics.getFontMetrics();
+
+        float x = x0y0Pos.x + (size.x - metrics.stringWidth(text)) / 2f;
+        float y = x0y0Pos.y + (size.y - metrics.getHeight()) / 2f
+                + metrics.getAscent();
+
+        Shape oldClip = graphics.getClip();
+
+        graphics.clipRect(
+                Math.round(x0y0Pos.x),
+                Math.round(x0y0Pos.y),
+                Math.round(size.x),
+                Math.round(size.y)
+        );
+
+        graphics.drawString(text, Math.round(x), Math.round(y));
+
+        graphics.setClip(oldClip);
+        graphics.setFont(originalFont);
     }
 
     public ImageEng createImage(String path){
