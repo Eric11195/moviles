@@ -35,12 +35,14 @@ public class DistanceSystem implements mcd_System{
         return totalValue;
     }
 
+    final Vec2 pos = new Vec2(0,0);
+    final Vec2 size = new Vec2(150,100);
     @Override
     public void render(GraphicsInterface g) {
         //render bar to goal
         String text = String.valueOf((int)totalValue/100);
         g.setColor(ColorLibrary.Red);
         g.setFont(FontLibrary.getFont(FontLibrary.FontName.HEADER));
-        g.drawText(text, new Vec2((float) 0 , 100));
+        g.drawText(text, pos, size);
     }
 }
