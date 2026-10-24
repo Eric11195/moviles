@@ -33,6 +33,9 @@ public class CoinSystem implements mcd_System{
     public void update(mcd_Scene scene, float t, float dt) {
 
     }
+    public int getCoins(){
+        return totalValue;
+    }
     final Vec2 size = new Vec2(150,100);
     final Vec2 pos = new Vec2(LOGIC_WINDOW_SIZE.x- size.x,0);
     @Override

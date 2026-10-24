@@ -8,6 +8,8 @@ import com.example.game.testing.EC.Prefabs.PlayerPrefab;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.CoinSystem;
 import com.example.game.testing.Systems.DistanceSystem;
+import com.example.game.testing.Systems.EndGameAfterXCoins;
+import com.example.game.testing.Systems.EndGameAfterXDistance;
 import com.example.game.testing.Systems.levelGenerator.BaseLevelGenerator;
 import com.example.game.testing.Systems.PlayerCollisionDetector;
 import com.example.utils.Vec2;
@@ -41,6 +43,14 @@ public class MainGameScene extends mcd_Scene{
     protected MainGameScene(Engine myEngine, Retos r){
         super(myEngine);
         this.retos = r;
+    }
+    private int coinsToWin;
+    public void setMinCoinsToWin(int coins){
+        this.coinsToWin = coins;
+    }
+    private float distanceToWin;
+    public void setDistanceToWin(float distanceToWin){
+        this.distanceToWin = distanceToWin;
     }
 
     public void setLevelGen(BaseLevelGenerator levelGen){
@@ -90,10 +100,12 @@ public class MainGameScene extends mcd_Scene{
         if(this.retos.is(Retos.monedas)){
             retoActivated=true;
             //add win by coin system
+            addSystem(new EndGameAfterXCoins(coinsToWin));
         }
         if(this.retos.is(Retos.distancia)){
             retoActivated=true;
             //add win by distance system
+            addSystem(new EndGameAfterXDistance(distanceToWin));
         }
         if(retoActivated){
             //add distance to goal system

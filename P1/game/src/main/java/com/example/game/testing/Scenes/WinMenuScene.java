@@ -3,7 +3,7 @@ package com.example.game.testing.Scenes;
 import com.example.engine.Engine;
 
 public class WinMenuScene extends mcd_Scene{
-    protected WinMenuScene(Engine myEngine) {
+    public WinMenuScene(Engine myEngine) {
         super(myEngine);
     }
 
