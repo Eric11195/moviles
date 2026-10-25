@@ -4,6 +4,7 @@ import static com.example.game.testing.EC.Prefabs.PlayerPrefab.createPlayer;
 import static com.example.game.testing.utils.JSON_HELPER.toJSON;
 
 import com.example.engine.Engine;
+import com.example.game.testing.EC.Component.CoinComponent;
 import com.example.game.testing.EC.Component.JetpackComponent;
 import com.example.game.testing.EC.Component.LaserComponent;
 import com.example.game.testing.EC.Component.MissileComponent;
@@ -44,7 +45,6 @@ public class LevelFileGenerator implements mcd_Serializable {
                 lg.lgp,
                 true
         );
-        lg.sg.generators.add(new HazardGenerator(scene,lg.lgp,lg.sg.dangerMatrix));
         lg.sg.setPlayer(lg.player);
         int loop_count = 0;
         while(currentTime < params.levelDurationInSeconds){
@@ -60,11 +60,11 @@ public class LevelFileGenerator implements mcd_Serializable {
             gnr.update(t, dt);
             int index_after = gnr._obstacleArrayIndex;
             while(index_before != index_after){
+                mcd_Entity ent = gnr._obstacleList.get(index_before);
+                System.out.println(ent.getComponent(ComponentId.OBSTACLE_COMPONENT).getClass());
                 this.obstacleCompleteList.put(
                         ((Obstacle)
-                                gnr._obstacleList
-                                        .get(index_before)
-                                        .getComponent(ComponentId.OBSTACLE_COMPONENT)).serialize()
+                                ent.getComponent(ComponentId.OBSTACLE_COMPONENT)).serialize()
                 );
                 index_before = (index_before+1) % gnr._obstacleList.size();
             }
@@ -100,6 +100,7 @@ public class LevelFileGenerator implements mcd_Serializable {
                     lgp.obsFactory.add(ZapperComponent.deserialize(jo));
                     break;
                 case OBSTACLE_COIN:
+                    lgp.obsFactory.add(CoinComponent.deserialize(jo));
                     break;
                 case OBSTACLE_LASER:
                     lgp.obsFactory.add(LaserComponent.deserialize(jo));

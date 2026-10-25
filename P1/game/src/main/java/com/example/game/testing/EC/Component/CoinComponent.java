@@ -27,10 +27,10 @@ public class CoinComponent extends Obstacle {
     mcd_Entity myEnt;
 
     public static class CoinComponentSerialized extends ObstacleFactory{
-        Vec2 pos;
+        float y;
         @Override
         public void instantiate(mcd_Scene scene, mcd_Entity ent, float t) {
-            ent.setComponent(ComponentId.OBSTACLE_COMPONENT, new CoinComponent(ent,t));
+            ent.setComponent(ComponentId.OBSTACLE_COMPONENT, new CoinComponent(ent,t, y));
         }
     }
     public CoinComponent(mcd_Entity _ent ,float spawnTime, int _value) {
@@ -40,11 +40,19 @@ public class CoinComponent extends Obstacle {
         scrolledTime = calculateScrolledTime(spawnTime);
     }
 
-    public CoinComponent(mcd_Entity _ent ,float spawnTime) {
+    public CoinComponent(mcd_Entity _ent, float spawnTime, float y) {
         super(_ent, spawnTime);
         myEnt = _ent;
         value = 1;
         scrolledTime = calculateScrolledTime(spawnTime);
+        TransformComponent tr =(TransformComponent) _ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
+        tr.pos.x = LOGIC_WINDOW_SIZE.x + COIN_RADIUS;
+        tr.pos.y = y;
+        tr.size.x = tr.size.y = COIN_RADIUS;
+
+        ColliderComponent collider = (ColliderComponent) _ent.getComponent(ComponentId.COLLIDER_COMPONENT);
+        collider.clearColliders();
+        collider.addSingleCollider(new Vec2(0,0),COIN_RADIUS);
     }
 
     @Override
@@ -90,13 +98,13 @@ public class CoinComponent extends Obstacle {
     public JSONObject serialize(){
         JSONObject jo = super.serialize();
         TransformComponent tr = (TransformComponent) myEnt.getComponent(ComponentId.TRANSFORM_COMPONENT);
-        jo.put("pos", JSON_HELPER.toJSON(tr.pos));
+        jo.put("y", (double) tr.pos.y);
         jo.put("id",OBSTACLE_COIN);
         return jo;
     }
     public static CoinComponent.CoinComponentSerialized deserialize(JSONObject obj){
         CoinComponent.CoinComponentSerialized ccs = new CoinComponent.CoinComponentSerialized();
-        ccs.pos = fromJSON((JSONObject) obj.getJSONObject("pos"));
+        ccs.y = (float)obj.getDouble("y");
         ccs.spawnTime = getSpawnTime(obj);
         return ccs;
     }

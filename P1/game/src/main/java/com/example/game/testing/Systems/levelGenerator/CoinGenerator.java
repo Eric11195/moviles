@@ -74,17 +74,10 @@ public class CoinGenerator extends Generator{
         if(y < COIN_RADIUS || y > LOGIC_WINDOW_SIZE.y-COIN_RADIUS) return false;
         dangerMatrixCoinPos.y = y-COIN_RADIUS;
         if(!dangerMatrix.checkRect(dangerMatrixCoinPos, dangerMatrixCoinSize)) return false;
-        tr.pos.x = LOGIC_WINDOW_SIZE.x + COIN_RADIUS;
-        tr.pos.y = y;
-        tr.size.x = tr.size.y = COIN_RADIUS;
 
-        ColliderComponent collider = (ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT);
-
-        collider.clearColliders();
-        collider.addSingleCollider(new Vec2(0,0),COIN_RADIUS);
 
         dangerMatrix.drawSquare(dangerMatrixCoinPos, dangerMatrixCoinSize);
-        ent.setComponent(ComponentId.OBSTACLE_COMPONENT,new CoinComponent(ent,t));
+        ent.setComponent(ComponentId.OBSTACLE_COMPONENT,new CoinComponent(ent,t, y));
         lastCoinTimestamp = t;
         lastCoinPos.y = tr.pos.y;
         return true;

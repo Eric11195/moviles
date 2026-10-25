@@ -23,6 +23,9 @@ public abstract class BaseLevelGenerator implements mcd_System {
     protected LevelGeneratorParams params;
     public ArrayList<Generator> generators = new ArrayList<>();
 
+    protected void addGenerator(Generator gen){
+        generators.add(gen);
+    }
     mcd_Entity player = null;
     public void setPlayer(mcd_Entity player){
         this.player = player;

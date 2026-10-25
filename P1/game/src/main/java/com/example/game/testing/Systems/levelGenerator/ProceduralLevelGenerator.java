@@ -26,6 +26,8 @@ public class ProceduralLevelGenerator extends BaseLevelGenerator {
     //@param density marks the highest amount of obstacles in screen at the same time
     public ProceduralLevelGenerator(mcd_Scene scene, LevelGeneratorParams params, boolean simulatedOnly){
         super(scene, params);
+        addGenerator(new HazardGenerator(scene, params, dangerMatrix));
+        addGenerator(new CoinGenerator(scene, params, dangerMatrix));
     }
 
     @Override
@@ -34,7 +36,7 @@ public class ProceduralLevelGenerator extends BaseLevelGenerator {
         super.update(scene,t,dt);
     }
 
-    public DangerMatrix dangerMatrix= new DangerMatrix(DANGER_MATRIX_PX_TILE_SIZE);
+    private DangerMatrix dangerMatrix= new DangerMatrix(DANGER_MATRIX_PX_TILE_SIZE);
     public void setupDangerMatrixWithAlreadyExistingObjects(float t, float dt){
         generators.forEach(gnr ->
         {gnr.setupDangerMatrixWithAlreadyExistingObjects(t, dt);});

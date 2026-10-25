@@ -58,8 +58,6 @@ public class MainMenuScene extends mcd_Scene{
                 lgp.maxNumberOfSimultaneousCoins = 20;
                 MainGameScene mgs = new MainGameScene(eng);
                 ProceduralLevelGenerator plg = new ProceduralLevelGenerator(mgs,lgp, false);
-                plg.generators.add(new HazardGenerator(mgs,lgp,plg.dangerMatrix));
-                plg.generators.add(new CoinGenerator(mgs,lgp,plg.dangerMatrix));
                 mgs.setLevelGen(plg);
                 eng.setScene(mgs);
             }
