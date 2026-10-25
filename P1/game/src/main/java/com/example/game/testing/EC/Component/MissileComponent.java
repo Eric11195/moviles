@@ -69,22 +69,22 @@ public class MissileComponent extends WarnedObstacle {
         return spawnTime + WARNING_TIME + (MISSILE_RADIUS*2 + LOGIC_WINDOW_SIZE.x)/(LevelSpeedSystem.getInstance().getSpeedMult()+MISSILE_MOVE_SPEED);
     }
 
+    Vec2 drawSelfInMatrixPos = new Vec2(), drawSelfInMatrixSize = new Vec2(MISSILE_RADIUS*2, MISSILE_RADIUS*2);
     @Override
     public void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm, float t, float dt) {
-//        float realXPos = tr.pos.x - getTimeTillSpawn() * xSpeed;
-//        if(realXPos < LOGIC_WINDOW_SIZE.x+DANGER_MATRIX_PRECALCULATED_SPACE) {
-//            dm.drawSquare(new Vec2(realXPos, tr.pos.y - tr.size.y), tr.size);
-//        }
+        super.drawSelfInDangerMatrix(tr,dm,t,dt);
+
         final float timeOfCollision = getTimeTillSpawn() + (LOGIC_WINDOW_SIZE.x-PLAYER_X_POS+PLAYER_DIMENSIONS.x)/(LevelSpeedSystem.getInstance().getSpeedMult()+MISSILE_MOVE_SPEED);
         float futureX = tr.pos.x - (MISSILE_MOVE_SPEED+LevelSpeedSystem.getInstance().getSpeedMult()) * timeOfCollision;
-
         // Only consider the missile while it is relevant
         // to the predicted scene.
         if (futureX < LOGIC_WINDOW_SIZE.x+DANGER_MATRIX_PRECALCULATED_SPACE) {
             // Mark the missile's predicted position at time t.
+            drawSelfInMatrixPos.x = futureX;
+            drawSelfInMatrixPos.y = tr.pos.y;
             dm.drawSquare(
-                    new Vec2(futureX, tr.pos.y),
-                    new Vec2(MISSILE_RADIUS*2,MISSILE_RADIUS*2)
+                    drawSelfInMatrixPos,
+                    drawSelfInMatrixSize
             );
         }
     }

@@ -137,6 +137,7 @@ public class LaserComponent extends WarnedObstacle {
     Vec2 drawInDangerMatrixSize = new Vec2();
     @Override
     public void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm,float t, float dt) {
+        super.drawSelfInDangerMatrix(tr,dm,t,dt);
         drawInDangerMatrixPos.x = Math.min(1,(t-scrolledTime/WARNING_TIME));
         drawInDangerMatrixSize.x = LOGIC_WINDOW_SIZE.x - drawInDangerMatrixSize.x;
         dm.drawSquare(drawInDangerMatrixPos,drawInDangerMatrixSize);

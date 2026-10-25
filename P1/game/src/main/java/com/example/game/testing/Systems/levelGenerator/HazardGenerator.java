@@ -12,6 +12,7 @@ import com.example.game.testing.EC.Component.MissileComponent;
 import com.example.game.testing.EC.Component.ObstacleId;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.Component.VelocityComponent;
+import com.example.game.testing.EC.Component.WarnedObstacle;
 import com.example.game.testing.EC.Component.WarningSign;
 import com.example.game.testing.EC.Component.ZapperComponent;
 import com.example.game.testing.EC.ComponentId;
@@ -86,13 +87,20 @@ public class HazardGenerator extends Generator{
                 );
         if(space.y-space.x < MISSILE_RADIUS*2) return false;
         float y = space.x + (space.y-space.x)*(float)Math.random();
+        WarnedObstacle.drawSelfInDangerMatrixPos.y = y;
+        if(!dangerMatrix.checkRect(WarnedObstacle.drawSelfInDangerMatrixPos, WarnedObstacle.drawSelfInDangerMatrixSize))
+            return false;
+
         if(y < 0 || y+MISSILE_RADIUS*2 > LOGIC_WINDOW_SIZE.y) return false;
+
         MissileComponent mis = (MissileComponent) ent.setComponent(
                 ComponentId.OBSTACLE_COMPONENT,
                 new MissileComponent(ent, t, y)
         );
         mis.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix,t,dt);
-        return dangerMatrix.ensureTraversability(player,dt);
+        boolean traversability = dangerMatrix.ensureTraversability(player,dt);
+        System.out.println("GenerateLaser");
+        return traversability;
     }
     final static Vec2 laserSizeInDangerMatrix = new Vec2(0, LASER_HEIGHT);
     final static Vec2 laserPosInDangerMatrix = new Vec2(0, 0);
@@ -107,10 +115,9 @@ public class HazardGenerator extends Generator{
 
         TransformComponent tr =(TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
         float y = space.x + (space.y-space.x)*(float)Math.random();
-        tr.pos.x = 0;
-        tr.pos.y = y;
-        tr.size.x = LASER_WIDTH;
-        tr.size.y = LASER_HEIGHT;
+        WarnedObstacle.drawSelfInDangerMatrixPos.y = y;
+        if(!dangerMatrix.checkRect(WarnedObstacle.drawSelfInDangerMatrixPos, WarnedObstacle.drawSelfInDangerMatrixSize))
+            return false;
 
         LaserComponent laser = (LaserComponent) ent.setComponent(ComponentId.OBSTACLE_COMPONENT
                 ,new LaserComponent(ent,t,2));
@@ -122,8 +129,10 @@ public class HazardGenerator extends Generator{
             ent.rmComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
             return false;
         }
+        System.out.println("GenerateLaser");
         return true;
     }
+    Vec2 zapperCreationStart = new Vec2(), zapperCreationEnd=new Vec2();
     public boolean createZapper(mcd_Entity ent, float t, float dt){
         Vec2 space =
                 getSafeVerticalSpaceForObstacleSoPlayerCanPass(
@@ -132,19 +141,18 @@ public class HazardGenerator extends Generator{
                 );
         //Space is really the from and to of y axis that the zapper will ocuppy
         //So x does not mean x axis at all
-        Vec2 start=new Vec2(),end=new Vec2();
         float delta = Math.abs(space.y-space.x);
         space.y = space.x + delta * (float)Math.random();
         space.x = space.x + delta * (float)Math.random();
         //System.out.println("Delta: "+ delta+ " Y_RANGE: ("+space.x+","+space.y+')');
-        ZapperComponent.getProvisionalZapperData(space,start,end);
-        if(start.y < 0 || start.y > LOGIC_WINDOW_SIZE.y || end.y < 0 || end.y > LOGIC_WINDOW_SIZE.y) return false;
-        if(!dangerMatrix.checkLine(start,end)) return false;
-        dangerMatrix.drawLine(start,end);
+        ZapperComponent.getProvisionalZapperData(space,zapperCreationStart,zapperCreationEnd);
+        if(zapperCreationStart.y < 0 || zapperCreationStart.y > LOGIC_WINDOW_SIZE.y || zapperCreationEnd.y < 0 || zapperCreationEnd.y > LOGIC_WINDOW_SIZE.y) return false;
+        if(!dangerMatrix.checkLine(zapperCreationStart,zapperCreationEnd)) return false;
+        dangerMatrix.drawLine(zapperCreationStart,zapperCreationEnd);
         if(!dangerMatrix.ensureTraversability(player,dt)) return false;
         ent.setComponent(
                 ComponentId.OBSTACLE_COMPONENT,
-                new ZapperComponent(ent, t, start, end)
+                new ZapperComponent(ent, t, zapperCreationStart, zapperCreationEnd)
         );
         return true;
     }
