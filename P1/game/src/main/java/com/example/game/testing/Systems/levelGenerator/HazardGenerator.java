@@ -98,9 +98,12 @@ public class HazardGenerator extends Generator{
                 new MissileComponent(ent, t, y)
         );
         mis.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix,t,dt);
-        boolean traversability = dangerMatrix.ensureTraversability(player,dt);
+        if(!dangerMatrix.ensureTraversability(player,dt)){
+            mis.deactivateWarning(ent);
+            return false;
+        }
         System.out.println("GenerateLaser");
-        return traversability;
+        return true;
     }
     final static Vec2 laserSizeInDangerMatrix = new Vec2(0, LASER_HEIGHT);
     final static Vec2 laserPosInDangerMatrix = new Vec2(0, 0);
@@ -127,9 +130,10 @@ public class HazardGenerator extends Generator{
         laserPosInDangerMatrix.x = LOGIC_WINDOW_SIZE.x - laserSizeInDangerMatrix.x;
         if (!dangerMatrix.ensureTraversability(player,dt) || !dangerMatrix.checkRect(laserPosInDangerMatrix, laserSizeInDangerMatrix)) {
             ent.rmComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
+            laser.deactivateWarning(ent);
             return false;
         }
-        System.out.println("GenerateLaser");
+        //System.out.println("GenerateLaser");
         return true;
     }
     Vec2 zapperCreationStart = new Vec2(), zapperCreationEnd=new Vec2();

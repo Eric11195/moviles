@@ -39,6 +39,9 @@ public abstract class WarnedObstacle extends Obstacle{
     }
     //This is called once, when the time from the warning is finished
     public void activateObstacle(mcd_Entity ent, float t, float dt){
+        deactivateWarning(ent);
+    }
+    public void deactivateWarning(mcd_Entity ent){
         WarningSign ws = (WarningSign) ent.getComponent(ComponentId.WARNING_COMPONENT);
         ws.deactivateWarning();
     }

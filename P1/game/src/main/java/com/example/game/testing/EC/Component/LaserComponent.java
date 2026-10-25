@@ -112,11 +112,13 @@ public class LaserComponent extends WarnedObstacle {
             draw.color = color;
         }
     }
-    private  void disable(mcd_Entity ent)
+    private void disable(mcd_Entity ent)
     {
         ent.rmComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
         ColliderComponent colliderComponent= (ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT);
         colliderComponent.clearColliders();
+
+        deactivateWarning(ent);
 
         ent.setActive(false);
 
