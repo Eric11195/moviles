@@ -2,6 +2,7 @@ package com.example.game.testing.Systems.levelGenerator;
 
 import static com.example.game.testing.constants.Constants.LASER_HEIGHT;
 import static com.example.game.testing.constants.Constants.LASER_WIDTH;
+import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.MIN_ZAPPER_HEIGHT;
 import static com.example.game.testing.constants.Constants.MISSILE_RADIUS;
 
@@ -16,6 +17,7 @@ import com.example.game.testing.EC.Component.ZapperComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
+import com.example.game.testing.Systems.LevelSpeedSystem;
 import com.example.utils.Vec2;
 
 import java.util.ArrayList;
@@ -81,7 +83,9 @@ public class HazardGenerator extends Generator{
                         getVerticalSafeZone(),
                         MISSILE_RADIUS*2
                 );
+        if(space.y-space.x < MISSILE_RADIUS*2) return false;
         float y = space.x + (space.y-space.x)*(float)Math.random();
+        if(y < 0 || y+MISSILE_RADIUS*2 > LOGIC_WINDOW_SIZE.y) return false;
         MissileComponent mis = (MissileComponent) ent.setComponent(
                 ComponentId.OBSTACLE_COMPONENT,
                 new MissileComponent(ent, t, y)
@@ -89,6 +93,8 @@ public class HazardGenerator extends Generator{
         mis.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix,t,dt);
         return dangerMatrix.ensureTraversability(player,dt);
     }
+    final static Vec2 laserSizeInDangerMatrix = new Vec2(0, LASER_HEIGHT);
+    final static Vec2 laserPosInDangerMatrix = new Vec2(0, 0);
     public  boolean createLaser(mcd_Entity ent, float t, float dt)
     {
         Vec2 space =
@@ -96,6 +102,8 @@ public class HazardGenerator extends Generator{
                         getVerticalSafeZone(),
                         LASER_HEIGHT*1.5f
                 );
+        if(space.y - space.x < LASER_HEIGHT) return false;
+
         TransformComponent tr =(TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
         float y = space.x + (space.y-space.x)*(float)Math.random();
         tr.pos.x = 0;
@@ -106,7 +114,10 @@ public class HazardGenerator extends Generator{
         LaserComponent laser = (LaserComponent) ent.setComponent(ComponentId.OBSTACLE_COMPONENT
                 ,new LaserComponent(ent,t,2));
         laser.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix,t,dt);
-        if (!dangerMatrix.ensureTraversability(player,dt)) {
+        laserSizeInDangerMatrix.x = LevelSpeedSystem.getInstance().getSpeedMult();
+        laserPosInDangerMatrix.y = y;
+        laserPosInDangerMatrix.x = LOGIC_WINDOW_SIZE.x - laserSizeInDangerMatrix.x;
+        if (!dangerMatrix.ensureTraversability(player,dt) || !dangerMatrix.checkRect(laserPosInDangerMatrix, laserSizeInDangerMatrix)) {
             ent.rmComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
             return false;
         }
@@ -126,6 +137,7 @@ public class HazardGenerator extends Generator{
         space.x = space.x + delta * (float)Math.random();
         //System.out.println("Delta: "+ delta+ " Y_RANGE: ("+space.x+","+space.y+')');
         ZapperComponent.getProvisionalZapperData(space,start,end);
+        if(start.y < 0 || start.y > LOGIC_WINDOW_SIZE.y || end.y < 0 || end.y > LOGIC_WINDOW_SIZE.y) return false;
         if(!dangerMatrix.checkLine(start,end)) return false;
         dangerMatrix.drawLine(start,end);
         if(!dangerMatrix.ensureTraversability(player,dt)) return false;

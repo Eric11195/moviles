@@ -34,7 +34,6 @@ public class DangerMatrix extends BoolMatrix{
     }
 
     /**
-     *
      * @return true if that line is free on the danger Matrix, false otherwise
      */
     public boolean checkLine(Vec2 startPt, Vec2 endPt){
@@ -44,6 +43,20 @@ public class DangerMatrix extends BoolMatrix{
         for(int i = 0; i < repetitions; ++i){
             if(get(getConvertedPos(pt))) return false;
             pt = pt.add(delta);
+        }
+        return true;
+    }
+
+    /**
+     * @param x0y0 the left up point of the rect
+     * @param size width and height in px
+     * @return true if the given rect is free on the danger matrix
+     */
+    public boolean checkRect(Vec2 x0y0, Vec2 size){
+        for(int x = (int)x0y0.x; x < x0y0.x+size.x; ++x){
+            for(int y = (int)x0y0.y; y < x0y0.y+size.y; ++y){
+                if(get(getConvertedPos(x,y))) return false;
+            }
         }
         return true;
     }
@@ -65,6 +78,14 @@ public class DangerMatrix extends BoolMatrix{
             pos.x/zonesPxSize,
             pos.y/zonesPxSize
         ));
+    }
+    public Vec2 getConvertedPos(int x, int y){
+        return sanitize(
+            new Vec2(
+                x/(float)zonesPxSize,
+                y/(float)zonesPxSize
+            )
+        );
     }
 
     /**

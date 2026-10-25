@@ -52,6 +52,6 @@ public class Constants {
     public static final float LASER_WIDTH = LOGIC_WINDOW_SIZE.x;
     public static final float LASER_ANIM_TIME = 0.5f;
     public  static final int LASER_ANIM_NUM = 4;
-    public static final float LASER_ATTACK_DUR= 1.5f;
+    public static final float LASER_ATTACK_DUR= 1.0f;
 
 }
