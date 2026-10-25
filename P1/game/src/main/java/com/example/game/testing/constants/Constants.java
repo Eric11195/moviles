@@ -54,4 +54,11 @@ public class Constants {
     public  static final int LASER_ANIM_NUM = 4;
     public static final float LASER_ATTACK_DUR= 1.0f;
 
+    // BACKGROUND
+    public static final float BACKGROUND_SPEED_SCALE = 0.5f;
+    public static final float BACKGROUND_MIN_HEIGHT = 500;
+    public static final float BACKGROUND_MAX_HEIGHT = 800;
+    public static final float BACKGROUND_MIN_WIDTH = 400;
+    public static final float BACKGROUND_MAX_WIDTH = 600;
+
 }

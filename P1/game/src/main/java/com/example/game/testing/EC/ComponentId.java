@@ -2,6 +2,7 @@ package com.example.game.testing.EC;
 
 public enum ComponentId {
     TRANSFORM_COMPONENT,
+    BACKGROUND_COMPONENT,
     BUTTON_COMPONENT,
     IMAGE_COMPONENT,
     VELOCITY_COMPONENT,

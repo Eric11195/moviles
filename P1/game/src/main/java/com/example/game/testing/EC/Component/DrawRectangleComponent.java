@@ -11,26 +11,27 @@ import com.example.utils.Vec2;
 
 import java.util.List;
 
-class Rectangle
-{
-    public Vec2 myPos,mySize;
-  public  Rectangle(Vec2 pos, Vec2 size)
-  {
-    myPos = pos;
-    mySize = size;
-  }
 
-};
 public class DrawRectangleComponent implements mcd_Component {
+    public static class Rectangle
+    {
+        public Vec2 myPos,mySize;
+        public  Rectangle(Vec2 pos, Vec2 size)
+        {
+            myPos = pos;
+            mySize = size;
+        }
+
+    };
     public ColorEng color;
-    List<Rectangle> rectanglesToDraw;
+    public List<Rectangle> rectanglesToDraw;
     public DrawRectangleComponent() {
         color = ColorLibrary.Red.clone();
         rectanglesToDraw = new java.util.ArrayList<Rectangle>();
     }
     public void addRectangle(Vec2 pos, Vec2 size)
     {
-        rectanglesToDraw.add(new Rectangle(pos,size));
+        rectanglesToDraw.add(new Rectangle(pos, size));
     }
 
     @Override
@@ -41,6 +42,7 @@ public class DrawRectangleComponent implements mcd_Component {
             g.drawRectangle(rectanglesToDraw.get(i).myPos,rectanglesToDraw.get(i).mySize,true);
         }
     }
+
     public void clearRectangles()
     {
         rectanglesToDraw.clear();

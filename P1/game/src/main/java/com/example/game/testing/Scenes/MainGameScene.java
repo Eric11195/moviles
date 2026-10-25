@@ -1,9 +1,13 @@
 package com.example.game.testing.Scenes;
 
 import static com.example.game.testing.EC.Prefabs.ButtonPrefab.createButton;
+import static com.example.game.testing.constants.Constants.BACKGROUND_MIN_WIDTH;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
 import com.example.engine.Engine;
+import com.example.game.testing.EC.Component.BackgroundComponent;
+import com.example.game.testing.EC.Component.DrawRectangleComponent;
+import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.Prefabs.PlayerPrefab;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.CoinSystem;
@@ -13,6 +17,7 @@ import com.example.game.testing.Systems.EndGameAfterXDistance;
 import com.example.game.testing.Systems.GameDistanceToEndOfLevelRenderer;
 import com.example.game.testing.Systems.levelGenerator.BaseLevelGenerator;
 import com.example.game.testing.Systems.PlayerCollisionDetector;
+import com.example.game.testing.constants.Constants;
 import com.example.utils.Vec2;
 
 public class MainGameScene extends mcd_Scene{
@@ -71,6 +76,14 @@ public class MainGameScene extends mcd_Scene{
             throw new RuntimeException("You must call setLevelGen before this function");
         }
         gameTime = 0;
+
+//        mcd_Entity background = createEntity();
+//        background.addComponent(ComponentId.BACKGROUND_COMPONENT, new BackgroundComponent(new Vec2(Constants.BACKGROUND_MIN_WIDTH,Constants.BACKGROUND_MIN_HEIGHT),
+//                new Vec2(Constants.BACKGROUND_MAX_WIDTH,Constants.BACKGROUND_MAX_HEIGHT),
+//                Constants.BACKGROUND_SPEED_SCALE,
+//                255));
+//        background.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT,new DrawRectangleComponent());
+
         int pauseButtonSize = 40;
         createButton(
             this,
