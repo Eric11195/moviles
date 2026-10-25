@@ -59,7 +59,7 @@ public class LaserComponent extends WarnedObstacle {
         is_attacking = false;
         index_rep = 0;
         loop_num = 0;
-        color = ColorLibrary.Yellow;
+        color = ColorLibrary.Yellow.clone();
 
         setUpCollider((ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT));
         setUpSpeed((VelocityComponent) ent.getComponent(ComponentId.VELOCITY_COMPONENT));

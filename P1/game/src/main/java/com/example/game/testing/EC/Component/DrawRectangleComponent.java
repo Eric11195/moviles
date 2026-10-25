@@ -25,11 +25,7 @@ public class DrawRectangleComponent implements mcd_Component {
     public ColorEng color;
     List<Rectangle> rectanglesToDraw;
     public DrawRectangleComponent() {
-        try {
-            color = ColorLibrary.Red.clone();
-        }catch(CloneNotSupportedException ignored){
-            color = new ColorEng(255,0,0,255);
-        }
+        color = ColorLibrary.Red.clone();
         rectanglesToDraw = new java.util.ArrayList<Rectangle>();
     }
     public void addRectangle(Vec2 pos, Vec2 size)

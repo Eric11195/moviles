@@ -21,12 +21,7 @@ public class ColorEng {
         // Variables a, r, g, b should be integers between 0 and 255
         return (a & 0xff) << 24 | (r & 0xff) << 16 | (g & 0xff) << 8 | (b & 0xff);
     }
-    public ColorEng clone() throws CloneNotSupportedException {
-        ColorEng colorEng = (ColorEng) super.clone();
-        colorEng.r = this.r;
-        colorEng.g = this.g;
-        colorEng.b = this.b;
-        colorEng.a = this.a;
-        return colorEng;
+    public ColorEng clone() {
+        return new ColorEng(r,g,b,a);
     }
 }
