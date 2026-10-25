@@ -26,8 +26,7 @@ public class CoinGenerator extends Generator{
 
     @Override
     protected boolean setUpNewObstacle(mcd_Entity ent, float t, float dt) {
-        createCoin(ent,t,dt);
-        return true;
+        return createCoin(ent,t,dt);
     }
 
     @Override
@@ -50,15 +49,21 @@ public class CoinGenerator extends Generator{
         _obstacleArrayIndex = 0;
         _freeIdxCount = params.maxNumberOfSimultaneousCoins;
     }
+    Vec2 dangerMatrixCoinPos = new Vec2(LOGIC_WINDOW_SIZE.x, 0);
+    Vec2 dangerMatrixCoinSize = new Vec2(COIN_RADIUS*2,2*COIN_RADIUS);
 
     public boolean createCoin(mcd_Entity ent, float t, float dt){
         Vec2 space =
                 getSafeVerticalSpaceForObstacleSoPlayerCanPass(
                         getVerticalSafeZone(),
-                        LASER_HEIGHT*1.5f
+                        COIN_RADIUS*2
                 );
+        if(space.y-space.x < COIN_RADIUS*2) return false;
         TransformComponent tr =(TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
         float y = space.x + (space.y-space.x)*(float)Math.random();
+        if(y < COIN_RADIUS || y > LOGIC_WINDOW_SIZE.y-COIN_RADIUS) return false;
+        dangerMatrixCoinPos.y = y-COIN_RADIUS;
+        if(!dangerMatrix.checkRect(dangerMatrixCoinPos, dangerMatrixCoinSize)) return false;
         tr.pos.x = LOGIC_WINDOW_SIZE.x + COIN_RADIUS;
         tr.pos.y = y;
         tr.size.x = tr.size.y = COIN_RADIUS;
@@ -68,9 +73,8 @@ public class CoinGenerator extends Generator{
         collider.clearColliders();
         collider.addSingleCollider(new Vec2(0,0),COIN_RADIUS);
 
-        CoinComponent coin = (CoinComponent) ent.setComponent(ComponentId.OBSTACLE_COMPONENT
-                ,new CoinComponent(ent,t));
-        coin.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix,t,dt);
+        dangerMatrix.drawSquare(dangerMatrixCoinPos, dangerMatrixCoinSize);
+        ent.setComponent(ComponentId.OBSTACLE_COMPONENT,new CoinComponent(ent,t));
 
         return true;
     }

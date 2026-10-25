@@ -31,8 +31,7 @@ public class HazardGenerator extends Generator{
     public boolean setUpNewObstacle(mcd_Entity obstacle, float t, float dt){
         //TransformComponent tr = (TransformComponent) obstacle.getComponent(ComponentId.TRANSFORM_COMPONENT);
         //ImageComponent img = (ImageComponent) obstacle.getComponent(ComponentId.IMAGE_COMPONENT);
-        if(!createRandomObstacleComp(obstacle,t,dt)) return false;
-        return true;
+        return createRandomObstacleComp(obstacle,t,dt);
     }
 
     @Override
@@ -60,7 +59,9 @@ public class HazardGenerator extends Generator{
     }
 
     public boolean createRandomObstacleComp(mcd_Entity ent, float t, float dt){
-        switch(chooseObstacleType()){
+        ObstacleId chosen = chooseObstacleType();
+        //System.out.println("Chosen obstacle is "+chosen.name());
+        switch(chosen){
             case OBSTACLE_LASER:
                 return createLaser(ent, t, dt);
             case OBSTACLE_MISSILE:

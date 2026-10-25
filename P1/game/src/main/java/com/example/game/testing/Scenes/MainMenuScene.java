@@ -52,7 +52,7 @@ public class MainMenuScene extends mcd_Scene{
                 lgp.obstacleExplosiveCreationBoost = 1.5f;
                 lgp.obstacleExplosiveCreationChance = 0.000000001;
                 lgp.obstacleLinearCreationPerSecond = 0.8f;
-                lgp.coinLinearCreationPerSecond = 5.0f;
+                lgp.coinLinearCreationPerSecond = 1.0f;
                 lgp.augmentSpeedEachXPixels = 100000;
                 lgp.augmentSpeedByYEachXPixels = 10;
                 lgp.maxNumberOfSimultaneousCoins = 20;

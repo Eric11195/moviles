@@ -47,15 +47,18 @@ public class CoinComponent extends Obstacle {
         scrolledTime = calculateScrolledTime(spawnTime);
     }
 
-
     @Override
     public float calculateScrolledTime(float spawnTime) {
         return spawnTime+ (LOGIC_WINDOW_SIZE.x + COIN_RADIUS*2)/LevelSpeedSystem.getInstance().getSpeedMult();
     }
 
+    final static Vec2 drawInSelfMatrixPos = new Vec2(0,0);
+    final static Vec2 drawInSelfMatrixSize = new Vec2(COIN_RADIUS*2,2*COIN_RADIUS);
     @Override
     public void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm,float t,float dt) {
-        dm.drawSquare(tr.pos, tr.size);
+        drawInSelfMatrixPos.x = tr.pos.x-COIN_RADIUS;
+        drawInSelfMatrixPos.y = tr.pos.y-COIN_RADIUS;
+        dm.drawSquare(drawInSelfMatrixPos, drawInSelfMatrixSize);
     }
 
     @Override
@@ -75,6 +78,12 @@ public class CoinComponent extends Obstacle {
         g.setColor(ColorLibrary.DarkGold);
         g.drawCircle(tr.pos,tr.size.x,false);
     }
+//    @Override
+//    public void update(mcd_Entity ent, float t, float dt){
+//        super.update(ent, t, dt);
+//        TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
+//        System.out.println("Coin ("+tr.pos.x+","+tr.pos.y+")");
+//    }
 
 
     @Override
