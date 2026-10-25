@@ -7,10 +7,13 @@ public class SoundAndroid implements EngSound {
 
     private String file_path;
 
-    public SoundAndroid(int n,String path)
+    int numLoops;
+
+    public SoundAndroid(int n,String path,int loops)
     {
         id=n;
         file_path=path;
+        numLoops=loops;
     }
     public SoundAndroid()
     {
@@ -24,6 +27,12 @@ public class SoundAndroid implements EngSound {
     @Override
     public int getId() {
         return id;
+    }
+
+    @Override
+    public int Loops()
+    {
+        return numLoops;
     }
     public void setName(int n)
     {

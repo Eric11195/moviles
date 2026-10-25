@@ -34,22 +34,29 @@ public class AudioAndroid implements AudioInterface {
     }
 
     @Override
-    public SoundAndroid addSound(String file_path) {
+    public SoundAndroid addSound(String file_path, int numLoops) {
         int aux = -1;
 
                 AssetFileDescriptor afd = null;
                 try {
-                    afd = context.getAssets().openFd(file_path);
+                    String pathAux = "audio/" + file_path;
+                    afd = context.getAssets().openFd(pathAux);
                     // Try 1: Exact path as passed (e.g. "Mineral sparkle.mp3")
                     aux = sound_pool.load(afd, 1);
+                    System.out.println(aux);
                     afd.close();
 
                 }catch (Exception e)
                 {
-                    return null;
+                    Log.e("SOUND", "Error al abrir el archivo: " + file_path, e);
                 }
 
-        return new SoundAndroid(aux, file_path);
+        return new SoundAndroid(aux, file_path,numLoops);
+    }
+
+    @Override
+    public void stopSound(EngSound sound) {
+        sound_pool.stop(sound.getId());
     }
 
     public void setBackgroundMusic(String file_path) {
@@ -63,9 +70,9 @@ public class AudioAndroid implements AudioInterface {
     }
 
     @Override
-    public void playSound(EngSound sound, int looping) {
+    public void playSound(EngSound sound) {
         if (sound != null && sound.getId() > 0) {
-            sound_pool.play(sound.getId(), 1.f, 1.f, 0, looping, 1.f);
+            sound_pool.play(sound.getId(), 1.f, 1.f, 0,sound.Loops(), 1.f);
         }
     }
 }
