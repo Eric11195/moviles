@@ -1,9 +1,12 @@
 package com.example.game.testing.Systems.levelGenerator;
 
 import static com.example.game.testing.constants.Constants.COIN_RADIUS;
+import static com.example.game.testing.constants.Constants.GRAVITY_FORCE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
+import static com.example.game.testing.constants.Constants.MAX_COIN_Y_JUMP;
 import static com.example.game.testing.constants.Constants.MAX_PLAYER_FALL_SPEED;
 import static com.example.game.testing.constants.Constants.MAX_PLAYER_UPWARDS_SPEED;
+import static com.example.game.testing.constants.Constants.Y_PLAYER_ACCEL;
 
 import com.example.game.testing.EC.Component.CoinComponent;
 import com.example.game.testing.EC.Component.ColliderComponent;
@@ -20,6 +23,7 @@ import java.util.ArrayList;
 public class CoinGenerator extends Generator{
     float lastCoinTimestamp = -1;
     Vec2 lastCoinPos = new Vec2(-1,-1);
+
     public CoinGenerator(mcd_Scene _scene, LevelGeneratorParams _params, DangerMatrix _dangerMatrix) {
         super(_scene, _params,_dangerMatrix);
     }
@@ -52,31 +56,46 @@ public class CoinGenerator extends Generator{
     Vec2 dangerMatrixCoinPos = new Vec2(LOGIC_WINDOW_SIZE.x, 0);
     Vec2 dangerMatrixCoinSize = new Vec2(COIN_RADIUS*2,2*COIN_RADIUS);
 
-    public boolean createCoin(mcd_Entity ent, float t, float dt){
-        Vec2 preferredZone = new Vec2(0, LOGIC_WINDOW_SIZE.y);
+    public boolean createCoin(mcd_Entity ent, float t, float dt) {
+        float currentSpeed = LevelSpeedSystem.getInstance().getSpeedMult();
 
-        if(lastCoinTimestamp != -1) {
-            // Optional: Break the chain if it's been too long since the last coin
-            if(t - lastCoinTimestamp > 1.0f) {
-                lastCoinTimestamp = -1;
-            } else {
-                float maxAllowedYMove = Math.min(MAX_PLAYER_UPWARDS_SPEED, MAX_PLAYER_FALL_SPEED);
-                float diff = (t - lastCoinTimestamp) * 0.7f * maxAllowedYMove;
-                preferredZone.x = Math.max(preferredZone.x, lastCoinPos.y - diff);
-                preferredZone.y = Math.min(preferredZone.y, lastCoinPos.y + diff);
-                if(preferredZone.y < preferredZone.x) return false;
-            }
+        int maxCoins = (_obstacleList != null && !_obstacleList.isEmpty()) ? _obstacleList.size() : 1;
+        float fixedXSpace = LOGIC_WINDOW_SIZE.x / maxCoins;
+        float fixedTimeGap = fixedXSpace / currentSpeed;
+
+        // 2. Reject the spawn entirely if the X space is too tight
+        if (lastCoinTimestamp != -1 && (t - lastCoinTimestamp) < fixedTimeGap) {
+            return false;
         }
 
-        float y = preferredZone.x + (preferredZone.y - preferredZone.x) * (float)Math.random();
+        float y;
 
-        if(y < COIN_RADIUS || y > LOGIC_WINDOW_SIZE.y - COIN_RADIUS) return false;
+        // 3. Start a new trail if it's the first coin or the chain broke
+        if (lastCoinTimestamp == -1 || (t - lastCoinTimestamp) > 1.0f) {
+            y = COIN_RADIUS + (LOGIC_WINDOW_SIZE.y - COIN_RADIUS * 2) * (float)Math.random();
+        } else {
+            // 4. Use the constant to restrict the maximum Y variation
+            float jump = (float)Math.random() * MAX_COIN_Y_JUMP * 2 - MAX_COIN_Y_JUMP;
+            y = lastCoinPos.y + jump;
+        }
+
+        // Reject if it hits the floor or ceiling
+        if (y < COIN_RADIUS || y > LOGIC_WINDOW_SIZE.y - COIN_RADIUS) {
+            lastCoinTimestamp = -1;
+            return false;
+        }
 
         dangerMatrixCoinPos.y = y - COIN_RADIUS;
-        if(!dangerMatrix.checkRect(dangerMatrixCoinPos, dangerMatrixCoinSize)) return false;
+
+        // Reject if it collides with a hazard (zapper, missile, laser)
+        if (!dangerMatrix.checkRect(dangerMatrixCoinPos, dangerMatrixCoinSize)) {
+            lastCoinTimestamp = -1;
+            return false;
+        }
 
         dangerMatrix.drawSquare(dangerMatrixCoinPos, dangerMatrixCoinSize);
         ent.setComponent(ComponentId.OBSTACLE_COMPONENT, new CoinComponent(ent, t, y));
+
         lastCoinTimestamp = t;
         lastCoinPos.y = y;
         return true;

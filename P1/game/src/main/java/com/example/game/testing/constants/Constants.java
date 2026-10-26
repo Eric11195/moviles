@@ -44,6 +44,7 @@ public class Constants {
 
         // COIN
         public static final float COIN_RADIUS = 10;
+        public static final float MAX_COIN_Y_JUMP = COIN_RADIUS * 1.0f;
         public static final float COIN_COLLIDER_RADIUS = 12;
     /**
      * How long until an obstacle with warning appears from the first time it's hinted on screen
