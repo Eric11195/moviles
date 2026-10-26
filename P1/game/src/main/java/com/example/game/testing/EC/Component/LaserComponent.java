@@ -72,7 +72,7 @@ public class LaserComponent extends WarnedObstacle {
         drawInDangerMatrixPos.y = posY;
         drawInDangerMatrixSize.y = LASER_HEIGHT;
         DrawRectangleComponent draw=  (DrawRectangleComponent)  ent.getComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
-        Vec2 rectSize = tr.size;
+        Vec2 rectSize = tr.size.clone();
         rectSize.x = rectSize.x/7.5f;
         draw.addRectangle(tr.pos,rectSize);
         draw.addRectangle(new Vec2((LOGIC_WINDOW_SIZE.x-rectSize.x),tr.pos.y),rectSize);
@@ -139,9 +139,11 @@ public class LaserComponent extends WarnedObstacle {
     @Override
     public void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm,float t, float dt) {
         super.drawSelfInDangerMatrix(tr,dm,t,dt);
-        drawInDangerMatrixPos.x = Math.min(1,(t-scrolledTime/WARNING_TIME));
-        drawInDangerMatrixSize.x = LOGIC_WINDOW_SIZE.x - drawInDangerMatrixSize.x;
-        dm.drawSquare(drawInDangerMatrixPos,drawInDangerMatrixSize);
+        drawInDangerMatrixPos.x = 0;
+
+        drawInDangerMatrixSize.x = LOGIC_WINDOW_SIZE.x;
+
+        dm.drawSquare(drawInDangerMatrixPos, drawInDangerMatrixSize);
     }
 
     final static Vec2 colliderRelativeCenter = new Vec2(PLAYER_X_POS, LASER_HEIGHT/2);

@@ -92,7 +92,8 @@ public abstract class Generator {
      * Consider y1,y2 as points at the rightmost screen position
      */
     public Vec2 getVerticalSafeZone(){
-        return dangerMatrix.getFreeHeightRange(LOGIC_WINDOW_SIZE.x);
+        return new Vec2(0, LOGIC_WINDOW_SIZE.y);
+//        return dangerMatrix.getFreeHeightRange(LOGIC_WINDOW_SIZE.x);
     }
 
     /**
@@ -101,17 +102,11 @@ public abstract class Generator {
      * @return Vec2(yUp, yDown)
      */
     public Vec2 getSafeVerticalSpaceForObstacleSoPlayerCanPass(Vec2 freeYRange, float minObstacleHeight){
-        float randomRange = (float)Math.random() * (LOGIC_WINDOW_SIZE.y-PLAYER_DIMENSIONS.y- PLAYER_MARGINS.y);
-        if(randomRange < minObstacleHeight){
-            //choose space under randomRange
-            return new Vec2(randomRange, freeYRange.y);
-        }else if(LOGIC_WINDOW_SIZE.y-randomRange < minObstacleHeight){
-            //choose space above randomRange
-            return new Vec2(freeYRange.x, randomRange);
-        }else{
-            //Choose either
-            return (Math.random() > 0.5) ? new Vec2(freeYRange.x, randomRange) : new Vec2(randomRange, freeYRange.y);
+        if (freeYRange.y - freeYRange.x < minObstacleHeight) {
+            return new Vec2(0, -1); // Invalid range, signals the generator to abort
         }
+
+        return new Vec2(freeYRange.x, freeYRange.y - minObstacleHeight);
     }
 
     protected abstract void initializeObstacleList(mcd_Scene scene);

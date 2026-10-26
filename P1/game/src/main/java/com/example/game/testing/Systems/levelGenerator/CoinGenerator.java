@@ -53,33 +53,32 @@ public class CoinGenerator extends Generator{
     Vec2 dangerMatrixCoinSize = new Vec2(COIN_RADIUS*2,2*COIN_RADIUS);
 
     public boolean createCoin(mcd_Entity ent, float t, float dt){
-        Vec2 preferredZone = getVerticalSafeZone();
+        Vec2 preferredZone = new Vec2(0, LOGIC_WINDOW_SIZE.y);
+
         if(lastCoinTimestamp != -1) {
-            float x_speed = LevelSpeedSystem.getInstance().getSpeedMult();
-            //pendiente que puede seguir la trayectoria del player
-            float maxAllowedYMove = Math.min(MAX_PLAYER_UPWARDS_SPEED, MAX_PLAYER_FALL_SPEED);
-            float m = maxAllowedYMove / x_speed;
-            float diff = (t-lastCoinTimestamp)* 0.7f*maxAllowedYMove*m;
-            preferredZone.x = Math.max(preferredZone.x, lastCoinPos.y - diff);
-            preferredZone.y = Math.min(preferredZone.y, lastCoinPos.y + diff);
-            if(preferredZone.y < preferredZone.x) return false;
+            // Optional: Break the chain if it's been too long since the last coin
+            if(t - lastCoinTimestamp > 1.0f) {
+                lastCoinTimestamp = -1;
+            } else {
+                float maxAllowedYMove = Math.min(MAX_PLAYER_UPWARDS_SPEED, MAX_PLAYER_FALL_SPEED);
+                float diff = (t - lastCoinTimestamp) * 0.7f * maxAllowedYMove;
+                preferredZone.x = Math.max(preferredZone.x, lastCoinPos.y - diff);
+                preferredZone.y = Math.min(preferredZone.y, lastCoinPos.y + diff);
+                if(preferredZone.y < preferredZone.x) return false;
+            }
         }
-        Vec2 space = getSafeVerticalSpaceForObstacleSoPlayerCanPass(
-                preferredZone,
-            COIN_RADIUS * 2
-        );
-        if(space.y-space.x <= COIN_RADIUS*2) return false;
-        TransformComponent tr =(TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
-        float y = space.x + (space.y-space.x)*(float)Math.random();
-        if(y < COIN_RADIUS || y > LOGIC_WINDOW_SIZE.y-COIN_RADIUS) return false;
-        dangerMatrixCoinPos.y = y-COIN_RADIUS;
+
+        float y = preferredZone.x + (preferredZone.y - preferredZone.x) * (float)Math.random();
+
+        if(y < COIN_RADIUS || y > LOGIC_WINDOW_SIZE.y - COIN_RADIUS) return false;
+
+        dangerMatrixCoinPos.y = y - COIN_RADIUS;
         if(!dangerMatrix.checkRect(dangerMatrixCoinPos, dangerMatrixCoinSize)) return false;
 
-
         dangerMatrix.drawSquare(dangerMatrixCoinPos, dangerMatrixCoinSize);
-        ent.setComponent(ComponentId.OBSTACLE_COMPONENT,new CoinComponent(ent,t, y));
+        ent.setComponent(ComponentId.OBSTACLE_COMPONENT, new CoinComponent(ent, t, y));
         lastCoinTimestamp = t;
-        lastCoinPos.y = tr.pos.y;
+        lastCoinPos.y = y;
         return true;
     }
 }

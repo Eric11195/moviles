@@ -53,9 +53,12 @@ public class DangerMatrix extends BoolMatrix{
      * @return true if the given rect is free on the danger matrix
      */
     public boolean checkRect(Vec2 x0y0, Vec2 size){
-        for(int x = (int)x0y0.x; x < x0y0.x+size.x; ++x){
-            for(int y = (int)x0y0.y; y < x0y0.y+size.y; ++y){
-                if(get(getConvertedPos(x,y))) return false;
+        Vec2 startGrid = getConvertedPos(x0y0);
+        Vec2 endGrid = getConvertedPos(x0y0.add(size));
+
+        for(int x = (int)startGrid.x; x <= endGrid.x; ++x){
+            for(int y = (int)startGrid.y; y <= endGrid.y; ++y){
+                if(get(x, y)) return false;
             }
         }
         return true;

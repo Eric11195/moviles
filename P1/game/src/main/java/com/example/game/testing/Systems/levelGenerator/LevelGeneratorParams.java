@@ -8,10 +8,15 @@ import org.json.JSONObject;
 public class LevelGeneratorParams implements mcd_Serializable {
     //Px speed per second. The obstacles move that much towards the left of the screen
     public float levelInitialSpeed;
+    /**
+     * Each augmentSpeedEachXPixels pixels moved to the right the speed is increased by augmentSpeedByYEachXPixels
+     */
     public int augmentSpeedEachXPixels;
     public float augmentSpeedByYEachXPixels;
     public float levelDurationInSeconds;
+    //at most there will be this many obstacles
     public int maxNumberOfSimultaneousObstacles;
+    //at most there will be this many coins on screen at the same time
     public int maxNumberOfSimultaneousCoins;
     /**
      * What are the chances of having an explosive obstacle creation
@@ -24,9 +29,12 @@ public class LevelGeneratorParams implements mcd_Serializable {
      */
     public float obstacleExplosiveCreationBoost;
     /**
-     * each second this amount of obstacle are created by default
+     * each second this amount is added to the obstacle acumulator. When it reaches one an obstacle will be spawn
      */
     public float obstacleLinearCreationPerSecond;
+    /**
+     * value to add to an acumulator. each time the acumulator reaches 1 it will spawn a coin
+     */
     public float coinLinearCreationPerSecond;
     public JSONObject serialize(){
         JSONObject jo = new JSONObject();
@@ -39,6 +47,7 @@ public class LevelGeneratorParams implements mcd_Serializable {
         jo.put("coinLinearCreationPerSecond", Double.valueOf(coinLinearCreationPerSecond));
         jo.put("augmentSpeedEachXPixels", augmentSpeedEachXPixels);
         jo.put("augmentSpeedByYEachXPixels", Double.valueOf(augmentSpeedByYEachXPixels));
+        jo.put("maxNumberOfSimultaneousCoins",maxNumberOfSimultaneousCoins);
         return jo;
     }
     public static LevelGeneratorParams deserialize(JSONObject jo){
@@ -52,6 +61,7 @@ public class LevelGeneratorParams implements mcd_Serializable {
         lgp.coinLinearCreationPerSecond = (float)jo.getDouble("coinLinearCreationPerSecond");
         lgp.augmentSpeedByYEachXPixels = (float)jo.getDouble("augmentSpeedByYEachXPixels");
         lgp.augmentSpeedEachXPixels = jo.getInt("augmentSpeedEachXPixels");
+        lgp.maxNumberOfSimultaneousCoins = jo.getInt("maxNumberOfSimultaneousCoins");
         return lgp;
     }
 }

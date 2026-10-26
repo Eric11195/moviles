@@ -61,94 +61,119 @@ public class LevelGeneratorToJSON extends mcd_Scene {
         toJSON(fileStorage, "Level6", j6);
         eng.setScene(new MainMenuScene(eng));
     }
-    private static LevelGeneratorParams getCoin1Params(){
+    private static LevelGeneratorParams getCoin1Params() {
         LevelGeneratorParams lg = new LevelGeneratorParams();
-        lg.levelDurationInSeconds = 20;
-        lg.levelInitialSpeed = 30;
-        lg.maxNumberOfSimultaneousObstacles = 4;
-        lg.obstacleExplosiveCreationBoost = 1;
-        lg.obstacleLinearCreationPerSecond = 0.8f;
-        lg.coinLinearCreationPerSecond = 3.0f;
-        lg.obstacleExplosiveCreationChance = 0.00000001;
-        lg.augmentSpeedEachXPixels = 5000;
-        lg.augmentSpeedByYEachXPixels = 15;
-        lg.coinLinearCreationPerSecond = 1;
+
+        lg.levelInitialSpeed = 30f;
+        lg.levelDurationInSeconds = 80f;
+        lg.maxNumberOfSimultaneousObstacles = 5;
         lg.maxNumberOfSimultaneousCoins = 10;
+
+        lg.obstacleLinearCreationPerSecond = 1.0f;
+        lg.obstacleExplosiveCreationChance = 0.00000001;
+        lg.obstacleExplosiveCreationBoost = 1.0f;
+
+        lg.coinLinearCreationPerSecond = 1.0f;
+        lg.augmentSpeedEachXPixels = 10000;
+        lg.augmentSpeedByYEachXPixels = 5f;
+
         return lg;
     }
-    public static LevelGeneratorParams getCoin2Params(){
+
+    public static LevelGeneratorParams getCoin2Params() {
         LevelGeneratorParams lg = new LevelGeneratorParams();
-        lg.levelDurationInSeconds = 30;
-        lg.levelInitialSpeed = 30;
+
+        lg.levelInitialSpeed = 35f;
+        lg.levelDurationInSeconds = 140f;
         lg.maxNumberOfSimultaneousObstacles = 8;
-        lg.obstacleExplosiveCreationBoost = 1.6f;
-        lg.obstacleLinearCreationPerSecond = 0.6f;
-        lg.coinLinearCreationPerSecond = 4.0f;
-        lg.obstacleExplosiveCreationChance = 0.00000001;
-        lg.augmentSpeedEachXPixels = 5000;
-        lg.augmentSpeedByYEachXPixels = 25;
-        lg.coinLinearCreationPerSecond = 1;
         lg.maxNumberOfSimultaneousCoins = 10;
+
+        lg.obstacleLinearCreationPerSecond = 1.3f;
+        lg.obstacleExplosiveCreationChance = 0.00000005;
+        lg.obstacleExplosiveCreationBoost = 1.3f;
+
+        lg.coinLinearCreationPerSecond = 1.2f;
+        lg.augmentSpeedEachXPixels = 8000;
+        lg.augmentSpeedByYEachXPixels = 7f;
+
         return lg;
     }
-    public static LevelGeneratorParams getCoin3Params(){
+
+    public static LevelGeneratorParams getCoin3Params() {
         LevelGeneratorParams lg = new LevelGeneratorParams();
-        lg.levelDurationInSeconds = 40;
-        lg.levelInitialSpeed = 50;
+
+        lg.levelInitialSpeed = 45f;
+        lg.levelDurationInSeconds = 170f;
         lg.maxNumberOfSimultaneousObstacles = 12;
-        lg.obstacleExplosiveCreationBoost = 0.7f;
-        lg.obstacleLinearCreationPerSecond = 1.2f;
-        lg.coinLinearCreationPerSecond = 5.0f;
-        lg.obstacleExplosiveCreationChance = 0.000001;
-        lg.augmentSpeedEachXPixels = 4000;
-        lg.augmentSpeedByYEachXPixels = 15;
-        lg.coinLinearCreationPerSecond = 1;
         lg.maxNumberOfSimultaneousCoins = 10;
-        return lg;
-    }
-    private static LevelGeneratorParams getDist1Params(){
-        LevelGeneratorParams lg = new LevelGeneratorParams();
-        lg.levelDurationInSeconds = 20;
-        lg.levelInitialSpeed = 50;
-        lg.maxNumberOfSimultaneousObstacles = 4;
-        lg.obstacleExplosiveCreationBoost = 1;
-        lg.obstacleLinearCreationPerSecond = 0.8f;
-        lg.coinLinearCreationPerSecond = 3.0f;
-        lg.obstacleExplosiveCreationChance = 0.00000001;
-        lg.augmentSpeedEachXPixels = 7000;
-        lg.augmentSpeedByYEachXPixels = 30;
-        lg.coinLinearCreationPerSecond = 1;
-        lg.maxNumberOfSimultaneousCoins = 10;
-        return lg;
-    }
-    private static LevelGeneratorParams getDist2Params(){
-        LevelGeneratorParams lg = new LevelGeneratorParams();
-        lg.levelDurationInSeconds = 20;
-        lg.levelInitialSpeed = 50;
-        lg.maxNumberOfSimultaneousObstacles = 4;
-        lg.obstacleExplosiveCreationBoost = 1;
-        lg.obstacleLinearCreationPerSecond = 0.8f;
-        lg.coinLinearCreationPerSecond = 3.0f;
-        lg.obstacleExplosiveCreationChance = 0.00000001;
+
+        lg.obstacleLinearCreationPerSecond = 1.6f;
+        lg.obstacleExplosiveCreationChance = 0.0000001;
+        lg.obstacleExplosiveCreationBoost = 1.6f;
+
+        lg.coinLinearCreationPerSecond = 1.5f;
         lg.augmentSpeedEachXPixels = 6000;
-        lg.augmentSpeedByYEachXPixels = 30;
-        lg.coinLinearCreationPerSecond = 1;
-        lg.maxNumberOfSimultaneousCoins = 10;
+        lg.augmentSpeedByYEachXPixels = 10f;
+
         return lg;
     }
-    private static LevelGeneratorParams getDist3Params(){
+
+    private static LevelGeneratorParams getDist1Params() {
         LevelGeneratorParams lg = new LevelGeneratorParams();
-        lg.levelDurationInSeconds = 20;
-        lg.levelInitialSpeed = 60;
-        lg.maxNumberOfSimultaneousObstacles = 4;
-        lg.obstacleExplosiveCreationBoost = 1;
-        lg.obstacleLinearCreationPerSecond = 0.8f;
-        lg.coinLinearCreationPerSecond = 3.0f;
-        lg.obstacleExplosiveCreationChance = 0.00000001;
-        lg.augmentSpeedEachXPixels = 5000;
-        lg.augmentSpeedByYEachXPixels = 30;
-        lg.coinLinearCreationPerSecond = 2;
+
+        lg.levelInitialSpeed = 40f;
+        lg.levelDurationInSeconds = 300f;
+        lg.maxNumberOfSimultaneousObstacles = 5;
         lg.maxNumberOfSimultaneousCoins = 10;
+
+        lg.obstacleLinearCreationPerSecond = 0.9f;
+        lg.obstacleExplosiveCreationChance = 0.00000001;
+        lg.obstacleExplosiveCreationBoost = 1.0f;
+
+        lg.coinLinearCreationPerSecond = 0.5f;
+        lg.augmentSpeedEachXPixels = 10000;
+        lg.augmentSpeedByYEachXPixels = 5f;
+
         return lg;
     }
-}
+
+    private static LevelGeneratorParams getDist2Params() {
+        LevelGeneratorParams lg = new LevelGeneratorParams();
+
+        lg.levelInitialSpeed = 50f;
+        lg.levelDurationInSeconds = 450f;
+        lg.maxNumberOfSimultaneousObstacles = 8;
+        lg.maxNumberOfSimultaneousCoins = 10;
+
+        lg.obstacleLinearCreationPerSecond = 1.2f;
+        lg.obstacleExplosiveCreationChance = 0.00000005;
+        lg.obstacleExplosiveCreationBoost = 1.3f;
+
+        lg.coinLinearCreationPerSecond = 0.5f;
+        lg.augmentSpeedEachXPixels = 8000;
+        lg.augmentSpeedByYEachXPixels = 7f;
+
+        return lg;
+    }
+
+    private static LevelGeneratorParams getDist3Params() {
+        LevelGeneratorParams lg = new LevelGeneratorParams();
+
+        lg.levelInitialSpeed = 60f;
+        lg.levelDurationInSeconds = 550f;
+        lg.maxNumberOfSimultaneousObstacles = 12;
+        lg.maxNumberOfSimultaneousCoins = 10;
+
+        lg.obstacleLinearCreationPerSecond = 1.5f;
+        lg.obstacleExplosiveCreationChance = 0.0000001;
+        lg.obstacleExplosiveCreationBoost = 1.6f;
+
+        lg.coinLinearCreationPerSecond = 0.5f;
+        lg.augmentSpeedEachXPixels = 6000;
+        lg.augmentSpeedByYEachXPixels = 10f;
+
+        return lg;
+    }
+
+
+    }

@@ -37,7 +37,7 @@ public class HazardGenerator extends Generator{
 
     @Override
     public void addProbabilityToObstacleSpawn(float dt) {
-        obstacleAcumSpawn += (dt*Math.random() < params.obstacleExplosiveCreationChance) ? params.obstacleExplosiveCreationBoost : 0;
+        obstacleAcumSpawn += (Math.random() < params.obstacleExplosiveCreationChance * dt) ? params.obstacleExplosiveCreationBoost : 0;
         float probability = params.obstacleLinearCreationPerSecond*dt;
         obstacleAcumSpawn += probability;
     }
@@ -74,10 +74,10 @@ public class HazardGenerator extends Generator{
         }
     }
     public ObstacleId chooseObstacleType(){
-        double d= Math.random();
-        if(d<0.2) return ObstacleId.OBSTACLE_LASER;
-        if(d<0.7) return ObstacleId.OBSTACLE_ZAPPER;
-        return ObstacleId.OBSTACLE_MISSILE;
+        double d = Math.random();
+        if(d < 0.33) return ObstacleId.OBSTACLE_LASER;
+        if(d < 0.66) return ObstacleId.OBSTACLE_MISSILE;
+        return ObstacleId.OBSTACLE_ZAPPER;
     }
     public boolean createMissile(mcd_Entity ent, float t, float dt){
         Vec2 space =
@@ -88,6 +88,7 @@ public class HazardGenerator extends Generator{
         if(space.y-space.x < MISSILE_RADIUS*2) return false;
         float y = space.x + (space.y-space.x)*(float)Math.random();
         WarnedObstacle.drawSelfInDangerMatrixPos.y = y;
+        WarnedObstacle.drawSelfInDangerMatrixPos.x = LOGIC_WINDOW_SIZE.x;
         if(!dangerMatrix.checkRect(WarnedObstacle.drawSelfInDangerMatrixPos, WarnedObstacle.drawSelfInDangerMatrixSize))
             return false;
 
@@ -107,33 +108,36 @@ public class HazardGenerator extends Generator{
     }
     final static Vec2 laserSizeInDangerMatrix = new Vec2(0, LASER_HEIGHT);
     final static Vec2 laserPosInDangerMatrix = new Vec2(0, 0);
-    public  boolean createLaser(mcd_Entity ent, float t, float dt)
+    public boolean createLaser(mcd_Entity ent, float t, float dt)
     {
         Vec2 space =
                 getSafeVerticalSpaceForObstacleSoPlayerCanPass(
                         getVerticalSafeZone(),
-                        LASER_HEIGHT*1.5f
+                        LASER_HEIGHT
                 );
         if(space.y - space.x < LASER_HEIGHT) return false;
 
         TransformComponent tr =(TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
         float y = space.x + (space.y-space.x)*(float)Math.random();
         WarnedObstacle.drawSelfInDangerMatrixPos.y = y;
+        WarnedObstacle.drawSelfInDangerMatrixPos.x = LOGIC_WINDOW_SIZE.x;
         if(!dangerMatrix.checkRect(WarnedObstacle.drawSelfInDangerMatrixPos, WarnedObstacle.drawSelfInDangerMatrixSize))
             return false;
 
         LaserComponent laser = (LaserComponent) ent.setComponent(ComponentId.OBSTACLE_COMPONENT
-                ,new LaserComponent(ent,t,2));
-        laser.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix,t,dt);
+                ,new LaserComponent(ent,t,y));
+
         laserSizeInDangerMatrix.x = LevelSpeedSystem.getInstance().getSpeedMult();
         laserPosInDangerMatrix.y = y;
         laserPosInDangerMatrix.x = LOGIC_WINDOW_SIZE.x - laserSizeInDangerMatrix.x;
+
         if (!dangerMatrix.ensureTraversability(player,dt) || !dangerMatrix.checkRect(laserPosInDangerMatrix, laserSizeInDangerMatrix)) {
             ent.rmComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
             laser.deactivateWarning(ent);
             return false;
         }
-        //System.out.println("GenerateLaser");
+
+        laser.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix,t,dt);
         return true;
     }
     Vec2 zapperCreationStart = new Vec2(), zapperCreationEnd=new Vec2();
