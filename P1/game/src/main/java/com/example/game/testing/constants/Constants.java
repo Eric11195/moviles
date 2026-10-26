@@ -44,6 +44,7 @@ public class Constants {
 
         // COIN
         public static final float COIN_RADIUS = 10;
+        public static final float COIN_COLLIDER_RADIUS = 12;
     /**
      * How long until an obstacle with warning appears from the first time it's hinted on screen
      */
@@ -56,11 +57,16 @@ public class Constants {
     public static final float LASER_ATTACK_DUR= 1.0f;
 
     // BACKGROUND
-    public static final float BACKGROUND_SPEED_SCALE = 0.5f;
-    public static final float BACKGROUND_MIN_HEIGHT = 500;
-    public static final float BACKGROUND_MAX_HEIGHT = 800;
-    public static final float BACKGROUND_MIN_WIDTH = 400;
-    public static final float BACKGROUND_MAX_WIDTH = 600;
+    public static final float BACKGROUND_1_SPEED_SCALE = 0.5f;
+    public static final float BACKGROUND_1_MIN_HEIGHT = 100;
+    public static final float BACKGROUND_1_MAX_HEIGHT = 250;
+    public static final float BACKGROUND_1_MIN_WIDTH = 60;
+    public static final float BACKGROUND_1_MAX_WIDTH = 120;
+    public static final float BACKGROUND_0_SPEED_SCALE = 0.25f;
+    public static final float BACKGROUND_0_MIN_HEIGHT = 200;
+    public static final float BACKGROUND_0_MAX_HEIGHT = 400;
+    public static final float BACKGROUND_0_MIN_WIDTH = 30;
+    public static final float BACKGROUND_0_MAX_WIDTH = 60;
 
     public static LevelGeneratorParams getDefaultLevelGeneratorParams(){
         LevelGeneratorParams lgp = new LevelGeneratorParams();

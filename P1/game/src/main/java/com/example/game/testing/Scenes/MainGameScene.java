@@ -1,7 +1,6 @@
 package com.example.game.testing.Scenes;
 
 import static com.example.game.testing.EC.Prefabs.ButtonPrefab.createButton;
-import static com.example.game.testing.constants.Constants.BACKGROUND_MIN_WIDTH;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
 import com.example.engine.Engine;
@@ -18,6 +17,7 @@ import com.example.game.testing.Systems.GameDistanceToEndOfLevelRenderer;
 import com.example.game.testing.Systems.levelGenerator.BaseLevelGenerator;
 import com.example.game.testing.Systems.PlayerCollisionDetector;
 import com.example.game.testing.constants.Constants;
+import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
 
 /**
@@ -48,10 +48,14 @@ public class MainGameScene extends mcd_Scene{
     protected MainGameScene(Engine myEngine) {
         super(myEngine);
         retos = Retos.none;
+
+        createBackground();
     }
     protected MainGameScene(Engine myEngine, Retos r){
         super(myEngine);
         this.retos = r;
+
+        createBackground();
     }
     private int coinsToWin;
     public void setCoinsToWin(int coins){
@@ -62,6 +66,21 @@ public class MainGameScene extends mcd_Scene{
         this.distanceToWin = distanceToWin;
     }
 
+    public void createBackground (){
+        mcd_Entity background0 = createEntity();
+        background0.addComponent(ComponentId.BACKGROUND_COMPONENT, new BackgroundComponent(new Vec2(Constants.BACKGROUND_0_MIN_WIDTH,Constants.BACKGROUND_0_MIN_HEIGHT),
+                new Vec2(Constants.BACKGROUND_0_MAX_WIDTH,Constants.BACKGROUND_0_MAX_HEIGHT),
+                Constants.BACKGROUND_0_SPEED_SCALE,
+                ColorLibrary.LightGrey));
+        background0.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT,new DrawRectangleComponent());
+
+        mcd_Entity background1 = createEntity();
+        background1.addComponent(ComponentId.BACKGROUND_COMPONENT, new BackgroundComponent(new Vec2(Constants.BACKGROUND_1_MIN_WIDTH,Constants.BACKGROUND_1_MIN_HEIGHT),
+                new Vec2(Constants.BACKGROUND_1_MAX_WIDTH,Constants.BACKGROUND_1_MAX_HEIGHT),
+                Constants.BACKGROUND_1_SPEED_SCALE,
+                ColorLibrary.DarkGrey));
+        background1.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT,new DrawRectangleComponent());
+    }
     public void setLevelGen(BaseLevelGenerator levelGen){
         if(this.levelGen!=null){
             throw new RuntimeException("You must not call setLevelGen again once levelGen is correctly set up");
@@ -79,13 +98,6 @@ public class MainGameScene extends mcd_Scene{
             throw new RuntimeException("You must call setLevelGen before this function");
         }
         gameTime = 0;
-
-//        mcd_Entity background = createEntity();
-//        background.addComponent(ComponentId.BACKGROUND_COMPONENT, new BackgroundComponent(new Vec2(Constants.BACKGROUND_MIN_WIDTH,Constants.BACKGROUND_MIN_HEIGHT),
-//                new Vec2(Constants.BACKGROUND_MAX_WIDTH,Constants.BACKGROUND_MAX_HEIGHT),
-//                Constants.BACKGROUND_SPEED_SCALE,
-//                255));
-//        background.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT,new DrawRectangleComponent());
 
         int pauseButtonSize = 40;
         createButton(

@@ -21,7 +21,6 @@ public class PlayerPrefab {
         mcd_Entity ent = my_scene.createEntity();
         ent.addComponent(ComponentId.JETPACK_COMPONENT, new JetpackComponent());
         ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent(new Vec2(PLAYER_X_POS,PLAYER_STARTING_Y_POS), PLAYER_DIMENSIONS));
-        ent.addComponent(ComponentId.IMAGE_COMPONENT, new ImageComponent("test_image.jpg"));
         ent.addComponent(ComponentId.VELOCITY_COMPONENT, new VelocityComponent());
         ent.addComponent(ComponentId.PLAYER_INPUT_COMPONENT, new PlayerInputComponent());
         float playerRad = Math.min(PLAYER_DIMENSIONS.x,PLAYER_DIMENSIONS.y)/2;

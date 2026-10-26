@@ -4,11 +4,14 @@ import com.example.engine.ColorEng;
 
 public class ColorLibrary {
     public static final ColorEng White = new ColorEng(255,255,255,255);
+    public static final ColorEng LightGrey = new ColorEng(200,200,200,255);
+    public static final ColorEng Grey = new ColorEng(150,150,150,255);
     public static final ColorEng DarkGrey = new ColorEng(50,50,50,255);
     public static final ColorEng Black = new ColorEng(0,0,0,255);
     public static final ColorEng Red = new ColorEng(255,0,0,255);
     public static final ColorEng Green = new ColorEng(0,255,0,255);
     public static final ColorEng Blue = new ColorEng(0,0,255,255);
+    public static final ColorEng DarkBlue = new ColorEng(0,0,60,255);
     public static final ColorEng Yellow = new ColorEng(255,255,0,255);
     public static final ColorEng Cyan = new ColorEng(0,255,255,255);
     public static final ColorEng Magenta = new ColorEng(255,0,255,255);
