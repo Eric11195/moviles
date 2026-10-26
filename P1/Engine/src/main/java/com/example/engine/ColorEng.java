@@ -24,4 +24,8 @@ public class ColorEng {
     public ColorEng clone() {
         return new ColorEng(r,g,b,a);
     }
+    public static ColorEng interpolate(ColorEng a, ColorEng b, float val ){
+        return new ColorEng((int) (a.r*(1-val) + b.r*val), (int) (a.g*(1-val) + b.g*val), (int) (a.b*(1-val) + b.b*val), (int) (a.a*(1-val) + b.a*val));
+    }
+
 }

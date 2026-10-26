@@ -35,7 +35,7 @@ public class EndGameScene extends mcd_Scene{
     @Override
     public void start(Engine eng) {
         pos.y = LOGIC_WINDOW_SIZE.y * 0.10f;
-        TextPrefab.createText(this,pos,size,win? "YOU WIN":"YOU LOOSE", win?ColorLibrary.Blue : ColorLibrary.Red);
+        TextPrefab.createText(this,pos,size,win? "YOU WIN":"YOU LOSE", win?ColorLibrary.Blue : ColorLibrary.Red);
         pos.y = pos.y + size.y + LOGIC_WINDOW_SIZE.y*0.1f;
         coinsText = (TextRectComponent) TextPrefab.createText(this, pos,size, "0", ColorLibrary.Gold).getComponent(ComponentId.TEXT_COMPONENT);
         pos.y = pos.y + size.y + LOGIC_WINDOW_SIZE.y*0.1f;

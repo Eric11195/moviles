@@ -11,15 +11,17 @@ import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
 
 public class BackgroundComponent implements mcd_Component {
+    final float xOffset = -1;
+    final float yOffset = 1;
     Vec2 minDims;
     Vec2 maxDims;
     float speedScale;
-    int alpha;
-    public BackgroundComponent(Vec2 _minDims, Vec2 _maxDims, float _speedScale, int _alpha){
+    ColorEng color;
+    public BackgroundComponent(Vec2 _minDims, Vec2 _maxDims, float _speedScale, ColorEng _color){
         minDims = _minDims;
         maxDims = _maxDims;
         speedScale = _speedScale;
-        alpha = _alpha;
+        color = _color;
     }
     @Override
     public void update(mcd_Entity ent, float t, float dt) {
@@ -40,20 +42,19 @@ public class BackgroundComponent implements mcd_Component {
             }
         }
 
+        rectangleComponent.color = color;
+
     }
 
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g) {
-        ColorEng alphaGrey = ColorLibrary.DarkGrey.clone();
-        alphaGrey.a = alpha;
-        g.setColor(alphaGrey);
     }
     void fillUpRects(DrawRectangleComponent rectangleComponent){
         Vec2 pos;
         Vec2 size;
         if (rectangleComponent.rectanglesToDraw.isEmpty()){
             float h = (float)Math.random() * (maxDims.y - minDims.y) + minDims.y;
-            pos = new Vec2(0, Constants.LOGIC_WINDOW_SIZE.y-h);
+            pos = new Vec2(xOffset, Constants.LOGIC_WINDOW_SIZE.y-h+yOffset);
             float w = (float)Math.random() * (maxDims.x - minDims.x) + minDims.x;
             size = new Vec2(w,h);
             rectangleComponent.rectanglesToDraw.add(new DrawRectangleComponent.Rectangle(pos, size));
@@ -62,7 +63,7 @@ public class BackgroundComponent implements mcd_Component {
         DrawRectangleComponent.Rectangle rect = rectangleComponent.rectanglesToDraw.get(rectangleComponent.rectanglesToDraw.size()-1);
         while(rect.myPos.x + rect.mySize.x < Constants.LOGIC_WINDOW_SIZE.x){
             float h = (float)Math.random() * (maxDims.y - minDims.y) + minDims.y;
-            pos = new Vec2(rect.myPos.x+rect.mySize.x, Constants.LOGIC_WINDOW_SIZE.y-h);
+            pos = new Vec2(rect.myPos.x+rect.mySize.x+xOffset, Constants.LOGIC_WINDOW_SIZE.y-h+yOffset);
             float w = (float)Math.random() * (maxDims.x - minDims.x) + minDims.x;
             size = new Vec2(w,h);
 

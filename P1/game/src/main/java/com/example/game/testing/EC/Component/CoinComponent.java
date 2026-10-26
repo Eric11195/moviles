@@ -2,6 +2,7 @@ package com.example.game.testing.EC.Component;
 
 import static com.example.game.testing.EC.Component.ObstacleId.OBSTACLE_COIN;
 import static com.example.game.testing.EC.Component.ObstacleId.OBSTACLE_ZAPPER;
+import static com.example.game.testing.constants.Constants.COIN_COLLIDER_RADIUS;
 import static com.example.game.testing.constants.Constants.COIN_RADIUS;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.utils.JSON_HELPER.fromJSON;
@@ -14,6 +15,7 @@ import com.example.game.testing.Systems.LevelSpeedSystem;
 import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.CoinSystem;
 import com.example.game.testing.Systems.levelGenerator.ObstacleFactory;
+import com.example.game.testing.constants.Constants;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.JSON_HELPER;
 import com.example.utils.Vec2;
@@ -25,6 +27,10 @@ public class CoinComponent extends Obstacle {
     int value;
 
     mcd_Entity myEnt;
+
+    float halfsize = COIN_RADIUS/2;
+
+    Vec2 halfsizes = new Vec2(halfsize,halfsize);
 
     public static class CoinComponentSerialized extends ObstacleFactory{
         float y;
@@ -52,7 +58,7 @@ public class CoinComponent extends Obstacle {
 
         ColliderComponent collider = (ColliderComponent) _ent.getComponent(ComponentId.COLLIDER_COMPONENT);
         collider.clearColliders();
-        collider.addSingleCollider(new Vec2(0,0),COIN_RADIUS);
+        collider.addSingleCollider(new Vec2(0,0),COIN_COLLIDER_RADIUS);
     }
 
     @Override
@@ -82,9 +88,10 @@ public class CoinComponent extends Obstacle {
         g.setStrokeWidth(2);
         g.setColor(ColorLibrary.Gold);
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
-        g.drawCircle(tr.pos,tr.size.x,true);
+        Vec2 pos = tr.pos.add(halfsizes);
+        g.drawCircle(pos,tr.size.x,true);
         g.setColor(ColorLibrary.DarkGold);
-        g.drawCircle(tr.pos,tr.size.x,false);
+        g.drawCircle(pos,tr.size.x,false);
     }
 //    @Override
 //    public void update(mcd_Entity ent, float t, float dt){
