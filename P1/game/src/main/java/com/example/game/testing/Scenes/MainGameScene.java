@@ -20,6 +20,9 @@ import com.example.game.testing.Systems.PlayerCollisionDetector;
 import com.example.game.testing.constants.Constants;
 import com.example.utils.Vec2;
 
+/**
+ * Play the game on this scene, either a preset level or a procedurally generated one
+ */
 public class MainGameScene extends mcd_Scene{
     BaseLevelGenerator levelGen = null;
     float gameTime;

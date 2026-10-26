@@ -14,6 +14,9 @@ import com.example.game.testing.Systems.levelGenerator.ProceduralLevelGenerator;
 import com.example.game.testing.utils.FontLibrary;
 import com.example.utils.Vec2;
 
+/**
+ * Main menu scene contains buttons for playing infinite level, preset level or generate new level files
+ */
 public class MainMenuScene extends mcd_Scene{
     public MainMenuScene(Engine eng){
         super(eng);

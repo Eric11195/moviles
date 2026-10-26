@@ -12,6 +12,9 @@ import com.example.utils.Vec2;
 
 import org.json.JSONObject;
 
+/**
+ * Presents a selection of several levels. On pressing any of the buttons. It will play
+ */
 public class LevelSelectorScene extends mcd_Scene{
     LevelSelectorScene(Engine eng){
         super(eng);

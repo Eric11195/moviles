@@ -9,6 +9,10 @@ import com.example.game.testing.Systems.levelGenerator.LevelGeneratorParams;
 
 import org.json.JSONObject;
 
+
+/**
+ * This scene will generate level Files for 6 levels. Then return to mainScene.
+ */
 public class LevelGeneratorToJSON extends mcd_Scene {
     public LevelGeneratorToJSON(Engine eng){
         super(eng);

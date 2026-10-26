@@ -17,6 +17,9 @@ import com.example.utils.Vec2;
 
 import org.w3c.dom.Text;
 
+/**
+ * This scene contains the meters and coins in text. And allows to return to the last game/level or return to the main menu
+ */
 public class EndGameScene extends mcd_Scene{
     private TextRectComponent metersText;
     private TextRectComponent coinsText;

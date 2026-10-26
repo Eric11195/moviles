@@ -9,6 +9,9 @@ import com.example.engine.GraphicsInterface;
 import com.example.engine.Scene;
 import com.example.utils.Vec2;
 
+/**
+ * Needs to be put on top of an existing scene, pops itself on resume. Or allows to return to main menu scene.
+ */
 public class PauseMenu extends mcd_Scene{
     Scene subScene;
     public PauseMenu(Engine myEngine, Scene scene){
