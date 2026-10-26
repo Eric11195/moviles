@@ -60,7 +60,7 @@ public class BackgroundComponent implements mcd_Component {
         }
 
         DrawRectangleComponent.Rectangle rect = rectangleComponent.rectanglesToDraw.get(rectangleComponent.rectanglesToDraw.size()-1);
-        while(rect.myPos.x + rect.mySize.x < Constants.LOGIC_WINDOW_SIZE.x);{
+        while(rect.myPos.x + rect.mySize.x < Constants.LOGIC_WINDOW_SIZE.x){
             float h = (float)Math.random() * (maxDims.y - minDims.y) + minDims.y;
             pos = new Vec2(rect.myPos.x+rect.mySize.x, Constants.LOGIC_WINDOW_SIZE.y-h);
             float w = (float)Math.random() * (maxDims.x - minDims.x) + minDims.x;
