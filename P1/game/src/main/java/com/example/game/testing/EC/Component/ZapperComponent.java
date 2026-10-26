@@ -11,25 +11,18 @@ import static com.example.game.testing.constants.Constants.ZAPPER_MAX_COLLIDERS;
 import static com.example.game.testing.utils.JSON_HELPER.fromJSON;
 import static com.example.game.testing.utils.StartPlayerDead.startPlayerDead;
 
-import com.example.engine.ColorEng;
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
-import com.example.game.testing.Scenes.LoseMenuScene;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.LevelSpeedSystem;
 import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.levelGenerator.ObstacleFactory;
 import com.example.game.testing.utils.ColorLibrary;
-import com.example.game.testing.utils.FontLibrary;
 import com.example.game.testing.utils.JSON_HELPER;
 import com.example.utils.Vec2;
 
 import org.json.JSONObject;
-
-import java.awt.Color;
-
-import javax.xml.crypto.dsig.Transform;
 
 /**
  * The electrical lines danger

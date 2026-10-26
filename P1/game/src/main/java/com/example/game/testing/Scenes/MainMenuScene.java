@@ -3,6 +3,7 @@ package com.example.game.testing.Scenes;
 import static com.example.game.testing.EC.Prefabs.ButtonPrefab.createButton;
 import static com.example.game.testing.constants.Constants.DEFAULT_BUTTON_SIZE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
+import static com.example.game.testing.constants.Constants.getDefaultLevelGeneratorParams;
 
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
@@ -45,19 +46,8 @@ public class MainMenuScene extends mcd_Scene{
             DEFAULT_BUTTON_SIZE,
             "INFINITE MODE",
             () ->{
-                LevelGeneratorParams lgp = new LevelGeneratorParams();
-                lgp.levelDurationInSeconds = -1;
-                lgp.levelInitialSpeed = 70;
-                lgp.maxNumberOfSimultaneousObstacles = 4;
-                lgp.obstacleExplosiveCreationBoost = 1.5f;
-                lgp.obstacleExplosiveCreationChance = 0.000000001;
-                lgp.obstacleLinearCreationPerSecond = 0.8f;
-                lgp.coinLinearCreationPerSecond = 1.0f;
-                lgp.augmentSpeedEachXPixels = 100000;
-                lgp.augmentSpeedByYEachXPixels = 10;
-                lgp.maxNumberOfSimultaneousCoins = 20;
                 MainGameScene mgs = new MainGameScene(eng);
-                ProceduralLevelGenerator plg = new ProceduralLevelGenerator(mgs,lgp, false);
+                ProceduralLevelGenerator plg = new ProceduralLevelGenerator(mgs,getDefaultLevelGeneratorParams(), false);
                 mgs.setLevelGen(plg);
                 eng.setScene(mgs);
             }

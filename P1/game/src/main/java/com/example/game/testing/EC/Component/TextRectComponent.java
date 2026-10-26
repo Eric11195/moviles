@@ -22,4 +22,7 @@ public class TextRectComponent implements mcd_Component {
         g.setColor(textColor);
         g.drawText(text,tr.pos,tr.size);
     }
+    public void setText(String s){
+        text = s;
+    }
 }

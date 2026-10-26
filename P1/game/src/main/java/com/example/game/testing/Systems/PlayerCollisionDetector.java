@@ -6,10 +6,8 @@ import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.Component.Obstacle;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
-import com.example.game.testing.Scenes.LoseMenuScene;
+import com.example.game.testing.Scenes.EndGameScene;
 import com.example.game.testing.Scenes.mcd_Scene;
-
-import javax.swing.text.html.parser.Entity;
 
 public class PlayerCollisionDetector implements mcd_System {
     mcd_Entity player;
@@ -29,10 +27,6 @@ public class PlayerCollisionDetector implements mcd_System {
                 break;
             }
         }
-    }
-
-    public void playerCollided(mcd_Scene scene){
-        scene.getEngine().setScene(new LoseMenuScene(scene.getEngine()));
     }
 
     @Override

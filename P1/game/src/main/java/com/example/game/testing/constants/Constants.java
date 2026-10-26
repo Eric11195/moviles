@@ -1,4 +1,5 @@
 package com.example.game.testing.constants;
+import com.example.game.testing.Systems.levelGenerator.LevelGeneratorParams;
 import com.example.utils.Vec2;
 
 
@@ -60,5 +61,20 @@ public class Constants {
     public static final float BACKGROUND_MAX_HEIGHT = 800;
     public static final float BACKGROUND_MIN_WIDTH = 400;
     public static final float BACKGROUND_MAX_WIDTH = 600;
+
+    public static LevelGeneratorParams getDefaultLevelGeneratorParams(){
+        LevelGeneratorParams lgp = new LevelGeneratorParams();
+        lgp.levelDurationInSeconds = -1;
+        lgp.levelInitialSpeed = 70;
+        lgp.maxNumberOfSimultaneousObstacles = 4;
+        lgp.obstacleExplosiveCreationBoost = 1.5f;
+        lgp.obstacleExplosiveCreationChance = 0.000000001;
+        lgp.obstacleLinearCreationPerSecond = 0.8f;
+        lgp.coinLinearCreationPerSecond = 1.0f;
+        lgp.augmentSpeedEachXPixels = 100000;
+        lgp.augmentSpeedByYEachXPixels = 10;
+        lgp.maxNumberOfSimultaneousCoins = 20;
+        return lgp;
+    }
 
 }

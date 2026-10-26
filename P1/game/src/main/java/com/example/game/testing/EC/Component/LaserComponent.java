@@ -14,7 +14,6 @@ import com.example.engine.ColorEng;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.engine.GraphicsInterface;
-import com.example.game.testing.Scenes.LoseMenuScene;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.levelGenerator.ObstacleFactory;

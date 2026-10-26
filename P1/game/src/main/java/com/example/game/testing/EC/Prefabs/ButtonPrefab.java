@@ -14,7 +14,7 @@ import java.awt.Color;
 public class ButtonPrefab {
     public static mcd_Entity createButton(mcd_Scene scene, Vec2 pos, Vec2 size, String text, ButtonComponent.ButtonClickFunction clickFunc){
         mcd_Entity ent = scene.createEntity();
-        ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent(pos, size));
+        ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent(pos.clone(), size.clone()));
         ent.addComponent(ComponentId.BUTTON_COMPONENT, new ButtonComponent(clickFunc));
         ent.addComponent(ComponentId.TEXT_COMPONENT, new TextRectComponent(text, ColorLibrary.Black));
         return ent;
