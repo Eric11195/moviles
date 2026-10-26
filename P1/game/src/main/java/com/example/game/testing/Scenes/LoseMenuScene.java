@@ -13,6 +13,7 @@ public class LoseMenuScene extends mcd_Scene{
 
     @Override
     public void start(Engine eng) {
+
         createButton(
             this,
             LOGIC_WINDOW_SIZE.mul(0.5f).add(DEFAULT_BUTTON_SIZE.mul(-0.5f)),

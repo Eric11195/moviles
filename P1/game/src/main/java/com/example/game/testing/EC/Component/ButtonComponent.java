@@ -21,13 +21,10 @@ public class ButtonComponent implements mcd_Component {
     ButtonClickFunction func;
     boolean hovering = false;
     boolean clicked = false;
-    public String button_text;
     private final static ColorEng idleColor = new ColorEng(255,0,0, 255);
     private final static ColorEng hoverColor = new ColorEng(0,255,0, 255);
     private final static ColorEng clickedColor = new ColorEng(255,255,255, 255);
-    private final static ColorEng textColor = new ColorEng(0,0,0, 255);
-    public ButtonComponent(String text, ButtonClickFunction onClickFunc){
-        button_text = text;
+    public ButtonComponent(ButtonClickFunction onClickFunc){
         func = onClickFunc;
     }
 
@@ -55,8 +52,6 @@ public class ButtonComponent implements mcd_Component {
             g.setColor(idleColor);
         }
         g.drawRoundRectangle(tr.pos,tr.size,12.0f, true);
-        g.setColor(textColor);
-        g.drawText(button_text,tr.pos,tr.size);
     }
 
     public boolean clickedDown(mcd_Entity ent){
