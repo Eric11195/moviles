@@ -16,8 +16,8 @@ import com.example.utils.Vec2;
 
 public class JetpackComponent implements mcd_Component{
     boolean isFlying;
-    float halfsize = PLAYER_DIMENSIONS.x/2;
-    Vec2 halfsizes = new Vec2(halfsize,halfsize);
+    float playerRad = Math.min(PLAYER_DIMENSIONS.x,PLAYER_DIMENSIONS.y)/2;
+    Vec2 halfsizes = new Vec2(PLAYER_DIMENSIONS.x/2,PLAYER_DIMENSIONS.y/2);
     private void checkSpeed(mcd_Entity playerEnt)
     {
         VelocityComponent velComp = (VelocityComponent) playerEnt.getComponent(ComponentId.VELOCITY_COMPONENT);
@@ -54,10 +54,10 @@ public class JetpackComponent implements mcd_Component{
 
         Vec2 pos = new Vec2(tr.pos.add(halfsizes));
         g.setColor(ColorLibrary.Grey);
-        g.drawCircle(pos,halfsize,true);
+        g.drawCircle(pos,playerRad,true);
 
         g.setColor(ColorLibrary.DarkGrey);
-        g.drawCircle(pos,halfsize,false);
+        g.drawCircle(pos,playerRad,false);
     }
 
     @Override

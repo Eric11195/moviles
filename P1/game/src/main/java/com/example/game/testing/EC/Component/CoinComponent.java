@@ -28,7 +28,7 @@ public class CoinComponent extends Obstacle {
 
     mcd_Entity myEnt;
 
-    float halfsize = COIN_RADIUS/2;
+    float halfsize = COIN_RADIUS;
 
     Vec2 halfsizes = new Vec2(halfsize,halfsize);
 
@@ -88,10 +88,9 @@ public class CoinComponent extends Obstacle {
         g.setStrokeWidth(2);
         g.setColor(ColorLibrary.Gold);
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
-        Vec2 pos = tr.pos.add(halfsizes);
-        g.drawCircle(pos,tr.size.x,true);
+        g.drawCircle(tr.pos,tr.size.x,true);
         g.setColor(ColorLibrary.DarkGold);
-        g.drawCircle(pos,tr.size.x,false);
+        g.drawCircle(tr.pos,tr.size.x,false);
     }
 //    @Override
 //    public void update(mcd_Entity ent, float t, float dt){
