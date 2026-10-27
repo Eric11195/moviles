@@ -130,11 +130,11 @@ public class MainGameScene extends mcd_Scene{
             retoActivated=true;
             //add win by coin system
             addSystem(new EndGameAfterXCoins(coinsToWin));
-        }
-        if(this.retos.is(Retos.distancia)){
+            addSystem(new EndGameAfterXDistance(distanceToWin,false));
+        }else if(this.retos.is(Retos.distancia)){
             retoActivated=true;
             //add win by distance system
-            addSystem(new EndGameAfterXDistance(distanceToWin));
+            addSystem(new EndGameAfterXDistance(distanceToWin,true));
         }
         if(retoActivated){
             //add distance to goal system
