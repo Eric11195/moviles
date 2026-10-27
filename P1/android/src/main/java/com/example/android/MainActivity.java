@@ -10,7 +10,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.androidengine.AndroidEngine;
 import com.example.game.testing.Scenes.MainMenuScene;
-import com.example.game.testing.Scenes.TestScene;
 
 public class MainActivity extends AppCompatActivity {
     @Override

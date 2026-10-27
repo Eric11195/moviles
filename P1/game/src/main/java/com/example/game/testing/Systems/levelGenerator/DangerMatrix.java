@@ -5,6 +5,7 @@ import static com.example.game.testing.constants.Constants.GRAVITY_FORCE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.MAX_PLAYER_FALL_SPEED;
 import static com.example.game.testing.constants.Constants.MAX_PLAYER_UPWARDS_SPEED;
+import static com.example.game.testing.constants.Constants.PLAYER_MARGINS;
 import static com.example.game.testing.constants.Constants.Y_PLAYER_ACCEL;
 
 import com.example.game.testing.EC.Component.TransformComponent;
@@ -122,7 +123,7 @@ public class DangerMatrix extends BoolMatrix{
             );
         return ensureTraversability(
             playerTr.pos.x, playerTr.pos.y,
-            playerTr.size.x, playerTr.size.y,
+            playerTr.size.x+PLAYER_MARGINS.x, playerTr.size.y+PLAYER_MARGINS.y,
             playerVel.velocity.y,
             LevelSpeedSystem.getInstance().getSpeedMult()
         );
