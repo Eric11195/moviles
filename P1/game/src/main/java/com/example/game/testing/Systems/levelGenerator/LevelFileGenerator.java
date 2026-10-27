@@ -55,26 +55,43 @@ public class LevelFileGenerator implements mcd_Serializable {
         return lg.serialize();
     }
     private void update(float t, float dt){
-        this.sg.generators.forEach(gnr->{
-            int index_before =gnr._obstacleArrayIndex;
-            gnr.update(t, dt);
+
+        // 1. Record the indices BEFORE the update so we know what gets spawned
+        int[] indices_before = new int[this.sg.generators.size()];
+        for(int i = 0; i < this.sg.generators.size(); i++){
+            indices_before[i] = this.sg.generators.get(i)._obstacleArrayIndex;
+        }
+
+        // 2. THIS IS THE MAGIC FIX: Let ProceduralLevelGenerator do its job!
+        // This will reset the DangerMatrix, tick the Speed/Distance systems, and spawn items.
+        this.sg.update(this.myScene, t, dt);
+
+        // 3. Now loop through to serialize new items and update obstacle physics
+        for(int i = 0; i < this.sg.generators.size(); i++){
+            Generator gnr = this.sg.generators.get(i);
+            int index_before = indices_before[i];
             int index_after = gnr._obstacleArrayIndex;
+
+            // Serialize anything that was created this frame
             while(index_before != index_after){
                 mcd_Entity ent = gnr._obstacleList.get(index_before);
-                System.out.println(ent.getComponent(ComponentId.OBSTACLE_COMPONENT).getClass());
                 this.obstacleCompleteList.put(
-                        ((Obstacle)
-                                ent.getComponent(ComponentId.OBSTACLE_COMPONENT)).serialize()
+                        ((Obstacle) ent.getComponent(ComponentId.OBSTACLE_COMPONENT)).serialize()
                 );
                 index_before = (index_before+1) % gnr._obstacleList.size();
             }
-            this.playerJetpack.setIsFlying(Math.random() > 0.5f);
-            this.player.update(t,dt);
-            for(mcd_Entity obs : gnr._obstacleList){
-                obs.update(t,dt);
-            }
-        });
 
+            // Update the active obstacles so their scrolledTime eventually expires
+            // and they return to the object pool
+            for(mcd_Entity obs : gnr._obstacleList){
+                if(obs.isActive()){
+                    obs.update(t,dt);
+                }
+            }
+        }
+
+        this.playerJetpack.setIsFlying(Math.random() > 0.5f);
+        this.player.update(t,dt);
     }
     @Override
     public JSONObject serialize() {

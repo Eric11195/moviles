@@ -48,9 +48,9 @@ public abstract class BaseLevelGenerator implements mcd_System {
         DistanceSystem ds = DistanceSystem.getInstance();
         float distance = ds.getDistance();
         if(((int)distance / params.augmentSpeedEachXPixels != ((int)(distance+toAdd))/ params.augmentSpeedEachXPixels)){
-            speedMult += params.augmentSpeedByYEachXPixels;
-            toAdd = dt*speedMult;
+            lss.addValue(params.augmentSpeedByYEachXPixels);
         }
+        toAdd = dt*lss.getSpeedMult();
         ds.addValue(toAdd);
     }
     Vec2 distanceTextPos = new Vec2(0,0);
