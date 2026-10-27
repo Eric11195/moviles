@@ -18,6 +18,7 @@ import com.example.game.testing.Systems.levelGenerator.BaseLevelGenerator;
 import com.example.game.testing.Systems.PlayerCollisionDetector;
 import com.example.game.testing.constants.Constants;
 import com.example.game.testing.utils.ColorLibrary;
+import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;
 
 /**
@@ -94,6 +95,7 @@ public class MainGameScene extends mcd_Scene{
     }
     @Override
     public void start(Engine eng) {
+        eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG));
         if(levelGen==null){
             throw new RuntimeException("You must call setLevelGen before this function");
         }
@@ -108,6 +110,7 @@ public class MainGameScene extends mcd_Scene{
             new Vec2(pauseButtonSize,pauseButtonSize),
             "||",
             ()->{
+                eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.BUTTON));
                 eng.pushScene(new PauseMenu(eng, this));
             }
         );
@@ -123,6 +126,8 @@ public class MainGameScene extends mcd_Scene{
         addSystem(levelGen);
 
         addRetosSystems(eng);
+
+
     }
     private void addRetosSystems(Engine eng){
         boolean retoActivated = false;

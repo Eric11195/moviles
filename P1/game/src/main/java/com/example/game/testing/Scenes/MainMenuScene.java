@@ -15,6 +15,7 @@ import com.example.game.testing.Systems.levelGenerator.ProceduralLevelGenerator;
 import com.example.game.testing.constants.Constants;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.FontLibrary;
+import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;
 
 /**
@@ -31,7 +32,8 @@ public class MainMenuScene extends mcd_Scene{
     public void start(Engine eng) {
         GraphicsInterface g = eng.getGraphics();
         g.setWindowLogicSize((int)LOGIC_WINDOW_SIZE.x, (int)LOGIC_WINDOW_SIZE.y);
-        
+        SoundLibrary.createSounds(this);
+
         FontLibrary.createFont(g, FontLibrary.FontName.STANDARD,16, "FascinateInline-Regular.ttf");
         FontLibrary.createFont(g, FontLibrary.FontName.HEADER,72, "FascinateInline-Regular.ttf");
         FontLibrary.createFont(g, FontLibrary.FontName.SUBHEADER,32, "FascinateInline-Regular.ttf");
@@ -52,7 +54,7 @@ public class MainMenuScene extends mcd_Scene{
         for (int i = 0; i<text.length;i++){
             TextPrefab.createText(this,new Vec2(screen_width_sixth,screen_height_eighth+yOffset*i),textSize,text[i], ColorLibrary.Black);
         }
-        
+
         createButton(
             this,
             ButtonCentralPos[0],
@@ -62,6 +64,7 @@ public class MainMenuScene extends mcd_Scene{
                 MainGameScene mgs = new MainGameScene(eng);
                 ProceduralLevelGenerator plg = new ProceduralLevelGenerator(mgs,getDefaultLevelGeneratorParams(), false);
                 mgs.setLevelGen(plg);
+                eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.BUTTON));
                 eng.setScene(mgs);
             }
         );
@@ -71,8 +74,10 @@ public class MainMenuScene extends mcd_Scene{
             DEFAULT_BUTTON_SIZE,
             "RETOS",
             () ->{
+                eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.BUTTON));
                 eng.setScene(new LevelSelectorScene(eng));
             }
         );
+        eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.WIN));
     }
 }

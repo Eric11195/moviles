@@ -8,6 +8,7 @@ import com.example.engine.Engine;
 import com.example.game.testing.Systems.levelGenerator.FileLevelGenerator;
 import com.example.game.testing.Systems.levelGenerator.LevelFileGenerator;
 import com.example.game.testing.utils.JSON_HELPER;
+import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;
 
 import org.json.JSONObject;
@@ -44,6 +45,7 @@ public class LevelSelectorScene extends mcd_Scene{
                     DEFAULT_BUTTON_SIZE,
                     (lgs.levelGeneratorParams.levelCoinsToWin==-1 ? "Distance": "Coins")+": "+num,
                     () -> {
+                        eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.BUTTON));
                         loadLevel(eng, lgs);
                     }
                 );
@@ -55,6 +57,7 @@ public class LevelSelectorScene extends mcd_Scene{
             new Vec2(40,40),
             "Back",
             () ->{
+                eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.BUTTON));
                 eng.setScene(new MainMenuScene(eng));
             }
         );

@@ -13,6 +13,7 @@ import com.example.game.testing.Systems.CoinSystem;
 import com.example.game.testing.Systems.DistanceSystem;
 import com.example.game.testing.Systems.levelGenerator.ProceduralLevelGenerator;
 import com.example.game.testing.utils.ColorLibrary;
+import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;
 
 import org.w3c.dom.Text;
@@ -38,6 +39,8 @@ public class EndGameScene extends mcd_Scene{
     @Override
     public void start(Engine eng) {
         pos.y = LOGIC_WINDOW_SIZE.y * 0.10f;
+        eng.getAudio().stopSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG));
+        eng.getAudio().playSound(SoundLibrary.getSound(win? SoundLibrary.SoundsId.WIN:SoundLibrary.SoundsId.LOSE));
         TextPrefab.createText(this,pos,size,win? "YOU WIN":"YOU LOSE", win?ColorLibrary.Blue : ColorLibrary.Red);
         pos.y = pos.y + size.y + LOGIC_WINDOW_SIZE.y*0.1f;
         coinsText = (TextRectComponent) TextPrefab.createText(this, pos,size, "0", ColorLibrary.Gold).getComponent(ComponentId.TEXT_COMPONENT);
@@ -47,7 +50,6 @@ public class EndGameScene extends mcd_Scene{
         coinsText.setText("Coins: "+Integer.toString(CoinSystem.getInstance().getCoins()));
         metersText.setText("Distance: "+Integer.toString((int)DistanceSystem.getInstance().getDistance()/100));
 
-
         buttonPos.y = buttonYDelta;
         createButton(
             this,
@@ -55,6 +57,7 @@ public class EndGameScene extends mcd_Scene{
             buttonSize,
             "Return to Main Menu",
             () ->{
+                eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.BUTTON));
                 eng.setScene(new MainMenuScene(eng));
             }
         );
@@ -65,6 +68,7 @@ public class EndGameScene extends mcd_Scene{
             buttonSize,
             "Play Again",
             () ->{
+                eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.BUTTON));
                 MainGameScene mgs = new MainGameScene(eng);
                 ProceduralLevelGenerator plg = new ProceduralLevelGenerator(mgs,getDefaultLevelGeneratorParams(), false);
                 mgs.setLevelGen(plg);

@@ -31,13 +31,6 @@ public class AudioDesktop implements AudioInterface {
             Clip auxiliarClip = AudioSystem.getClip();
             auxiliarClip.open(converted);
             auxiliarClip.setFramePosition(0);
-            if(loops>=0){
-                auxiliarClip.loop(loops);
-            }
-            else
-            {
-                auxiliarClip.loop(Clip.LOOP_CONTINUOUSLY);
-            }
             return pool.addSound(auxiliarClip);
         } catch (Exception e) {
             System.err.println("Couldn't load audio file");
@@ -74,7 +67,15 @@ public class AudioDesktop implements AudioInterface {
     private void playClip(SoundDesktop soundDesktop)
     {
         if(soundDesktop.id>=0&&pool.clips[soundDesktop.id]!=null){
-        pool.clips[soundDesktop.id].start();
+            pool.clips[soundDesktop.id].setFramePosition(0);
+            if(soundDesktop.numLoops<0)
+            {
+                pool.clips[soundDesktop.id].loop(Clip.LOOP_CONTINUOUSLY);
+            }
+            else
+            {
+                pool.clips[soundDesktop.id].loop(soundDesktop.numLoops);
+            }
         }
     }
     private void playBigSound(SoundDesktop soundDesktop)
@@ -84,13 +85,14 @@ public class AudioDesktop implements AudioInterface {
 
             try{
                 AudioInputStream audio = AudioSystem.getAudioInputStream(file);
-
+                AudioInputStream converted =
+                        AudioSystem.getAudioInputStream(audioFormat, audio);
                 soundDesktop.line.open(audioFormat);
                 soundDesktop.line.start();
                 byte[] buffer = new byte[bufferSize];
                 int bytesRead;
 
-                while ((bytesRead = audio.read(buffer, 0, buffer.length)) != -1) {
+                while ((bytesRead = converted.read(buffer, 0, buffer.length)) != -1) {
                     soundDesktop.line.write(buffer, 0, bytesRead);
                 }
 

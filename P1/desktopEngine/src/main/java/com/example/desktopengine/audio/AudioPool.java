@@ -19,7 +19,7 @@ public class AudioPool {
         {
             clips[clips_used] = clip;
             clips_used++;
-            return clips_used;
+            return clips_used-1;
         }
         for(int i =0;i<MAX_SOUNDS;i++)
         {
