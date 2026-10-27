@@ -24,14 +24,6 @@ public class LevelSelectorScene extends mcd_Scene{
         int BUTTON_COUNT = 3;
         eng.getFileStorage().setRelativePath("Assets/Levels");
 
-        final int[] numbers = {
-            20,
-            40,
-            60,
-            100,
-            200,
-            300
-        };
 
         for(int j = 0; j < 2; ++j) {
             for (int i = 1; i <= BUTTON_COUNT; ++i) {
@@ -40,14 +32,19 @@ public class LevelSelectorScene extends mcd_Scene{
                         ((j+1)*LOGIC_WINDOW_SIZE.x / 3.0f) - 0.5f * DEFAULT_BUTTON_SIZE.x,
                         LOGIC_WINDOW_SIZE.y * ((float) i / (BUTTON_COUNT + 1.0f)) - 0.5f * DEFAULT_BUTTON_SIZE.y
                 );
-                int finalJ = j;
+                JSONObject obj = JSON_HELPER.fromJSON(eng.getFileStorage(),"Level" + Integer.toString(idx+1));
+                if(obj==null){
+                    throw new RuntimeException("File level could not be found");
+                }
+                LevelFileGenerator.LevelGeneratorSerialized lgs = LevelFileGenerator.deserialize(obj);
+                int num = lgs.levelGeneratorParams.levelCoinsToWin==-1 ? lgs.levelGeneratorParams.levelTotalMeters : lgs.levelGeneratorParams.levelCoinsToWin;
                 createButton(
                     this,
                     pos,
                     DEFAULT_BUTTON_SIZE,
-                    numbers[idx]+" "+(j==0 ? "Coins":"Distance"),
+                    (lgs.levelGeneratorParams.levelCoinsToWin==-1 ? "Distance": "Coins")+": "+num,
                     () -> {
-                        loadLevel(eng, "Level" + Integer.toString(idx+1), finalJ==0, numbers[idx]);
+                        loadLevel(eng, lgs);
                     }
                 );
             }
@@ -63,18 +60,14 @@ public class LevelSelectorScene extends mcd_Scene{
         );
     }
 
-    private void loadLevel(Engine eng, String filename, boolean coins, int distCoinNumber){
-        JSONObject obj = JSON_HELPER.fromJSON(eng.getFileStorage(),filename);
-        if(obj==null){
-            throw new RuntimeException("File level could not be found");
-        }
-        MainGameScene mainScene = new MainGameScene(eng, coins? MainGameScene.Retos.monedas : MainGameScene.Retos.distancia);
-        mainScene.setDistanceToWin(distCoinNumber * 100);
-        mainScene.setCoinsToWin(distCoinNumber);
+    private void loadLevel(Engine eng, LevelFileGenerator.LevelGeneratorSerialized lgs){
+        MainGameScene mainScene = new MainGameScene(eng, lgs.levelGeneratorParams.levelCoinsToWin==-1? MainGameScene.Retos.distancia : MainGameScene.Retos.monedas);
+        mainScene.setDistanceToWin(lgs.levelGeneratorParams.levelTotalMeters * 100);
+        mainScene.setCoinsToWin(lgs.levelGeneratorParams.levelCoinsToWin);
         mainScene.setLevelGen(
             new FileLevelGenerator(
                 mainScene,
-                LevelFileGenerator.deserialize(obj)
+                lgs
             )
         );
         eng.setScene(mainScene);

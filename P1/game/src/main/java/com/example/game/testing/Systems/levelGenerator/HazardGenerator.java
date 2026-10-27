@@ -103,7 +103,6 @@ public class HazardGenerator extends Generator{
             mis.deactivateWarning(ent);
             return false;
         }
-        System.out.println("GenerateLaser");
         return true;
     }
     final static Vec2 laserSizeInDangerMatrix = new Vec2(0, LASER_HEIGHT);

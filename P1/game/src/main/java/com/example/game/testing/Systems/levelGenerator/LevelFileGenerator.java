@@ -14,6 +14,7 @@ import com.example.game.testing.EC.Component.ZapperComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
+import com.example.game.testing.Systems.DistanceSystem;
 import com.example.game.testing.utils.mcd_Serializable;
 
 import org.json.JSONArray;
@@ -33,7 +34,6 @@ public class LevelFileGenerator implements mcd_Serializable {
     private static final float ARTIFICIAL_DELTA_TIME = 0.02f;
     private LevelGeneratorParams params;
     public static JSONObject generateNewLevel(mcd_Scene scene, Engine eng, LevelGeneratorParams params){
-        float currentTime = 0;
         LevelFileGenerator lg = new LevelFileGenerator();
         lg.lgp = params;
         lg.myScene = scene;
@@ -46,11 +46,10 @@ public class LevelFileGenerator implements mcd_Serializable {
                 true
         );
         lg.sg.setPlayer(lg.player);
-        int loop_count = 0;
-        while(currentTime < params.levelDurationInSeconds){
+        float currentTime = 0;
+        while(DistanceSystem.getInstance().getDistance() < 100*params.levelTotalMeters){
             lg.update(currentTime, ARTIFICIAL_DELTA_TIME);
             currentTime += ARTIFICIAL_DELTA_TIME;
-            ++loop_count;
         }
         return lg.serialize();
     }
@@ -102,7 +101,7 @@ public class LevelFileGenerator implements mcd_Serializable {
     }
 
     public static class LevelGeneratorSerialized {
-        LevelGeneratorParams levelGeneratorParams;
+        public LevelGeneratorParams levelGeneratorParams;
         List<ObstacleFactory> obsFactory = new ArrayList<ObstacleFactory>();
     }
 

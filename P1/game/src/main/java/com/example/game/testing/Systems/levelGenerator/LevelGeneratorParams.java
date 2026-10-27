@@ -13,7 +13,8 @@ public class LevelGeneratorParams implements mcd_Serializable {
      */
     public int augmentSpeedEachXPixels;
     public float augmentSpeedByYEachXPixels;
-    public float levelDurationInSeconds;
+    public int levelTotalMeters;
+    public int levelCoinsToWin;
     //at most there will be this many obstacles
     public int maxNumberOfSimultaneousObstacles;
     //at most there will be this many coins on screen at the same time
@@ -39,7 +40,8 @@ public class LevelGeneratorParams implements mcd_Serializable {
     public JSONObject serialize(){
         JSONObject jo = new JSONObject();
         jo.put("levelInitialSpeed", Double.valueOf(levelInitialSpeed));
-        jo.put("levelDurationInSeconds", Double.valueOf(levelDurationInSeconds));
+        jo.put("levelTotalMeters", levelTotalMeters);
+        jo.put("levelCoinsToWin", levelCoinsToWin);
         jo.put("maxNumberOfSimultaneousObstacles", Double.valueOf(maxNumberOfSimultaneousObstacles));
         jo.put("obstacleExplosiveCreationChance", Double.valueOf(obstacleExplosiveCreationChance));
         jo.put("obstacleExplosiveCreationBoost", Double.valueOf(obstacleExplosiveCreationBoost));
@@ -52,7 +54,8 @@ public class LevelGeneratorParams implements mcd_Serializable {
     }
     public static LevelGeneratorParams deserialize(JSONObject jo){
         LevelGeneratorParams lgp = new LevelGeneratorParams();
-        lgp.levelDurationInSeconds = (float)jo.getDouble("levelDurationInSeconds");
+        lgp.levelTotalMeters = jo.getInt("levelTotalMeters");
+        lgp.levelCoinsToWin = jo.getInt("levelCoinsToWin");
         lgp.levelInitialSpeed = (float)jo.getDouble("levelInitialSpeed");
         lgp.maxNumberOfSimultaneousObstacles = jo.getInt("maxNumberOfSimultaneousObstacles");
         lgp.obstacleExplosiveCreationBoost = (float)jo.getDouble("obstacleExplosiveCreationBoost");

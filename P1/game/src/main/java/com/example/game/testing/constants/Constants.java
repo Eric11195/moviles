@@ -71,7 +71,8 @@ public class Constants {
 
     public static LevelGeneratorParams getDefaultLevelGeneratorParams(){
         LevelGeneratorParams lgp = new LevelGeneratorParams();
-        lgp.levelDurationInSeconds = -1;
+        lgp.levelTotalMeters = -1;
+        lgp.levelCoinsToWin = -1;
         lgp.levelInitialSpeed = 70;
         lgp.maxNumberOfSimultaneousObstacles = 4;
         lgp.obstacleExplosiveCreationBoost = 1.5f;
