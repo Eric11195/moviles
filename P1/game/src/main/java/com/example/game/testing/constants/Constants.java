@@ -10,7 +10,7 @@ public class Constants {
     public static final Vec2 PLAYER_DIMENSIONS= new Vec2(LOGIC_WINDOW_SIZE.x/12, LOGIC_WINDOW_SIZE.y/10);
     //PLAYER
     public static final float PLAYER_STARTING_Y_POS = LOGIC_WINDOW_SIZE.y-PLAYER_DIMENSIONS.y;
-    public static final Vec2 PLAYER_MARGINS = new Vec2(PLAYER_DIMENSIONS.x/2, PLAYER_DIMENSIONS.y/2);
+    public static final Vec2 PLAYER_MARGINS = new Vec2(PLAYER_DIMENSIONS.x, PLAYER_DIMENSIONS.y);
     //Vertical upwards
     public static final float MAX_PLAYER_UPWARDS_SPEED = 120;
     public static final float Y_PLAYER_ACCEL = 400;
@@ -21,9 +21,9 @@ public class Constants {
     public static final Vec2 DEFAULT_BUTTON_SIZE = new Vec2(LOGIC_WINDOW_SIZE.x*0.25f,LOGIC_WINDOW_SIZE.y*0.15f);
 
     //OBSTACLES
-    public static final int DANGER_MATRIX_PRECALCULATED_SPACE = (int)(LOGIC_WINDOW_SIZE.x * 0.5f);
+    public static final int DANGER_MATRIX_PRECALCULATED_SPACE = (int)(LOGIC_WINDOW_SIZE.x * 0.3f);
         // SCENE GENERATOR
-        public static final int DANGER_MATRIX_PX_TILE_SIZE = 2;
+        public static final int DANGER_MATRIX_PX_TILE_SIZE = 10;
 
         // ZAPPERS
         public static final float MIN_ZAPPER_WIDTH = 60;

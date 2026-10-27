@@ -26,11 +26,14 @@ public class DangerMatrix extends BoolMatrix{
     }
     public void drawLine(Vec2 startPt, Vec2 endPt){
         Vec2 delta = endPt.sub(startPt);
-        int repetitions = (int)Math.ceil(delta.length() / zonesPxSize);
+        int repetitions = Math.max(1, (int)Math.ceil(delta.length() / zonesPxSize));
+        // Calculate the small incremental step instead of the full length
+        Vec2 step = delta.mul(1.0f / repetitions);
+
         Vec2 pt = startPt;
-        for(int i = 0; i < repetitions; ++i){
+        for(int i = 0; i <= repetitions; ++i){
             set(getConvertedPos(pt), true);
-            pt = pt.add(delta);
+            pt = pt.add(step);
         }
     }
 
@@ -39,11 +42,14 @@ public class DangerMatrix extends BoolMatrix{
      */
     public boolean checkLine(Vec2 startPt, Vec2 endPt){
         Vec2 delta = endPt.sub(startPt);
-        int repetitions = (int)Math.ceil(delta.length() / (zonesPxSize/5.0f));
+        int repetitions = Math.max(1, (int)Math.ceil(delta.length() / (zonesPxSize/5.0f)));
+        // Calculate the small incremental step
+        Vec2 step = delta.mul(1.0f / repetitions);
+
         Vec2 pt = startPt;
-        for(int i = 0; i < repetitions; ++i){
+        for(int i = 0; i <= repetitions; ++i){
             if(get(getConvertedPos(pt))) return false;
-            pt = pt.add(delta);
+            pt = pt.add(step);
         }
         return true;
     }
@@ -122,12 +128,14 @@ public class DangerMatrix extends BoolMatrix{
                 "Ensure it has both of them before calling this function"
             );
         return ensureTraversability(
+            playerTr.pos.x, playerTr.pos.y,
             playerTr.size.x+PLAYER_MARGINS.x, playerTr.size.y+PLAYER_MARGINS.y,
             LevelSpeedSystem.getInstance().getSpeedMult()
         );
     }
-
     private boolean ensureTraversability(
+            float playerXStartPos,
+            float playerYStartPos,
             float playerWidth,
             float playerHeight,
             float horizontalSpeed
@@ -139,62 +147,63 @@ public class DangerMatrix extends BoolMatrix{
         final int yCount = getHeight();
         final int xCount = getWidth();
 
-        // ONLY start checking from where new obstacles are generated (WINDOW_WIDTH)
-        int startX = (int) (LOGIC_WINDOW_SIZE.x / zonesPxSize);
-        startX = Math.max(0, Math.min(xCount - 1, startX));
+        // 1. Start from the player's actual position
+        final int startX = Math.max(0, Math.min(xCount - 1, (int) (playerXStartPos / zonesPxSize)));
+        final int startY = Math.max(0, Math.min(yCount - 1, Math.round(playerYStartPos / zonesPxSize)));
 
-        // Cap the right-most check so the player bounding box doesn't go out of bounds
+        // Cap the right-most check to prevent bounds exceptions
         final int endX = xCount - 1 - (int) Math.floor((playerWidth - 0.001f) / zonesPxSize);
 
         if (endX <= startX) return true;
 
         final float dt = zonesPxSize / horizontalSpeed;
 
-        // Maximum cells the player can move up or down per horizontal column
+        // Calculate max vertical movement per column step
         final int cellsUp = (int) Math.ceil((MAX_PLAYER_UPWARDS_SPEED * dt) / zonesPxSize);
         final int cellsDown = (int) Math.ceil((MAX_PLAYER_FALL_SPEED * dt) / zonesPxSize);
 
         boolean[] currentReachable = new boolean[yCount];
         boolean[] nextReachable = new boolean[yCount];
+        boolean[] safeY = new boolean[yCount];
 
-        // 1. INITIALIZE: Assume any free space at the start of our check is a valid entry point,
-        // since the path up to this column was already validated in previous frames.
-        boolean entryFound = false;
-        for (int y = 0; y < yCount; ++y) {
-            if (isCharacterFree(startX * (float) zonesPxSize, y * (float) zonesPxSize, playerWidth, playerHeight)) {
-                currentReachable[y] = true;
-                entryFound = true;
-            }
-        }
+        currentReachable[startY] = true;
 
-        if (!entryFound) return false;
-
-        // 2. FORWARD CHECK: Only iterate through the newly generated columns on the far right
+        // 2. Scan forward to ensure a continuous path exists
         for (int x = startX + 1; x <= endX; ++x) {
+            boolean anySafe = false;
+
+            // OPTIMIZATION: Check collision for this column exactly ONCE per Y-cell.
+            for (int y = 0; y < yCount; ++y) {
+                safeY[y] = isCharacterFree(x * (float) zonesPxSize, y * (float) zonesPxSize, playerWidth, playerHeight);
+                if (safeY[y]) anySafe = true;
+            }
+
+            // Early exit: If an obstacle completely walls off this entire column, it's impossible.
+            if (!anySafe) return false;
+
             boolean anyReachable = false;
             java.util.Arrays.fill(nextReachable, false);
 
             for (int y = 0; y < yCount; ++y) {
                 if (!currentReachable[y]) continue;
 
-                // Create a reachable window based on max speeds
+                // Expand reachable area based on max jump/fall speeds
                 int minY = Math.max(0, y - cellsUp);
                 int maxY = Math.min(yCount - 1, y + cellsDown);
 
                 for (int nextY = minY; nextY <= maxY; ++nextY) {
-                    if (nextReachable[nextY]) continue; // Skip if already marked valid
-
-                    // If the bounding box fits in this reachable cell, mark it
-                    if (isCharacterFree(x * (float) zonesPxSize, nextY * (float) zonesPxSize, playerWidth, playerHeight)) {
+                    // Only expand into cells that are safe and haven't been marked yet
+                    if (!nextReachable[nextY] && safeY[nextY]) {
                         nextReachable[nextY] = true;
                         anyReachable = true;
                     }
                 }
             }
 
-            // If a newly generated column creates a solid wall, reject the obstacle
+            // If the reachable path collided completely with obstacles, reject the generation
             if (!anyReachable) return false;
 
+            // Swap arrays for the next column
             boolean[] temp = currentReachable;
             currentReachable = nextReachable;
             nextReachable = temp;
