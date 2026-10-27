@@ -177,7 +177,6 @@ public class LevelGeneratorToJSON extends mcd_Scene {
     private static LevelGeneratorParams getDist3Params() {
         LevelGeneratorParams lg = new LevelGeneratorParams();
 
-        // Target: 30000 pixels. Initial speed 100. 30000 / 100 = ~300 seconds minimum.
         lg.levelInitialSpeed = 100f;
         lg.levelTotalMeters = 150;
         lg.levelCoinsToWin = -1;

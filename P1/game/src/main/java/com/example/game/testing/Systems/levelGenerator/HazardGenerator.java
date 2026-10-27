@@ -105,7 +105,7 @@ public class HazardGenerator extends Generator{
         }
         return true;
     }
-    final static Vec2 laserSizeInDangerMatrix = new Vec2(0, LASER_HEIGHT);
+    final static Vec2 laserSizeInDangerMatrix = new Vec2(10, LASER_HEIGHT);
     final static Vec2 laserPosInDangerMatrix = new Vec2(0, 0);
     public boolean createLaser(mcd_Entity ent, float t, float dt)
     {
@@ -128,15 +128,14 @@ public class HazardGenerator extends Generator{
 
         laserSizeInDangerMatrix.x = LevelSpeedSystem.getInstance().getSpeedMult();
         laserPosInDangerMatrix.y = y;
-        laserPosInDangerMatrix.x = LOGIC_WINDOW_SIZE.x - laserSizeInDangerMatrix.x;
+        laserPosInDangerMatrix.x = LOGIC_WINDOW_SIZE.x;
 
-        if (!dangerMatrix.ensureTraversability(player,dt) || !dangerMatrix.checkRect(laserPosInDangerMatrix, laserSizeInDangerMatrix)) {
+        laser.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix,t,dt);
+        if (!dangerMatrix.ensureTraversability(player,dt) || dangerMatrix.checkRect(laserPosInDangerMatrix, laserPosInDangerMatrix)) {
             ent.rmComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
             laser.deactivateWarning(ent);
             return false;
         }
-
-        laser.drawSelfInDangerMatrix((TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT), dangerMatrix,t,dt);
         return true;
     }
     Vec2 zapperCreationStart = new Vec2(), zapperCreationEnd=new Vec2();
