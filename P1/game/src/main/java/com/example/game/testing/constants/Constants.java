@@ -68,6 +68,7 @@ public class Constants {
     public static final float BACKGROUND_0_MAX_HEIGHT = 400;
     public static final float BACKGROUND_0_MIN_WIDTH = 30;
     public static final float BACKGROUND_0_MAX_WIDTH = 60;
+    public static final int MAX_BACKGROUND_RECTS = 20;
 
     public static LevelGeneratorParams getDefaultLevelGeneratorParams(){
         LevelGeneratorParams lgp = new LevelGeneratorParams();
