@@ -70,9 +70,9 @@ public class CoinComponent extends Obstacle {
     final static Vec2 drawInSelfMatrixSize = new Vec2(COIN_RADIUS*2,2*COIN_RADIUS);
     @Override
     public void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm,float t,float dt) {
-        drawInSelfMatrixPos.x = tr.pos.x-COIN_RADIUS;
-        drawInSelfMatrixPos.y = tr.pos.y-COIN_RADIUS;
-        dm.drawSquare(drawInSelfMatrixPos, drawInSelfMatrixSize);
+//        drawInSelfMatrixPos.x = tr.pos.x-COIN_RADIUS;
+//        drawInSelfMatrixPos.y = tr.pos.y-COIN_RADIUS;
+//        dm.drawSquare(drawInSelfMatrixPos, drawInSelfMatrixSize);
     }
 
     @Override

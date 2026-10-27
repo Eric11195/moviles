@@ -122,122 +122,85 @@ public class DangerMatrix extends BoolMatrix{
                 "Ensure it has both of them before calling this function"
             );
         return ensureTraversability(
-            playerTr.pos.x, playerTr.pos.y,
             playerTr.size.x+PLAYER_MARGINS.x, playerTr.size.y+PLAYER_MARGINS.y,
-            playerVel.velocity.y,
             LevelSpeedSystem.getInstance().getSpeedMult()
         );
     }
 
     private boolean ensureTraversability(
-            float playerXStartPos,
-            float playerYStartPos,
             float playerWidth,
             float playerHeight,
-            float initialVy,
             float horizontalSpeed
     ) {
-        if (horizontalSpeed <= 0 || zonesPxSize <= 0
-                || playerWidth <= 0 || playerHeight <= 0) {
+        if (horizontalSpeed <= 0 || zonesPxSize <= 0 || playerWidth <= 0 || playerHeight <= 0) {
             throw new IllegalArgumentException("Invalid parameters");
         }
 
-        // Coarse velocity quantization to reduce the state count.
-        final float vyStep = 50f;
+        final int yCount = getHeight();
+        final int xCount = getWidth();
+
+        // ONLY start checking from where new obstacles are generated (WINDOW_WIDTH)
+        int startX = (int) (LOGIC_WINDOW_SIZE.x / zonesPxSize);
+        startX = Math.max(0, Math.min(xCount - 1, startX));
+
+        // Cap the right-most check so the player bounding box doesn't go out of bounds
+        final int endX = xCount - 1 - (int) Math.floor((playerWidth - 0.001f) / zonesPxSize);
+
+        if (endX <= startX) return true;
+
         final float dt = zonesPxSize / horizontalSpeed;
 
-        final int yCount = getHeight();
-        final int vCount = 2 * (int) Math.ceil(MAX_PLAYER_UPWARDS_SPEED / vyStep) + 1;
-        final int zeroV = vCount / 2;
+        // Maximum cells the player can move up or down per horizontal column
+        final int cellsUp = (int) Math.ceil((MAX_PLAYER_UPWARDS_SPEED * dt) / zonesPxSize);
+        final int cellsDown = (int) Math.ceil((MAX_PLAYER_FALL_SPEED * dt) / zonesPxSize);
 
-        final int startX = Math.min(getWidth() - 1,
-                Math.max(0, (int) (playerXStartPos / zonesPxSize)));
+        boolean[] currentReachable = new boolean[yCount];
+        boolean[] nextReachable = new boolean[yCount];
 
-        final int startY = Math.round(playerYStartPos / zonesPxSize);
-        final int startV = Math.max(0, Math.min(vCount - 1,
-                Math.round(initialVy / vyStep) + zeroV));
-
-        if (startY < 0 || startY >= yCount) return false;
-
-        boolean[][] current = new boolean[yCount][vCount];
-        boolean[][] next = new boolean[yCount][vCount];
-
-        current[startY][startV] = true;
-
-        // Reused collision lookup.
-        boolean[] safeY = new boolean[yCount];
-
-        for (int x = startX; x >= 0; --x) {
-            // Precompute valid character positions in this column.
-            for (int y = 0; y < yCount; ++y) {
-                safeY[y] = isCharacterFree(
-                        x * (float) zonesPxSize,
-                        y * (float) zonesPxSize,
-                        playerWidth,
-                        playerHeight
-                );
+        // 1. INITIALIZE: Assume any free space at the start of our check is a valid entry point,
+        // since the path up to this column was already validated in previous frames.
+        boolean entryFound = false;
+        for (int y = 0; y < yCount; ++y) {
+            if (isCharacterFree(startX * (float) zonesPxSize, y * (float) zonesPxSize, playerWidth, playerHeight)) {
+                currentReachable[y] = true;
+                entryFound = true;
             }
-
-            // Discard states that are no longer collision-free.
-            boolean any = false;
-
-            for (int y = 0; y < yCount; ++y) {
-                for (int v = 0; v < vCount; ++v) {
-                    if (!current[y][v]) continue;
-
-                    if (!safeY[y]) {
-                        current[y][v] = false;
-                    } else {
-                        any = true;
-                    }
-                }
-            }
-
-            if (!any) return false;
-
-            if (x == 0) return true;
-
-            // Clear the reusable destination array.
-            for (int y = 0; y < yCount; ++y) {
-                java.util.Arrays.fill(next[y], false);
-            }
-
-            for (int y = 0; y < yCount; ++y) {
-                for (int v = 0; v < vCount; ++v) {
-                    if (!current[y][v]) continue;
-
-                    float vy = (v - zeroV) * vyStep;
-
-                    // Two possible actions: gravity or thrust.
-                    for (int action = 0; action < 2; ++action) {
-                        float acceleration = GRAVITY_FORCE
-                                - (action == 1 ? Y_PLAYER_ACCEL : 0);
-
-                        float newVy = Math.max(-MAX_PLAYER_UPWARDS_SPEED,
-                                Math.min(MAX_PLAYER_FALL_SPEED,
-                                        vy + acceleration * dt));
-
-                        float newY = y * (float) zonesPxSize
-                                + newVy * dt;
-
-                        int ny = Math.round(newY / zonesPxSize);
-                        int nv = Math.max(0, Math.min(vCount - 1,
-                                Math.round(newVy / vyStep) + zeroV));
-
-                        if (ny < 0 || ny >= yCount) continue;
-                        if (!safeY[ny]) continue;
-
-                        next[ny][nv] = true;
-                    }
-                }
-            }
-
-            boolean[][] temp = current;
-            current = next;
-            next = temp;
         }
 
-        return false;
+        if (!entryFound) return false;
+
+        // 2. FORWARD CHECK: Only iterate through the newly generated columns on the far right
+        for (int x = startX + 1; x <= endX; ++x) {
+            boolean anyReachable = false;
+            java.util.Arrays.fill(nextReachable, false);
+
+            for (int y = 0; y < yCount; ++y) {
+                if (!currentReachable[y]) continue;
+
+                // Create a reachable window based on max speeds
+                int minY = Math.max(0, y - cellsUp);
+                int maxY = Math.min(yCount - 1, y + cellsDown);
+
+                for (int nextY = minY; nextY <= maxY; ++nextY) {
+                    if (nextReachable[nextY]) continue; // Skip if already marked valid
+
+                    // If the bounding box fits in this reachable cell, mark it
+                    if (isCharacterFree(x * (float) zonesPxSize, nextY * (float) zonesPxSize, playerWidth, playerHeight)) {
+                        nextReachable[nextY] = true;
+                        anyReachable = true;
+                    }
+                }
+            }
+
+            // If a newly generated column creates a solid wall, reject the obstacle
+            if (!anyReachable) return false;
+
+            boolean[] temp = currentReachable;
+            currentReachable = nextReachable;
+            nextReachable = temp;
+        }
+
+        return true;
     }
 
     /**

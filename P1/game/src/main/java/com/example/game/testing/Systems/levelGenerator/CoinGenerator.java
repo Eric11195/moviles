@@ -93,7 +93,7 @@ public class CoinGenerator extends Generator{
             return false;
         }
 
-        dangerMatrix.drawSquare(dangerMatrixCoinPos, dangerMatrixCoinSize);
+//        dangerMatrix.drawSquare(dangerMatrixCoinPos, dangerMatrixCoinSize);
         ent.setComponent(ComponentId.OBSTACLE_COMPONENT, new CoinComponent(ent, t, y));
 
         lastCoinTimestamp = t;
