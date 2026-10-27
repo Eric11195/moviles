@@ -333,6 +333,12 @@ public class GraphicsDesktop implements GraphicsInterface {
         this.transformation = new AffineTransform(
                 this.graphics.getTransform()
         );
+        graphics.clipRect(
+                0,
+                0,
+                this._logicWindowWidth,
+                this._logicWindowHeight
+        );
     }
 
     @Override

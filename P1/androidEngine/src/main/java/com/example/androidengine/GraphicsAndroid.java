@@ -179,6 +179,12 @@ public class GraphicsAndroid implements GraphicsInterface {
 
         can.drawColor(clearColor.getColorAsInt());
         can.setMatrix(viewportMatrix);
+        can.clipRect(
+                0,
+                0,
+                this._logicWindowWidth,
+                this._logicWindowHeight
+        );
 
         //return true;
     }
