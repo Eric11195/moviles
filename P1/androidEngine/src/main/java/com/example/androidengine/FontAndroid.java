@@ -12,17 +12,14 @@ import com.example.engine.FontEng;
 public class FontAndroid implements FontEng {
     private float fontSize;
     private final Typeface tf;
-    //Creates a font with the given font resource
-    //Id looks like R.font.fontName on res/drawable
     //Do not mark bold if yout font.ttf is bold by default
     public FontAndroid(Context context, String fontName, float fontSize, boolean bold){
-        int resourceId = context.getResources().getIdentifier(
-                fontName,
-                "font",
-                context.getPackageName()
-        );
+        // Load the base font directly from the assets folder
+        Typeface baseTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/" + fontName);
+
+        // Apply bold styling if needed
         this.tf = Typeface.create(
-                ResourcesCompat.getFont(context, resourceId),
+                baseTypeface,
                 bold ? Typeface.BOLD : Typeface.NORMAL
         );
         this.fontSize = fontSize;

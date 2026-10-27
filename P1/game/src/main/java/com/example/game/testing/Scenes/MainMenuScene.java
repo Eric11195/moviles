@@ -27,7 +27,7 @@ public class MainMenuScene extends mcd_Scene{
         g.setWindowLogicSize((int)LOGIC_WINDOW_SIZE.x, (int)LOGIC_WINDOW_SIZE.y);
         
         FontLibrary.createFont(g, FontLibrary.FontName.STANDARD,16);
-        FontLibrary.createFont(g, FontLibrary.FontName.HEADER,72);
+        FontLibrary.createFont(g, FontLibrary.FontName.HEADER,72, "FascinateInline-Regular.ttf");
         FontLibrary.createFont(g, FontLibrary.FontName.SUBHEADER,32);
         g.setFont(FontLibrary.getFont(FontLibrary.FontName.SUBHEADER));
 

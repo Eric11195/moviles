@@ -4,6 +4,8 @@ import com.example.engine.FontEng;
 
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -18,8 +20,9 @@ public class FontDesktop implements FontEng {
     }
 
     public FontDesktop(String file_name, float size) {
-        InputStream is = getClass().getResourceAsStream("/fonts/" + file_name);
         try {
+            // Read directly from the file system path
+            InputStream is = new FileInputStream(new File("assets/fonts/" + file_name));
             java_font = Font.createFont(Font.TRUETYPE_FONT, is);
             setFontSize(size);
         } catch (FontFormatException | IOException exception) {
