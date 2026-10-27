@@ -7,13 +7,14 @@ import com.example.game.testing.EC.mcd_Component;
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.utils.ColorLibrary;
+import com.example.utils.PoolObject;
 import com.example.utils.Vec2;
 
 import java.util.List;
 
 
 public class DrawRectangleComponent implements mcd_Component {
-    public static class Rectangle
+    public static class Rectangle extends PoolObject<Rectangle>
     {
         public Vec2 myPos,mySize;
         public  Rectangle(Vec2 pos, Vec2 size)
@@ -22,6 +23,10 @@ public class DrawRectangleComponent implements mcd_Component {
             mySize = size;
         }
 
+        @Override
+        public Rectangle clone() {
+            return new Rectangle(myPos,mySize);
+        }
     };
     public ColorEng color;
     public List<Rectangle> rectanglesToDraw;

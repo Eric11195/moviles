@@ -8,6 +8,7 @@ import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.LevelSpeedSystem;
 import com.example.game.testing.constants.Constants;
 import com.example.game.testing.utils.ColorLibrary;
+import com.example.utils.Pool;
 import com.example.utils.Vec2;
 
 public class BackgroundComponent implements mcd_Component {
@@ -17,6 +18,8 @@ public class BackgroundComponent implements mcd_Component {
     Vec2 maxDims;
     float speedScale;
     ColorEng color;
+    Pool<DrawRectangleComponent.Rectangle> rectanglePool = new Pool<>(Constants.MAX_BACKGROUND_RECTS,
+            new DrawRectangleComponent.Rectangle(new Vec2(0,0),new Vec2(0,0)));
     public BackgroundComponent(Vec2 _minDims, Vec2 _maxDims, float _speedScale, ColorEng _color){
         minDims = _minDims;
         maxDims = _maxDims;
@@ -37,7 +40,8 @@ public class BackgroundComponent implements mcd_Component {
             r.myPos.x -= spd * dt * speedScale;
 
             if (r.myPos.x + r.mySize.x < 0) {
-                rectangleComponent.rectanglesToDraw.remove(i);
+                DrawRectangleComponent.Rectangle removeRect = rectangleComponent.rectanglesToDraw.remove(i);
+                rectanglePool.releaseItem(removeRect);
                 i--;
             }
         }
@@ -57,7 +61,12 @@ public class BackgroundComponent implements mcd_Component {
             pos = new Vec2(xOffset, Constants.LOGIC_WINDOW_SIZE.y-h+yOffset);
             float w = (float)Math.random() * (maxDims.x - minDims.x) + minDims.x;
             size = new Vec2(w,h);
-            rectangleComponent.rectanglesToDraw.add(new DrawRectangleComponent.Rectangle(pos, size));
+
+            DrawRectangleComponent.Rectangle addRect = rectanglePool.fetchItem();
+            addRect.myPos = pos;
+            addRect.mySize = size;
+
+            rectangleComponent.rectanglesToDraw.add(addRect);
         }
 
         DrawRectangleComponent.Rectangle rect = rectangleComponent.rectanglesToDraw.get(rectangleComponent.rectanglesToDraw.size()-1);
@@ -67,7 +76,11 @@ public class BackgroundComponent implements mcd_Component {
             float w = (float)Math.random() * (maxDims.x - minDims.x) + minDims.x;
             size = new Vec2(w,h);
 
-            rectangleComponent.rectanglesToDraw.add(new DrawRectangleComponent.Rectangle(pos, size));
+            DrawRectangleComponent.Rectangle addRect = rectanglePool.fetchItem();
+            addRect.myPos = pos;
+            addRect.mySize = size;
+
+            rectangleComponent.rectanglesToDraw.add(addRect);
             rect = rectangleComponent.rectanglesToDraw.get(rectangleComponent.rectanglesToDraw.size()-1);
         }
     }
