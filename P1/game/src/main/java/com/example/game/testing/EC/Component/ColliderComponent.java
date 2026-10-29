@@ -32,6 +32,7 @@ public class ColliderComponent implements mcd_Component {
     ArrayList<ColliderData> colliders = new ArrayList<ColliderData>();
 
     Vec2 center = new Vec2(0,0);
+
     public ColliderComponent(){
     }
 
@@ -108,6 +109,7 @@ public class ColliderComponent implements mcd_Component {
     public void addSingleCollider(Vec2 relativeCenter, float radius){
         if(colliders.size() < COLLIDER_COUNT_HARD_CAP_PER_ENTITY)
             colliders.add(new ColliderData(relativeCenter, radius));
+        recalculateCenter();
     }
 
     /**
@@ -151,6 +153,7 @@ public class ColliderComponent implements mcd_Component {
                 )
             );
         }
+        recalculateCenter();
     }
     /**
      * Creates a line of colliders and adds all of them to the colliders of this component.
@@ -167,6 +170,10 @@ public class ColliderComponent implements mcd_Component {
         addColliderLine(startPos,endPos,lineWidth, COLLIDER_COUNT_HARD_CAP_PER_ENTITY-colliders.size());
     }
 
+    public void recalculateCenter(){
+        Vec2 temp = colliders.get(0).add(colliders.get(colliders.size()-1));
+        center = new Vec2(temp.x/2,temp.y/2);
+    }
     public void addCollision(mcd_Entity ent){
         var temp = new CollisionData();
         temp.entity = ent;

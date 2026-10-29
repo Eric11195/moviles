@@ -34,6 +34,8 @@ public class Constants {
         public static final float ZAPPER_LINE_WIDTH = 10;
         public static final int ZAPPER_MAX_COLLIDERS = 10;
         public static final float MAX_ZAPPER_LENGTH = 200;
+        public static final float MIN_ZAPPER_TURN_RATE = 1f;
+        public static final float MAX_ZAPPER_TURN_RATE = 2f;
 
         // MISILES
         public static final float MISSILE_MOVE_SPEED = LOGIC_WINDOW_SIZE.x*2;
