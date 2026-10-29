@@ -67,11 +67,8 @@ public class LevelSelectorScene extends mcd_Scene{
         MainGameScene mainScene = new MainGameScene(eng, lgs.levelGeneratorParams.levelCoinsToWin==-1? MainGameScene.Retos.distancia : MainGameScene.Retos.monedas);
         mainScene.setDistanceToWin(lgs.levelGeneratorParams.levelTotalMeters * 100);
         mainScene.setCoinsToWin(lgs.levelGeneratorParams.levelCoinsToWin);
-        mainScene.setLevelGen(
-            new FileLevelGenerator(
-                mainScene,
-                lgs
-            )
+        mainScene.setFixedLevelGen(
+            lgs
         );
         eng.setScene(mainScene);
     }

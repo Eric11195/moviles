@@ -6,6 +6,6 @@ import com.example.game.testing.Scenes.EndGameScene;
 
 public class StartPlayerDead {
     public static void startPlayerDead(Engine eng, mcd_Entity killedBy){
-        eng.setScene(new EndGameScene(eng, false));
+        eng.setScene(new EndGameScene(eng, killedBy.getMyScene(), false));
     }
 }

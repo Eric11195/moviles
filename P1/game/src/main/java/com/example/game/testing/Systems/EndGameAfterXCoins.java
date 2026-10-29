@@ -20,7 +20,7 @@ public class EndGameAfterXCoins implements mcd_System{
     public void update(mcd_Scene scene, float t, float dt) {
         if(CoinSystem.getInstance().getCoins() >= maxCoins){
             Engine eng = scene.getEngine();
-            eng.setScene(new EndGameScene(eng, true));
+            eng.setScene(new EndGameScene(eng,scene, true));
         }
     }
     Vec2 pos = new Vec2(CoinSystem.pos.x+90, CoinSystem.pos.y);

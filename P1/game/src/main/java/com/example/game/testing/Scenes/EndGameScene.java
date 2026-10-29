@@ -25,9 +25,10 @@ public class EndGameScene extends mcd_Scene{
     private TextRectComponent metersText;
     private TextRectComponent coinsText;
     private boolean win;
-    public EndGameScene(Engine myEngine, boolean win) {
+    public EndGameScene(Engine myEngine, mcd_Scene levelScene, boolean win) {
         super(myEngine);
         this.win = win;
+        this.levelScene = levelScene;
     }
     final static Vec2 pos = new Vec2(LOGIC_WINDOW_SIZE.x*0.1f, 0);
     final static Vec2 size = new Vec2(LOGIC_WINDOW_SIZE.x*0.4f, LOGIC_WINDOW_SIZE.y*0.15f);
@@ -35,6 +36,8 @@ public class EndGameScene extends mcd_Scene{
     final static Vec2 buttonSize = DEFAULT_BUTTON_SIZE;
     final static float buttonYDelta = (LOGIC_WINDOW_SIZE.y-buttonSize.y*2)/3.0f;
     final static Vec2 buttonPos = new Vec2(pos.x+size.x+LOGIC_WINDOW_SIZE.x*0.1f, buttonYDelta);
+
+    mcd_Scene levelScene;
 
     @Override
     public void start(Engine eng) {
@@ -69,10 +72,8 @@ public class EndGameScene extends mcd_Scene{
             "Play Again",
             () ->{
                 eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.BUTTON));
-                MainGameScene mgs = new MainGameScene(eng);
-                ProceduralLevelGenerator plg = new ProceduralLevelGenerator(mgs,getDefaultLevelGeneratorParams(), false);
-                mgs.setLevelGen(plg);
-                eng.setScene(mgs);
+                levelScene.cleanup(eng);
+                eng.setScene(levelScene);
             }
         );
     }

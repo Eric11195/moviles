@@ -62,8 +62,7 @@ public class MainMenuScene extends mcd_Scene{
             "INFINITE MODE",
             () ->{
                 MainGameScene mgs = new MainGameScene(eng);
-                ProceduralLevelGenerator plg = new ProceduralLevelGenerator(mgs,getDefaultLevelGeneratorParams(), false);
-                mgs.setLevelGen(plg);
+                mgs.setProceduralLevelGen(getDefaultLevelGeneratorParams());
                 eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.BUTTON));
                 eng.setScene(mgs);
             }

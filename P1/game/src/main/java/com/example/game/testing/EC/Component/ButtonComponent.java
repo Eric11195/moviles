@@ -62,7 +62,7 @@ public class ButtonComponent implements mcd_Component {
             //System.out.println("Event: "+evt.pos.x+" , "+evt.pos.y);
             if(inside(tr, evt.pos)) {
                 hovering = true;
-                if (evt.type == TouchEventType.UP){
+                if (evt.type == TouchEventType.DOWN){
                     return true;
                 }
             }

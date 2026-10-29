@@ -16,6 +16,10 @@ import com.example.game.testing.Systems.EndGameAfterXDistance;
 import com.example.game.testing.Systems.GameDistanceToEndOfLevelRenderer;
 import com.example.game.testing.Systems.levelGenerator.BaseLevelGenerator;
 import com.example.game.testing.Systems.PlayerCollisionDetector;
+import com.example.game.testing.Systems.levelGenerator.FileLevelGenerator;
+import com.example.game.testing.Systems.levelGenerator.LevelFileGenerator;
+import com.example.game.testing.Systems.levelGenerator.LevelGeneratorParams;
+import com.example.game.testing.Systems.levelGenerator.ProceduralLevelGenerator;
 import com.example.game.testing.constants.Constants;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.SoundLibrary;
@@ -49,14 +53,10 @@ public class MainGameScene extends mcd_Scene{
     protected MainGameScene(Engine myEngine) {
         super(myEngine);
         retos = Retos.none;
-
-        createBackground();
     }
     protected MainGameScene(Engine myEngine, Retos r){
         super(myEngine);
         this.retos = r;
-
-        createBackground();
     }
     private int coinsToWin;
     public void setCoinsToWin(int coins){
@@ -82,11 +82,31 @@ public class MainGameScene extends mcd_Scene{
                 ColorLibrary.DarkGrey));
         background1.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT,new DrawRectangleComponent());
     }
-    public void setLevelGen(BaseLevelGenerator levelGen){
-        if(this.levelGen!=null){
-            throw new RuntimeException("You must not call setLevelGen again once levelGen is correctly set up");
+    LevelGeneratorParams lgp;
+    LevelFileGenerator.LevelGeneratorSerialized lgs;
+    enum levelType{
+        procedural,
+        fixed
+    }
+    levelType lt;
+    boolean levelGenSet = false;
+    public void setProceduralLevelGen(LevelGeneratorParams lgp){
+        this.levelGenSet = true;
+        this.lgp = lgp;
+        this.lt = levelType.procedural;
+    }
+    public void setFixedLevelGen(LevelFileGenerator.LevelGeneratorSerialized lgs){
+        this.levelGenSet = true;
+        this.lgs = lgs;
+        this.lt = levelType.fixed;
+    }
+    public void instantiateLevelGen(){
+        assert(this.levelGenSet);
+        if(this.lt==levelType.procedural){
+            levelGen = new ProceduralLevelGenerator(this, this.lgp, false);
+        }else{
+            levelGen = new FileLevelGenerator(this, this.lgs);
         }
-        this.levelGen = levelGen;
     }
     @Override
     public void update(Engine eng, float t, float dt){
@@ -95,11 +115,8 @@ public class MainGameScene extends mcd_Scene{
     }
     @Override
     public void start(Engine eng) {
-        //eng.getAudio().stopSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG));
-
-        if(levelGen==null){
-            throw new RuntimeException("You must call setLevelGen before this function");
-        }
+        createBackground();
+        instantiateLevelGen();
         gameTime = 0;
 
         int pauseButtonSize = 40;
