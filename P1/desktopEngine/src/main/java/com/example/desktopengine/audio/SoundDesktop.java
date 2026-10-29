@@ -18,6 +18,9 @@ public class SoundDesktop implements  EngSound {
     @Override
     public int getId(){return id;}
 
+    @Override
+    public void setStreamId(int n) { }
+
     public int Loops()
     {
         return numLoops;

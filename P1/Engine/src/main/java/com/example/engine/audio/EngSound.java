@@ -5,4 +5,6 @@ public interface EngSound {
   public int getId();
 
   public int Loops();
+
+  public void setStreamId(int n);
 }

@@ -47,7 +47,8 @@ public class AudioAndroid implements AudioInterface {
 
     @Override
     public void stopSound(EngSound sound) {
-        sound_pool.stop(sound.getId());
+        SoundAndroid soundAndroid = (SoundAndroid) sound;
+        sound_pool.stop(soundAndroid.streamId);
     }
 
     public void setBackgroundMusic(String file_path) {
@@ -61,9 +62,10 @@ public class AudioAndroid implements AudioInterface {
     }
 
     @Override
-    public void playSound(EngSound sound) {
+    public int playSound(EngSound sound) {
         if (sound != null && sound.getId() > 0) {
-            sound_pool.play(sound.getId(), 1.f, 1.f, 0,sound.Loops(), 1.f);
+            return sound_pool.play(sound.getId(), 1.f, 1.f, 0,sound.Loops(), 1.f);
         }
+        return  -1;
     }
 }

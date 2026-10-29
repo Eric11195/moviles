@@ -126,14 +126,17 @@ public class AudioDesktop implements AudioInterface {
     {
         SoundDesktop desktopSound = (SoundDesktop) sound;
         if(desktopSound.isBigFile){
-        desktopSound.line.stop();}
+        desktopSound.line.stop();
+        }
         else
         {
-            pool.clips[desktopSound.getId()].stop();
+            for( int i =0;i<MAX_SAME_SOUNDS;i++){
+            pool.clips[desktopSound.getId()+i].stop();
+            }
         }
     }
     @Override
-    public void playSound(EngSound sound) {
+    public int playSound(EngSound sound) {
         SoundDesktop desktopSound = (SoundDesktop) sound;
         if(desktopSound.isBigFile)
         {
@@ -142,5 +145,6 @@ public class AudioDesktop implements AudioInterface {
         else{
             playClip(desktopSound);
         }
+        return 0;
     }
 }

@@ -9,6 +9,8 @@ public class SoundAndroid implements EngSound {
 
     int numLoops;
 
+    int streamId = -1;
+    int streamid;
     public SoundAndroid(int n,String path,int loops)
     {
         id=n;
@@ -20,6 +22,7 @@ public class SoundAndroid implements EngSound {
         id =-1;
         file_path="";
     }
+    public void setStreamId(int n){streamId = n;}
     @Override
     public String getAudioPath() {
         return file_path;

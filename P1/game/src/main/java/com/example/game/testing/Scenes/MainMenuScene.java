@@ -78,6 +78,7 @@ public class MainMenuScene extends mcd_Scene{
                 eng.setScene(new LevelSelectorScene(eng));
             }
         );
-        eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.WIN));
+        //SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG).setStreamId(eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG)));
+        //eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.WIN));
     }
 }

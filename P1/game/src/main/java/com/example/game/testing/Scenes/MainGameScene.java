@@ -95,7 +95,8 @@ public class MainGameScene extends mcd_Scene{
     }
     @Override
     public void start(Engine eng) {
-        eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG));
+        //eng.getAudio().stopSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG));
+
         if(levelGen==null){
             throw new RuntimeException("You must call setLevelGen before this function");
         }
@@ -126,7 +127,7 @@ public class MainGameScene extends mcd_Scene{
         addSystem(levelGen);
 
         addRetosSystems(eng);
-
+        SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG).setStreamId(eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG)));
 
     }
     private void addRetosSystems(Engine eng){
