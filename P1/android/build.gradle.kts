@@ -33,7 +33,7 @@ android {
 }
 tasks.register<Copy>("Copy"){
     from(rootDir.absolutePath + "/assets")
-    into("src/main/assets")
+    into("src/main/Assets")
 }
 tasks.preBuild(){
     dependsOn("Copy")

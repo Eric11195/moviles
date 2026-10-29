@@ -22,7 +22,7 @@ public class FontDesktop implements FontEng {
     public FontDesktop(String file_name, float size) {
         try {
             // Read directly from the file system path
-            InputStream is = new FileInputStream(new File("assets/fonts/" + file_name));
+            InputStream is = new FileInputStream(new File("Assets/fonts/" + file_name));
             java_font = Font.createFont(Font.TRUETYPE_FONT, is);
             setFontSize(size);
         } catch (FontFormatException | IOException exception) {
