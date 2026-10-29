@@ -4,10 +4,12 @@ import android.content.Context;
 
 import com.example.engine.IFileStorage;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 public class FileStorageAndroid implements IFileStorage {
@@ -50,21 +52,18 @@ public class FileStorageAndroid implements IFileStorage {
 
     @Override
     public String read(String filename) throws IOException {
-        File file = resolveFile(filename);
+        try (InputStream input = context.getAssets().open(
+                "Levels/" + filename)) {
 
-        try (FileInputStream input = new FileInputStream(file)) {
-            byte[] bytes = new byte[(int) file.length()];
-            int offset = 0;
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            byte[] buffer = new byte[4096];
+            int count;
 
-            while (offset < bytes.length) {
-                int count = input.read(bytes, offset, bytes.length - offset);
-                if (count == -1) {
-                    break;
-                }
-                offset += count;
+            while ((count = input.read(buffer)) != -1) {
+                output.write(buffer, 0, count);
             }
 
-            return new String(bytes, 0, offset, StandardCharsets.UTF_8);
+            return output.toString("UTF-8");
         }
     }
 
