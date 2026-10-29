@@ -8,6 +8,7 @@ import static com.example.game.testing.constants.Constants.WARNING_TIME;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
+import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;
 
 public abstract class WarnedObstacle extends Obstacle{
@@ -21,10 +22,13 @@ public abstract class WarnedObstacle extends Obstacle{
     public WarnedObstacle(mcd_Entity ent, float spawnTime) {
         super(ent, spawnTime);
         timeTillSpawn = WARNING_TIME;
+    }
+    public void activateWarning(mcd_Entity ent)
+    {
         WarningSign ws = (WarningSign) ent.getComponent(ComponentId.WARNING_COMPONENT);
         ws.activateWarning();
+        ent.getEngine().getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.WARNING));
     }
-
     @Override
     public void update(mcd_Entity ent, float t, float dt){
         super.update(ent,t,dt);

@@ -18,6 +18,7 @@ import com.example.game.testing.Systems.levelGenerator.ObstacleFactory;
 import com.example.game.testing.constants.Constants;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.JSON_HELPER;
+import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;
 
 import org.json.JSONObject;
@@ -79,6 +80,7 @@ public class CoinComponent extends Obstacle {
     public void onPlayerCollision(mcd_Entity player, mcd_Entity ent, mcd_Scene scene) {
         // ADD COIN
         CoinSystem.getInstance().addValue(value);
+        scene.getEngine().getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.COIN));
         ent.setActive(false);
     }
 

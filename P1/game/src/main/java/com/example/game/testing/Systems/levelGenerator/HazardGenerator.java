@@ -19,6 +19,7 @@ import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.LevelSpeedSystem;
+import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;
 
 import java.util.ArrayList;
@@ -103,6 +104,8 @@ public class HazardGenerator extends Generator{
             mis.deactivateWarning(ent);
             return false;
         }
+        WarnedObstacle obstacle = (WarnedObstacle) ent.getComponent(ComponentId.OBSTACLE_COMPONENT);
+        obstacle.activateWarning(ent);
         return true;
     }
     final static Vec2 laserSizeInDangerMatrix = new Vec2(10, LASER_HEIGHT);
@@ -136,6 +139,8 @@ public class HazardGenerator extends Generator{
             laser.deactivateWarning(ent);
             return false;
         }
+        WarnedObstacle obstacle = (WarnedObstacle) ent.getComponent(ComponentId.OBSTACLE_COMPONENT);
+        obstacle.activateWarning(ent);
         return true;
     }
     Vec2 zapperCreationStart = new Vec2(), zapperCreationEnd=new Vec2();

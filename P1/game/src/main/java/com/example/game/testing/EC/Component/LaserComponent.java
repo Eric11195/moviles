@@ -18,6 +18,7 @@ import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.levelGenerator.ObstacleFactory;
 import com.example.game.testing.utils.ColorLibrary;
+import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;
 import static com.example.game.testing.EC.Component.ObstacleId.OBSTACLE_LASER;
 import org.json.JSONObject;

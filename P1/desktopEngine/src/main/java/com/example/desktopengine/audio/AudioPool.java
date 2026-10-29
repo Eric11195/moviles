@@ -4,7 +4,7 @@ import javax.sound.sampled.Clip;
 
 
 public class AudioPool {
-    static final int MAX_SOUNDS = 20;
+    static final int MAX_SOUNDS = 40;
     public Clip[] clips;
     int clips_used;
     public AudioPool()

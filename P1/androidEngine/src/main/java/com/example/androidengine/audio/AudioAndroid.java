@@ -16,16 +16,7 @@ public class AudioAndroid implements AudioInterface {
 
     public AudioAndroid(Context context) {
         this.context = context;
-        this.sound_pool = new SoundPool(12, AudioManager.STREAM_MUSIC, 0);
-
-        this.sound_pool.setOnLoadCompleteListener((soundPool, sampleId, status) -> {
-            if (status == 0) {
-                this.sound_pool.play(sampleId, 1.f, 1.f, 0, 0, 1.f);
-                Log.d("AudioAndroid", "Sonido cargado: " + sampleId);
-            } else {
-                Log.e("AudioAndroid", "Error cargando sonido: " + sampleId);
-            }
-        });
+        this.sound_pool = new SoundPool(40, AudioManager.STREAM_MUSIC, 0);
     }
 
     public AudioAndroid() {

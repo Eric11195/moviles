@@ -11,7 +11,7 @@ import javax.sound.sampled.Clip;
 
 
 public class AudioDesktop implements AudioInterface {
-
+    static  final int MAX_SAME_SOUNDS=3;
     private AudioPool pool;
 
     final AudioFormat audioFormat = new AudioFormat(44100, 8, 1, true, true);
@@ -24,14 +24,18 @@ public class AudioDesktop implements AudioInterface {
     private int addClip(File audioFile, int loops)
     {
         try {
+
+            int initial_index = 0;
+            for(int i =0;i<MAX_SAME_SOUNDS;i++){
             AudioInputStream original =AudioSystem.getAudioInputStream(audioFile);
             AudioInputStream converted = AudioSystem.getAudioInputStream(audioFormat, original);
-
-
             Clip auxiliarClip = AudioSystem.getClip();
             auxiliarClip.open(converted);
             auxiliarClip.setFramePosition(0);
-            return pool.addSound(auxiliarClip);
+                initial_index = pool.addSound(auxiliarClip);
+            }
+            initial_index-=MAX_SAME_SOUNDS-1;
+            return initial_index;
         } catch (Exception e) {
             System.err.println("Couldn't load audio file");
         }
@@ -65,18 +69,27 @@ public class AudioDesktop implements AudioInterface {
         return sound;
     }
     private void playClip(SoundDesktop soundDesktop)
-    {
-        if(soundDesktop.id>=0&&pool.clips[soundDesktop.id]!=null){
-            pool.clips[soundDesktop.id].setFramePosition(0);
-            if(soundDesktop.numLoops<0)
+    { if(soundDesktop.id>=0&&pool.clips[soundDesktop.id]!=null){
+        int i =0;
+        boolean found = false;
+        while(i<MAX_SAME_SOUNDS&&!found)
+        {
+            if(!pool.clips[soundDesktop.id+i].isRunning())
             {
-                pool.clips[soundDesktop.id].loop(Clip.LOOP_CONTINUOUSLY);
+                pool.clips[soundDesktop.id+i].setFramePosition(0);
+                pool.clips[soundDesktop.id+i].loop(
+                        soundDesktop.numLoops<0?
+                                Clip.LOOP_CONTINUOUSLY:soundDesktop.numLoops);
+                found =true;
+                if(i>0){
+                    int j =12;
+                }
             }
-            else
-            {
-                pool.clips[soundDesktop.id].loop(soundDesktop.numLoops);
-            }
+            i++;
         }
+
+
+    }
     }
     private void playBigSound(SoundDesktop soundDesktop)
     {
