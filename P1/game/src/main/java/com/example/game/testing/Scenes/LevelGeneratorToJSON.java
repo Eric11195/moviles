@@ -52,7 +52,7 @@ public class LevelGeneratorToJSON extends mcd_Scene {
                 getDist3Params()
         );
         IFileStorage fileStorage = eng.getFileStorage();
-        fileStorage.setRelativePath("Assets/Levels");
+        fileStorage.setRelativePath("assets/Levels");
         toJSON(fileStorage, "Level1", j1);
         toJSON(fileStorage, "Level2", j2);
         toJSON(fileStorage, "Level3", j3);
