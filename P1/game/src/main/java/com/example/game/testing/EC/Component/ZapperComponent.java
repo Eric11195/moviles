@@ -134,7 +134,7 @@ public class ZapperComponent extends Obstacle{
     }
 
     public float width(){
-        return Math.abs(end.x-start.x);
+        return Math.abs(end.x-start.x)+ZAPPER_HEAD_RADIUS;
     }
     public float height(){
         return Math.abs(end.y-start.y);
