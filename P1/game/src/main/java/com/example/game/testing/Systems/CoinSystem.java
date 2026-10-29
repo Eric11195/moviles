@@ -37,7 +37,7 @@ public class CoinSystem implements mcd_System{
         return totalValue;
     }
     static public final Vec2 size = new Vec2(150,50);
-    static public final Vec2 pos = new Vec2(-50,30);
+    static public final Vec2 pos = new Vec2(-55,30);
     @Override
     public void render(GraphicsInterface g) {
         String text = String.valueOf(totalValue);
