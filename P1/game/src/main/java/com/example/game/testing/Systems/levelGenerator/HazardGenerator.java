@@ -10,6 +10,7 @@ import com.example.game.testing.EC.Component.ColliderComponent;
 import com.example.game.testing.EC.Component.LaserComponent;
 import com.example.game.testing.EC.Component.MissileComponent;
 import com.example.game.testing.EC.Component.ObstacleId;
+import com.example.game.testing.EC.Component.RotatingZapperComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.Component.VelocityComponent;
 import com.example.game.testing.EC.Component.WarnedObstacle;
@@ -70,15 +71,18 @@ public class HazardGenerator extends Generator{
                 return createMissile(ent, t, dt);
             case OBSTACLE_ZAPPER:
                 return createZapper(ent,t, dt);
+            case OBSTACLE_ROTATING_ZAPPER:
+                return createRotatingZapper(ent,t, dt);
             default:
                 throw new RuntimeException("Invalid obstacle type");
         }
     }
     public ObstacleId chooseObstacleType(){
         double d = Math.random();
-        if(d < 0.33) return ObstacleId.OBSTACLE_LASER;
-        if(d < 0.66) return ObstacleId.OBSTACLE_MISSILE;
-        return ObstacleId.OBSTACLE_ZAPPER;
+        if(d < 0.25) return ObstacleId.OBSTACLE_LASER;
+        if(d < 0.50) return ObstacleId.OBSTACLE_MISSILE;
+        if(d < 0.75) return ObstacleId.OBSTACLE_ZAPPER;
+        return ObstacleId.OBSTACLE_ROTATING_ZAPPER;
     }
     public boolean createMissile(mcd_Entity ent, float t, float dt){
         Vec2 space =
@@ -164,6 +168,29 @@ public class HazardGenerator extends Generator{
         ent.setComponent(
                 ComponentId.OBSTACLE_COMPONENT,
                 new ZapperComponent(ent, t, zapperCreationStart, zapperCreationEnd)
+        );
+        return true;
+    }
+    public boolean createRotatingZapper(mcd_Entity ent, float t, float dt){
+        Vec2 space =
+                getSafeVerticalSpaceForObstacleSoPlayerCanPass(
+                        getVerticalSafeZone(),
+                        MIN_ZAPPER_HEIGHT
+                );
+        //Space is really the from and to of y axis that the zapper will ocuppy
+        //So x does not mean x axis at all
+        float delta = Math.abs(space.y-space.x);
+        space.y = space.x + delta * (float)Math.random();
+        space.x = space.x + delta * (float)Math.random();
+        //System.out.println("Delta: "+ delta+ " Y_RANGE: ("+space.x+","+space.y+')');
+        ZapperComponent.getProvisionalZapperData(space,zapperCreationStart,zapperCreationEnd);
+        if(zapperCreationStart.y < 0 || zapperCreationStart.y > LOGIC_WINDOW_SIZE.y || zapperCreationEnd.y < 0 || zapperCreationEnd.y > LOGIC_WINDOW_SIZE.y) return false;
+        if(!dangerMatrix.checkLine(zapperCreationStart,zapperCreationEnd)) return false;
+        dangerMatrix.drawLine(zapperCreationStart,zapperCreationEnd);
+        if(!dangerMatrix.ensureTraversability(player,dt)) return false;
+        ent.setComponent(
+                ComponentId.OBSTACLE_COMPONENT,
+                new RotatingZapperComponent(ent, t, zapperCreationStart, zapperCreationEnd)
         );
         return true;
     }
