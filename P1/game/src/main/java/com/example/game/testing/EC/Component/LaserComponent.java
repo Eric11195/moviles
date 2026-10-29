@@ -43,6 +43,8 @@ public class LaserComponent extends WarnedObstacle {
         public void instantiate(mcd_Scene scene, mcd_Entity ent, float t) {
             TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
             ent.setComponent(ComponentId.OBSTACLE_COMPONENT, new LaserComponent(ent,t,yPos));
+            WarnedObstacle warning = (WarnedObstacle) ent.getComponent(ComponentId.OBSTACLE_COMPONENT);
+            warning.activateWarning(ent);
         }
     }
     public LaserComponent(mcd_Entity ent,float spawnTime,float posY)

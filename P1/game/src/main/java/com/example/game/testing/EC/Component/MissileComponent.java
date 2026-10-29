@@ -31,6 +31,8 @@ public class MissileComponent extends WarnedObstacle {
         @Override
         public void instantiate(mcd_Scene scene, mcd_Entity ent, float t) {
             ent.setComponent(ComponentId.OBSTACLE_COMPONENT, new MissileComponent(ent,t, yPos));
+            WarnedObstacle warning = (WarnedObstacle) ent.getComponent(ComponentId.OBSTACLE_COMPONENT);
+            warning.activateWarning(ent);
         }
     }
 
