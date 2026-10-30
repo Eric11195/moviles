@@ -34,15 +34,13 @@ android {
 tasks.register<Copy>("copyAssets") {
     from(rootProject.file("assets"))
     into(layout.projectDirectory.dir("src/main/assets"))
-
-    // Always execute, even if Gradle considers it up-to-date.
     outputs.upToDateWhen { false }
 }
 
-tasks.named("preBuild") {
+// Hook into asset merging tasks rather than preBuild
+tasks.matching { it.name.startsWith("merge") && it.name.endsWith("Assets") }.configureEach {
     dependsOn("copyAssets")
 }
-
 
 dependencies {
     implementation(project(":androidEngine"))

@@ -61,20 +61,27 @@ public class FileStorageAndroid implements IFileStorage {
     public String read(String filename) throws IOException {
         File file = resolveFile(filename);
 
-        try (InputStream input = context.getAssets().open(
-                getAssetPath(filename)
-        )) {
-            ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-            byte[] buffer = new byte[8192];
-            int count;
-
-            while ((count = input.read(buffer)) != -1) {
-                output.write(buffer, 0, count);
+        // Check internal storage first
+        if (file.exists()) {
+            try (InputStream input = new java.io.FileInputStream(file)) {
+                return readFromStream(input);
             }
-
-            return output.toString("UTF-8");
         }
+
+        // Fallback to assets
+        try (InputStream input = context.getAssets().open(getAssetPath(filename))) {
+            return readFromStream(input);
+        }
+    }
+
+    private String readFromStream(InputStream input) throws IOException {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        byte[] buffer = new byte[8192];
+        int count;
+        while ((count = input.read(buffer)) != -1) {
+            output.write(buffer, 0, count);
+        }
+        return output.toString(StandardCharsets.UTF_8.name());
     }
 
     private File resolveFile(String filename) throws IOException {
