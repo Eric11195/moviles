@@ -52,4 +52,9 @@ public class SoundDesktop implements  EngSound {
     }
 
     public void setLine(SourceDataLine l){line = l;}
+
+    @Override
+    public boolean isBigFile() {
+        return isBigFile;
+    }
 }

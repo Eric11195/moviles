@@ -10,6 +10,7 @@ public class SoundAndroid implements EngSound {
     int numLoops;
 
     int streamId = -1;
+    boolean isBigFile = false;
     int streamid;
     public SoundAndroid(int n,String path,int loops)
     {
@@ -17,6 +18,8 @@ public class SoundAndroid implements EngSound {
         file_path=path;
         numLoops=loops;
     }
+    public void setId(int n)
+    {id = n;}
     public SoundAndroid()
     {
         id =-1;
@@ -31,7 +34,11 @@ public class SoundAndroid implements EngSound {
     public int getId() {
         return id;
     }
-
+    @Override
+    public boolean isBigFile()
+    {
+        return isBigFile;
+    }
     @Override
     public int Loops()
     {

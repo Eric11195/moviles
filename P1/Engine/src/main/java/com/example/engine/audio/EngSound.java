@@ -7,4 +7,6 @@ public interface EngSound {
   public int Loops();
 
   public void setStreamId(int n);
+
+  public boolean isBigFile();
 }
