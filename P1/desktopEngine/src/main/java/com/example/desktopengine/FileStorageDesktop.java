@@ -10,17 +10,23 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 public class FileStorageDesktop implements IFileStorage {
+    private final Path rootPath =
+            Paths.get("./assets").toAbsolutePath().normalize();
 
-    private Path basePath = Paths.get(".");
+    private Path basePath = rootPath;
+
+    @Override
+    public void setRelativePath(String relativePath) {
+        basePath = rootPath.resolve(relativePath).normalize();
+
+        if (!basePath.startsWith(rootPath)) {
+            throw new IllegalArgumentException("Invalid relative path");
+        }
+    }
 
     @Override
     public String getCurrentPath() {
         return basePath.toString();
-    }
-
-    @Override
-    public void setRelativePath(String relativePath) {
-        basePath = Paths.get(relativePath).toAbsolutePath().normalize();
     }
 
     @Override
