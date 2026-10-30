@@ -46,7 +46,9 @@ public abstract class mcd_Scene implements Scene {
     }
     @Override
     public void cleanup(Engine eng){
+
         entityList.clear();
+        systemList.clear();
     }
     @Override
     public void pause(Engine eng){
