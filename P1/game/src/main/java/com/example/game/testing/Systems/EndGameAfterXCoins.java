@@ -23,7 +23,7 @@ public class EndGameAfterXCoins implements mcd_System{
             eng.setScene(new EndGameScene(eng,scene, true));
         }
     }
-    Vec2 pos = new Vec2(CoinSystem.pos.x+90, CoinSystem.pos.y);
+    Vec2 pos = new Vec2(CoinSystem.pos.x+CoinSystem.size.x, CoinSystem.pos.y);
     Vec2 size = new Vec2(50,CoinSystem.size.y);
     @Override
     public void render(GraphicsInterface g) {

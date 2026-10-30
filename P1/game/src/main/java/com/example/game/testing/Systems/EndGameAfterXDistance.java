@@ -23,7 +23,7 @@ public class EndGameAfterXDistance implements mcd_System{
             eng.setScene(new EndGameScene(eng,scene, this.win));
         }
     }
-    Vec2 pos = new Vec2(DistanceSystem.pos.x+50, DistanceSystem.pos.y+5);
+    Vec2 pos = new Vec2(DistanceSystem.pos.x+DistanceSystem.size.x, DistanceSystem.pos.y+5);
     Vec2 size = new Vec2(50,CoinSystem.size.y);
     @Override
     public void render(GraphicsInterface g) {
