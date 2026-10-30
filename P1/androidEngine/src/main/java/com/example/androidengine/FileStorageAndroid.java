@@ -5,10 +5,11 @@ import android.content.Context;
 import com.example.engine.IFileStorage;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.io.InputStream;
+import java.io.ByteArrayOutputStream;
 
 public class FileStorageAndroid implements IFileStorage {
 
@@ -47,24 +48,32 @@ public class FileStorageAndroid implements IFileStorage {
             output.write(content.getBytes(StandardCharsets.UTF_8));
         }
     }
+    private String getAssetPath(String filename) throws IOException {
+        File file = resolveFile(filename);
 
+        String relativePath = context.getFilesDir().toPath()
+                .relativize(file.toPath())
+                .toString();
+
+        return relativePath.replace(File.separatorChar, '/');
+    }
     @Override
     public String read(String filename) throws IOException {
         File file = resolveFile(filename);
 
-        try (FileInputStream input = new FileInputStream(file)) {
-            byte[] bytes = new byte[(int) file.length()];
-            int offset = 0;
+        try (InputStream input = context.getAssets().open(
+                getAssetPath(filename)
+        )) {
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
 
-            while (offset < bytes.length) {
-                int count = input.read(bytes, offset, bytes.length - offset);
-                if (count == -1) {
-                    break;
-                }
-                offset += count;
+            byte[] buffer = new byte[8192];
+            int count;
+
+            while ((count = input.read(buffer)) != -1) {
+                output.write(buffer, 0, count);
             }
 
-            return new String(bytes, 0, offset, StandardCharsets.UTF_8);
+            return output.toString("UTF-8");
         }
     }
 
