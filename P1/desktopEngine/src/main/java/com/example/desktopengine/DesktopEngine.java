@@ -27,7 +27,7 @@ public class DesktopEngine extends Engine{
         do {
             do {
                 try {
-                    gd.prepareFrame();
+                    if(!gd.prepareFrame()) return;
                     this.getCurrentScene().render(g);
                 }
                 finally {

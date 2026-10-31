@@ -53,8 +53,9 @@ public class AndroidEngine extends Engine{
     }
     @Override
     protected void render(GraphicsInterface g){
-        g.prepareFrame();
-        this.getCurrentScene().render(g);
-        g.endFrame();
+        if(g.prepareFrame()) {
+            this.getCurrentScene().render(g);
+            g.endFrame();
+        }
     }
 }

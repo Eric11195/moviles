@@ -166,15 +166,15 @@ public class GraphicsAndroid implements GraphicsInterface {
     }
 
     @Override
-    public void prepareFrame() {
+    public boolean prepareFrame() {
         assert(can == null);
 
         can = surface.lockCanvas();
 
         if (can == null) {
             Log.d("DRAW", "Canvas is NULL!");
-            //return false;
-            assert(false);
+            return false;
+            //assert(false);
         }
 
         can.drawColor(clearColor.getColorAsInt());
@@ -186,7 +186,7 @@ public class GraphicsAndroid implements GraphicsInterface {
                 this._logicWindowHeight
         );
 
-        //return true;
+        return true;
     }
 
     @Override

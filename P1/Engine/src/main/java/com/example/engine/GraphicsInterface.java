@@ -40,7 +40,7 @@ public interface GraphicsInterface {
     public void rotate(float x, float y, float rotationDegrees);
     public void save();
     public void restore();
-    public void prepareFrame();
+    public boolean prepareFrame();
     public void endFrame();
 
     int getWidth();

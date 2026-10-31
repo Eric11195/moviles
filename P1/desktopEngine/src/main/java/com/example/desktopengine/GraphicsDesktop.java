@@ -322,7 +322,7 @@ public class GraphicsDesktop implements GraphicsInterface {
     }
 
     @Override
-    public void prepareFrame() {
+    public boolean prepareFrame() {
         this.graphics = (Graphics2D)this.buf.getDrawGraphics();
         transformation.setTransform(this.originalTransform);
 
@@ -339,6 +339,7 @@ public class GraphicsDesktop implements GraphicsInterface {
                 this._logicWindowWidth,
                 this._logicWindowHeight
         );
+        return true;
     }
 
     @Override
