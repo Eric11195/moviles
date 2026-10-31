@@ -24,8 +24,9 @@ android {
 
     sourceSets {
         named("main") {
-            // Link directly to root assets folder
-            assets.directories.add(rootProject.file("assets").absolutePath)
+            val rootAssetsDir = rootProject.file("assets").absolutePath
+            println("[GRADLE ASSETS] Registering source asset directory: $rootAssetsDir")
+            assets.directories.add(rootAssetsDir)
         }
     }
 
