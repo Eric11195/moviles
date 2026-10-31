@@ -5,8 +5,7 @@ import static com.example.game.testing.constants.Constants.DEFAULT_BUTTON_SIZE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
 import com.example.engine.Engine;
-import com.example.game.testing.Systems.levelGenerator.FileLevelGenerator;
-import com.example.game.testing.Systems.levelGenerator.LevelFileGenerator;
+import com.example.game.testing.Systems.LevelGenerator.LevelFileGenerator;
 import com.example.game.testing.utils.JSON_HELPER;
 import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;

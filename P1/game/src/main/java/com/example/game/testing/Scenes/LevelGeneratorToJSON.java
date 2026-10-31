@@ -4,8 +4,8 @@ import static com.example.game.testing.utils.JSON_HELPER.toJSON;
 
 import com.example.engine.Engine;
 import com.example.engine.IFileStorage;
-import com.example.game.testing.Systems.levelGenerator.LevelFileGenerator;
-import com.example.game.testing.Systems.levelGenerator.LevelGeneratorParams;
+import com.example.game.testing.Systems.LevelGenerator.LevelFileGenerator;
+import com.example.game.testing.Systems.LevelGenerator.LevelGeneratorParams;
 
 import org.json.JSONObject;
 

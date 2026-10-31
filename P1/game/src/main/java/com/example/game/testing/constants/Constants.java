@@ -1,5 +1,5 @@
 package com.example.game.testing.constants;
-import com.example.game.testing.Systems.levelGenerator.LevelGeneratorParams;
+import com.example.game.testing.Systems.LevelGenerator.LevelGeneratorParams;
 import com.example.utils.Vec2;
 
 

@@ -7,7 +7,7 @@ import static com.example.game.testing.constants.Constants.WARNING_TIME;
 
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
-import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
+import com.example.game.testing.Systems.LevelGenerator.DangerMatrix;
 import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;
 

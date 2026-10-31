@@ -6,7 +6,7 @@ import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.LevelSpeedSystem;
-import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
+import com.example.game.testing.Systems.LevelGenerator.DangerMatrix;
 import com.example.game.testing.utils.mcd_Serializable;
 
 import org.json.JSONObject;

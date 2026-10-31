@@ -3,7 +3,6 @@ package com.example.game.testing.Scenes;
 import static com.example.game.testing.EC.Prefabs.ButtonPrefab.createButton;
 import static com.example.game.testing.constants.Constants.DEFAULT_BUTTON_SIZE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
-import static com.example.game.testing.constants.Constants.getDefaultLevelGeneratorParams;
 
 import com.example.engine.Engine;
 import com.example.game.testing.EC.Component.TextRectComponent;
@@ -11,12 +10,9 @@ import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.Prefabs.TextPrefab;
 import com.example.game.testing.Systems.CoinSystem;
 import com.example.game.testing.Systems.DistanceSystem;
-import com.example.game.testing.Systems.levelGenerator.ProceduralLevelGenerator;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;
-
-import org.w3c.dom.Text;
 
 /**
  * This scene contains the meters and coins in text. And allows to return to the last game/level or return to the main menu

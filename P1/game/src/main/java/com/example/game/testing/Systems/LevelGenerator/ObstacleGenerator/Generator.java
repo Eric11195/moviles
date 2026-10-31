@@ -1,18 +1,14 @@
-package com.example.game.testing.Systems.levelGenerator;
+package com.example.game.testing.Systems.LevelGenerator.ObstacleGenerator;
 
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
-import static com.example.game.testing.constants.Constants.PLAYER_DIMENSIONS;
-import static com.example.game.testing.constants.Constants.PLAYER_MARGINS;
 
-import com.example.game.testing.EC.Component.ColliderComponent;
 import com.example.game.testing.EC.Component.Obstacle;
 import com.example.game.testing.EC.Component.TransformComponent;
-import com.example.game.testing.EC.Component.VelocityComponent;
-import com.example.game.testing.EC.Component.WarningSign;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
-import com.example.game.testing.Systems.LevelSpeedSystem;
+import com.example.game.testing.Systems.LevelGenerator.DangerMatrix;
+import com.example.game.testing.Systems.LevelGenerator.LevelGeneratorParams;
 import com.example.utils.Vec2;
 
 import java.util.ArrayList;

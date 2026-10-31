@@ -15,10 +15,9 @@ import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.LevelSpeedSystem;
-import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
-import com.example.game.testing.Systems.levelGenerator.ObstacleFactory;
+import com.example.game.testing.Systems.LevelGenerator.DangerMatrix;
+import com.example.game.testing.Systems.LevelGenerator.ObstacleFactory;
 import com.example.game.testing.utils.ColorLibrary;
-import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;
 
 import org.json.JSONObject;

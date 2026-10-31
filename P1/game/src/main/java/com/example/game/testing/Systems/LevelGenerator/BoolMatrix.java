@@ -1,4 +1,4 @@
-package com.example.game.testing.Systems.levelGenerator;
+package com.example.game.testing.Systems.LevelGenerator;
 
 import com.example.utils.Vec2;
 

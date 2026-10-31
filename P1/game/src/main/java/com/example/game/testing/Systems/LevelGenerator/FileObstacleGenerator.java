@@ -1,4 +1,4 @@
-package com.example.game.testing.Systems.levelGenerator;
+package com.example.game.testing.Systems.LevelGenerator;
 
 import com.example.game.testing.EC.Component.ColliderComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
@@ -7,11 +7,12 @@ import com.example.game.testing.EC.Component.WarningSign;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
+import com.example.game.testing.Systems.LevelGenerator.ObstacleGenerator.Generator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileObstacleGenerator extends Generator{
+public class FileObstacleGenerator extends Generator {
     int current_idx;
     List<ObstacleFactory> obstaclesBeComing;
     public FileObstacleGenerator(mcd_Scene _scene, LevelGeneratorParams _params, DangerMatrix _dangerMatrix, List<ObstacleFactory> obstacles) {

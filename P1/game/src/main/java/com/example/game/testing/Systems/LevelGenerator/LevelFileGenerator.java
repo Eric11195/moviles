@@ -1,4 +1,4 @@
-package com.example.game.testing.Systems.levelGenerator;
+package com.example.game.testing.Systems.LevelGenerator;
 
 import static com.example.game.testing.EC.Prefabs.PlayerPrefab.createPlayer;
 import static com.example.game.testing.utils.JSON_HELPER.toJSON;
@@ -15,6 +15,7 @@ import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.DistanceSystem;
+import com.example.game.testing.Systems.LevelGenerator.ObstacleGenerator.Generator;
 import com.example.game.testing.utils.mcd_Serializable;
 
 import org.json.JSONArray;

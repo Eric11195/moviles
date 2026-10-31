@@ -1,7 +1,6 @@
 package com.example.game.testing.EC.Component;
 
 import static com.example.game.testing.EC.Component.ObstacleId.OBSTACLE_COIN;
-import static com.example.game.testing.EC.Component.ObstacleId.OBSTACLE_ZAPPER;
 import static com.example.game.testing.constants.Constants.COIN_COLLIDER_RADIUS;
 import static com.example.game.testing.constants.Constants.COIN_RADIUS;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
@@ -12,12 +11,10 @@ import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.LevelSpeedSystem;
-import com.example.game.testing.Systems.levelGenerator.DangerMatrix;
+import com.example.game.testing.Systems.LevelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.CoinSystem;
-import com.example.game.testing.Systems.levelGenerator.ObstacleFactory;
-import com.example.game.testing.constants.Constants;
+import com.example.game.testing.Systems.LevelGenerator.ObstacleFactory;
 import com.example.game.testing.utils.ColorLibrary;
-import com.example.game.testing.utils.JSON_HELPER;
 import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;
 

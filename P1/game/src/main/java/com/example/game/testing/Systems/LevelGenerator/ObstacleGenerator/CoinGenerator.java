@@ -1,12 +1,8 @@
-package com.example.game.testing.Systems.levelGenerator;
+package com.example.game.testing.Systems.LevelGenerator.ObstacleGenerator;
 
 import static com.example.game.testing.constants.Constants.COIN_RADIUS;
-import static com.example.game.testing.constants.Constants.GRAVITY_FORCE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.MAX_COIN_Y_JUMP;
-import static com.example.game.testing.constants.Constants.MAX_PLAYER_FALL_SPEED;
-import static com.example.game.testing.constants.Constants.MAX_PLAYER_UPWARDS_SPEED;
-import static com.example.game.testing.constants.Constants.Y_PLAYER_ACCEL;
 
 import com.example.game.testing.EC.Component.CoinComponent;
 import com.example.game.testing.EC.Component.ColliderComponent;
@@ -15,6 +11,8 @@ import com.example.game.testing.EC.Component.VelocityComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
+import com.example.game.testing.Systems.LevelGenerator.DangerMatrix;
+import com.example.game.testing.Systems.LevelGenerator.LevelGeneratorParams;
 import com.example.game.testing.Systems.LevelSpeedSystem;
 import com.example.utils.Vec2;
 

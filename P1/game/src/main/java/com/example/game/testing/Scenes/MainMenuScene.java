@@ -8,11 +8,6 @@ import static com.example.game.testing.constants.Constants.getDefaultLevelGenera
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.Prefabs.TextPrefab;
-import com.example.game.testing.Systems.levelGenerator.CoinGenerator;
-import com.example.game.testing.Systems.levelGenerator.HazardGenerator;
-import com.example.game.testing.Systems.levelGenerator.LevelGeneratorParams;
-import com.example.game.testing.Systems.levelGenerator.ProceduralLevelGenerator;
-import com.example.game.testing.constants.Constants;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.FontLibrary;
 import com.example.game.testing.utils.SoundLibrary;
