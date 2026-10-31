@@ -22,7 +22,7 @@ public class LevelSelectorScene extends mcd_Scene{
     @Override
     public void start(Engine eng) {
         int BUTTON_COUNT = 3;
-        eng.getFileStorage().setRelativePath("levels");
+        eng.getFileStorage().setRelativePath("Levels");
 
 
         for(int j = 0; j < 2; ++j) {
