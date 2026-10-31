@@ -10,29 +10,31 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class FileStorageAndroid implements IFileStorage {
 
     private final Context context;
-    private File baseDirectory;
-
+    private String baseDirectory = "";
     public FileStorageAndroid(Context context) {
         this.context = context.getApplicationContext();
-        this.baseDirectory = this.context.getFilesDir();
+
     }
 
     @Override
     public String getCurrentPath() {
-        return baseDirectory.getPath();
+        return baseDirectory;
     }
 
     @Override
     public void setRelativePath(String relativePath) {
-        baseDirectory = new File(context.getFilesDir(), relativePath)
-                .getAbsoluteFile()
-                .toPath()
-                .normalize()
-                .toFile();
+        if (relativePath == null || relativePath.isEmpty()) {
+            baseDirectory = "";
+            return;
+        }
+
+        baseDirectory = relativePath;
     }
 
     @Override
@@ -48,28 +50,12 @@ public class FileStorageAndroid implements IFileStorage {
             output.write(content.getBytes(StandardCharsets.UTF_8));
         }
     }
-    private String getAssetPath(String filename) throws IOException {
-        File file = resolveFile(filename);
 
-        String relativePath = context.getFilesDir().toPath()
-                .relativize(file.toPath())
-                .toString();
-
-        return relativePath.replace(File.separatorChar, '/');
-    }
     @Override
     public String read(String filename) throws IOException {
-        File file = resolveFile(filename);
+        String path = resolveAssetPath(filename);
 
-        // Check internal storage first
-        if (file.exists()) {
-            try (InputStream input = new java.io.FileInputStream(file)) {
-                return readFromStream(input);
-            }
-        }
-
-        // Fallback to assets
-        try (InputStream input = context.getAssets().open(getAssetPath(filename))) {
+        try (InputStream input = context.getAssets().open(path)) {
             return readFromStream(input);
         }
     }
@@ -85,16 +71,26 @@ public class FileStorageAndroid implements IFileStorage {
     }
 
     private File resolveFile(String filename) throws IOException {
-        File file = new File(baseDirectory, filename)
-                .getAbsoluteFile()
-                .toPath()
-                .normalize()
-                .toFile();
+        File base = new File(context.getFilesDir(), baseDirectory);
 
-        if (!file.toPath().startsWith(baseDirectory.toPath().normalize())) {
+        Path basePath = base.getAbsoluteFile().toPath().normalize();
+        Path filePath = basePath.resolve(filename).normalize();
+
+        if (!filePath.startsWith(basePath)) {
             throw new IOException("Invalid filename: " + filename);
         }
 
-        return file;
+        return filePath.toFile();
+    }
+
+    private String resolveAssetPath(String filename) throws IOException {
+        Path basePath = Paths.get(baseDirectory).normalize();
+        Path filePath = basePath.resolve(filename).normalize();
+
+        if (filePath.isAbsolute() || !filePath.startsWith(basePath)) {
+            throw new IOException("Invalid filename: " + filename);
+        }
+
+        return filePath.toString().replace("\\", "/");
     }
 }
