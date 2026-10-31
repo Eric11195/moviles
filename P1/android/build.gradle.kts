@@ -4,6 +4,8 @@ plugins {
 
 android {
     namespace = "com.example.android"
+
+    // Restored SDK 36.1 configuration required by :androidEngine
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -19,6 +21,14 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    sourceSets {
+        named("main") {
+            // Link directly to root assets folder
+            assets.directories.add(rootProject.file("assets").absolutePath)
+        }
+    }
+
     buildTypes {
         release {
             optimization {
@@ -30,16 +40,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-}
-tasks.register<Copy>("copyAssets") {
-    from(rootProject.file("assets"))
-    into(layout.projectDirectory.dir("src/main/assets"))
-    outputs.upToDateWhen { false }
-}
-
-// Hook into asset merging tasks rather than preBuild
-tasks.matching { it.name.startsWith("merge") && it.name.endsWith("Assets") }.configureEach {
-    dependsOn("copyAssets")
 }
 
 dependencies {
