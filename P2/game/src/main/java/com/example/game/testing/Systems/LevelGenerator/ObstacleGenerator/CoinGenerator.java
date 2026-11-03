@@ -1,0 +1,101 @@
+package com.example.game.testing.Systems.LevelGenerator.ObstacleGenerator;
+
+import static com.example.game.testing.constants.Constants.COIN_RADIUS;
+import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
+import static com.example.game.testing.constants.Constants.MAX_COIN_Y_JUMP;
+
+import com.example.game.testing.EC.Component.CoinComponent;
+import com.example.game.testing.EC.Component.ColliderComponent;
+import com.example.game.testing.EC.Component.TransformComponent;
+import com.example.game.testing.EC.Component.VelocityComponent;
+import com.example.game.testing.EC.ComponentId;
+import com.example.game.testing.EC.mcd_Entity;
+import com.example.game.testing.Scenes.mcd_Scene;
+import com.example.game.testing.Systems.LevelGenerator.DangerMatrix;
+import com.example.game.testing.Systems.LevelGenerator.LevelGeneratorParams;
+import com.example.game.testing.Systems.LevelSpeedSystem;
+import com.example.utils.Vec2;
+
+import java.util.ArrayList;
+
+public class CoinGenerator extends Generator{
+    float lastCoinTimestamp = -1;
+    Vec2 lastCoinPos = new Vec2(-1,-1);
+
+    public CoinGenerator(mcd_Scene _scene, LevelGeneratorParams _params, DangerMatrix _dangerMatrix) {
+        super(_scene, _params,_dangerMatrix);
+    }
+
+    @Override
+    protected boolean setUpNewObstacle(mcd_Entity ent, float t, float dt) {
+        return createCoin(ent,t,dt);
+    }
+
+    @Override
+    public void addProbabilityToObstacleSpawn(float dt) {
+        float probability = params.coinLinearCreationPerSecond*dt;
+        obstacleAcumSpawn += probability;
+    }
+
+    @Override
+    protected void initializeObstacleList(mcd_Scene scene) {
+        _obstacleList = new ArrayList<mcd_Entity>(params.maxNumberOfSimultaneousCoins);
+        for(int i = 0; i < params.maxNumberOfSimultaneousCoins; ++i){
+            mcd_Entity ent = scene.createEntity();
+            ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
+            ent.addComponent(ComponentId.VELOCITY_COMPONENT, new VelocityComponent());
+            ent.addComponent(ComponentId.COLLIDER_COMPONENT, new ColliderComponent());
+            ent.setActive(false);
+            _obstacleList.add(ent);
+        }
+        _obstacleArrayIndex = 0;
+        _freeIdxCount = params.maxNumberOfSimultaneousCoins;
+    }
+    Vec2 dangerMatrixCoinPos = new Vec2(LOGIC_WINDOW_SIZE.x, 0);
+    Vec2 dangerMatrixCoinSize = new Vec2(COIN_RADIUS*2,2*COIN_RADIUS);
+
+    public boolean createCoin(mcd_Entity ent, float t, float dt) {
+        float currentSpeed = LevelSpeedSystem.getInstance().getSpeedMult();
+
+        int maxCoins = (_obstacleList != null && !_obstacleList.isEmpty()) ? _obstacleList.size() : 1;
+        float fixedXSpace = LOGIC_WINDOW_SIZE.x / maxCoins;
+        float fixedTimeGap = fixedXSpace / currentSpeed;
+
+        // 2. Reject the spawn entirely if the X space is too tight
+        if (lastCoinTimestamp != -1 && (t - lastCoinTimestamp) < fixedTimeGap) {
+            return false;
+        }
+
+        float y;
+
+        // 3. Start a new trail if it's the first coin or the chain broke
+        if (lastCoinTimestamp == -1 || (t - lastCoinTimestamp) > 1.0f) {
+            y = COIN_RADIUS + (LOGIC_WINDOW_SIZE.y - COIN_RADIUS * 2) * (float)Math.random();
+        } else {
+            // 4. Use the constant to restrict the maximum Y variation
+            float jump = (float)Math.random() * MAX_COIN_Y_JUMP * 2 - MAX_COIN_Y_JUMP;
+            y = lastCoinPos.y + jump;
+        }
+
+        // Reject if it hits the floor or ceiling
+        if (y < COIN_RADIUS || y > LOGIC_WINDOW_SIZE.y - COIN_RADIUS) {
+            lastCoinTimestamp = -1;
+            return false;
+        }
+
+        dangerMatrixCoinPos.y = y - COIN_RADIUS;
+
+        // Reject if it collides with a hazard (zapper, missile, laser)
+        if (!dangerMatrix.checkRect(dangerMatrixCoinPos, dangerMatrixCoinSize)) {
+            lastCoinTimestamp = -1;
+            return false;
+        }
+
+//        dangerMatrix.drawSquare(dangerMatrixCoinPos, dangerMatrixCoinSize);
+        ent.setComponent(ComponentId.OBSTACLE_COMPONENT, new CoinComponent(ent, t, y));
+
+        lastCoinTimestamp = t;
+        lastCoinPos.y = y;
+        return true;
+    }
+}

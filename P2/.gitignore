@@ -1,0 +1,41 @@
+# Built application output files
+*.apk
+*.aar
+*.ap_
+*.aab
+
+# Gradle build directories (matches root and ALL submodules like android/build, game/build)
+.gradle/
+build/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Android Studio / IntelliJ IDE files
+.idea/
+*.iml
+.navigation/
+captures/
+.externalNativeBuild/
+.cxx/
+*.hprof
+
+# Local environment configuration
+local.properties
+
+# Desktop / Java build outputs
+out/
+bin/
+*.class
+
+# OS generated files
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Log files
+*.log
+
+# Temporary debug dumps
+apk_dump/
+**/apk_dump/
