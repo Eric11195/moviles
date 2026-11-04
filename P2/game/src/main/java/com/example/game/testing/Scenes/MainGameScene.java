@@ -145,7 +145,6 @@ public class MainGameScene extends mcd_Scene{
 
         addRetosSystems(eng);
         SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG).setStreamId(eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG)));
-
     }
     private void addRetosSystems(Engine eng){
         boolean retoActivated = false;

@@ -18,6 +18,7 @@ import com.example.engine.FontEng;
 import com.example.engine.ImageEng;
 import com.example.engine.GraphicsInterface;
 import com.example.utils.Vec2;
+import com.google.android.libraries.ads.mobile.sdk.banner.AdView;
 
 public class GraphicsAndroid implements GraphicsInterface {
     private final SurfaceView surf;
@@ -26,16 +27,17 @@ public class GraphicsAndroid implements GraphicsInterface {
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     private FontAndroid font = new FontAndroid();
-
     private final AppCompatActivity activity;
-    public GraphicsAndroid(AppCompatActivity activity, int id, int width, int height){
+    AdView v;
+    public GraphicsAndroid(AppCompatActivity activity, int screen_id, int add_id, int width, int height){
         this.activity = activity;
         assert(surface == null);
         assert(can == null);
         this._logicWindowHeight = height;
         this._logicWindowWidth = width;
-        surf = activity.findViewById(id);
-        surf.setZOrderOnTop(true);
+        v = activity.findViewById(add_id);
+        surf = activity.findViewById(screen_id);
+//        surf.setZOrderOnTop(true);
         surface = surf.getHolder();
         surface.addCallback(
                 new SurfaceHolder.Callback() {

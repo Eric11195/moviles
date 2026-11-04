@@ -74,5 +74,10 @@ public class MainMenuScene extends mcd_Scene{
         );
         //SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG).setStreamId(eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG)));
         //eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.WIN));
+        eng.getAds().showBanner();
+    }
+    @Override
+    public void cleanup(Engine eng){
+        eng.getAds().hideBanner();
     }
 }

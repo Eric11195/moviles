@@ -38,13 +38,16 @@ public abstract class Engine implements Runnable{
     }
 
     ArrayList<Scene> sceneStack = new ArrayList<Scene>();
-    ArrayList<Engine.sceneOperation> sceneOpQueue=new ArrayList<Engine.sceneOperation>();
+    ArrayList<sceneOperation> sceneOpQueue=new ArrayList<sceneOperation>();
 
-    protected Engine(GraphicsInterface graphics, InputBase input, AudioInterface audio, IFileStorage fileStorage) {
+    private final AdsInterface ads;
+
+    protected Engine(GraphicsInterface graphics, InputBase input, AudioInterface audio, IFileStorage fileStorage, AdsInterface ads) {
         this.graphics = graphics;
         this.input = input;
         this.audio = audio;
         this.fileStorage = fileStorage;
+        this.ads = ads;
     }
 
     public Scene getCurrentScene() {
@@ -83,6 +86,7 @@ public abstract class Engine implements Runnable{
     public InputBase getInput() {return input; }
     public AudioInterface getAudio() {return audio; }
     public IFileStorage getFileStorage(){return fileStorage; }
+    public AdsInterface getAds(){return this.ads;}
 
     public boolean getRunning() {
         return running;
@@ -103,7 +107,6 @@ public abstract class Engine implements Runnable{
     //Called when the application is paused (switched to another screen etc)
     public void pause() {
         if(!running) return;
-
         this.running = false;
         while (true) {
             try {
@@ -125,7 +128,7 @@ public abstract class Engine implements Runnable{
             throw new RuntimeException("run() should not be called directly");
         }
         while(this.running && !this.correctlyResumedBoolean());
-        
+        this.start();
         while(this.running){
             this.update();
         }
@@ -151,6 +154,9 @@ public abstract class Engine implements Runnable{
         prevTime = lastFrameTime; // Informes de FPS
         frames = 0;
         dt = t = 0;
+
+        System.out.println("Engine: Calling ads.initialize()");
+        this.ads.initialize();
     }
 
     private void manageSceneOperations(){
@@ -224,4 +230,5 @@ public abstract class Engine implements Runnable{
         ++frames;
     }
     protected abstract void render(GraphicsInterface g);
+
 }

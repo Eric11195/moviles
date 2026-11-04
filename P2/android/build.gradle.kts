@@ -52,9 +52,7 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
     implementation(libs.material)
-    implementation(libs.play.services.ads)
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ext.junit)
-    implementation("com.google.android.libraries.ads.mobile.sdk:ads-mobile-sdk:1.6.0")
 }
