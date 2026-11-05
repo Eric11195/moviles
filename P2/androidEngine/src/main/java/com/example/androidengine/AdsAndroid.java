@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import com.example.engine.AdsInterface;
 
 import com.google.android.libraries.ads.mobile.sdk.MobileAds;
+import com.google.android.libraries.ads.mobile.sdk.common.PreloadCallback;
+import com.google.android.libraries.ads.mobile.sdk.common.PreloadConfiguration;
 import com.google.android.libraries.ads.mobile.sdk.initialization.InitializationConfig;
 
 import com.google.android.libraries.ads.mobile.sdk.banner.AdSize;
@@ -24,6 +26,8 @@ import com.google.android.libraries.ads.mobile.sdk.common.LoadAdError;
 
 import com.google.android.libraries.ads.mobile.sdk.rewarded.RewardedAd;
 import com.google.android.libraries.ads.mobile.sdk.common.AdRequest;
+import com.google.android.libraries.ads.mobile.sdk.rewarded.RewardedAdEventCallback;
+import com.google.android.libraries.ads.mobile.sdk.rewarded.RewardedAdPreloader;
 
 public class AdsAndroid implements AdsInterface {
 
@@ -31,9 +35,9 @@ public class AdsAndroid implements AdsInterface {
 
     // Google's official test ad unit IDs.
     private static final String BANNER_TEST_ID =
-            "/21775744923/example/adaptive-banner";
+            "ca-app-pub-3940256099942544/6300978111"; // AdMob Adaptive Banner
     private static final String REWARDED_TEST_ID =
-            "/21775744923/example/rewarded";
+            "ca-app-pub-3940256099942544/5224354917"; // AdMob Rewarded Ad
 
     // Replace with your AdMob application ID.
     private static final String APP_ID =
@@ -45,8 +49,6 @@ public class AdsAndroid implements AdsInterface {
     private RewardedAd rewardedAd;
 
     private volatile boolean initialized = false;
-    private volatile boolean bannerRequested = false;
-    private boolean bannerLoadStarted = false;
 
     public AdsAndroid(Activity activity, int bannerViewId) {
         this.activity = activity;
@@ -70,12 +72,9 @@ public class AdsAndroid implements AdsInterface {
                             initialized = true;
                             Log.d(TAG, "Google Mobile Ads initialized.");
 
+                            loadBanner();
                             loadRewardedAd();
 
-                            if (bannerRequested) {
-                                bannerView.setVisibility(View.VISIBLE);
-                                loadBanner();
-                            }
                         });
                     }
             );
@@ -100,8 +99,6 @@ public class AdsAndroid implements AdsInterface {
                 new BannerAdRequest.Builder(BANNER_TEST_ID, adSize)
                         .build();
 
-        bannerLoadStarted = true;
-
         bannerView.loadAd(
                 request,
                 new AdLoadCallback<BannerAd>() {
@@ -120,7 +117,6 @@ public class AdsAndroid implements AdsInterface {
                     @Override
                     public void onAdFailedToLoad(@NonNull LoadAdError error) {
                         Log.e(TAG, "Banner failed to load: " + error);
-                        bannerLoadStarted = false;
                     }
                 }
         );
@@ -128,7 +124,6 @@ public class AdsAndroid implements AdsInterface {
 
     @Override
     public void showBanner() {
-        bannerRequested = true;
 
         activity.runOnUiThread(() -> {
             if (!initialized) {
@@ -138,16 +133,12 @@ public class AdsAndroid implements AdsInterface {
 
             bannerView.setVisibility(View.VISIBLE);
 
-            if (!bannerLoadStarted) {
-                loadBanner();
-            }
+            loadBanner();
         });
     }
 
     @Override
     public void hideBanner() {
-        bannerRequested = false;
-
         activity.runOnUiThread(() -> {
             if (bannerView != null) {
                 bannerView.setVisibility(View.GONE);
@@ -157,60 +148,53 @@ public class AdsAndroid implements AdsInterface {
 
     @Override
     public void showRewarded() {
-        if (!initialized) {
-            Log.w(TAG, "Ads SDK has not been initialized.");
-            return;
-        }
+        activity.runOnUiThread(() -> {
+            if (!initialized) {
+                Log.w(TAG, "Ads SDK has not been initialized.");
+                return;
+            }
 
-        if (rewardedAd == null) {
-            Log.w(TAG, "Rewarded ad is not ready.");
-            loadRewardedAd();
-            return;
-        }
+            // Polling returns the next available ad and loads another ad in the background.
+            final RewardedAd ad = RewardedAdPreloader.pollAd(REWARDED_TEST_ID);
 
-        RewardedAd ad = rewardedAd;
-        rewardedAd = null;
+            // If this is null, the ad hasn't finished downloading yet (or failed to load)
+            if (ad == null) {
+                Log.e(TAG, "Rewarded ad is not available yet.");
+                return;
+            }
 
-        ad.show(activity, rewardItem -> {
-            Log.d(TAG, "User earned reward: " + rewardItem.getAmount());
+            Log.d(TAG, "Rewarded ad response info: " + ad.getResponseInfo());
+            ad.setAdEventCallback(
+                    new RewardedAdEventCallback() {
+                        @Override
+                        public void onAdImpression() {
+                            Log.d(TAG, "Rewarded ad recorded an impression.");
+                        }
+                    });
 
-            // TODO: Notify the game that the reward was earned.
+            // Show the ad.
+            ad.show(
+                    activity,
+                    rewardItem -> {
+                        Log.d(TAG, "User earned reward: " + rewardItem.getAmount());
+                        // TODO: Safely notify your game engine that the reward was earned
+                    }
+            );
         });
-
-        loadRewardedAd();
     }
-
     private void loadRewardedAd() {
         if (!initialized) {
             return;
         }
+        AdRequest adRequest = new AdRequest.Builder(REWARDED_TEST_ID).build();
+        PreloadConfiguration preloadConfig = new PreloadConfiguration(adRequest);
 
-        RewardedAd.load(
-                new AdRequest.Builder(REWARDED_TEST_ID).build(),
-                new AdLoadCallback<RewardedAd>() {
-
-                    @Override
-                    public void onAdLoaded(@NonNull RewardedAd ad) {
-                        rewardedAd = ad;
-                        Log.d(TAG, "Rewarded ad loaded.");
-                    }
-
-                    @Override
-                    public void onAdFailedToLoad(
-                            @NonNull LoadAdError error) {
-                        rewardedAd = null;
-                        Log.e(TAG, "Rewarded ad failed: " + error);
-                    }
-                }
-        );
-    }
-
-    public void destroy() {
-//        activity.runOnUiThread(() -> {
-//            if (bannerView != null) {
-//                bannerView.destroy();
-//                bannerView = null;
-//            }
-//        });
+        // Add the callback to log errors if preloading fails
+        RewardedAdPreloader.start(REWARDED_TEST_ID, preloadConfig, new PreloadCallback() {
+            @Override
+            public void onAdFailedToPreload(@NonNull String preloadId, @NonNull LoadAdError error) {
+                Log.e(TAG, "Preload failed for " + preloadId + ": " + error.getMessage());
+            }
+        });
     }
 }
