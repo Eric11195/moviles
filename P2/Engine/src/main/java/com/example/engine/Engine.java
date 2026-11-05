@@ -48,6 +48,7 @@ public abstract class Engine implements Runnable{
         this.audio = audio;
         this.fileStorage = fileStorage;
         this.ads = ads;
+        this.ads.initialize();
     }
 
     public Scene getCurrentScene() {
@@ -137,7 +138,7 @@ public abstract class Engine implements Runnable{
      * The moment this returns true the game loop will be active
      */
     protected boolean correctlyResumedBoolean(){
-        return true;
+        return this.ads.isReady();
     }
 
     private float dt=0;
@@ -156,7 +157,6 @@ public abstract class Engine implements Runnable{
         dt = t = 0;
 
         System.out.println("Engine: Calling ads.initialize()");
-        this.ads.initialize();
     }
 
     private void manageSceneOperations(){

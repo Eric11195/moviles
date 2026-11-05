@@ -5,6 +5,11 @@ import com.example.engine.AdsInterface;
 public class AdsDesktop implements AdsInterface {
 
     @Override
+    public boolean isReady() {
+        return true;
+    }
+
+    @Override
     public void initialize() {}
 
     @Override

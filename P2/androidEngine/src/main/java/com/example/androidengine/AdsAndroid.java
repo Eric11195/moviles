@@ -55,6 +55,11 @@ public class AdsAndroid implements AdsInterface {
     }
 
     @Override
+    public boolean isReady() {
+        return initialized;
+    }
+
+    @Override
     public void initialize() {
         new Thread(() -> {
             MobileAds.initialize(
