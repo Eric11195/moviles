@@ -5,6 +5,8 @@ import static com.example.game.testing.constants.Constants.ROWS_IN_SHOP;
 
 import com.example.engine.Engine;
 import com.example.game.testing.EC.Component.TransformComponent;
+import com.example.game.testing.EC.mcd_Entity;
+import com.example.game.testing.Systems.mcd_System;
 import com.example.game.testing.Systems.menu.Scrollable;
 
 import java.util.ArrayList;
@@ -27,13 +29,14 @@ public class ShopScene extends mcd_Scene{
             // Open folder
             // Count number of elements
             int numberOfElementsInTab = 0;
-            List<TransformComponent> transformsOfThisTab = new ArrayList<>();
+            List<mcd_Entity> entOfThisTab = new ArrayList<>();
             for(int j = 0; j < numberOfElementsInTab; ++j){
                 //Todo: create a shopObject
-                //add to the transform list
+                //add to the entity list
+                // DO NOT ADD TO THIS SCENE OBJECT LIST
                 //transformsOfThisTab.add();
             }
-            scrollableList.add(new Scrollable(ROWS_IN_SHOP, COLS_IN_SHOP, transformsOfThisTab));
+            scrollableList.add(new Scrollable(ROWS_IN_SHOP, COLS_IN_SHOP, entOfThisTab));
         }
         showTab(tabs.powerups);
     }
@@ -46,12 +49,16 @@ public class ShopScene extends mcd_Scene{
         levels,
         count
     }
-    private int active_tab;
     private void showTab(tabs t){
         //TODO: hide all previous objects
+        scrollableList.forEach((scrollable -> {
+            scrollable.setActive(false);
+        }));
         //TODO: show only the objects on this tab
-        active_tab = t.ordinal();
         systemList.clear();
-        addSystem(scrollableList.get(active_tab));
+        int active_tab = t.ordinal();
+        Scrollable activeScrollable = scrollableList.get(active_tab);
+        addSystem(activeScrollable);
+        activeScrollable.setActive(true);
     }
 }
