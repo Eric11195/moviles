@@ -88,4 +88,9 @@ public class Constants {
         return lgp;
     }
 
+    //=====================================================
+    //SHOP
+    //=====================================================
+    public static final int ROWS_IN_SHOP = 2;
+    public static final int COLS_IN_SHOP = 3;
 }

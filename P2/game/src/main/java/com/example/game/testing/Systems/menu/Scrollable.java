@@ -16,7 +16,7 @@ public class Scrollable implements mcd_System {
     private int cols;
     float barProgress;
     float barSize;
-    Scrollable(int rows, int cols, List<TransformComponent> trList){
+    public Scrollable(int rows, int cols, List<TransformComponent> trList){
         //Calculate the number of vertical elements that fit the screen
         this.totalRows = Math.max(rows, 1+(trList.size()/cols));
         this.rows = rows;

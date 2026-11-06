@@ -1,15 +1,41 @@
 package com.example.game.testing.Scenes;
 
+import static com.example.game.testing.constants.Constants.COLS_IN_SHOP;
+import static com.example.game.testing.constants.Constants.ROWS_IN_SHOP;
+
 import com.example.engine.Engine;
+import com.example.game.testing.EC.Component.TransformComponent;
+import com.example.game.testing.Systems.menu.Scrollable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ShopScene extends mcd_Scene{
     protected ShopScene(Engine myEngine) {
         super(myEngine);
     }
+    List<Scrollable> scrollableList;
 
     @Override
     public void start(Engine eng) {
-        //create an object that displays rubies
+        scrollableList = new ArrayList<>();
+        //TODO: create an object that displays rubies
+        //TODO: create a button for each tab
+
+        //Creates all objects for all tabs
+        for(int i = 0; i < tabs.count.ordinal(); ++i){
+            // Open folder
+            // Count number of elements
+            int numberOfElementsInTab = 0;
+            List<TransformComponent> transformsOfThisTab = new ArrayList<>();
+            for(int j = 0; j < numberOfElementsInTab; ++j){
+                //Todo: create a shopObject
+                //add to the transform list
+                //transformsOfThisTab.add();
+            }
+            scrollableList.add(new Scrollable(ROWS_IN_SHOP, COLS_IN_SHOP, transformsOfThisTab));
+        }
+        showTab(tabs.powerups);
     }
     enum tabs{
         powerups,
@@ -17,11 +43,15 @@ public class ShopScene extends mcd_Scene{
         obstacleSkins,
         colorPalletes,
         menus,
-        levels
+        levels,
+        count
     }
+    private int active_tab;
     private void showTab(tabs t){
-        //hide all previous objects
-
-        //show only the objects on this tab
+        //TODO: hide all previous objects
+        //TODO: show only the objects on this tab
+        active_tab = t.ordinal();
+        systemList.clear();
+        addSystem(scrollableList.get(active_tab));
     }
 }
