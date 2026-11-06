@@ -1,6 +1,6 @@
-package com.example.game.testing.EC.Component;
+package com.example.game.testing.EC.Component.obstacle;
 
-import static com.example.game.testing.EC.Component.ObstacleId.OBSTACLE_MISSILE;
+import static com.example.game.testing.EC.Component.obstacle.ObstacleId.OBSTACLE_MISSILE;
 import static com.example.game.testing.constants.Constants.DANGER_MATRIX_PRECALCULATED_SPACE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.MISSILE_MOVE_SPEED;
@@ -11,6 +11,9 @@ import static com.example.game.testing.constants.Constants.WARNING_TIME;
 import static com.example.game.testing.utils.StartPlayerDead.startPlayerDead;
 
 import com.example.engine.GraphicsInterface;
+import com.example.game.testing.EC.Component.ColliderComponent;
+import com.example.game.testing.EC.Component.TransformComponent;
+import com.example.game.testing.EC.Component.VelocityComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;

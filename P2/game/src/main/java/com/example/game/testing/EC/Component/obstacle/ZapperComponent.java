@@ -1,6 +1,6 @@
-package com.example.game.testing.EC.Component;
+package com.example.game.testing.EC.Component.obstacle;
 
-import static com.example.game.testing.EC.Component.ObstacleId.OBSTACLE_ZAPPER;
+import static com.example.game.testing.EC.Component.obstacle.ObstacleId.OBSTACLE_ZAPPER;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.MAX_ZAPPER_LENGTH;
 import static com.example.game.testing.constants.Constants.MIN_ZAPPER_WIDTH;
@@ -12,6 +12,8 @@ import static com.example.game.testing.utils.JSON_HELPER.fromJSON;
 import static com.example.game.testing.utils.StartPlayerDead.startPlayerDead;
 
 import com.example.engine.GraphicsInterface;
+import com.example.game.testing.EC.Component.ColliderComponent;
+import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
@@ -27,7 +29,7 @@ import org.json.JSONObject;
 /**
  * The electrical lines danger
  */
-public class ZapperComponent extends Obstacle{
+public class ZapperComponent extends Obstacle {
     public final Vec2 start;
     public final Vec2 end;
 

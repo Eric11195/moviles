@@ -2,7 +2,7 @@ package com.example.game.testing.Systems.LevelGenerator.ObstacleGenerator;
 
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
-import com.example.game.testing.EC.Component.Obstacle;
+import com.example.game.testing.EC.Component.obstacle.Obstacle;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;

@@ -1,6 +1,8 @@
-package com.example.game.testing.EC.Component;
+package com.example.game.testing.EC.Component.obstacle;
 
 import com.example.engine.GraphicsInterface;
+import com.example.game.testing.EC.Component.TransformComponent;
+import com.example.game.testing.EC.Component.VelocityComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
@@ -29,7 +31,7 @@ public abstract class Obstacle implements mcd_Component, mcd_Serializable {
         //scrolledTime = calculateScrolledTime(spawnTime);
     }
     public abstract float calculateScrolledTime(float spawnTime);
-    public abstract void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm,float t, float dt);
+    public abstract void drawSelfInDangerMatrix(TransformComponent tr, DangerMatrix dm, float t, float dt);
     @Override
     public void update(mcd_Entity ent, float t, float dt) {
         VelocityComponent vel = (VelocityComponent)ent.getComponent(ComponentId.VELOCITY_COMPONENT);

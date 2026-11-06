@@ -3,10 +3,9 @@ package com.example.game.testing.Systems;
 import static com.example.game.testing.EC.Component.ColliderComponent.checkAllOverlaps;
 
 import com.example.engine.GraphicsInterface;
-import com.example.game.testing.EC.Component.Obstacle;
+import com.example.game.testing.EC.Component.obstacle.Obstacle;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
-import com.example.game.testing.Scenes.EndGameScene;
 import com.example.game.testing.Scenes.mcd_Scene;
 
 public class PlayerCollisionDetector implements mcd_System {

@@ -1,4 +1,4 @@
-package com.example.game.testing.EC.Component;
+package com.example.game.testing.EC.Component.obstacle;
 
 public enum ObstacleId {
     OBSTACLE_ZAPPER,

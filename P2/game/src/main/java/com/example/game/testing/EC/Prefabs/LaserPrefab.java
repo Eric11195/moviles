@@ -3,8 +3,7 @@ import static com.example.game.testing.constants.Constants.LASER_HEIGHT;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
 import com.example.game.testing.EC.Component.ColliderComponent;
-import com.example.game.testing.EC.Component.ImageComponent;
-import com.example.game.testing.EC.Component.LaserComponent;
+import com.example.game.testing.EC.Component.obstacle.LaserComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;

@@ -1,12 +1,14 @@
-package com.example.game.testing.EC.Component;
+package com.example.game.testing.EC.Component.obstacle;
 
+import com.example.game.testing.EC.Component.ColliderComponent;
+import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.LevelGenerator.DangerMatrix;
 import com.example.game.testing.constants.Constants;
 import com.example.utils.Vec2;
 
-public class RotatingZapperComponent extends ZapperComponent{
+public class RotatingZapperComponent extends ZapperComponent {
     Vec2 center = null;
     float rad = -1.0f;
 

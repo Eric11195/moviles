@@ -1,4 +1,4 @@
-package com.example.game.testing.EC.Component;
+package com.example.game.testing.EC.Component.obstacle;
 
 import static com.example.game.testing.constants.Constants.LASER_ANIM_NUM;
 import static com.example.game.testing.constants.Constants.LASER_ANIM_TIME;
@@ -11,6 +11,10 @@ import static com.example.game.testing.utils.StartPlayerDead.startPlayerDead;
 import static com.example.game.testing.constants.Constants.PLAYER_X_POS;
 
 import com.example.engine.ColorEng;
+import com.example.game.testing.EC.Component.ColliderComponent;
+import com.example.game.testing.EC.Component.DrawRectangleComponent;
+import com.example.game.testing.EC.Component.TransformComponent;
+import com.example.game.testing.EC.Component.VelocityComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.engine.GraphicsInterface;
@@ -19,7 +23,7 @@ import com.example.game.testing.Systems.LevelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.LevelGenerator.ObstacleFactory;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
-import static com.example.game.testing.EC.Component.ObstacleId.OBSTACLE_LASER;
+import static com.example.game.testing.EC.Component.obstacle.ObstacleId.OBSTACLE_LASER;
 import org.json.JSONObject;
 
 public class LaserComponent extends WarnedObstacle {

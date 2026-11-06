@@ -1,13 +1,12 @@
-package com.example.game.testing.EC.Component;
+package com.example.game.testing.EC.Component.shop;
 
 import com.example.engine.GraphicsInterface;
+import com.example.game.testing.EC.Component.ButtonComponent;
+import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.ComponentId;
-import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.RubySystem;
 import com.example.utils.Vec2;
-
-import java.awt.Button;
 
 public class ShopObject extends ButtonComponent {
     Buyable buyable;
@@ -31,7 +30,7 @@ public class ShopObject extends ButtonComponent {
 
         this.buyable.render(
             g,
-            tr.pos.x + tr.size.x*0.1f,
+            tr.pos.x +tr.size.x*0.1f,
             tr.pos.y+tr.size.y*0.1f,
             tr.size.x*0.8f,
             tr.size.y*0.8f

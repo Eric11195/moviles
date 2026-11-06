@@ -4,7 +4,7 @@ import static com.example.game.testing.constants.Constants.COIN_RADIUS;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.MAX_COIN_Y_JUMP;
 
-import com.example.game.testing.EC.Component.CoinComponent;
+import com.example.game.testing.EC.Component.obstacle.CoinComponent;
 import com.example.game.testing.EC.Component.ColliderComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.Component.VelocityComponent;
