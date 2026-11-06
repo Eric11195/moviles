@@ -60,8 +60,8 @@ public class MainMenuScene extends mcd_Scene{
                 mgs.setProceduralLevelGen(getDefaultLevelGeneratorParams());
                 eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.BUTTON));
                 eng.setScene(mgs);
-                eng.getAds().showRewarded();
-                eng.getAds().hideBanner();
+                // eng.getAds().showRewarded();
+                // eng.getAds().hideBanner();
             }
         );
         createButton(
