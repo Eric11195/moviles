@@ -21,4 +21,12 @@ public class AdsDesktop implements AdsInterface {
 
     @Override
     public void showRewarded() {}
+
+    @Override
+    public boolean hasReward() {
+        return false;
+    }
+
+    @Override
+    public void consumeReward() {}
 }

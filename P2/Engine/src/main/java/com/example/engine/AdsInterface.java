@@ -9,4 +9,6 @@ public interface AdsInterface {
     void hideBanner();
 
     void showRewarded();
+    boolean hasReward();
+    void consumeReward();
 }

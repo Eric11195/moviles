@@ -177,11 +177,24 @@ public class AdsAndroid implements AdsInterface {
                     activity,
                     rewardItem -> {
                         Log.d(TAG, "User earned reward: " + rewardItem.getAmount());
-                        // TODO: Safely notify your game engine that the reward was earned
+                        rewardAvailable = true;
                     }
             );
         });
     }
+    boolean rewardAvailable=false;
+
+    @Override
+    public boolean hasReward() {
+        return rewardAvailable;
+    }
+
+    @Override
+    public void consumeReward() {
+        assert(rewardAvailable);
+        rewardAvailable=false;
+    }
+
     private void loadRewardedAd() {
         if (!initialized) {
             return;
