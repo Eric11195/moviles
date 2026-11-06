@@ -1,24 +1,22 @@
-package com.example.game.testing.EC.Component;
+package com.example.game.testing.EC.Component.UI;
 
 import com.example.engine.ColorEng;
 import com.example.engine.GraphicsInterface;
 import com.example.engine.TouchEvent;
 import com.example.engine.TouchEventType;
+import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;
 
-import java.awt.Button;
-
-import javax.xml.crypto.dsig.Transform;
-
 // All buttons have same color, but different text
 public class ButtonComponent implements mcd_Component {
     public interface ButtonClickFunction{
         void onClick();
     }
+    public void onClick(){}
     ButtonClickFunction func;
     boolean hovering = false;
     boolean clicked = false;
@@ -38,6 +36,7 @@ public class ButtonComponent implements mcd_Component {
             clicked=true;
             ent.getEngine().getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.BUTTON));
             func.onClick();
+            this.onClick();
         }
     }
 

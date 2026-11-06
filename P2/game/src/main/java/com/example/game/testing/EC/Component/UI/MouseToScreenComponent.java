@@ -1,4 +1,4 @@
-package com.example.game.testing.EC.Component;
+package com.example.game.testing.EC.Component.UI;
 
 import com.example.engine.ColorEng;
 import com.example.engine.Engine;
@@ -8,7 +8,6 @@ import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.utils.Vec2;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
 public class MouseToScreenComponent implements mcd_Component {
