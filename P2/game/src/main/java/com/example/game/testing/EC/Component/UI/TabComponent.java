@@ -2,22 +2,22 @@ package com.example.game.testing.EC.Component.UI;
 
 import java.util.List;
 
-public abstract class TabComponent extends ButtonComponent{
-    List<TabComponent> allTabs;
-    int myIndex;
-    TabComponent(int index){
-        super(()->{});
-        myIndex = index;
+public class TabComponent extends ButtonComponent{
+    public static interface TabbedMenu{
+        public void openTab(int idx);
+    }
+    public TabComponent(TabbedMenu myMenu, int idx){
+        super(()->{
+            myMenu.openTab(idx);
+        });
     }
     boolean selected = false;
     public void select(){
         selected = true;
-        tabSelected(this.myIndex);
     }
     public void unselect(){
         selected = false;
     }
-    abstract void tabSelected(int tabIdx);
     @Override
     public void onClick(){
         select();

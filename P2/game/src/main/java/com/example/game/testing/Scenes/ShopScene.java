@@ -5,6 +5,7 @@ import static com.example.game.testing.constants.Constants.ROWS_IN_SHOP;
 
 import com.example.engine.Engine;
 import com.example.game.testing.EC.Component.TransformComponent;
+import com.example.game.testing.EC.Component.UI.TabComponent;
 import com.example.game.testing.EC.Prefabs.BackButtonPrefab;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.mcd_System;
@@ -13,7 +14,7 @@ import com.example.game.testing.Systems.menu.Scrollable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShopScene extends mcd_Scene{
+public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
     protected ShopScene(Engine myEngine) {
         super(myEngine);
     }
@@ -39,10 +40,25 @@ public class ShopScene extends mcd_Scene{
             }
             scrollableList.add(new Scrollable(ROWS_IN_SHOP, COLS_IN_SHOP, entOfThisTab));
         }
-        showTab(tabs.powerups);
+        openTab(tabs.powerups.ordinal());
 
         BackButtonPrefab.createBackButton(eng, this);
     }
+
+    @Override
+    public void openTab(int idx) {
+        //Todo: set to the right color the previous tabs
+        //TODO: hide all previous objects
+        scrollableList.forEach((scrollable -> {
+            scrollable.setActive(false);
+        }));
+        //TODO: show only the objects on this tab
+        systemList.clear();
+        Scrollable activeScrollable = scrollableList.get(idx);
+        addSystem(activeScrollable);
+        activeScrollable.setActive(true);
+    }
+
     enum tabs{
         powerups,
         characterSkins,
@@ -51,17 +67,5 @@ public class ShopScene extends mcd_Scene{
         menus,
         levels,
         count
-    }
-    private void showTab(tabs t){
-        //TODO: hide all previous objects
-        scrollableList.forEach((scrollable -> {
-            scrollable.setActive(false);
-        }));
-        //TODO: show only the objects on this tab
-        systemList.clear();
-        int active_tab = t.ordinal();
-        Scrollable activeScrollable = scrollableList.get(active_tab);
-        addSystem(activeScrollable);
-        activeScrollable.setActive(true);
     }
 }
