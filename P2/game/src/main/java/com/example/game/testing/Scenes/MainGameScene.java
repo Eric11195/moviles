@@ -128,7 +128,6 @@ public class MainGameScene extends mcd_Scene{
             new Vec2(pauseButtonSize,pauseButtonSize),
             "||",
             ()->{
-                eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.BUTTON));
                 eng.pushScene(new PauseMenu(eng, this));
             }
         );
@@ -144,7 +143,15 @@ public class MainGameScene extends mcd_Scene{
         addSystem(levelGen);
 
         addRetosSystems(eng);
-        SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG).setStreamId(eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG)));
+        SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYING).setStreamId(eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYING)));
+    }
+    @Override
+    public void resume(Engine eng){
+        eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYING));
+    }
+    @Override
+    public void pause(Engine eng){
+        eng.getAudio().stopSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYING));
     }
     private void addRetosSystems(Engine eng){
         boolean retoActivated = false;

@@ -28,8 +28,8 @@ public class PauseMenu extends mcd_Scene{
         Vec2 secondButtonPos = pos.clone();
         secondButtonPos.y*=2;
         createButton(this, secondButtonPos, DEFAULT_BUTTON_SIZE, "EXIT", ()->{
-            eng.getAudio().stopSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG));
-            eng.setScene(new MainMenuScene(eng));});
+            eng.setScene(new MainMenuScene(eng));
+        });
     }
     @Override
     public void render(GraphicsInterface g){

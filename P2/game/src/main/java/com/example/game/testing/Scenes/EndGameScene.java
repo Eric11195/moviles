@@ -38,7 +38,7 @@ public class EndGameScene extends mcd_Scene{
     @Override
     public void start(Engine eng) {
         pos.y = LOGIC_WINDOW_SIZE.y * 0.10f;
-        eng.getAudio().stopSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG));
+        eng.getAudio().stopSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYING));
         eng.getAudio().playSound(SoundLibrary.getSound(win? SoundLibrary.SoundsId.WIN:SoundLibrary.SoundsId.LOSE));
         TextPrefab.createText(this,pos,size,win? "YOU WIN":"YOU LOSE", win?ColorLibrary.Blue : ColorLibrary.Red);
         pos.y = pos.y + size.y + LOGIC_WINDOW_SIZE.y*0.1f;
@@ -56,7 +56,6 @@ public class EndGameScene extends mcd_Scene{
             buttonSize,
             "Return to Main Menu",
             () ->{
-                eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.BUTTON));
                 eng.setScene(new MainMenuScene(eng));
             }
         );
@@ -67,7 +66,6 @@ public class EndGameScene extends mcd_Scene{
             buttonSize,
             "Play Again",
             () ->{
-                eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.BUTTON));
                 levelScene.cleanup(eng);
                 eng.setScene(levelScene);
             }

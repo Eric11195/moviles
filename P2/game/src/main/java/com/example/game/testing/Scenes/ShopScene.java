@@ -5,6 +5,7 @@ import static com.example.game.testing.constants.Constants.ROWS_IN_SHOP;
 
 import com.example.engine.Engine;
 import com.example.game.testing.EC.Component.TransformComponent;
+import com.example.game.testing.EC.Prefabs.BackButtonPrefab;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.mcd_System;
 import com.example.game.testing.Systems.menu.Scrollable;
@@ -39,6 +40,8 @@ public class ShopScene extends mcd_Scene{
             scrollableList.add(new Scrollable(ROWS_IN_SHOP, COLS_IN_SHOP, entOfThisTab));
         }
         showTab(tabs.powerups);
+
+        BackButtonPrefab.createBackButton(eng, this);
     }
     enum tabs{
         powerups,

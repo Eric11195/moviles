@@ -22,16 +22,16 @@ public class ColliderComponent implements mcd_Component {
     ArrayList<CollisionData> collisions = new ArrayList<CollisionData>();
 
     public static class ColliderData extends Vec2{
-        float rad;
+        public float rad;
         public ColliderData(Vec2 offset, float rad){
             this.x = offset.x;
             this.y = offset.y;
             this.rad = rad;
         }
     }
-    ArrayList<ColliderData> colliders = new ArrayList<ColliderData>();
+    public ArrayList<ColliderData> colliders = new ArrayList<ColliderData>();
 
-    Vec2 center = new Vec2(0,0);
+    public Vec2 center = new Vec2(0,0);
 
     public ColliderComponent(){
     }

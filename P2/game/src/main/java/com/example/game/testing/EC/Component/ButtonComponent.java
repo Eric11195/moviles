@@ -7,6 +7,7 @@ import com.example.engine.TouchEventType;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
+import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;
 
 import java.awt.Button;
@@ -35,6 +36,7 @@ public class ButtonComponent implements mcd_Component {
         //Detect clic
         if(clickedDown(ent) && func != null) {
             clicked=true;
+            ent.getEngine().getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.BUTTON));
             func.onClick();
         }
     }

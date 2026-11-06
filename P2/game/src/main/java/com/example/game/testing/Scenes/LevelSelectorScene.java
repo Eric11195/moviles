@@ -5,6 +5,7 @@ import static com.example.game.testing.constants.Constants.DEFAULT_BUTTON_SIZE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
 import com.example.engine.Engine;
+import com.example.game.testing.EC.Prefabs.BackButtonPrefab;
 import com.example.game.testing.Systems.LevelGenerator.LevelFileGenerator;
 import com.example.game.testing.utils.JSON_HELPER;
 import com.example.game.testing.utils.SoundLibrary;
@@ -44,22 +45,12 @@ public class LevelSelectorScene extends mcd_Scene{
                     DEFAULT_BUTTON_SIZE,
                     (lgs.levelGeneratorParams.levelCoinsToWin==-1 ? "Distance": "Coins")+": "+num,
                     () -> {
-                        eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.BUTTON));
                         loadLevel(eng, lgs);
                     }
                 );
             }
         }
-        createButton(
-            this,
-            new Vec2(0,LOGIC_WINDOW_SIZE.y-40),
-            new Vec2(40,40),
-            "Back",
-            () ->{
-                eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.BUTTON));
-                eng.setScene(new MainMenuScene(eng));
-            }
-        );
+        BackButtonPrefab.createBackButton(eng, this);
     }
 
     private void loadLevel(Engine eng, LevelFileGenerator.LevelGeneratorSerialized lgs){
