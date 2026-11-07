@@ -373,4 +373,19 @@ public class GraphicsDesktop implements GraphicsInterface {
         //System.out.println("getPointInWindowPos("+game.x+','+game.y+')');
         return new Vec2(game.x,game.y);
     }
+
+    @Override
+    public void resetClipping() {
+        clipRect(
+                0,
+                0,
+                this._logicWindowWidth,
+                this._logicWindowHeight
+        );
+    }
+
+    @Override
+    public void clipRect(int x, int y, int width, int height) {
+        graphics.clipRect(x,y,width,height);
+    }
 }

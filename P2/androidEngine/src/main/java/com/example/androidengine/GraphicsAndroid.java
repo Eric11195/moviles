@@ -181,12 +181,7 @@ public class GraphicsAndroid implements GraphicsInterface {
 
         can.drawColor(clearColor.getColorAsInt());
         can.setMatrix(viewportMatrix);
-        can.clipRect(
-                0,
-                0,
-                this._logicWindowWidth,
-                this._logicWindowHeight
-        );
+        resetClipping();
 
         return true;
     }
@@ -373,5 +368,20 @@ public class GraphicsAndroid implements GraphicsInterface {
         inverseViewportMatrix.mapPoints(point);
 
         return new Vec2(point[0], point[1]);
+    }
+
+    @Override
+    public void resetClipping() {
+        clipRect(0,0,_logicWindowWidth, _logicWindowHeight);
+    }
+
+    @Override
+    public void clipRect(int x, int y, int width, int height) {
+        can.clipRect(
+            x,
+            y,
+            width,
+            height
+        );
     }
 }

@@ -198,7 +198,7 @@ public class Scrollable implements mcd_System {
 
     @Override
     public void render(GraphicsInterface g) {
-
+        g.clipRect(0,(int)startPos.y,(int)size.x+BACK_BUTTON_SQUARE_SIZE,(int) size.y+BACK_BUTTON_SQUARE_SIZE);
         // Render inner objects.
         allMyObjects.forEach(ent -> ent.render(g));
 
@@ -219,6 +219,7 @@ public class Scrollable implements mcd_System {
                 90,
                 true
         );
+        g.resetClipping();
     }
 
     // =====================================================

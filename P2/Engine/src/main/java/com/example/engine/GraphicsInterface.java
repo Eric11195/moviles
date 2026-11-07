@@ -49,4 +49,7 @@ public interface GraphicsInterface {
     void setViewport(float scale_mult, float offset_x, float offset_y);
 
     Vec2 getPointInWindowPos(Vec2 pos);
+
+    void resetClipping();
+    void clipRect(int x, int y, int width, int height);
 }
