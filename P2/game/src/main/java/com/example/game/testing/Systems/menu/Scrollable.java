@@ -1,5 +1,6 @@
 package com.example.game.testing.Systems.menu;
 
+import static com.example.game.testing.constants.Constants.BACK_BUTTON_SQUARE_SIZE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
 import com.example.engine.GraphicsInterface;
@@ -8,6 +9,7 @@ import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.mcd_System;
+import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
 
 import java.util.List;
@@ -31,6 +33,9 @@ public class Scrollable implements mcd_System {
         this.allMyObjects = trList;
         this.barProgress = 0;
         this.barSize = Math.min(1, this.rows / ((float)this.totalRows));
+
+        float totalYSpace = (size.y-BACK_BUTTON_SQUARE_SIZE);
+        this.scrollBarSize.y = barSize*totalYSpace;
     }
     final List<mcd_Entity> allMyObjects;
     @Override
@@ -64,9 +69,20 @@ public class Scrollable implements mcd_System {
             ent.update(t,dt);
         });
     }
-
+    Vec2 scrollBarPos = new Vec2();
+    Vec2 scrollBarSize = new Vec2(BACK_BUTTON_SQUARE_SIZE*0.8f,0);
     @Override
     public void render(GraphicsInterface g) {
+        float totalYSpace = (size.y-BACK_BUTTON_SQUARE_SIZE);
+        g.setColor(ColorLibrary.DarkGrey);
+        scrollBarPos.x = startPos.x-BACK_BUTTON_SQUARE_SIZE*0.9f;
+        scrollBarPos.y = startPos.y+barProgress*totalYSpace;
+        g.drawRoundRectangle(
+            scrollBarPos,
+            scrollBarSize,
+            90,
+            true
+        );
         //todo: render bar
         //render all inner objects
         allMyObjects.forEach(ent -> {
