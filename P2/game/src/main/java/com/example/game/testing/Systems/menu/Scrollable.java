@@ -73,6 +73,12 @@ public class Scrollable implements mcd_System {
     Vec2 scrollBarSize = new Vec2(BACK_BUTTON_SQUARE_SIZE*0.8f,0);
     @Override
     public void render(GraphicsInterface g) {
+        //render all inner objects
+        allMyObjects.forEach(ent -> {
+            ent.render(g);
+        });
+
+        //Render scrollbar
         float totalYSpace = (size.y-BACK_BUTTON_SQUARE_SIZE);
         g.setColor(ColorLibrary.DarkGrey);
         scrollBarPos.x = startPos.x-BACK_BUTTON_SQUARE_SIZE*0.9f;
@@ -83,11 +89,6 @@ public class Scrollable implements mcd_System {
             90,
             true
         );
-        //todo: render bar
-        //render all inner objects
-        allMyObjects.forEach(ent -> {
-            ent.render(g);
-        });
     }
     public void setActive(boolean value){
         allMyObjects.forEach((ent)->{
