@@ -4,11 +4,11 @@ import static com.example.game.testing.constants.Constants.COLS_IN_SHOP;
 import static com.example.game.testing.constants.Constants.ROWS_IN_SHOP;
 
 import com.example.engine.Engine;
-import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.Component.UI.TabComponent;
+import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.Prefabs.BackButtonPrefab;
+import com.example.game.testing.EC.Prefabs.ShopTab;
 import com.example.game.testing.EC.mcd_Entity;
-import com.example.game.testing.Systems.mcd_System;
 import com.example.game.testing.Systems.menu.Scrollable;
 
 import java.util.ArrayList;
@@ -19,15 +19,17 @@ public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
         super(myEngine);
     }
     List<Scrollable> scrollableList;
+    List<TabComponent> tabComponentList;
 
     @Override
     public void start(Engine eng) {
         scrollableList = new ArrayList<>();
+        tabComponentList = new ArrayList<>();
         //TODO: create an object that displays rubies
-        //TODO: create a button for each tab
-
         //Creates all objects for all tabs
         for(int i = 0; i < tabs.count.ordinal(); ++i){
+            //TODO: create a button for each tab
+            tabComponentList.add((TabComponent) ShopTab.createShopTab(this, this, tabs.values()[i].toString(),i, tabs.count.ordinal()).getComponent(ComponentId.BUTTON_COMPONENT));
             // Open folder
             // Count number of elements
             int numberOfElementsInTab = 0;
@@ -40,32 +42,32 @@ public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
             }
             scrollableList.add(new Scrollable(ROWS_IN_SHOP, COLS_IN_SHOP, entOfThisTab));
         }
-        openTab(tabs.powerups.ordinal());
+        openTab(tabs.PowerUps.ordinal());
 
         BackButtonPrefab.createBackButton(eng, this);
     }
 
     @Override
     public void openTab(int idx) {
-        //Todo: set to the right color the previous tabs
         //TODO: hide all previous objects
         scrollableList.forEach((scrollable -> {
             scrollable.setActive(false);
         }));
+        tabComponentList.forEach(TabComponent::unselect);
         //TODO: show only the objects on this tab
         systemList.clear();
+        tabComponentList.get(idx).select();
         Scrollable activeScrollable = scrollableList.get(idx);
         addSystem(activeScrollable);
         activeScrollable.setActive(true);
     }
 
     enum tabs{
-        powerups,
-        characterSkins,
-        obstacleSkins,
-        colorPalletes,
-        menus,
-        levels,
+        PowerUps,
+        Skins,
+        Colors,
+        Menus,
+        Levels,
         count
     }
 }
