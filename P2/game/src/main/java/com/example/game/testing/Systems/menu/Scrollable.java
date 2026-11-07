@@ -1,9 +1,12 @@
+
 package com.example.game.testing.Systems.menu;
 
 import static com.example.game.testing.constants.Constants.BACK_BUTTON_SQUARE_SIZE;
-import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
+import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
+import com.example.engine.TouchEvent;
+import com.example.engine.TouchEventType;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
@@ -15,84 +18,215 @@ import com.example.utils.Vec2;
 import java.util.List;
 
 public class Scrollable implements mcd_System {
-    private int rows;
-    private int totalRows;
-    private int cols;
-    float barProgress;
-    float barSize;
-    Vec2 startPos;
-    Vec2 size;
-    //Probably needs limits in size and position in constructor for it to recalculate correctly
-    public Scrollable(Vec2 startPos, Vec2 size, int rows, int cols, List<mcd_Entity> trList){
-        //Calculate the number of vertical elements that fit the screen
+
+    private final int rows;
+    private final int totalRows;
+    private final int cols;
+
+    private final Vec2 startPos;
+    private final Vec2 size;
+
+    private final List<mcd_Entity> allMyObjects;
+
+    // Normalized scrollbar position [0, 1].
+    private float barProgress;
+
+    // Scrollbar thumb height in pixels.
+    private float barSize;
+
+    // Scrollbar geometry.
+    private final Vec2 scrollBarPos = new Vec2();
+    private final Vec2 scrollBarSize =
+            new Vec2(BACK_BUTTON_SQUARE_SIZE * 0.8f, 0);
+
+    // Input.
+    private float mouseStampY = -1;
+
+    // Available vertical space for content and scrollbar.
+    private final float viewportHeight;
+
+    public Scrollable(
+            Vec2 startPos,
+            Vec2 size,
+            int rows,
+            int cols,
+            List<mcd_Entity> trList) {
+
         this.startPos = startPos;
         this.size = size;
-        this.totalRows = Math.max(rows, (trList.size() + cols - 1) / cols);
-        this.rows = rows;
-        this.cols = cols;
-        this.allMyObjects = trList;
-        this.barProgress = 0;
-        this.barSize = Math.min(1, this.rows / ((float)this.totalRows));
 
-        float totalYSpace = (size.y-BACK_BUTTON_SQUARE_SIZE);
-        this.scrollBarSize.y = barSize*totalYSpace;
+        this.rows = Math.max(1, rows);
+        this.cols = Math.max(1, cols);
+
+        this.allMyObjects = trList;
+
+        // Calculate the actual number of rows required.
+        this.totalRows = Math.max(
+                this.rows,
+                (trList.size() + this.cols - 1) / this.cols
+        );
+
+        // Reserve space for the bottom button.
+        viewportHeight = Math.max(
+                0,
+                size.y - BACK_BUTTON_SQUARE_SIZE
+        );
+
+        this.barProgress = 0;
+
+        // Calculate scrollbar thumb height.
+        this.barSize = viewportHeight *
+                this.rows / (float) this.totalRows;
+
+        this.scrollBarSize.y = barSize;
     }
-    final List<mcd_Entity> allMyObjects;
+
+    private float getMaxScroll() {
+        return totalRows - rows;
+    }
+
+    private float getAvailableBarMovement() {
+        return Math.max(0, viewportHeight - barSize);
+    }
+
+    private float clamp01(float value) {
+        return Math.max(0, Math.min(1, value));
+    }
+
+    // =====================================================
+    // INPUT
+    // =====================================================
+
+    private void handleMouseInput(Engine eng) {
+
+        for (TouchEvent evt : eng.getInput().getTouchEvents()) {
+
+            switch (evt.type.numVal()) {
+
+                case TouchEventType.DOWN_VALUE:
+
+                    mouseStampY = evt.pos.y;
+                    break;
+
+                case TouchEventType.UP_VALUE:
+
+                    if (mouseStampY >= 0) {
+
+                        float delta = evt.pos.y - mouseStampY;
+
+                        float availableMovement =
+                                getAvailableBarMovement();
+
+                        if (availableMovement > 0) {
+
+                            barProgress +=
+                                    delta / availableMovement;
+
+                            barProgress = clamp01(barProgress);
+                        }
+                    }
+
+                    mouseStampY = -1;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    // =====================================================
+    // UPDATE
+    // =====================================================
+
     @Override
     public void update(mcd_Scene scene, float t, float dt) {
-        //Todo: Move each object transform so that they fit on screen based on barProgress
+
+        // Process input every frame.
+        handleMouseInput(scene.getEngine());
+
+        // Calculate how many rows have been scrolled.
+        float scrollOffset = barProgress * getMaxScroll();
+
+        // Calculate the vertical distance between rows.
+        float rowHeight = size.y / rows;
+
         int i = 0;
-        int row = 0;
-        float scrollOffset = barProgress * (totalRows - rows);
-        while( i < this.allMyObjects.size()){
-            //Calculate Y
-            //TODO: add the scrolled distance to this y
+
+        while (i < allMyObjects.size()) {
+
+            int row = i / cols;
+
+            // Apply scroll offset to the row.
             float visibleRow = row - scrollOffset;
-            float y = startPos.y + size.y * visibleRow /(float)rows;
-            int limit = i+this.cols;
-            for(int j = i; j < this.allMyObjects.size() && j < limit; ++j){
-                //Calculate X
+
+            float y = startPos.y + rowHeight * visibleRow;
+
+            int limit = Math.min(
+                    i + cols,
+                    allMyObjects.size()
+            );
+
+            for (int j = i; j < limit; ++j) {
+
                 int col = j - i;
-                float x = startPos.x + size.x * col / (float)cols;
-                mcd_Entity ent = this.allMyObjects.get(j);
-                TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
+
+                float x = startPos.x +
+                        size.x * col / (float) cols;
+
+                mcd_Entity ent = allMyObjects.get(j);
+
+                TransformComponent tr =
+                        (TransformComponent) ent.getComponent(
+                                ComponentId.TRANSFORM_COMPONENT
+                        );
+
                 tr.pos.x = x;
                 tr.pos.y = y;
             }
-            i += this.cols;
-            ++row;
-        }
-        //Todo: detect bar mouse Movement
 
-        //Update all inner objects
-        allMyObjects.forEach(ent->{
-            ent.update(t,dt);
-        });
+            i += cols;
+        }
+
+        // Update inner objects.
+        allMyObjects.forEach(ent -> ent.update(t, dt));
     }
-    Vec2 scrollBarPos = new Vec2();
-    Vec2 scrollBarSize = new Vec2(BACK_BUTTON_SQUARE_SIZE*0.8f,0);
+
+    // =====================================================
+    // RENDER
+    // =====================================================
+
     @Override
     public void render(GraphicsInterface g) {
-        //render all inner objects
-        allMyObjects.forEach(ent -> {
-            ent.render(g);
-        });
 
-        //Render scrollbar
-        float totalYSpace = (size.y-BACK_BUTTON_SQUARE_SIZE);
+        // Render inner objects.
+        allMyObjects.forEach(ent -> ent.render(g));
+
+        // Calculate scrollbar position.
+        scrollBarPos.x =
+                startPos.x - BACK_BUTTON_SQUARE_SIZE * 0.9f;
+
+        scrollBarPos.y =
+                startPos.y +
+                        barProgress * getAvailableBarMovement();
+
+        // Render scrollbar.
         g.setColor(ColorLibrary.DarkGrey);
-        scrollBarPos.x = startPos.x-BACK_BUTTON_SQUARE_SIZE*0.9f;
-        scrollBarPos.y = startPos.y+barProgress*totalYSpace;
+
         g.drawRoundRectangle(
-            scrollBarPos,
-            scrollBarSize,
-            90,
-            true
+                scrollBarPos,
+                scrollBarSize,
+                90,
+                true
         );
     }
-    public void setActive(boolean value){
-        allMyObjects.forEach((ent)->{
-            ent.setActive(value);
-        });
+
+    // =====================================================
+    // ACTIVATION
+    // =====================================================
+
+    public void setActive(boolean value) {
+
+        allMyObjects.forEach(ent -> ent.setActive(value));
     }
 }

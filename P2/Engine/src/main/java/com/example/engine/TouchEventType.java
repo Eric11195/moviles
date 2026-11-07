@@ -1,12 +1,18 @@
 package com.example.engine;
 
 public class TouchEventType {
-    public final static TouchEventType None = new TouchEventType(0);
-    public final static TouchEventType DOWN = new TouchEventType(1<<0);
-    public final static TouchEventType UP = new TouchEventType(1<<1);
-    public final static TouchEventType MOVE = new TouchEventType(1<<2);
-    public final static TouchEventType UNKNOWN = new TouchEventType(1<<3);
-    public final static TouchEventType ALL = new TouchEventType(0xFFFFFFFF);
+    public final static int NONE_VALUE = 0;
+    public final static int DOWN_VALUE = 1;
+    public final static int UP_VALUE = 1<<1;
+    public final static int MOVE_VALUE = 1<<2;
+    public final static int UNKNOWN_VALUE = 1<<3;
+    public final static int ALL_VALUE = 0xFFFFFFFF;
+    public final static TouchEventType None = new TouchEventType(NONE_VALUE);
+    public final static TouchEventType DOWN = new TouchEventType(DOWN_VALUE);
+    public final static TouchEventType UP = new TouchEventType(UP_VALUE);
+    public final static TouchEventType MOVE = new TouchEventType(MOVE_VALUE);
+    public final static TouchEventType UNKNOWN = new TouchEventType(UNKNOWN_VALUE);
+    public final static TouchEventType ALL = new TouchEventType(ALL_VALUE);
     private int numericValue;
     public int numVal(){return numericValue;}
 
