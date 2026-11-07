@@ -7,7 +7,8 @@ import com.example.utils.Vec2;
 public class SpriteBuyable extends Buyable {
     String spritePath;
     ImageEng sprite;
-    SpriteBuyable(GraphicsInterface g, String imagePath){
+    public SpriteBuyable(int price, GraphicsInterface g, String imagePath){
+        super(price);
         this.spritePath = imagePath;
         sprite = g.createImage(spritePath);
     }

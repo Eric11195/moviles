@@ -4,6 +4,9 @@ import com.example.engine.GraphicsInterface;
 
 public abstract class Buyable {
     public int price;
+    public Buyable(int price){
+        this.price = price;
+    }
     public abstract void render(
         GraphicsInterface g,
         float x,

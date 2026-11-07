@@ -93,4 +93,6 @@ public class Constants {
     //=====================================================
     public static final int ROWS_IN_SHOP = 2;
     public static final int COLS_IN_SHOP = 3;
+    public static final int BACK_BUTTON_SQUARE_SIZE = 40;
+    public static final float TAB_HEIGHT = LOGIC_WINDOW_SIZE.y / 14.0f;
 }

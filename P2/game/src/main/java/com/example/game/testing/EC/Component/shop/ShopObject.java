@@ -1,11 +1,13 @@
 package com.example.game.testing.EC.Component.shop;
 
+import com.example.engine.ColorEng;
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.Component.UI.ButtonComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.RubySystem;
+import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
 
 public class ShopObject extends ButtonComponent {
@@ -35,8 +37,10 @@ public class ShopObject extends ButtonComponent {
             tr.size.x*0.8f,
             tr.size.y*0.8f
         );
+        g.setColor(ColorLibrary.Black);
+        g.drawRoundRectangle(tr.pos, tr.size, 12.0f, false);
         g.drawText(Integer.toString(
-                this.buyable.price),
+                        this.buyable.price),
                 new Vec2(tr.pos.x+tr.size.x*0.5f, tr.pos.y+tr.size.y*0.9f)
         );
     }

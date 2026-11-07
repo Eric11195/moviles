@@ -1,6 +1,7 @@
 package com.example.game.testing.EC.Prefabs;
 
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
+import static com.example.game.testing.constants.Constants.TAB_HEIGHT;
 
 import com.example.game.testing.EC.Component.TextRectComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
@@ -16,7 +17,7 @@ public class ShopTab {
         mcd_Entity ent = scene.createEntity();
         TransformComponent tr = (TransformComponent) ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
         tr.size.x = LOGIC_WINDOW_SIZE.x / (float)totalTabs;
-        tr.size.y = LOGIC_WINDOW_SIZE.y / 14.0f;
+        tr.size.y = TAB_HEIGHT;
         tr.pos.x = tr.size.x*tabIdx;
         tr.pos.y=0;
         ent.addComponent(ComponentId.TEXT_COMPONENT, new TextRectComponent(text, ColorLibrary.Black));
