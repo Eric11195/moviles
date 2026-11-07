@@ -1,7 +1,10 @@
 package com.example.game.testing.Scenes;
 
+import static com.example.game.testing.constants.Constants.BACK_BUTTON_SQUARE_SIZE;
 import static com.example.game.testing.constants.Constants.COLS_IN_SHOP;
+import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.ROWS_IN_SHOP;
+import static com.example.game.testing.constants.Constants.TAB_HEIGHT;
 
 import com.example.engine.ColorEng;
 import com.example.engine.Engine;
@@ -12,6 +15,7 @@ import com.example.game.testing.EC.Prefabs.ShopItemPrefab;
 import com.example.game.testing.EC.Prefabs.ShopTab;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.menu.Scrollable;
+import com.example.utils.Vec2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +26,14 @@ public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
     }
     List<Scrollable> scrollableList;
     List<TabComponent> tabComponentList;
+    private static final Vec2 pos = new Vec2(
+        BACK_BUTTON_SQUARE_SIZE,
+        TAB_HEIGHT
+    );
+    private static final Vec2 size = new Vec2(
+        LOGIC_WINDOW_SIZE.x-BACK_BUTTON_SQUARE_SIZE,
+        LOGIC_WINDOW_SIZE.y  - BACK_BUTTON_SQUARE_SIZE-TAB_HEIGHT
+    );
 
     @Override
     public void start(Engine eng) {
@@ -52,7 +64,7 @@ public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
                 // DO NOT ADD TO THIS SCENE OBJECT LIST
                 //transformsOfThisTab.add();
             }
-            scrollableList.add(new Scrollable(ROWS_IN_SHOP, COLS_IN_SHOP, entOfThisTab));
+            scrollableList.add(new Scrollable(pos,size, ROWS_IN_SHOP, COLS_IN_SHOP, entOfThisTab));
         }
         openTab(tabs.PowerUps.ordinal());
 

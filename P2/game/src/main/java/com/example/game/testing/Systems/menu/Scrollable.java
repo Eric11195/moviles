@@ -18,10 +18,14 @@ public class Scrollable implements mcd_System {
     private int cols;
     float barProgress;
     float barSize;
+    Vec2 startPos;
+    Vec2 size;
     //Probably needs limits in size and position in constructor for it to recalculate correctly
-    public Scrollable(int rows, int cols, List<mcd_Entity> trList){
+    public Scrollable(Vec2 startPos, Vec2 size, int rows, int cols, List<mcd_Entity> trList){
         //Calculate the number of vertical elements that fit the screen
-        this.totalRows = Math.max(rows, 1+(trList.size()/cols));
+        this.startPos = startPos;
+        this.size = size;
+        this.totalRows = Math.max(rows, (trList.size() + cols - 1) / cols);
         this.rows = rows;
         this.cols = cols;
         this.allMyObjects = trList;
@@ -34,18 +38,21 @@ public class Scrollable implements mcd_System {
         //Todo: Move each object transform so that they fit on screen based on barProgress
         int i = 0;
         int row = 0;
+        float scrollOffset = barProgress * (totalRows - rows);
         while( i < this.allMyObjects.size()){
-            //Calculate Y center
+            //Calculate Y
             //TODO: add the scrolled distance to this y
-            float y = LOGIC_WINDOW_SIZE.y* (row / (this.rows+2.0f));
+            float visibleRow = row - scrollOffset;
+            float y = startPos.y + size.y * visibleRow /(float)rows;
             int limit = i+this.cols;
             for(int j = i; j < this.allMyObjects.size() && j < limit; ++j){
-                //Calculate X center
-                float x = LOGIC_WINDOW_SIZE.x * ((limit-j)/ (this.cols+2.0f));
+                //Calculate X
+                int col = j - i;
+                float x = startPos.x + size.x * col / (float)cols;
                 mcd_Entity ent = this.allMyObjects.get(j);
                 TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
-                tr.pos.x = x - tr.size.x/2.0f;
-                tr.pos.y = y - tr.size.y/2.0f;
+                tr.pos.x = x;
+                tr.pos.y = y;
             }
             i += this.cols;
             ++row;

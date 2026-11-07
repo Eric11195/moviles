@@ -17,6 +17,7 @@ public class ShopObject extends ButtonComponent {
             buy(b);
         });
         this.buyable = b;
+        this.idleColor = ColorLibrary.LightGrey;
     }
 
     @Override
