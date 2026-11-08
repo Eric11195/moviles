@@ -16,7 +16,11 @@ public class ShopObject extends ButtonComponent {
     Buyable buyable;
     public ShopObject(mcd_Scene scene, Buyable b) {
         super(()->{
-            buy(scene, b);
+            if(b.price==-1){
+                equip(b);
+            }else {
+                buy(scene, b);
+            }
         });
         this.buyable = b;
         this.idleColor = ColorLibrary.LightGrey;
@@ -66,5 +70,8 @@ public class ShopObject extends ButtonComponent {
             scene.getEngine().pushScene(new NotEnoughMoneyPopUp(scene.getEngine(), scene, b));
             //Todo: mostrar mensaje de dinero insuficiente
         }
+    }
+    private static void equip(Buyable b){
+        throw new RuntimeException("Unimplemented");
     }
 }
