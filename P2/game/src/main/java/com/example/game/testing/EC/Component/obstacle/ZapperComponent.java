@@ -133,8 +133,9 @@ public class ZapperComponent extends Obstacle {
             });
         else{
             collider.colliders.forEach(col ->{
-                final Vec2 radsq = new Vec2(col.rad*2,col.rad*2);
-                g.drawImage(img, tr.pos, radsq);
+                final Vec2 rad = new Vec2(col.rad,col.rad);
+                final Vec2 rad2 = rad.mul(2);
+                g.drawImage(img, tr.pos.add(col).sub(rad), rad2);
             });
         }
     }
