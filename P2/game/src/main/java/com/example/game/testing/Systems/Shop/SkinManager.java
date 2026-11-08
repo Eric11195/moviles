@@ -77,8 +77,7 @@ public class SkinManager implements mcd_Serializable {
         MISSILE,
         LASER,
         WARNINGS,
-        ZAPPER_HEAD,
-        ZAPPER_POINT,
+        ZAPPER,
         COINS,
         COUNT
     }

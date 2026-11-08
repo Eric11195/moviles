@@ -11,6 +11,7 @@ import static com.example.game.testing.constants.Constants.WARNING_TIME;
 import static com.example.game.testing.utils.StartPlayerDead.startPlayerDead;
 
 import com.example.engine.GraphicsInterface;
+import com.example.engine.ImageEng;
 import com.example.game.testing.EC.Component.ColliderComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.Component.VelocityComponent;
@@ -20,6 +21,7 @@ import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.LevelSpeedSystem;
 import com.example.game.testing.Systems.LevelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.LevelGenerator.ObstacleFactory;
+import com.example.game.testing.Systems.Shop.SkinManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
 
@@ -49,6 +51,7 @@ public class MissileComponent extends WarnedObstacle {
         generateCollider(ent);
         setTransform(ent, yPos);
         scrolledTime = calculateScrolledTime(spawnTime);
+        this.img = SkinManager.getInstance().getImage(SkinManager.Images.MISSILE);
     }
     private void setTransform(mcd_Entity ent, float yPos){
         myTransform = (TransformComponent)ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
@@ -123,12 +126,17 @@ public class MissileComponent extends WarnedObstacle {
             vel.velocity.x = 0;
         }
     }
+    ImageEng img = null;
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g){
         super.render(ent, g);
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
-        g.setColor(ColorLibrary.Blue);
-        g.drawRectangle(tr.pos, tr.size, true);
+        if(img==null) {
+            g.setColor(ColorLibrary.Blue);
+            g.drawRectangle(tr.pos, tr.size, true);
+        }else{
+            g.drawImage(img, tr.pos, tr.size);
+        }
     }
 
 }

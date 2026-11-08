@@ -21,6 +21,7 @@ import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.LevelSpeedSystem;
 import com.example.game.testing.Systems.LevelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.LevelGenerator.ObstacleFactory;
+import com.example.game.testing.Systems.Shop.SkinManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.JSON_HELPER;
 import com.example.utils.Vec2;
@@ -72,6 +73,7 @@ public class ZapperComponent extends Obstacle {
         scrolledTime = calculateScrolledTime(spawnTime);
         this.myEnt = ent;
         generateColliders(ent);
+        this.img = SkinManager.getInstance().getImage(SkinManager.Images.ZAPPER);
     }
     private void generateColliders(mcd_Entity ent){
         ColliderComponent col = (ColliderComponent)ent.getComponent(ComponentId.COLLIDER_COMPONENT);
