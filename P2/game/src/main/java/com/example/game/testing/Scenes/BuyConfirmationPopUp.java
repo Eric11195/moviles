@@ -17,14 +17,11 @@ import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
 
-import java.awt.Button;
-import java.awt.Color;
-
 //Push this scene. DO NOT SET THIS. This will pop itself after finished
-public class BuyConfirmationScene extends mcd_Scene {
+public class BuyConfirmationPopUp extends mcd_Scene {
     Buyable elementToBuy;
     Scene previousScene;
-    public BuyConfirmationScene(Engine myEngine, mcd_Scene previousScene, Buyable elementToBuy) {
+    public BuyConfirmationPopUp(Engine myEngine, mcd_Scene previousScene, Buyable elementToBuy) {
         super(myEngine);
         this.elementToBuy = elementToBuy;
         this.previousScene = previousScene;

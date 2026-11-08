@@ -1,13 +1,12 @@
 package com.example.game.testing.EC.Component.shop;
 
-import com.example.engine.ColorEng;
-import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.Component.UI.ButtonComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
-import com.example.game.testing.Scenes.BuyConfirmationScene;
+import com.example.game.testing.Scenes.BuyConfirmationPopUp;
+import com.example.game.testing.Scenes.NotEnoughMoneyPopUp;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.RubySystem;
 import com.example.game.testing.utils.ColorLibrary;
@@ -51,10 +50,11 @@ public class ShopObject extends ButtonComponent {
 
     private static void buy(mcd_Scene scene, Buyable b){
         if(RubySystem.canPay(b.price)){
-            scene.getEngine().pushScene(new BuyConfirmationScene(scene.getEngine(),scene, b));
+            scene.getEngine().pushScene(new BuyConfirmationPopUp(scene.getEngine(),scene, b));
 //            RubySystem.pay(b.price);
             //TODO: registrar item comprado
         }else{
+            scene.getEngine().pushScene(new NotEnoughMoneyPopUp(scene.getEngine(), scene, b));
             //Todo: mostrar mensaje de dinero insuficiente
         }
     }
