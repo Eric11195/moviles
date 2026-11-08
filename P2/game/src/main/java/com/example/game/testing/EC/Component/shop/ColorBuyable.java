@@ -14,8 +14,8 @@ import org.json.JSONObject;
 public class ColorBuyable extends Buyable {
     ColorEng color;
     ColorManager.Colors colorFor;
-    public ColorBuyable(int price, ColorManager.Colors colorFor, ColorEng color){
-        super(BuyableType.color, price);
+    public ColorBuyable(String fileName,int price, ColorManager.Colors colorFor, ColorEng color){
+        super(fileName,BuyableType.color, price);
         this.color = color;
         this.colorFor = colorFor;
     }
@@ -34,8 +34,9 @@ public class ColorBuyable extends Buyable {
         ColorManager.getInstance().setColor(colorFor, color);
     }
 
-    public static ColorBuyable deserializeColor(int price, JSONObject obj){
+    public static ColorBuyable deserializeColor(String fileName, int price, JSONObject obj){
         return new ColorBuyable(
+            fileName,
             price,
             ColorManager.Colors.valueOf(obj.getString("colorFor")),
             JSON_HELPER.colorFromJSON(obj)

@@ -7,12 +7,14 @@ import com.example.game.testing.utils.mcd_Serializable;
 import org.json.JSONObject;
 
 public abstract class Buyable implements mcd_Serializable {
+    String fileName;
     BuyableType type;
     /**
      * If price == -1. Then this item has already been bought
      */
     public int price;
-    public Buyable(BuyableType type, int price){
+    public Buyable(String fileName, BuyableType type, int price){
+        this.fileName = fileName;
         this.type = type;
         this.price = price;
     }
@@ -36,13 +38,13 @@ public abstract class Buyable implements mcd_Serializable {
         jo.put("type", this.type.toString());
         return jo;
     }
-    public static Buyable deserialize(GraphicsInterface g, JSONObject obj){
+    public static Buyable deserialize(String fileName, GraphicsInterface g, JSONObject obj){
         int price = obj.getInt("price");
         switch(BuyableType.valueOf(obj.getString("type"))){
             case skin:
-                return SpriteBuyable.deserializeSkin(price,g,obj);
+                return SpriteBuyable.deserializeSkin(fileName,price,g,obj);
             case color:
-                return ColorBuyable.deserializeColor(price,obj);
+                return ColorBuyable.deserializeColor(fileName,price,obj);
             case font:
                 throw new RuntimeException("Unimplemented yet");
             default:

@@ -20,6 +20,8 @@ import com.example.game.testing.Systems.menu.Scrollable;
 import com.example.game.testing.utils.JSON_HELPER;
 import com.example.utils.Vec2;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,10 +55,20 @@ public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
             // Count number of elements
             List<mcd_Entity> entOfThisTab = new ArrayList<>();
             fs.forEachFileOnDirectory((fileName)->{
+                JSONObject jo =
+                    JSON_HELPER.fromJSON(
+                        fs,
+                        fileName
+                    );
+                if(jo==null) return;
                 entOfThisTab.add(
                     ShopItemPrefab.createShopItem(
                         this,
-                        Buyable.deserialize(eng.getGraphics(), JSON_HELPER.fromJSON(fs,fileName))
+                        Buyable.deserialize(
+                            fileName,
+                            eng.getGraphics(),
+                            jo
+                        )
                     )
                 );
             });
