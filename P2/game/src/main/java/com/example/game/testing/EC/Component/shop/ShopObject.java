@@ -64,11 +64,8 @@ public class ShopObject extends ButtonComponent {
     private static void buy(mcd_Scene scene, Buyable b){
         if(RubySystem.canPay(b.price)){
             scene.getEngine().pushScene(new BuyConfirmationPopUp(scene.getEngine(),scene, b));
-//            RubySystem.pay(b.price);
-            //TODO: registrar item comprado
         }else{
             scene.getEngine().pushScene(new NotEnoughMoneyPopUp(scene.getEngine(), scene, b));
-            //Todo: mostrar mensaje de dinero insuficiente
         }
     }
     private static void equip(Buyable b){
