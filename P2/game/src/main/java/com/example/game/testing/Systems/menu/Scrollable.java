@@ -97,6 +97,10 @@ public class Scrollable implements mcd_System {
     // INPUT
     // =====================================================
 
+    boolean inside_scrollbar(Vec2 ptr_pos){
+        return scrollBarPos.x <= ptr_pos.x && scrollBarPos.x+scrollBarSize.x > ptr_pos.x &&
+            scrollBarPos.y <= ptr_pos.y && scrollBarPos.y+scrollBarSize.y > ptr_pos.y;
+    }
     private void handleMouseInput(Engine eng) {
 
         for (TouchEvent evt : eng.getInput().getTouchEvents()) {
@@ -104,8 +108,8 @@ public class Scrollable implements mcd_System {
             switch (evt.type.numVal()) {
 
                 case TouchEventType.DOWN_VALUE:
-
-                    mouseStampY = evt.pos.y;
+                    if(inside_scrollbar(evt.pos))
+                        mouseStampY = evt.pos.y;
                     break;
 
                 case TouchEventType.UP_VALUE:
