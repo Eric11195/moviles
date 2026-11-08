@@ -5,12 +5,13 @@ import static com.example.game.testing.constants.Constants.DEFAULT_BUTTON_SIZE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
 import com.example.engine.Engine;
-import com.example.game.testing.EC.Prefabs.BackButtonPrefab;
 import com.example.game.testing.Systems.LevelGenerator.LevelFileGenerator;
 import com.example.game.testing.utils.JSON_HELPER;
 import com.example.utils.Vec2;
 
 import org.json.JSONObject;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Presents a selection of several levels. On pressing any of the buttons. It will play
@@ -21,35 +22,45 @@ public class LevelSelectorScene extends mcd_Scene{
     }
     @Override
     public void start(Engine eng) {
-        int BUTTON_COUNT = 3;
+        int BUTTONS_PER_ROW = 3;
+        Vec2 BASE_POS = new Vec2(LOGIC_WINDOW_SIZE.x/(BUTTONS_PER_ROW+1),LOGIC_WINDOW_SIZE.y/4);
+        Vec2 OFFSET = new Vec2(LOGIC_WINDOW_SIZE.x/(BUTTONS_PER_ROW+1),LOGIC_WINDOW_SIZE.y/5);
+        float BUTTON_SIZE_MULT = 0.8f;
         eng.getFileStorage().setRelativePath("levels");
 
-
-        for(int j = 0; j < 2; ++j) {
-            for (int i = 1; i <= BUTTON_COUNT; ++i) {
-                int idx = BUTTON_COUNT*j+(i-1);
-                Vec2 pos = new Vec2(
-                        ((j+1)*LOGIC_WINDOW_SIZE.x / 3.0f) - 0.5f * DEFAULT_BUTTON_SIZE.x,
-                        LOGIC_WINDOW_SIZE.y * ((float) i / (BUTTON_COUNT + 1.0f)) - 0.5f * DEFAULT_BUTTON_SIZE.y
-                );
-                JSONObject obj = JSON_HELPER.fromJSON(eng.getFileStorage(),"Level" + Integer.toString(idx+1));
-                if(obj==null){
-                    throw new RuntimeException("File level could not be found");
-                }
-                LevelFileGenerator.LevelGeneratorSerialized lgs = LevelFileGenerator.deserialize(obj);
-                int num = lgs.levelGeneratorParams.levelCoinsToWin==-1 ? lgs.levelGeneratorParams.levelTotalMeters : lgs.levelGeneratorParams.levelCoinsToWin;
-                createButton(
+        AtomicInteger idx = new AtomicInteger(0);
+        eng.getFileStorage().forEachFileOnDirectory((String filename)->{
+            if (!filename.contains("Level")) return;
+            JSONObject obj = JSON_HELPER.fromJSON(eng.getFileStorage(), "Level" + Integer.toString(idx.get() + 1));
+            if (obj == null) {
+                throw new RuntimeException("File level could not be found");
+            }
+            Vec2 pos = new Vec2(
+                    (BASE_POS.x + (idx.get() % BUTTONS_PER_ROW) * OFFSET.x) - 0.5f * DEFAULT_BUTTON_SIZE.x,
+                    BASE_POS.y + (idx.get() / BUTTONS_PER_ROW) * OFFSET.y - 0.5f * DEFAULT_BUTTON_SIZE.y
+            );
+            LevelFileGenerator.LevelGeneratorSerialized lgs = LevelFileGenerator.deserialize(obj);
+            int num = lgs.levelGeneratorParams.levelCoinsToWin == -1 ? lgs.levelGeneratorParams.levelTotalMeters : lgs.levelGeneratorParams.levelCoinsToWin;
+            createButton(
                     this,
                     pos,
-                    DEFAULT_BUTTON_SIZE,
-                    (lgs.levelGeneratorParams.levelCoinsToWin==-1 ? "Distance": "Coins")+": "+num,
+                    DEFAULT_BUTTON_SIZE.mul(BUTTON_SIZE_MULT),
+                    (lgs.levelGeneratorParams.levelCoinsToWin == -1 ? "Distance" : "Coins") + ": " + num,
                     () -> {
                         loadLevel(eng, lgs);
                     }
-                );
-            }
-        }
-        BackButtonPrefab.createBackButton(eng, this);
+            );
+            idx.incrementAndGet();
+        });
+        createButton(
+                this,
+                new Vec2(0,LOGIC_WINDOW_SIZE.y-40),
+                new Vec2(40,40),
+                "Back",
+                () ->{
+                    eng.setScene(new MainMenuScene(eng));
+                }
+        );
     }
 
     private void loadLevel(Engine eng, LevelFileGenerator.LevelGeneratorSerialized lgs){
