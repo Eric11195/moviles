@@ -8,9 +8,11 @@ import static com.example.game.testing.constants.Constants.PLAYER_DIMENSIONS;
 import static com.example.game.testing.constants.Constants.Y_PLAYER_ACCEL;
 
 import com.example.engine.GraphicsInterface;
+import com.example.engine.ImageEng;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
+import com.example.game.testing.Systems.Shop.SkinManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
 
@@ -18,6 +20,9 @@ public class JetpackComponent implements mcd_Component{
     boolean isFlying;
     float playerRad = Math.min(PLAYER_DIMENSIONS.x,PLAYER_DIMENSIONS.y)/2;
     Vec2 halfsizes = new Vec2(PLAYER_DIMENSIONS.x/2,PLAYER_DIMENSIONS.y/2);
+    public JetpackComponent(){
+        this.img = SkinManager.getInstance().getImage(SkinManager.Images.PLAYER);
+    }
     private void checkSpeed(mcd_Entity playerEnt)
     {
         VelocityComponent velComp = (VelocityComponent) playerEnt.getComponent(ComponentId.VELOCITY_COMPONENT);
@@ -45,19 +50,23 @@ public class JetpackComponent implements mcd_Component{
         }
         vel.velocity.y+= GRAVITY_FORCE*dt;
     }
+    ImageEng img = null;
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g)
     {
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
-
-        g.setStrokeWidth(3);
-
         Vec2 pos = new Vec2(tr.pos.add(halfsizes));
-        g.setColor(ColorLibrary.Grey);
-        g.drawCircle(pos,playerRad,true);
+        if(img==null) {
+            g.setStrokeWidth(3);
 
-        g.setColor(ColorLibrary.DarkGrey);
-        g.drawCircle(pos,playerRad,false);
+            g.setColor(ColorLibrary.Grey);
+            g.drawCircle(pos, playerRad, true);
+
+            g.setColor(ColorLibrary.DarkGrey);
+            g.drawCircle(pos, playerRad, false);
+        }else{
+            g.drawImage(img, pos, PLAYER_DIMENSIONS);
+        }
     }
 
     @Override

@@ -11,6 +11,7 @@ import static com.example.game.testing.utils.StartPlayerDead.startPlayerDead;
 import static com.example.game.testing.constants.Constants.PLAYER_X_POS;
 
 import com.example.engine.ColorEng;
+import com.example.engine.ImageEng;
 import com.example.game.testing.EC.Component.ColliderComponent;
 import com.example.game.testing.EC.Component.DrawRectangleComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
@@ -21,6 +22,7 @@ import com.example.engine.GraphicsInterface;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.LevelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.LevelGenerator.ObstacleFactory;
+import com.example.game.testing.Systems.Shop.SkinManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
 import static com.example.game.testing.EC.Component.obstacle.ObstacleId.OBSTACLE_LASER;
@@ -50,15 +52,10 @@ public class LaserComponent extends WarnedObstacle {
             warning.activateWarning(ent);
         }
     }
+    ImageEng mainImg = null;
     public LaserComponent(mcd_Entity ent,float spawnTime,float posY)
     {
         super(ent, spawnTime);
-
-        if(!ent.hasComponent(ComponentId.DRAW_RECTANGLE_COMPONENT))
-        {
-            ent.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT,new DrawRectangleComponent());
-        }
-
 
         anim_timer =0;
         is_attacking = false;
@@ -77,12 +74,19 @@ public class LaserComponent extends WarnedObstacle {
         tr.pos.x =0;
         drawInDangerMatrixPos.y = posY;
         drawInDangerMatrixSize.y = LASER_HEIGHT;
-        DrawRectangleComponent draw=  (DrawRectangleComponent)  ent.getComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
         Vec2 rectSize = tr.size.clone();
         rectSize.x = rectSize.x/7.5f;
-        draw.addRectangle(tr.pos,rectSize);
-        draw.addRectangle(new Vec2((LOGIC_WINDOW_SIZE.x-rectSize.x),tr.pos.y),rectSize);
-        draw.color = color;
+
+        mainImg = SkinManager.getInstance().getImage(SkinManager.Images.LASER);
+        if(mainImg == null) {
+            if (!ent.hasComponent(ComponentId.DRAW_RECTANGLE_COMPONENT)) {
+                ent.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT, new DrawRectangleComponent());
+            }
+            DrawRectangleComponent draw=  (DrawRectangleComponent)  ent.getComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
+            draw.addRectangle(tr.pos,rectSize);
+            draw.addRectangle(new Vec2((LOGIC_WINDOW_SIZE.x-rectSize.x),tr.pos.y),rectSize);
+            draw.color = color;
+        }
 
         scrolledTime = calculateScrolledTime(spawnTime);
     }
@@ -96,26 +100,27 @@ public class LaserComponent extends WarnedObstacle {
     }
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g) {
-        if(ent.hasComponent(ComponentId.TRANSFORM_COMPONENT))
-        {
-            if(!is_attacking)
-            {
-                if(loop_num%2!=0)
-                {
-                    float progress = (float) (anim_timer/(LASER_ANIM_TIME));
-                    color.a = (int)(255 - 155 * progress);
-                    color.a = Math.max(100,Math.min(255,color.a));
-                }
-                else{
-                    float progress = (float) (anim_timer/(LASER_ANIM_TIME));
-                    color.a = (int)(100 + 155 * progress);
-                    color.a = Math.max(100,Math.min(255,color.a));
-                }
-            }
-            else{color.a = 255;}
-            DrawRectangleComponent draw = (DrawRectangleComponent) ent.getComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
-            draw.color = color;
+        if(mainImg != null && is_attacking){
+            TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
+            g.drawImage(mainImg, tr.pos, tr.size);
         }
+        if(!is_attacking)
+        {
+            if(loop_num%2!=0)
+            {
+                float progress = (float) (anim_timer/(LASER_ANIM_TIME));
+                color.a = (int)(255 - 155 * progress);
+                color.a = Math.max(100,Math.min(255,color.a));
+            }
+            else{
+                float progress = (float) (anim_timer/(LASER_ANIM_TIME));
+                color.a = (int)(100 + 155 * progress);
+                color.a = Math.max(100,Math.min(255,color.a));
+            }
+        }
+        else{color.a = 255;}
+        DrawRectangleComponent draw = (DrawRectangleComponent) ent.getComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
+        draw.color = color;
     }
     private void disable(mcd_Entity ent)
     {

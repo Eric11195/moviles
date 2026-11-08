@@ -76,7 +76,6 @@ public class SkinManager implements mcd_Serializable {
         PLAYER,
         MISSILE,
         LASER,
-        LASER_WARNINGS,
         WARNINGS,
         ZAPPER_HEAD,
         ZAPPER_POINT,
