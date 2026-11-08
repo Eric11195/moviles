@@ -4,9 +4,11 @@ import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.WARNING_RADIUS;
 
 import com.example.engine.GraphicsInterface;
+import com.example.engine.ImageEng;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
+import com.example.game.testing.Systems.Shop.SkinManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
 
@@ -20,17 +22,29 @@ public class WarningSign implements mcd_Component {
     }
     @Override
     public void update(mcd_Entity ent, float t, float dt) {}
+    public WarningSign(){
+        img = SkinManager.getInstance().getImage(SkinManager.Images.WARNINGS);
+        pos.x = LOGIC_WINDOW_SIZE.x - WARNING_RADIUS;
+        if(img!=null) {
+            pos.x -= WARNING_RADIUS;
+        }
+    }
+    ImageEng img=null;
 
+    Vec2 pos = new Vec2();
+    static final Vec2 size = new Vec2(WARNING_RADIUS*2,WARNING_RADIUS*2);
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g) {
         if(active){
             TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
-            final Vec2 middlePoint = new Vec2(
-                    LOGIC_WINDOW_SIZE.x-WARNING_RADIUS,
-                    tr.pos.y + WARNING_RADIUS
-            );
-            drawTriangles(g, middlePoint);
-            drawExclamation(g,middlePoint);
+            if(img!=null){
+                pos.y = tr.pos.y;
+                g.drawImage(img,pos,size);
+            }else {
+                pos.y = tr.pos.y + WARNING_RADIUS;
+                drawTriangles(g, pos);
+                drawExclamation(g, pos.clone());
+            }
         }
     }
     private void drawTriangles(GraphicsInterface g, Vec2 middlePoint){
