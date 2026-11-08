@@ -4,7 +4,7 @@ import static com.example.game.testing.EC.Component.obstacle.ObstacleId.OBSTACLE
 import static com.example.game.testing.constants.Constants.COIN_COLLIDER_RADIUS;
 import static com.example.game.testing.constants.Constants.COIN_RADIUS;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
-import static com.example.game.testing.utils.JSON_HELPER.fromJSON;
+import static com.example.game.testing.utils.JSON_HELPER.vec2FromJSON;
 
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.Component.ColliderComponent;

@@ -1,14 +1,19 @@
 package com.example.game.testing.EC.Component.shop;
 
+import static com.example.game.testing.utils.JSON_HELPER.toJSON;
+
 import com.example.engine.ColorEng;
 import com.example.engine.GraphicsInterface;
 import com.example.engine.ImageEng;
+import com.example.game.testing.utils.JSON_HELPER;
 import com.example.utils.Vec2;
 
+import org.json.JSONObject;
+
 public class ColorBuyable extends Buyable {
-ColorEng color;
+    ColorEng color;
     public ColorBuyable(int price, ColorEng color){
-        super(price);
+        super(BuyableType.color, price);
         this.color = color;
     }
     Vec2 pos = new Vec2();
@@ -19,5 +24,18 @@ ColorEng color;
         size.x = sizeX; size.y = sizeY;
         g.setColor(this.color);
         g.drawRectangle(pos,size,true);
+    }
+    public static ColorBuyable deserializeColor(int price, JSONObject obj){
+        return new ColorBuyable(
+            price,
+            JSON_HELPER.colorFromJSON(obj)
+        );
+    }
+
+    @Override
+    public JSONObject serialize() {
+        JSONObject jo = super.serialize();
+        toJSON(color, jo);
+        return jo;
     }
 }

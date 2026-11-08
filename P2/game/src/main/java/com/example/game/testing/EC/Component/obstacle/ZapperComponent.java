@@ -8,7 +8,7 @@ import static com.example.game.testing.constants.Constants.ZAPPER_DELTA_WIDTH;
 import static com.example.game.testing.constants.Constants.ZAPPER_HEAD_RADIUS;
 import static com.example.game.testing.constants.Constants.ZAPPER_LINE_WIDTH;
 import static com.example.game.testing.constants.Constants.ZAPPER_MAX_COLLIDERS;
-import static com.example.game.testing.utils.JSON_HELPER.fromJSON;
+import static com.example.game.testing.utils.JSON_HELPER.vec2FromJSON;
 import static com.example.game.testing.utils.StartPlayerDead.startPlayerDead;
 
 import com.example.engine.GraphicsInterface;
@@ -153,8 +153,8 @@ public class ZapperComponent extends Obstacle {
     }
     public static ZapperComponentSerialized deserialize(JSONObject obj){
         ZapperComponentSerialized zcs = new ZapperComponentSerialized();
-        zcs.end = fromJSON((JSONObject) obj.getJSONObject("end"));
-        zcs.start = fromJSON((JSONObject) obj.getJSONObject("start"));
+        zcs.end = JSON_HELPER.vec2FromJSON((JSONObject) obj.getJSONObject("end"));
+        zcs.start = JSON_HELPER.vec2FromJSON((JSONObject) obj.getJSONObject("start"));
         zcs.spawnTime = getSpawnTime(obj);
         return zcs;
     }

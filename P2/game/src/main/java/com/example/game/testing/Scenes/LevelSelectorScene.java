@@ -8,7 +8,6 @@ import com.example.engine.Engine;
 import com.example.game.testing.EC.Prefabs.BackButtonPrefab;
 import com.example.game.testing.Systems.LevelGenerator.LevelFileGenerator;
 import com.example.game.testing.utils.JSON_HELPER;
-import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;
 
 import org.json.JSONObject;
@@ -33,7 +32,7 @@ public class LevelSelectorScene extends mcd_Scene{
                         ((j+1)*LOGIC_WINDOW_SIZE.x / 3.0f) - 0.5f * DEFAULT_BUTTON_SIZE.x,
                         LOGIC_WINDOW_SIZE.y * ((float) i / (BUTTON_COUNT + 1.0f)) - 0.5f * DEFAULT_BUTTON_SIZE.y
                 );
-                JSONObject obj = JSON_HELPER.fromJSON(eng.getFileStorage(),"Level" + Integer.toString(idx+1));
+                JSONObject obj = JSON_HELPER.vec2FromJSON(eng.getFileStorage(),"Level" + Integer.toString(idx+1));
                 if(obj==null){
                     throw new RuntimeException("File level could not be found");
                 }

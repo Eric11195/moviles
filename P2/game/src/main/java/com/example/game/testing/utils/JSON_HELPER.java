@@ -1,13 +1,11 @@
 package com.example.game.testing.utils;
+import com.example.engine.ColorEng;
 import com.example.engine.IFileStorage;
 import com.example.utils.Vec2;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.List;
 
 public class JSON_HELPER {
@@ -44,6 +42,10 @@ public class JSON_HELPER {
         jo.put("y",(double)v.y);
         return jo;
     }
+    public static JSONObject toJSON(ColorEng clr, JSONObject jo){
+        jo.put("color", clr.getColorAsInt());
+        return jo;
+    }
 
     public static void toJSON(IFileStorage fileStorage, String file_name, JSONObject jo){
         try {
@@ -55,7 +57,7 @@ public class JSON_HELPER {
         }
     }
 
-    public static JSONObject fromJSON(IFileStorage fileStorage, String file_name){
+    public static JSONObject vec2FromJSON(IFileStorage fileStorage, String file_name){
         try {
             String content = fileStorage.read(file_name+".json");
             return new JSONObject(content);
@@ -64,10 +66,15 @@ public class JSON_HELPER {
         }
         return null;
     }
-    public static Vec2 fromJSON(JSONObject v){
+    public static Vec2 vec2FromJSON(JSONObject v){
         return new Vec2(
                 (float)v.getDouble("x"),
                 (float)v.getDouble("y")
+        );
+    }
+    public static ColorEng colorFromJSON(JSONObject clr){
+        return new ColorEng(
+          clr.getInt("color")
         );
     }
 }
