@@ -12,6 +12,7 @@ import static com.example.game.testing.utils.JSON_HELPER.vec2FromJSON;
 import static com.example.game.testing.utils.StartPlayerDead.startPlayerDead;
 
 import com.example.engine.GraphicsInterface;
+import com.example.engine.ImageEng;
 import com.example.game.testing.EC.Component.ColliderComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.ComponentId;
@@ -117,17 +118,25 @@ public class ZapperComponent extends Obstacle {
     public Vec2 getActualEndPos(TransformComponent tr){
         return tr.pos.add(end);
     }
+    ImageEng img=null;
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g){
         g.setStrokeWidth(2);
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
         ColliderComponent collider = (ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT);
-        collider.colliders.forEach(col ->{
-            g.setColor(ColorLibrary.Yellow);
-            g.drawCircle(tr.pos.add(col),col.rad,true);
-            g.setColor(ColorLibrary.Gold);
-            g.drawCircle(tr.pos.add(col),col.rad,false);
-        });
+        if(img==null)
+            collider.colliders.forEach(col ->{
+                g.setColor(ColorLibrary.Yellow);
+                g.drawCircle(tr.pos.add(col),col.rad,true);
+                g.setColor(ColorLibrary.Gold);
+                g.drawCircle(tr.pos.add(col),col.rad,false);
+            });
+        else{
+            collider.colliders.forEach(col ->{
+                final Vec2 radsq = new Vec2(col.rad*2,col.rad*2);
+                g.drawImage(img, tr.pos, radsq);
+            });
+        }
     }
 
     @Override
