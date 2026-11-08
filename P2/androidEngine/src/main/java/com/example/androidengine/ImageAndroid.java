@@ -12,10 +12,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 //To load an image put it inside res/drawable
-public class ImageAndroid implements ImageEng {
+public class ImageAndroid extends ImageEng {
     private Bitmap bm;
     // Id looks like R.drawable.imageName on res/drawable
     public ImageAndroid(Context context, String path){
+        super(path);
         try {
             InputStream input = context.getAssets().open(path);
 

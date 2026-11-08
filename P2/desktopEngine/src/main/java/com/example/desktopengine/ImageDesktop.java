@@ -14,10 +14,11 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
-public class ImageDesktop implements ImageEng {
+public class ImageDesktop extends ImageEng {
     Image img;
 
     public ImageDesktop(String image_path){
+        super(image_path);
         String fullPath = Path.of(
                 Utils.getCurrentPath(),
                 image_path
