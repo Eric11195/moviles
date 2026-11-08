@@ -2,6 +2,8 @@ package com.example.game.testing.EC.Component.shop;
 
 import com.example.engine.GraphicsInterface;
 import com.example.engine.ImageEng;
+import com.example.game.testing.Systems.Shop.ColorManager;
+import com.example.game.testing.Systems.Shop.SkinManager;
 import com.example.utils.Vec2;
 
 import org.json.JSONObject;
@@ -9,10 +11,12 @@ import org.json.JSONObject;
 public class SpriteBuyable extends Buyable {
     String spritePath;
     ImageEng sprite;
-    public SpriteBuyable(int price, GraphicsInterface g, String imagePath){
+    SkinManager.Images imageFor;
+    public SpriteBuyable(int price, GraphicsInterface g, String imagePath, SkinManager.Images imageFor){
         super(BuyableType.skin,price);
         this.spritePath = imagePath;
         sprite = g.createImage(spritePath);
+        this.imageFor = imageFor;
     }
 
     Vec2 pos;
@@ -22,7 +26,8 @@ public class SpriteBuyable extends Buyable {
         return new SpriteBuyable(
             price,
             g,
-            obj.getString("path")
+            obj.getString("path"),
+            SkinManager.Images.valueOf(obj.getString("imageFor"))
         );
     }
 
@@ -30,6 +35,7 @@ public class SpriteBuyable extends Buyable {
     public JSONObject serialize(){
         JSONObject jo = super.serialize();
         jo.put("path",spritePath);
+        jo.put("imageFor", imageFor.toString());
         return jo;
     }
     @Override
@@ -37,5 +43,10 @@ public class SpriteBuyable extends Buyable {
         pos.x = x; pos.y = y;
         size.x = sizeX; size.y = sizeY;
         g.drawImage(sprite, pos, size);
+    }
+
+    @Override
+    public void equip() {
+        SkinManager.getInstance().setImage(imageFor,sprite);
     }
 }

@@ -22,6 +22,18 @@ public class SkinManager implements mcd_Serializable {
             imageList.add(images.get(i));
         }
     }
+    public static void setInstance(SkinManager mngr){
+        _instance = mngr;
+    }
+    static SkinManager _instance = null;
+    public static boolean hasInstance(){
+        return _instance != null;
+    }
+    public static SkinManager getInstance(){
+        if(_instance == null)
+            throw new RuntimeException("Instance was null, you must initialize this first");
+        return _instance;
+    }
 
     @Override
     public JSONObject serialize() {
@@ -44,13 +56,18 @@ public class SkinManager implements mcd_Serializable {
         ArrayList<ImageEng> imgs = new ArrayList<>();
         Images[] enum_img = Images.values();
         for(int i = 0; i < Images.COUNT.ordinal(); ++i){
-            imgs.add(
-                g.createImage(
-                    jo.getString(
-                        enum_img[i].toString()
+            if(!jo.has(enum_img[i].toString()) || jo.isNull(enum_img[i].toString())){
+                imgs.add(null);
+                continue;
+            }else {
+                imgs.add(
+                    g.createImage(
+                        jo.getString(
+                            jo.getString(enum_img[i].toString())
+                        )
                     )
-                )
-            );
+                );
+            }
         }
         return new SkinManager(imgs);
     }
@@ -69,5 +86,9 @@ public class SkinManager implements mcd_Serializable {
     ArrayList<ImageEng> imageList;
     public ImageEng getImage(Images clr){
         return imageList.get(clr.ordinal());
+    }
+    public void setImage(Images type, ImageEng img){
+        ImageEng imgEng = imageList.get(type.ordinal());
+        imgEng = img;
     }
 }

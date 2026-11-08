@@ -57,7 +57,7 @@ public class JSON_HELPER {
         }
     }
 
-    public static JSONObject vec2FromJSON(IFileStorage fileStorage, String file_name){
+    public static JSONObject fromJSON(IFileStorage fileStorage, String file_name){
         try {
             String content = fileStorage.read(file_name+".json");
             return new JSONObject(content);

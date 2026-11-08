@@ -4,6 +4,7 @@ import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
 import com.example.engine.Scene;
 import com.example.game.testing.EC.mcd_Entity;
+import com.example.game.testing.Systems.Shop.ColorManager;
 import com.example.game.testing.Systems.mcd_System;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public abstract class mcd_Scene implements Scene {
     }
     @Override
     public void render(GraphicsInterface g) {
+        g.clear(ColorManager.getInstance().getColor(ColorManager.Colors.BACKGROUND_COLOR));
         for(mcd_Entity ents : entityList){
             ents.render(g);
         }

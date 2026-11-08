@@ -1,6 +1,7 @@
 package com.example.game.testing.EC.Component.shop;
 
 import com.example.engine.GraphicsInterface;
+import com.example.game.testing.Systems.Shop.ColorManager;
 import com.example.game.testing.utils.mcd_Serializable;
 
 import org.json.JSONObject;
@@ -27,6 +28,7 @@ public abstract class Buyable implements mcd_Serializable {
         color,
         font
     }
+    public abstract void equip();
     @Override
     public JSONObject serialize(){
         JSONObject jo = new JSONObject();

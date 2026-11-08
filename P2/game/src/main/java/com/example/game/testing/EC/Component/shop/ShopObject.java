@@ -9,6 +9,7 @@ import com.example.game.testing.Scenes.BuyConfirmationPopUp;
 import com.example.game.testing.Scenes.NotEnoughMoneyPopUp;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.RubySystem;
+import com.example.game.testing.Systems.Shop.ColorManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
 
@@ -69,6 +70,6 @@ public class ShopObject extends ButtonComponent {
         }
     }
     private static void equip(Buyable b){
-        throw new RuntimeException("Unimplemented");
+        b.equip();
     }
 }

@@ -8,6 +8,8 @@ import static com.example.game.testing.constants.Constants.getDefaultLevelGenera
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.Prefabs.TextPrefab;
+import com.example.game.testing.Systems.Shop.ColorManager;
+import com.example.game.testing.Systems.Shop.ManagerManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.FontLibrary;
 import com.example.game.testing.utils.SoundLibrary;
@@ -25,6 +27,10 @@ public class MainMenuScene extends mcd_Scene{
     }
     @Override
     public void start(Engine eng) {
+        if(!ManagerManager.init(eng.getFileStorage(), eng.getGraphics())){
+            throw new RuntimeException("Could not be correctly initialize");
+        }
+
         GraphicsInterface g = eng.getGraphics();
         g.setWindowLogicSize((int)LOGIC_WINDOW_SIZE.x, (int)LOGIC_WINDOW_SIZE.y);
         SoundLibrary.createSounds(this);

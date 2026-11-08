@@ -21,6 +21,18 @@ public class ColorManager implements mcd_Serializable {
             colorList.add(colors.get(i).clone());
         }
     }
+    public static void setInstance(ColorManager mngr){
+        _instance = mngr;
+    }
+    private static ColorManager _instance = null;
+    public static ColorManager getInstance(){
+        if(_instance == null)
+            throw new RuntimeException("_instance must be initialized before this call");
+        return _instance;
+    }
+    public static boolean hasInstance(){
+        return _instance != null;
+    }
 
     @Override
     public JSONObject serialize() {
@@ -42,6 +54,8 @@ public class ColorManager implements mcd_Serializable {
         ArrayList<ColorEng> clrs = new ArrayList<>();
         Colors[] enum_clr = Colors.values();
         for(int i = 0; i < Colors.COUNT.ordinal(); ++i){
+            if(!jo.has(enum_clr[i].toString()))
+                clrs.add(new ColorEng(0xFFFFFFFF));
             clrs.add(colorFromJSON((JSONObject) jo.get(enum_clr[i].toString())));
         }
         return new ColorManager(clrs);
@@ -54,7 +68,14 @@ public class ColorManager implements mcd_Serializable {
         COUNT
     }
     ArrayList<ColorEng> colorList;
-    public ColorEng getColor(ColorManager.Colors clr){
+    public final ColorEng getColor(ColorManager.Colors clr){
         return colorList.get(clr.ordinal());
+    }
+    public void setColor(ColorManager.Colors type, ColorEng clr){
+        ColorEng c = colorList.get(type.ordinal());
+        c.r = clr.r;
+        c.g = clr.g;
+        c.b = clr.b;
+        c.a = clr.a;
     }
 }
