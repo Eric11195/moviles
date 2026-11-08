@@ -4,6 +4,8 @@ import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
 import com.example.engine.ColorEng;
 import com.example.engine.Engine;
+import com.example.engine.GraphicsInterface;
+import com.example.engine.Scene;
 import com.example.game.testing.EC.Component.DrawRectangleComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.Component.UI.ButtonComponent;
@@ -21,9 +23,11 @@ import java.awt.Color;
 //Push this scene. DO NOT SET THIS. This will pop itself after finished
 public class BuyConfirmationScene extends mcd_Scene {
     Buyable elementToBuy;
-    public BuyConfirmationScene(Engine myEngine, Buyable elementToBuy) {
+    Scene previousScene;
+    public BuyConfirmationScene(Engine myEngine, mcd_Scene previousScene, Buyable elementToBuy) {
         super(myEngine);
         this.elementToBuy = elementToBuy;
+        this.previousScene = previousScene;
     }
 
     @Override
@@ -31,19 +35,19 @@ public class BuyConfirmationScene extends mcd_Scene {
         createEntity().addComponent(
             ComponentId.DRAW_RECTANGLE_COMPONENT,
             new DrawRectangleComponent(
-                ColorLibrary.DarkGold,
-                LOGIC_WINDOW_SIZE.x*0.20f,
-                LOGIC_WINDOW_SIZE.y*0.20f,
-                LOGIC_WINDOW_SIZE.x*0.6f,
-                LOGIC_WINDOW_SIZE.y*0.6f
+                ColorLibrary.Yellow,
+                LOGIC_WINDOW_SIZE.x*0.10f,
+                LOGIC_WINDOW_SIZE.y*0.10f,
+                LOGIC_WINDOW_SIZE.x*0.8f,
+                LOGIC_WINDOW_SIZE.y*0.8f
             )
         );
 
         ButtonComponent cancelBut = (ButtonComponent) ButtonPrefab.createButton(
             this,
                 new Vec2(
-                    LOGIC_WINDOW_SIZE.x*0.33f,
-                    LOGIC_WINDOW_SIZE.y*0.6f
+                    LOGIC_WINDOW_SIZE.x*0.25f,
+                    LOGIC_WINDOW_SIZE.y*0.7f
                 ),
                 new Vec2(
                     LOGIC_WINDOW_SIZE.x*0.2f,
@@ -52,13 +56,13 @@ public class BuyConfirmationScene extends mcd_Scene {
                 "CANCEL",
                 eng::popScene
         ).getComponent(ComponentId.BUTTON_COMPONENT);
-        cancelBut.setIdleColor(new ColorEng(0xAA3939FF));
+        cancelBut.setIdleColor(new ColorEng(0xFFAA3939));
 
         ButtonComponent acceptBut = (ButtonComponent) ButtonPrefab.createButton(
                 this,
                 new Vec2(
-                        LOGIC_WINDOW_SIZE.x*0.66f,
-                        LOGIC_WINDOW_SIZE.y*0.6f
+                        LOGIC_WINDOW_SIZE.x*0.55f,
+                        LOGIC_WINDOW_SIZE.y*0.7f
                 ),
                 new Vec2(
                         LOGIC_WINDOW_SIZE.x*0.2f,
@@ -69,16 +73,22 @@ public class BuyConfirmationScene extends mcd_Scene {
                     eng.popScene();
                 }
         ).getComponent(ComponentId.BUTTON_COMPONENT);
-        acceptBut.setIdleColor(new ColorEng(0x2D882DFF));
+        acceptBut.setIdleColor(new ColorEng(0xFF2D882D));
 
         mcd_Entity ent = ShopItemPrefab.createShopItem(this, this.elementToBuy);
         TransformComponent tr = (TransformComponent) ent.getComponent(
             ComponentId.TRANSFORM_COMPONENT
         );
         tr.pos.x = LOGIC_WINDOW_SIZE.x * 0.25f;
-        tr.pos.y = LOGIC_WINDOW_SIZE.y * 0.25f;
-        tr.size.x = LOGIC_WINDOW_SIZE.x * 0.25f;
-        tr.size.y = LOGIC_WINDOW_SIZE.y * 0.25f;
+        tr.pos.y = LOGIC_WINDOW_SIZE.y * 0.15f;
+        tr.size.x = LOGIC_WINDOW_SIZE.x * 0.5f;
+        tr.size.y = LOGIC_WINDOW_SIZE.y * 0.5f;
         addEntity(ent);
+    }
+
+    @Override
+    public void render(GraphicsInterface g){
+        this.previousScene.render(g);
+        super.render(g);
     }
 }

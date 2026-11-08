@@ -15,9 +15,9 @@ import com.example.utils.Vec2;
 
 public class ShopObject extends ButtonComponent {
     Buyable buyable;
-    public ShopObject(Engine eng, Buyable b) {
+    public ShopObject(mcd_Scene scene, Buyable b) {
         super(()->{
-            buy(eng, b);
+            buy(scene, b);
         });
         this.buyable = b;
         this.idleColor = ColorLibrary.LightGrey;
@@ -49,9 +49,9 @@ public class ShopObject extends ButtonComponent {
         );
     }
 
-    private static void buy(Engine eng, Buyable b){
+    private static void buy(mcd_Scene scene, Buyable b){
         if(RubySystem.canPay(b.price)){
-            eng.pushScene(new BuyConfirmationScene(eng, b));
+            scene.getEngine().pushScene(new BuyConfirmationScene(scene.getEngine(),scene, b));
 //            RubySystem.pay(b.price);
             //TODO: registrar item comprado
         }else{

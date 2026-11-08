@@ -10,6 +10,7 @@ public class ColorEng {
         this.b = b;
         this.a = a;
     }
+    //ARGB format
     //This consumes argb format
     public ColorEng(int color){
         this.r = (color >> 16) & 0xff;
@@ -17,6 +18,7 @@ public class ColorEng {
         this.b = color & 0xff;
         this.a = (color >> 24) & 0xff;
     }
+    //ARGB format
     public int getColorAsInt(){
         // Variables a, r, g, b should be integers between 0 and 255
         return (a & 0xff) << 24 | (r & 0xff) << 16 | (g & 0xff) << 8 | (b & 0xff);

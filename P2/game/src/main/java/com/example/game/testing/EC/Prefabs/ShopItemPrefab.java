@@ -23,19 +23,19 @@ public class ShopItemPrefab {
         TransformComponent tr = (TransformComponent) ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
         tr.size.x = (LOGIC_WINDOW_SIZE.x-BACK_BUTTON_SQUARE_SIZE)/COLS_IN_SHOP;
         tr.size.y = (LOGIC_WINDOW_SIZE.y-BACK_BUTTON_SQUARE_SIZE-TAB_HEIGHT)/ROWS_IN_SHOP;
-        ent.addComponent(ComponentId.SHOP_OBJECT_COMPONENT, new ShopObject(scene.getEngine(),new ColorBuyable(price, color.clone())));
+        ent.addComponent(ComponentId.SHOP_OBJECT_COMPONENT, new ShopObject(scene,new ColorBuyable(price, color.clone())));
         return ent;
     }
     public static mcd_Entity createShopItem(mcd_Scene scene, int price, GraphicsInterface g, String path){
         mcd_Entity ent = new mcd_Entity(scene);
         ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
-        ent.addComponent(ComponentId.SHOP_OBJECT_COMPONENT, new ShopObject(scene.getEngine(), new SpriteBuyable(price,g,path)));
+        ent.addComponent(ComponentId.SHOP_OBJECT_COMPONENT, new ShopObject(scene, new SpriteBuyable(price,g,path)));
         return ent;
     }
     public static mcd_Entity createShopItem(mcd_Scene scene, Buyable b){
         mcd_Entity ent = new mcd_Entity(scene);
         ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
-        ent.addComponent(ComponentId.SHOP_OBJECT_COMPONENT, new ShopObject(scene.getEngine(), b));
+        ent.addComponent(ComponentId.SHOP_OBJECT_COMPONENT, new ShopObject(scene, b));
         return ent;
     }
 }
