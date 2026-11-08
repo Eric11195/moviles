@@ -7,6 +7,7 @@ import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.utils.JSON_HELPER.vec2FromJSON;
 
 import com.example.engine.GraphicsInterface;
+import com.example.engine.ImageEng;
 import com.example.game.testing.EC.Component.ColliderComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.ComponentId;
@@ -16,6 +17,7 @@ import com.example.game.testing.Systems.LevelSpeedSystem;
 import com.example.game.testing.Systems.LevelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.CoinSystem;
 import com.example.game.testing.Systems.LevelGenerator.ObstacleFactory;
+import com.example.game.testing.Systems.Shop.SkinManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;
@@ -39,12 +41,12 @@ public class CoinComponent extends Obstacle {
             ent.setComponent(ComponentId.OBSTACLE_COMPONENT, new CoinComponent(ent,t, y));
         }
     }
-    public CoinComponent(mcd_Entity _ent ,float spawnTime, int _value) {
-        super(_ent, spawnTime);
-        myEnt = _ent;
-        value = _value;
-        scrolledTime = calculateScrolledTime(spawnTime);
-    }
+//    public CoinComponent(mcd_Entity _ent ,float spawnTime, int _value) {
+//        super(_ent, spawnTime);
+//        myEnt = _ent;
+//        value = _value;
+//        scrolledTime = calculateScrolledTime(spawnTime);
+//    }
 
     public CoinComponent(mcd_Entity _ent, float spawnTime, float y) {
         super(_ent, spawnTime);
@@ -59,7 +61,9 @@ public class CoinComponent extends Obstacle {
         ColliderComponent collider = (ColliderComponent) _ent.getComponent(ComponentId.COLLIDER_COMPONENT);
         collider.clearColliders();
         collider.addSingleCollider(new Vec2(0,0),COIN_COLLIDER_RADIUS);
+        img = SkinManager.getInstance().getImage(SkinManager.Images.COINS);
     }
+    ImageEng img=null;
 
     @Override
     public float calculateScrolledTime(float spawnTime) {
@@ -85,13 +89,17 @@ public class CoinComponent extends Obstacle {
 
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g) {
-        super.render(ent, g);
-        g.setStrokeWidth(2);
-        g.setColor(ColorLibrary.Gold);
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
-        g.drawCircle(tr.pos,tr.size.x,true);
-        g.setColor(ColorLibrary.DarkGold);
-        g.drawCircle(tr.pos,tr.size.x,false);
+        if(img==null) {
+            g.setStrokeWidth(2);
+            g.setColor(ColorLibrary.Gold);
+            g.drawCircle(tr.pos, tr.size.x, true);
+            g.setColor(ColorLibrary.DarkGold);
+            g.drawCircle(tr.pos, tr.size.x, false);
+        }else{
+            final Vec2 o = tr.size.mul(2);
+            g.drawImage(img, tr.pos.add(tr.size.mul(-1)), o);
+        }
     }
 //    @Override
 //    public void update(mcd_Entity ent, float t, float dt){
