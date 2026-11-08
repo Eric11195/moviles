@@ -17,13 +17,16 @@ public class ButtonComponent implements mcd_Component {
     public interface ButtonClickFunction{
         void onClick();
     }
+    public void setIdleColor(ColorEng clr){
+        idleColor = clr.clone();
+    }
     public void onClick(){}
     ButtonClickFunction func;
     boolean hovering = false;
     boolean clicked = false;
-    protected ColorEng idleColor = ColorLibrary.Red;
-    protected ColorEng hoverColor = ColorLibrary.Green;
-    protected ColorEng clickedColor = ColorLibrary.Blue;
+    protected ColorEng idleColor = ColorLibrary.Red.clone();
+    protected ColorEng hoverColor = ColorLibrary.Green.clone();
+    protected ColorEng clickedColor = ColorLibrary.Blue.clone();
     public ButtonComponent(ButtonClickFunction onClickFunc){
         func = onClickFunc;
     }

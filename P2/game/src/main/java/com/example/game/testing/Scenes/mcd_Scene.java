@@ -63,6 +63,10 @@ public abstract class mcd_Scene implements Scene {
         entityList.add(new mcd_Entity(this));
         return entityList.get(entityList.size()-1);
     }
+    public mcd_Entity addEntity(mcd_Entity ent){
+        entityList.add(ent);
+        return ent;
+    }
     public void addSystem(mcd_System sys) {
         systemList.add(sys);
     }

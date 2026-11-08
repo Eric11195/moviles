@@ -1,20 +1,23 @@
 package com.example.game.testing.EC.Component.shop;
 
 import com.example.engine.ColorEng;
+import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.Component.UI.ButtonComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
+import com.example.game.testing.Scenes.BuyConfirmationScene;
+import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.RubySystem;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
 
 public class ShopObject extends ButtonComponent {
     Buyable buyable;
-    public ShopObject(Buyable b) {
+    public ShopObject(Engine eng, Buyable b) {
         super(()->{
-            buy(b);
+            buy(eng, b);
         });
         this.buyable = b;
         this.idleColor = ColorLibrary.LightGrey;
@@ -46,9 +49,10 @@ public class ShopObject extends ButtonComponent {
         );
     }
 
-    private static void buy(Buyable b){
+    private static void buy(Engine eng, Buyable b){
         if(RubySystem.canPay(b.price)){
-            RubySystem.pay(b.price);
+            eng.pushScene(new BuyConfirmationScene(eng, b));
+//            RubySystem.pay(b.price);
             //TODO: registrar item comprado
         }else{
             //Todo: mostrar mensaje de dinero insuficiente

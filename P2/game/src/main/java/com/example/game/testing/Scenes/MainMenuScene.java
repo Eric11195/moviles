@@ -74,13 +74,13 @@ public class MainMenuScene extends mcd_Scene{
             }
         );
         createButton(
-                this,
-                ButtonCentralPos[2],
-                DEFAULT_BUTTON_SIZE,
-                "TIENDA",
-                () ->{
-                    eng.setScene(new ShopScene(eng));
-                }
+            this,
+            ButtonCentralPos[2],
+            DEFAULT_BUTTON_SIZE,
+            "TIENDA",
+            () ->{
+                eng.setScene(new ShopScene(eng));
+            }
         );
         //SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG).setStreamId(eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG)));
         //eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.WIN));
