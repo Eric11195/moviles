@@ -42,10 +42,19 @@ public class ShopObject extends ButtonComponent {
         );
         g.setColor(ColorLibrary.Black);
         g.drawRoundRectangle(tr.pos, tr.size, 12.0f, false);
-        g.drawText(Integer.toString(
-                        this.buyable.price),
+        String text ="";
+        if(this.buyable.price == -1){
+            text = selected() ? "Equipped":"Bought";
+        }else{
+            text = Integer.toString(this.buyable.price);
+        }
+        g.drawText(
+                text,
                 new Vec2(tr.pos.x+tr.size.x*0.5f, tr.pos.y+tr.size.y*0.9f)
         );
+    }
+    boolean selected(){
+        return false;
     }
 
     private static void buy(mcd_Scene scene, Buyable b){
