@@ -14,6 +14,7 @@ import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.Prefabs.ButtonPrefab;
 import com.example.game.testing.EC.Prefabs.ShopItemPrefab;
 import com.example.game.testing.EC.mcd_Entity;
+import com.example.game.testing.Systems.RubySystem;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
 
@@ -68,6 +69,8 @@ public class BuyConfirmationPopUp extends mcd_Scene {
                 "CONFIRM",
                 ()->{
                     eng.popScene();
+                    RubySystem.pay(elementToBuy.price);
+                    elementToBuy.price = -1;
                 }
         ).getComponent(ComponentId.BUTTON_COMPONENT);
         acceptBut.setIdleColor(new ColorEng(0xFF2D882D));
