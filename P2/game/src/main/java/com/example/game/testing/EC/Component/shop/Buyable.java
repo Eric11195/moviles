@@ -1,20 +1,23 @@
 package com.example.game.testing.EC.Component.shop;
 
 import com.example.engine.GraphicsInterface;
+import com.example.game.testing.Scenes.ShopScene;
 import com.example.game.testing.Systems.Shop.ColorManager;
 import com.example.game.testing.utils.mcd_Serializable;
 
 import org.json.JSONObject;
 
 public abstract class Buyable implements mcd_Serializable {
-    String fileName;
-    BuyableType type;
+    public final String fileName;
+    public final ShopScene.tabs tab;
+    public final BuyableType type;
     /**
      * If price == -1. Then this item has already been bought
      */
     public int price;
-    public Buyable(String fileName, BuyableType type, int price){
+    public Buyable(String fileName, ShopScene.tabs tab, BuyableType type, int price){
         this.fileName = fileName;
+        this.tab = tab;
         this.type = type;
         this.price = price;
     }
@@ -38,13 +41,13 @@ public abstract class Buyable implements mcd_Serializable {
         jo.put("type", this.type.toString());
         return jo;
     }
-    public static Buyable deserialize(String fileName, GraphicsInterface g, JSONObject obj){
+    public static Buyable deserialize(String fileName, ShopScene.tabs t, GraphicsInterface g, JSONObject obj){
         int price = obj.getInt("price");
         switch(BuyableType.valueOf(obj.getString("type"))){
             case skin:
-                return SpriteBuyable.deserializeSkin(fileName,price,g,obj);
+                return SpriteBuyable.deserializeSkin(fileName,t,price,g,obj);
             case color:
-                return ColorBuyable.deserializeColor(fileName,price,obj);
+                return ColorBuyable.deserializeColor(fileName,t,price,obj);
             case font:
                 throw new RuntimeException("Unimplemented yet");
             default:

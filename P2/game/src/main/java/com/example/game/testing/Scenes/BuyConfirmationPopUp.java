@@ -16,7 +16,10 @@ import com.example.game.testing.EC.Prefabs.ShopItemPrefab;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.RubySystem;
 import com.example.game.testing.utils.ColorLibrary;
+import com.example.game.testing.utils.JSON_HELPER;
 import com.example.utils.Vec2;
+
+import java.io.IOException;
 
 //Push this scene. DO NOT SET THIS. This will pop itself after finished
 public class BuyConfirmationPopUp extends mcd_Scene {
@@ -71,6 +74,12 @@ public class BuyConfirmationPopUp extends mcd_Scene {
                     eng.popScene();
                     RubySystem.pay(elementToBuy.price);
                     elementToBuy.price = -1;
+                    eng.getFileStorage().setRelativePath("unlockables/"+elementToBuy.tab.toString());
+                    try {
+                        eng.getFileStorage().write(elementToBuy.fileName, JSON_HELPER.toJSON(elementToBuy).toString());
+                    }catch(IOException io){
+                        throw new RuntimeException("Error while writing back file");
+                    }
                 }
         ).getComponent(ComponentId.BUTTON_COMPONENT);
         acceptBut.setIdleColor(new ColorEng(0xFF2D882D));

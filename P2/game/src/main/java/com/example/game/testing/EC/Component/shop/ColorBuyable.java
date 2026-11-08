@@ -5,6 +5,7 @@ import static com.example.game.testing.utils.JSON_HELPER.toJSON;
 import com.example.engine.ColorEng;
 import com.example.engine.GraphicsInterface;
 import com.example.engine.ImageEng;
+import com.example.game.testing.Scenes.ShopScene;
 import com.example.game.testing.Systems.Shop.ColorManager;
 import com.example.game.testing.utils.JSON_HELPER;
 import com.example.utils.Vec2;
@@ -14,8 +15,8 @@ import org.json.JSONObject;
 public class ColorBuyable extends Buyable {
     ColorEng color;
     ColorManager.Colors colorFor;
-    public ColorBuyable(String fileName,int price, ColorManager.Colors colorFor, ColorEng color){
-        super(fileName,BuyableType.color, price);
+    public ColorBuyable(String fileName, ShopScene.tabs t, int price, ColorManager.Colors colorFor, ColorEng color){
+        super(fileName, t, BuyableType.color, price);
         this.color = color;
         this.colorFor = colorFor;
     }
@@ -34,9 +35,10 @@ public class ColorBuyable extends Buyable {
         ColorManager.getInstance().setColor(colorFor, color);
     }
 
-    public static ColorBuyable deserializeColor(String fileName, int price, JSONObject obj){
+    public static ColorBuyable deserializeColor(String fileName, ShopScene.tabs t, int price, JSONObject obj){
         return new ColorBuyable(
             fileName,
+            t,
             price,
             ColorManager.Colors.valueOf(obj.getString("colorFor")),
             JSON_HELPER.colorFromJSON(obj)

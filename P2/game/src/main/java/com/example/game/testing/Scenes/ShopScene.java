@@ -54,6 +54,7 @@ public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
             // Open folder
             // Count number of elements
             List<mcd_Entity> entOfThisTab = new ArrayList<>();
+            int finalI = i;
             fs.forEachFileOnDirectory((fileName)->{
                 JSONObject jo =
                     JSON_HELPER.fromJSON(
@@ -66,6 +67,7 @@ public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
                         this,
                         Buyable.deserialize(
                             fileName,
+                            tabs.values()[finalI],
                             eng.getGraphics(),
                             jo
                         )
@@ -94,7 +96,7 @@ public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
         activeScrollable.setActive(true);
     }
 
-    enum tabs{
+    public static enum tabs{
         PowerUps,
         Skins,
         Colors,

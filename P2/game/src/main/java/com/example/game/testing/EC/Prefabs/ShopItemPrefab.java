@@ -15,25 +15,26 @@ import com.example.game.testing.EC.Component.shop.ShopObject;
 import com.example.game.testing.EC.Component.shop.SpriteBuyable;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
+import com.example.game.testing.Scenes.ShopScene;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.Shop.ColorManager;
 import com.example.game.testing.Systems.Shop.SkinManager;
 
 public class ShopItemPrefab {
-    public static mcd_Entity createShopItem(mcd_Scene scene,String fileName, int price, ColorEng color){
+    public static mcd_Entity createShopItem(mcd_Scene scene, String fileName, ShopScene.tabs t, int price, ColorEng color){
         mcd_Entity ent = new mcd_Entity(scene);
         TransformComponent tr = (TransformComponent) ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
         tr.size.x = (LOGIC_WINDOW_SIZE.x-BACK_BUTTON_SQUARE_SIZE)/COLS_IN_SHOP;
         tr.size.y = (LOGIC_WINDOW_SIZE.y-BACK_BUTTON_SQUARE_SIZE-TAB_HEIGHT)/ROWS_IN_SHOP;
-        ent.addComponent(ComponentId.SHOP_OBJECT_COMPONENT, new ShopObject(scene,new ColorBuyable(fileName,price, ColorManager.Colors.BACKGROUND_COLOR,color.clone())));
+        ent.addComponent(ComponentId.SHOP_OBJECT_COMPONENT, new ShopObject(scene,new ColorBuyable(fileName,t,price, ColorManager.Colors.BACKGROUND_COLOR,color.clone())));
         return ent;
     }
-    public static mcd_Entity createShopItem(mcd_Scene scene, String fileName, int price, GraphicsInterface g, String path, SkinManager.Images imgFor){
+    public static mcd_Entity createShopItem(mcd_Scene scene, String fileName, ShopScene.tabs t, int price, GraphicsInterface g, String path, SkinManager.Images imgFor){
         mcd_Entity ent = new mcd_Entity(scene);
         TransformComponent tr = (TransformComponent) ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
         tr.size.x = (LOGIC_WINDOW_SIZE.x-BACK_BUTTON_SQUARE_SIZE)/COLS_IN_SHOP;
         tr.size.y = (LOGIC_WINDOW_SIZE.y-BACK_BUTTON_SQUARE_SIZE-TAB_HEIGHT)/ROWS_IN_SHOP;
-        ent.addComponent(ComponentId.SHOP_OBJECT_COMPONENT, new ShopObject(scene, new SpriteBuyable(fileName,price,g,path, imgFor)));
+        ent.addComponent(ComponentId.SHOP_OBJECT_COMPONENT, new ShopObject(scene, new SpriteBuyable(fileName,t,price,g,path, imgFor)));
         return ent;
     }
     public static mcd_Entity createShopItem(mcd_Scene scene, Buyable b){
