@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.stream.Stream;
 
 public class FileStorageDesktop implements IFileStorage {
     private final Path rootPath =
@@ -61,5 +62,17 @@ public class FileStorageDesktop implements IFileStorage {
         }
 
         return Files.readString(filePath, StandardCharsets.UTF_8);
+    }
+
+    @Override
+    public boolean forEachFileOnDirectory(ForEachFileOnDirectoryFunc f) {
+        try (Stream<Path> entries = Files.list(basePath)) {
+            for (Path entry : (Iterable<Path>) entries::iterator) {
+                f.func(entry.getFileName().toString());
+            }
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
     }
 }

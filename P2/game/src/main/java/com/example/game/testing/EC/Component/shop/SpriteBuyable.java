@@ -8,6 +8,8 @@ import com.example.utils.Vec2;
 
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 public class SpriteBuyable extends Buyable {
     String spritePath;
     ImageEng sprite;
@@ -15,18 +17,20 @@ public class SpriteBuyable extends Buyable {
     public SpriteBuyable(int price, GraphicsInterface g, String imagePath, SkinManager.Images imageFor){
         super(BuyableType.skin,price);
         this.spritePath = imagePath;
-        sprite = g.createImage(spritePath);
+        if(this.spritePath!=null)
+            sprite = g.createImage(spritePath);
+        else sprite = null;
         this.imageFor = imageFor;
     }
 
-    Vec2 pos;
-    Vec2 size;
+    Vec2 pos=new Vec2();
+    Vec2 size=new Vec2();
 
     public static Buyable deserializeSkin(int price, GraphicsInterface g, JSONObject obj) {
         return new SpriteBuyable(
             price,
             g,
-            obj.getString("path"),
+            obj.isNull("path")?null: obj.getString("path"),
             SkinManager.Images.valueOf(obj.getString("imageFor"))
         );
     }
@@ -42,6 +46,10 @@ public class SpriteBuyable extends Buyable {
     public void render(GraphicsInterface g, float x, float y, float sizeX, float sizeY) {
         pos.x = x; pos.y = y;
         size.x = sizeX; size.y = sizeY;
+        if(sprite == null){
+            g.drawText("COLOR",pos,size);
+            return;
+        }
         g.drawImage(sprite, pos, size);
     }
 

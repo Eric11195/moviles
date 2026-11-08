@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 public class FileStorageAndroid implements IFileStorage {
 
@@ -67,6 +68,23 @@ public class FileStorageAndroid implements IFileStorage {
             Log.e(TAG, "[READ FAILED] Asset not found inside APK at path: assets/" + path, e);
             throw e;
         }
+    }
+
+    /**
+     * @param f the func to be applied
+     * @return false on error (non valid directoy)
+     */
+    @Override
+    public boolean forEachFileOnDirectory(ForEachFileOnDirectoryFunc f) {
+        try {
+            String path = resolveAssetPath("");
+            for(String fileName : Objects.requireNonNull(context.getAssets().list(path))){
+                f.func(fileName);
+            }
+        }catch(IOException ex){
+            return false;
+        }
+        return true;
     }
 
     private String readFromStream(InputStream input) throws IOException {

@@ -57,13 +57,19 @@ public class JSON_HELPER {
         }
     }
 
-    public static JSONObject fromJSON(IFileStorage fileStorage, String file_name){
+    public static JSONObject fromJSON(IFileStorage fileStorage, String file_name) {
         try {
-            String content = fileStorage.read(file_name+".json");
+            if (!file_name.endsWith(".json")) {
+                file_name += ".json";
+            }
+
+            String content = fileStorage.read(file_name);
             return new JSONObject(content);
-        }catch(java.io.IOException e){
+
+        } catch (java.io.IOException e) {
             e.printStackTrace();
         }
+
         return null;
     }
     public static Vec2 vec2FromJSON(JSONObject v){

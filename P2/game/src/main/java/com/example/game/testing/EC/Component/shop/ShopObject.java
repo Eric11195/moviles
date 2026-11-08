@@ -54,8 +54,8 @@ public class ShopObject extends ButtonComponent {
             text = Integer.toString(this.buyable.price);
         }
         g.drawText(
-                text,
-                new Vec2(tr.pos.x+tr.size.x*0.5f, tr.pos.y+tr.size.y*0.9f)
+            text,
+            new Vec2(tr.pos.x+tr.size.x*0.5f, tr.pos.y+tr.size.y*0.9f)
         );
     }
     boolean selected(){

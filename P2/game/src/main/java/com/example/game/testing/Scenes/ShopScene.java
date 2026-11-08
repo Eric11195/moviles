@@ -8,13 +8,16 @@ import static com.example.game.testing.constants.Constants.TAB_HEIGHT;
 
 import com.example.engine.ColorEng;
 import com.example.engine.Engine;
+import com.example.engine.IFileStorage;
 import com.example.game.testing.EC.Component.UI.TabComponent;
+import com.example.game.testing.EC.Component.shop.Buyable;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.Prefabs.BackButtonPrefab;
 import com.example.game.testing.EC.Prefabs.ShopItemPrefab;
 import com.example.game.testing.EC.Prefabs.ShopTab;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.menu.Scrollable;
+import com.example.game.testing.utils.JSON_HELPER;
 import com.example.utils.Vec2;
 
 import java.util.ArrayList;
@@ -40,30 +43,23 @@ public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
         scrollableList = new ArrayList<>();
         tabComponentList = new ArrayList<>();
         //TODO: create an object that displays rubies
+        IFileStorage fs = eng.getFileStorage();
         //Creates all objects for all tabs
         for(int i = 0; i < tabs.count.ordinal(); ++i){
+            fs.setRelativePath("unlockables/"+tabs.values()[i].toString()+"/");
             //TODO: create a button for each tab
             tabComponentList.add((TabComponent) ShopTab.createShopTab(this, this, tabs.values()[i].toString(),i, tabs.count.ordinal()).getComponent(ComponentId.BUTTON_COMPONENT));
             // Open folder
             // Count number of elements
-            int numberOfElementsInTab = 7;
             List<mcd_Entity> entOfThisTab = new ArrayList<>();
-            for(int j = 0; j < numberOfElementsInTab; ++j){
-                //Todo: create a shopObject
-                int color = 255/(1+j);
+            fs.forEachFileOnDirectory((fileName)->{
                 entOfThisTab.add(
                     ShopItemPrefab.createShopItem(
                         this,
-                        j+(i*numberOfElementsInTab),
-                        new ColorEng(
-                            color,color,color,255
-                        )
+                        Buyable.deserialize(eng.getGraphics(), JSON_HELPER.fromJSON(fs,fileName))
                     )
                 );
-                //add to the entity list
-                // DO NOT ADD TO THIS SCENE OBJECT LIST
-                //transformsOfThisTab.add();
-            }
+            });
             scrollableList.add(new Scrollable(pos,size, ROWS_IN_SHOP, COLS_IN_SHOP, entOfThisTab));
         }
         openTab(tabs.PowerUps.ordinal());
