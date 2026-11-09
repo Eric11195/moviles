@@ -60,7 +60,7 @@ public class ShopObject extends ButtonComponent {
         );
     }
     boolean selected(){
-        return false;
+        return buyable.selected();
     }
 
     private static void buy(mcd_Scene scene, Buyable b){

@@ -55,4 +55,9 @@ public class ColorBuyable extends Buyable {
         jo.put("colorFor",colorFor.toString());
         return jo;
     }
+
+    @Override
+    public boolean selected() {
+        return ColorManager.getInstance().getColor(colorFor).getColorAsInt() == color.getColorAsInt();
+    }
 }

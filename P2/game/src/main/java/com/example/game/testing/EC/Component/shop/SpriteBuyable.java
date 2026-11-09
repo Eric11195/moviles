@@ -13,14 +13,12 @@ import org.json.JSONObject;
 import java.util.Objects;
 
 public class SpriteBuyable extends Buyable {
-    String spritePath;
     ImageEng sprite;
     SkinManager.Images imageFor;
     public SpriteBuyable(String fileName, String tabName, int price, GraphicsInterface g, String imagePath, SkinManager.Images imageFor){
         super(fileName,tabName,BuyableType.skin,price);
-        this.spritePath = imagePath;
-        if(this.spritePath!=null)
-            sprite = g.createImage(spritePath);
+        if(imagePath!=null)
+            sprite = g.createImage(imagePath);
         else sprite = null;
         this.imageFor = imageFor;
     }
@@ -42,10 +40,16 @@ public class SpriteBuyable extends Buyable {
     @Override
     public JSONObject serialize(){
         JSONObject jo = super.serialize();
-        jo.put("path",spritePath);
+        jo.put("path",sprite.path);
         jo.put("imageFor", imageFor.toString());
         return jo;
     }
+
+    @Override
+    public boolean selected() {
+        return Objects.equals(SkinManager.getInstance().getImage(imageFor).path, sprite.path);
+    }
+
     @Override
     public void render(GraphicsInterface g, float x, float y, float sizeX, float sizeY) {
         pos.x = x; pos.y = y;

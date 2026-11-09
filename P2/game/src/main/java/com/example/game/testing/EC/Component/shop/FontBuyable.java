@@ -47,6 +47,14 @@ public class FontBuyable extends Buyable {
         jo.put("fontFor", fontFor.toString());
         return jo;
     }
+
+    @Override
+    public boolean selected() {
+        FontEng f = FontManager.getInstance().getFont(fontFor);
+        return Objects.equals(f.fileName, font.fileName) &&
+                f.fontSize == font.fontSize;
+    }
+
     @Override
     public void render(GraphicsInterface g, float x, float y, float sizeX, float sizeY) {
         pos.x = x; pos.y = y;

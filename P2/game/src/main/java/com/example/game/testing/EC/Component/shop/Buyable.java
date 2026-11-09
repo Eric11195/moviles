@@ -55,5 +55,6 @@ public abstract class Buyable implements mcd_Serializable {
                 throw new RuntimeException("Invalid type");
         }
     }
+    public abstract boolean selected();
 
 }
