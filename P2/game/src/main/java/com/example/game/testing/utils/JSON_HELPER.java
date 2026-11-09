@@ -92,9 +92,9 @@ public class JSON_HELPER {
     }
     public static FontEng fontFromJSON(GraphicsInterface g, JSONObject f){
         if(f.isNull("fontName")){
-            return g.createFont(null, f.getInt("fontName"));
+            return g.createFont(null, f.getInt("fontSize"));
         }else{
-            return g.createFont(f.getString("fontName"), f.getInt("fontName"));
+            return g.createFont(f.getString("fontName"), f.getInt("fontSize"));
         }
     }
 }

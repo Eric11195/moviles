@@ -5,6 +5,8 @@ import static com.example.game.testing.utils.JSON_HELPER.toJSON;
 
 import com.example.engine.ColorEng;
 import com.example.engine.FontEng;
+import com.example.engine.GraphicsInterface;
+import com.example.game.testing.utils.JSON_HELPER;
 import com.example.game.testing.utils.mcd_Serializable;
 
 import org.json.JSONObject;
@@ -50,23 +52,23 @@ public class FontManager implements mcd_Serializable {
         });
         return jo;
     }
-    public static ColorManager deserialize(JSONObject jo){
-        ArrayList<ColorEng> clrs = new ArrayList<>();
+    public static FontManager deserialize(GraphicsInterface g, JSONObject jo){
+        ArrayList<FontEng> clrs = new ArrayList<>();
         Fonts[] enum_clr = Fonts.values();
         for(int i = 0; i < Fonts.COUNT.ordinal(); ++i){
-            if(!jo.has(enum_clr[i].toString()))
-                clrs.add(new ColorEng(0xFFFFFFFF));
-            clrs.add(colorFromJSON((JSONObject) jo.get(enum_clr[i].toString())));
+            clrs.add(JSON_HELPER.fontFromJSON(g,jo.getJSONObject(enum_clr[i].toString())));
         }
-        return new ColorManager(clrs);
+        return new FontManager(clrs);
     }
 
     public static enum Fonts{
-        MAIN_FONT,
+        BUTTON_FONT,
+        COIN_N_DISTANCE_COUNT,
+        TITLE_FONT,
         COUNT
     }
     ArrayList<FontEng> fontList;
-    public final FontEng getFont(ColorManager.Colors clr){
+    public final FontEng getFont(FontManager.Fonts clr){
         return fontList.get(clr.ordinal());
     }
     public void setFont(FontManager.Fonts type, FontEng clr){

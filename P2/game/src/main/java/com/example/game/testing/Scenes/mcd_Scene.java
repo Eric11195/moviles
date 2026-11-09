@@ -36,9 +36,7 @@ public abstract class mcd_Scene implements Scene {
             }
         }
     }
-    @Override
-    public void render(GraphicsInterface g) {
-        g.clear(ColorManager.getInstance().getColor(ColorManager.Colors.BACKGROUND_COLOR));
+    protected void innerRender(GraphicsInterface g){
         for(mcd_Entity ents : entityList){
             ents.render(g);
         }
@@ -47,8 +45,12 @@ public abstract class mcd_Scene implements Scene {
         }
     }
     @Override
+    public void render(GraphicsInterface g) {
+        g.clear(ColorManager.getInstance().getColor(ColorManager.Colors.BACKGROUND_COLOR));
+        innerRender(g);
+    }
+    @Override
     public void cleanup(Engine eng){
-
         entityList.clear();
         systemList.clear();
     }

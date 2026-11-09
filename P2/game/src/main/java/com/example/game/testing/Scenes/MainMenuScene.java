@@ -9,9 +9,9 @@ import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.Prefabs.TextPrefab;
 import com.example.game.testing.Systems.Shop.ColorManager;
+import com.example.game.testing.Systems.Shop.FontManager;
 import com.example.game.testing.Systems.Shop.ManagerManager;
 import com.example.game.testing.utils.ColorLibrary;
-import com.example.game.testing.utils.FontLibrary;
 import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;
 
@@ -35,10 +35,10 @@ public class MainMenuScene extends mcd_Scene{
         g.setWindowLogicSize((int)LOGIC_WINDOW_SIZE.x, (int)LOGIC_WINDOW_SIZE.y);
         SoundLibrary.createSounds(this);
 
-        FontLibrary.createFont(g, FontLibrary.FontName.STANDARD,16, "FascinateInline-Regular.ttf");
-        FontLibrary.createFont(g, FontLibrary.FontName.HEADER,72, "FascinateInline-Regular.ttf");
-        FontLibrary.createFont(g, FontLibrary.FontName.SUBHEADER,32, "FascinateInline-Regular.ttf");
-        g.setFont(FontLibrary.getFont(FontLibrary.FontName.SUBHEADER));
+//        FontLibrary.createFont(g, FontLibrary.FontName.STANDARD,16, "FascinateInline-Regular.ttf");
+//        FontLibrary.createFont(g, FontLibrary.FontName.HEADER,72, "FascinateInline-Regular.ttf");
+//        FontLibrary.createFont(g, FontLibrary.FontName.SUBHEADER,32, "FascinateInline-Regular.ttf");
+        g.setFont(FontManager.getInstance().getFont(FontManager.Fonts.TITLE_FONT));
 
         float screen_width_third = LOGIC_WINDOW_SIZE.x/3.0f;
         float screen_width_sixth = LOGIC_WINDOW_SIZE.x/6.0f;

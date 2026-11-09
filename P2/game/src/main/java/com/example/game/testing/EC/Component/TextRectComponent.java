@@ -5,6 +5,7 @@ import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
+import com.example.game.testing.Systems.Shop.FontManager;
 
 public class TextRectComponent implements mcd_Component {
     String text;
@@ -20,6 +21,7 @@ public class TextRectComponent implements mcd_Component {
     public void render(mcd_Entity ent, GraphicsInterface g) {
         TransformComponent tr = (TransformComponent)ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
         g.setColor(textColor);
+        g.setFont(FontManager.getInstance().getFont(FontManager.Fonts.BUTTON_FONT));
         g.drawText(text,tr.pos,tr.size);
     }
     public void setText(String s){

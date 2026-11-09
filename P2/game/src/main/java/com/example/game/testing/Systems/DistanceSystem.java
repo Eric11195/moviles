@@ -2,8 +2,8 @@ package com.example.game.testing.Systems;
 
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.Scenes.mcd_Scene;
+import com.example.game.testing.Systems.Shop.FontManager;
 import com.example.game.testing.utils.ColorLibrary;
-import com.example.game.testing.utils.FontLibrary;
 import com.example.utils.Vec2;
 
 public class DistanceSystem implements mcd_System{
@@ -42,7 +42,7 @@ public class DistanceSystem implements mcd_System{
         //render bar to goal
         String text = String.valueOf((int)totalValue/100);
         g.setColor(ColorLibrary.Red);
-        g.setFont(FontLibrary.getFont(FontLibrary.FontName.HEADER));
+        g.setFont(FontManager.getInstance().getFont(FontManager.Fonts.COIN_N_DISTANCE_COUNT));
         g.drawText(text, pos, size);
     }
 }

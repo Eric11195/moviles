@@ -1,12 +1,7 @@
 package com.example.game.testing.Systems;
 
-import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
-
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.Scenes.mcd_Scene;
-import com.example.game.testing.utils.ColorLibrary;
-import com.example.game.testing.utils.FontLibrary;
-import com.example.utils.Vec2;
 
 public class LevelSpeedSystem implements mcd_System{
     static LevelSpeedSystem instance = null;

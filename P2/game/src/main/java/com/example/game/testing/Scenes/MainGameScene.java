@@ -143,7 +143,6 @@ public class MainGameScene extends mcd_Scene{
         addSystem(levelGen);
 
         addRetosSystems(eng);
-        SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYING).setStreamId(eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYING)));
     }
     @Override
     public void resume(Engine eng){

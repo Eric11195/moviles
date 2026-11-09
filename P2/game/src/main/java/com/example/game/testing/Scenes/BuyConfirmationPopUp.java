@@ -98,6 +98,6 @@ public class BuyConfirmationPopUp extends mcd_Scene {
     @Override
     public void render(GraphicsInterface g){
         this.previousScene.render(g);
-        super.render(g);
+        innerRender(g);
     }
 }

@@ -34,7 +34,7 @@ public class PauseMenu extends mcd_Scene{
     @Override
     public void render(GraphicsInterface g){
         subScene.render(g);
-        super.render(g);
+        innerRender(g);
     }
 
 }

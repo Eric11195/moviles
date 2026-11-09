@@ -22,6 +22,10 @@ public class ManagerManager implements mcd_Serializable {
         if(joSkins==null)return false;
         SkinManager.setInstance(SkinManager.deserialize(g,joSkins));
 
+        JSONObject joFonts = JSON_HELPER.fromJSON(fileStorage, "fonts");
+        if(joFonts==null)return false;
+        FontManager.setInstance(FontManager.deserialize(g,joFonts));
+
         return initialized = true;
     }
     public static boolean isInitialized(){
