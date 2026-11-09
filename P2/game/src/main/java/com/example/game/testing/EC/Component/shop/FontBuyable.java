@@ -56,6 +56,6 @@ public class FontBuyable extends Buyable {
 
     @Override
     public void equip(IFileStorage fs) {
-        FontManager.getInstance().setFont(fontFor,font);
+        FontManager.getInstance().setFont(fs,fontFor,font);
     }
 }

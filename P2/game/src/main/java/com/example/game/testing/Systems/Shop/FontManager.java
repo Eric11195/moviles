@@ -6,6 +6,7 @@ import static com.example.game.testing.utils.JSON_HELPER.toJSON;
 import com.example.engine.ColorEng;
 import com.example.engine.FontEng;
 import com.example.engine.GraphicsInterface;
+import com.example.engine.IFileStorage;
 import com.example.game.testing.utils.JSON_HELPER;
 import com.example.game.testing.utils.mcd_Serializable;
 
@@ -71,8 +72,10 @@ public class FontManager implements mcd_Serializable {
     public final FontEng getFont(FontManager.Fonts clr){
         return fontList.get(clr.ordinal());
     }
-    public void setFont(FontManager.Fonts type, FontEng clr){
+    public void setFont(IFileStorage fs, FontManager.Fonts type, FontEng clr){
         FontEng c = fontList.get(type.ordinal());
         c = clr;
+        fs.setRelativePath("presets");
+        JSON_HELPER.toJSON(fs,"fonts",this.serialize());
     }
 }
