@@ -4,6 +4,8 @@ import static com.example.game.testing.utils.JSON_HELPER.colorFromJSON;
 import static com.example.game.testing.utils.JSON_HELPER.toJSON;
 
 import com.example.engine.ColorEng;
+import com.example.engine.IFileStorage;
+import com.example.game.testing.utils.JSON_HELPER;
 import com.example.game.testing.utils.mcd_Serializable;
 
 import org.json.JSONObject;
@@ -75,11 +77,16 @@ public class ColorManager implements mcd_Serializable {
     public final ColorEng getColor(ColorManager.Colors clr){
         return colorList.get(clr.ordinal());
     }
-    public void setColor(ColorManager.Colors type, ColorEng clr){
+    public void setColor(ColorManager.Colors type, ColorEng clr, IFileStorage fs){
         ColorEng c = colorList.get(type.ordinal());
         c.r = clr.r;
         c.g = clr.g;
         c.b = clr.b;
         c.a = clr.a;
+        storeChangesToFile(fs);
+    }
+    private void storeChangesToFile(IFileStorage fs){
+        fs.setRelativePath("presets");
+        JSON_HELPER.toJSON(fs, "colors",this.serialize());
     }
 }

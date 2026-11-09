@@ -1,6 +1,7 @@
 package com.example.game.testing.EC.Component.shop;
 
 import com.example.engine.GraphicsInterface;
+import com.example.engine.IFileStorage;
 import com.example.game.testing.EC.Component.UI.ButtonComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.ComponentId;
@@ -18,7 +19,7 @@ public class ShopObject extends ButtonComponent {
     public ShopObject(mcd_Scene scene, Buyable b) {
         super(()->{
             if(b.price==-1){
-                equip(b);
+                equip(scene.getEngine().getFileStorage(), b);
             }else {
                 buy(scene, b);
             }
@@ -69,7 +70,7 @@ public class ShopObject extends ButtonComponent {
             scene.getEngine().pushScene(new NotEnoughMoneyPopUp(scene.getEngine(), scene, b));
         }
     }
-    private static void equip(Buyable b){
-        b.equip();
+    private static void equip(IFileStorage fs, Buyable b){
+        b.equip(fs);
     }
 }

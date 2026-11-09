@@ -1,6 +1,1 @@
-{
-    "type":  "color",
-    "colorFor":  "PLAYER_COLOR",
-    "color":  -15024996,
-    "price":  5
-}
+{"colorFor":"PLAYER_COLOR","color":-15024996,"price":-1,"type":"color"}

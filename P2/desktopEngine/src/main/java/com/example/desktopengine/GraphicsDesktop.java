@@ -326,8 +326,6 @@ public class GraphicsDesktop implements GraphicsInterface {
         this.graphics = (Graphics2D)this.buf.getDrawGraphics();
         transformation.setTransform(this.originalTransform);
 
-        clear();
-
         applyViewport();
         // Store the combined viewport + logical transform.
         this.transformation = new AffineTransform(

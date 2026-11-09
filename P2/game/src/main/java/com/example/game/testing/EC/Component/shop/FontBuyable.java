@@ -2,6 +2,7 @@ package com.example.game.testing.EC.Component.shop;
 
 import com.example.engine.FontEng;
 import com.example.engine.GraphicsInterface;
+import com.example.engine.IFileStorage;
 import com.example.engine.ImageEng;
 import com.example.game.testing.Scenes.ShopScene;
 import com.example.game.testing.Systems.Shop.ColorManager;
@@ -54,7 +55,7 @@ public class FontBuyable extends Buyable {
     }
 
     @Override
-    public void equip() {
+    public void equip(IFileStorage fs) {
         FontManager.getInstance().setFont(fontFor,font);
     }
 }

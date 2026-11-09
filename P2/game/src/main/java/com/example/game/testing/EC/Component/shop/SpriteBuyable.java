@@ -1,6 +1,7 @@
 package com.example.game.testing.EC.Component.shop;
 
 import com.example.engine.GraphicsInterface;
+import com.example.engine.IFileStorage;
 import com.example.engine.ImageEng;
 import com.example.game.testing.Scenes.ShopScene;
 import com.example.game.testing.Systems.Shop.ColorManager;
@@ -57,7 +58,7 @@ public class SpriteBuyable extends Buyable {
     }
 
     @Override
-    public void equip() {
-        SkinManager.getInstance().setImage(imageFor,sprite);
+    public void equip(IFileStorage fs) {
+        SkinManager.getInstance().setImage(imageFor,sprite,fs);
     }
 }

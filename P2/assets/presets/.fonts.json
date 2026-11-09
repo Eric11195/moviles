@@ -1,0 +1,14 @@
+{
+  "BUTTON_FONT": {
+    "fontName": "FascinateInline-Regular.ttf",
+    "fontSize": 32
+  },
+  "TITLE_FONT": {
+    "fontName": "FascinateInline-Regular.ttf",
+    "fontSize": 72
+  },
+  "COIN_N_DISTANCE_COUNT": {
+    "fontName": "FascinateInline-Regular.ttf",
+    "fontSize": 28
+  }
+}

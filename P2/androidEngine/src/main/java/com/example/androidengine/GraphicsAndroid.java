@@ -234,6 +234,7 @@ public class GraphicsAndroid implements GraphicsInterface {
     }
     ColorEng clearColor = new ColorEng(255,255,255,255);
     // fills the entire display with the given color
+
     @Override
     public void clear(ColorEng color){
         assert(can!=null);

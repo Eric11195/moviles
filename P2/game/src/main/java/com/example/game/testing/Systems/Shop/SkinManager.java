@@ -5,7 +5,9 @@ import static com.example.game.testing.utils.JSON_HELPER.toJSON;
 
 import com.example.engine.ColorEng;
 import com.example.engine.GraphicsInterface;
+import com.example.engine.IFileStorage;
 import com.example.engine.ImageEng;
+import com.example.game.testing.utils.JSON_HELPER;
 import com.example.game.testing.utils.mcd_Serializable;
 
 import org.json.JSONObject;
@@ -85,8 +87,10 @@ public class SkinManager implements mcd_Serializable {
     public ImageEng getImage(Images clr){
         return imageList.get(clr.ordinal());
     }
-    public void setImage(Images type, ImageEng img){
+    public void setImage(Images type, ImageEng img, IFileStorage fs){
         ImageEng imgEng = imageList.get(type.ordinal());
         imgEng = img;
+        fs.setRelativePath("presets");
+        JSON_HELPER.toJSON(fs, "skins", this.serialize());
     }
 }

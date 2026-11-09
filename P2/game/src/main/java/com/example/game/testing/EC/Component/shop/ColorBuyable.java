@@ -4,6 +4,7 @@ import static com.example.game.testing.utils.JSON_HELPER.toJSON;
 
 import com.example.engine.ColorEng;
 import com.example.engine.GraphicsInterface;
+import com.example.engine.IFileStorage;
 import com.example.engine.ImageEng;
 import com.example.game.testing.Scenes.ShopScene;
 import com.example.game.testing.Systems.Shop.ColorManager;
@@ -33,8 +34,8 @@ public class ColorBuyable extends Buyable {
     }
 
     @Override
-    public void equip() {
-        ColorManager.getInstance().setColor(colorFor, color);
+    public void equip(IFileStorage fs) {
+        ColorManager.getInstance().setColor(colorFor, color, fs);
     }
 
     public static ColorBuyable deserializeColor(String fileName, String tabName, int price, JSONObject obj){

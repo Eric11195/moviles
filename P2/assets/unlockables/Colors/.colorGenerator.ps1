@@ -11,7 +11,7 @@ $elementTypes = @(
 ) 
 
 # 2. Define the fixed price
-$price = 5
+$price = 0
 
 # 3. Define colors cast as [long] so they never output as negative in the JSON
 $colors = [ordered]@{
