@@ -7,5 +7,20 @@
   },
   "BUTTONS_COLOR": {
     "color": 4294901760
+  },
+  "PLAYER_COLOR": {
+    "color": 4288059030
+  },
+  "LASER_COLOR": {
+    "color": 4294967040
+  },
+  "ZAPPER_COLOR": {
+    "color": 4294967040
+  },
+  "MISSILE_COLOR": {
+    "color": 4278190335
+  },
+  "COIN_COLOR": {
+    "color":4294953035
   }
 }

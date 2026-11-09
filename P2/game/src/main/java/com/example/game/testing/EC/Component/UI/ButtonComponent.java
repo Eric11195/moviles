@@ -8,6 +8,7 @@ import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
+import com.example.game.testing.Systems.Shop.ColorManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;
@@ -24,7 +25,7 @@ public class ButtonComponent implements mcd_Component {
     ButtonClickFunction func;
     boolean hovering = false;
     boolean clicked = false;
-    protected ColorEng idleColor = ColorLibrary.Red.clone();
+    protected ColorEng idleColor = ColorManager.getInstance().getColor(ColorManager.Colors.BUTTONS_COLOR);
     protected ColorEng hoverColor = ColorLibrary.Green.clone();
     protected ColorEng clickedColor = ColorLibrary.Blue.clone();
     public ButtonComponent(ButtonClickFunction onClickFunc){

@@ -17,6 +17,7 @@ import com.example.game.testing.Systems.LevelSpeedSystem;
 import com.example.game.testing.Systems.LevelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.CoinSystem;
 import com.example.game.testing.Systems.LevelGenerator.ObstacleFactory;
+import com.example.game.testing.Systems.Shop.ColorManager;
 import com.example.game.testing.Systems.Shop.SkinManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.SoundLibrary;
@@ -92,7 +93,7 @@ public class CoinComponent extends Obstacle {
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
         if(img==null) {
             g.setStrokeWidth(2);
-            g.setColor(ColorLibrary.Gold);
+            g.setColor(ColorManager.getInstance().getColor(ColorManager.Colors.COIN_COLOR));
             g.drawCircle(tr.pos, tr.size.x, true);
             g.setColor(ColorLibrary.DarkGold);
             g.drawCircle(tr.pos, tr.size.x, false);

@@ -18,7 +18,7 @@ public class ShopTab {
         TransformComponent tr = (TransformComponent) ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
         tr.size.y = TAB_HEIGHT;
         tr.pos.y=0;
-        ent.addComponent(ComponentId.TEXT_COMPONENT, new TextRectComponent(text, ColorLibrary.Black));
+        ent.addComponent(ComponentId.TEXT_COMPONENT, new TextRectComponent(text));
         ent.addComponent(ComponentId.BUTTON_COMPONENT, new TabComponent(tabbedMenu,tabIdx));
         return ent;
     }

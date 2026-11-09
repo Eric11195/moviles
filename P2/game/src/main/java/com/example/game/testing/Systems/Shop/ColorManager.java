@@ -8,7 +8,6 @@ import com.example.game.testing.utils.mcd_Serializable;
 
 import org.json.JSONObject;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
 public class ColorManager implements mcd_Serializable {
@@ -62,6 +61,11 @@ public class ColorManager implements mcd_Serializable {
     }
 
     public static enum Colors{
+        PLAYER_COLOR,
+        LASER_COLOR,
+        ZAPPER_COLOR,
+        MISSILE_COLOR,
+        COIN_COLOR,
         TEXT_COLOR,
         BACKGROUND_COLOR,
         BUTTONS_COLOR,

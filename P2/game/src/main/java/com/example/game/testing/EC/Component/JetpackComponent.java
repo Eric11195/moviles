@@ -12,6 +12,7 @@ import com.example.engine.ImageEng;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
+import com.example.game.testing.Systems.Shop.ColorManager;
 import com.example.game.testing.Systems.Shop.SkinManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
@@ -59,7 +60,7 @@ public class JetpackComponent implements mcd_Component{
         if(img==null) {
             g.setStrokeWidth(3);
 
-            g.setColor(ColorLibrary.Grey);
+            g.setColor(ColorManager.getInstance().getColor(ColorManager.Colors.PLAYER_COLOR));
             g.drawCircle(pos, playerRad, true);
 
             g.setColor(ColorLibrary.DarkGrey);

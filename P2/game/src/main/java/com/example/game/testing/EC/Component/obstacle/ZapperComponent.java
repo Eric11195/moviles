@@ -21,6 +21,7 @@ import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.LevelSpeedSystem;
 import com.example.game.testing.Systems.LevelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.LevelGenerator.ObstacleFactory;
+import com.example.game.testing.Systems.Shop.ColorManager;
 import com.example.game.testing.Systems.Shop.SkinManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.JSON_HELPER;
@@ -128,7 +129,7 @@ public class ZapperComponent extends Obstacle {
         ColliderComponent collider = (ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT);
         if(img==null)
             collider.colliders.forEach(col ->{
-                g.setColor(ColorLibrary.Yellow);
+                g.setColor(ColorManager.getInstance().getColor(ColorManager.Colors.ZAPPER_COLOR));
                 g.drawCircle(tr.pos.add(col),col.rad,true);
                 g.setColor(ColorLibrary.Gold);
                 g.drawCircle(tr.pos.add(col),col.rad,false);

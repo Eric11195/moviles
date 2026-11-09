@@ -22,6 +22,7 @@ import com.example.engine.GraphicsInterface;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.LevelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.LevelGenerator.ObstacleFactory;
+import com.example.game.testing.Systems.Shop.ColorManager;
 import com.example.game.testing.Systems.Shop.SkinManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
@@ -61,7 +62,7 @@ public class LaserComponent extends WarnedObstacle {
         is_attacking = false;
         index_rep = 0;
         loop_num = 0;
-        color = ColorLibrary.Yellow.clone();
+        color = ColorManager.getInstance().getColor(ColorManager.Colors.LASER_COLOR).clone();
 
         setUpCollider((ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT));
         setUpSpeed((VelocityComponent) ent.getComponent(ComponentId.VELOCITY_COMPONENT));

@@ -21,6 +21,7 @@ import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.LevelSpeedSystem;
 import com.example.game.testing.Systems.LevelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.LevelGenerator.ObstacleFactory;
+import com.example.game.testing.Systems.Shop.ColorManager;
 import com.example.game.testing.Systems.Shop.SkinManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
@@ -132,7 +133,7 @@ public class MissileComponent extends WarnedObstacle {
         super.render(ent, g);
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
         if(img==null) {
-            g.setColor(ColorLibrary.Blue);
+            g.setColor(ColorManager.getInstance().getColor(ColorManager.Colors.MISSILE_COLOR));
             g.drawRectangle(tr.pos, tr.size, true);
         }else{
             g.drawImage(img, tr.pos, tr.size);

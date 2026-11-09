@@ -14,7 +14,7 @@ public class ButtonPrefab {
         mcd_Entity ent = scene.createEntity();
         ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent(pos.clone(), size.clone()));
         ent.addComponent(ComponentId.BUTTON_COMPONENT, new ButtonComponent(clickFunc));
-        ent.addComponent(ComponentId.TEXT_COMPONENT, new TextRectComponent(text, ColorLibrary.Black));
+        ent.addComponent(ComponentId.TEXT_COMPONENT, new TextRectComponent(text));
         return ent;
     }
 }
