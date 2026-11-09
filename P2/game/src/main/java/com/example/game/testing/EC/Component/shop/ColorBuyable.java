@@ -28,6 +28,8 @@ public class ColorBuyable extends Buyable {
         size.x = sizeX; size.y = sizeY;
         g.setColor(this.color);
         g.drawRectangle(pos,size,true);
+        g.setColor(ColorManager.getInstance().getColor(ColorManager.Colors.TEXT_COLOR));
+        g.drawText(this.colorFor.toString().replace("_COLOR",""),pos,size);
     }
 
     @Override

@@ -65,15 +65,18 @@ public class JSON_HELPER {
     }
 
     public static JSONObject fromJSON(IFileStorage fileStorage, String file_name) {
+        System.out.println("Begin Reading "+file_name+" in "+fileStorage.getCurrentPath());
         try {
             if (!file_name.endsWith(".json")) {
                 file_name += ".json";
             }
 
             String content = fileStorage.read(file_name);
-            return new JSONObject(content);
-
+            JSONObject jo = new JSONObject(content);
+            System.out.println(file_name+" Read succesfully");
+            return jo;
         } catch (java.io.IOException e) {
+            System.out.println("Error while reading file "+file_name+" in "+fileStorage.getCurrentPath());
             e.printStackTrace();
         }
 

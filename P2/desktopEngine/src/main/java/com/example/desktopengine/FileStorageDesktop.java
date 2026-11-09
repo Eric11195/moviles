@@ -68,7 +68,14 @@ public class FileStorageDesktop implements IFileStorage {
     public boolean forEachFileOnDirectory(ForEachFileOnDirectoryFunc f) {
         try (Stream<Path> entries = Files.list(basePath)) {
             for (Path entry : (Iterable<Path>) entries::iterator) {
-                f.func(entry.getFileName().toString());
+                String fileName = entry.getFileName().toString();
+
+                // Ignore files/folders that start with a dot
+                if (!fileName.startsWith(".")) {
+                    f.func(fileName);
+                }else{
+                    System.out.println(">>>>>File ignored in forEachFileOnDirectory: "+fileName);
+                }
             }
             return true;
         } catch (IOException e) {
