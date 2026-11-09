@@ -13,15 +13,19 @@ import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
 
 public class ShopTab {
-    public static mcd_Entity createShopTab(mcd_Scene scene, TabComponent.TabbedMenu tabbedMenu, String text, int tabIdx, int totalTabs){
+    public static mcd_Entity createShopTab(mcd_Scene scene, TabComponent.TabbedMenu tabbedMenu, String text, int tabIdx){
         mcd_Entity ent = scene.createEntity();
         TransformComponent tr = (TransformComponent) ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
-        tr.size.x = LOGIC_WINDOW_SIZE.x / (float)totalTabs;
         tr.size.y = TAB_HEIGHT;
-        tr.pos.x = tr.size.x*tabIdx;
         tr.pos.y=0;
         ent.addComponent(ComponentId.TEXT_COMPONENT, new TextRectComponent(text, ColorLibrary.Black));
         ent.addComponent(ComponentId.BUTTON_COMPONENT, new TabComponent(tabbedMenu,tabIdx));
+        return ent;
+    }
+    public static mcd_Entity positionTab(mcd_Entity ent, int tabIdx, int tabCount){
+        TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
+        tr.size.x = LOGIC_WINDOW_SIZE.x / (float)tabCount;
+        tr.pos.x = tr.size.x*tabIdx;
         return ent;
     }
 }

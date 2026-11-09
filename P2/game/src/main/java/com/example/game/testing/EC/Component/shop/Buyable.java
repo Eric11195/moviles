@@ -9,15 +9,15 @@ import org.json.JSONObject;
 
 public abstract class Buyable implements mcd_Serializable {
     public final String fileName;
-    public final ShopScene.tabs tab;
+    public String tabName;
     public final BuyableType type;
     /**
      * If price == -1. Then this item has already been bought
      */
     public int price;
-    public Buyable(String fileName, ShopScene.tabs tab, BuyableType type, int price){
+    public Buyable(String fileName, String tabName, BuyableType type, int price){
         this.fileName = fileName;
-        this.tab = tab;
+        this.tabName = tabName;
         this.type = type;
         this.price = price;
     }
@@ -41,13 +41,13 @@ public abstract class Buyable implements mcd_Serializable {
         jo.put("type", this.type.toString());
         return jo;
     }
-    public static Buyable deserialize(String fileName, ShopScene.tabs t, GraphicsInterface g, JSONObject obj){
+    public static Buyable deserialize(String fileName, String tabName, GraphicsInterface g, JSONObject obj){
         int price = obj.getInt("price");
         switch(BuyableType.valueOf(obj.getString("type"))){
             case skin:
-                return SpriteBuyable.deserializeSkin(fileName,t,price,g,obj);
+                return SpriteBuyable.deserializeSkin(fileName,tabName,price,g,obj);
             case color:
-                return ColorBuyable.deserializeColor(fileName,t,price,obj);
+                return ColorBuyable.deserializeColor(fileName,tabName,price,obj);
             case font:
                 throw new RuntimeException("Unimplemented yet");
             default:

@@ -30,7 +30,7 @@ public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
         super(myEngine);
     }
     List<Scrollable> scrollableList;
-    List<TabComponent> tabComponentList;
+    List<mcd_Entity> tabList;
     private static final Vec2 pos = new Vec2(
         BACK_BUTTON_SQUARE_SIZE,
         TAB_HEIGHT
@@ -43,40 +43,49 @@ public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
     @Override
     public void start(Engine eng) {
         scrollableList = new ArrayList<>();
-        tabComponentList = new ArrayList<>();
+        tabList = new ArrayList<>();
         //TODO: create an object that displays rubies
         IFileStorage fs = eng.getFileStorage();
-        //Creates all objects for all tabs
-        for(int i = 0; i < tabs.count.ordinal(); ++i){
-            fs.setRelativePath("unlockables/"+tabs.values()[i].toString()+"/");
-            //TODO: create a button for each tab
-            tabComponentList.add((TabComponent) ShopTab.createShopTab(this, this, tabs.values()[i].toString(),i, tabs.count.ordinal()).getComponent(ComponentId.BUTTON_COMPONENT));
+        fs.setRelativePath("unlockables");
+        final int[] i = {0};
+        fs.forEachFileOnDirectory((filename)->{
+            fs.setRelativePath("unlockables/"+filename+"/");
+            int finalI = i[0];
+            tabList.add(ShopTab.createShopTab(this, this, filename,finalI));
             // Open folder
             // Count number of elements
             List<mcd_Entity> entOfThisTab = new ArrayList<>();
-            int finalI = i;
-            fs.forEachFileOnDirectory((fileName)->{
+
+            fs.forEachFileOnDirectory((fileNameInner)->{
                 JSONObject jo =
-                    JSON_HELPER.fromJSON(
-                        fs,
-                        fileName
-                    );
+                        JSON_HELPER.fromJSON(
+                                fs,
+                                fileNameInner
+                        );
                 if(jo==null) return;
                 entOfThisTab.add(
-                    ShopItemPrefab.createShopItem(
-                        this,
-                        Buyable.deserialize(
-                            fileName,
-                            tabs.values()[finalI],
-                            eng.getGraphics(),
-                            jo
+                        ShopItemPrefab.createShopItem(
+                                this,
+                                Buyable.deserialize(
+                                        fileNameInner,
+                                        filename,
+                                        eng.getGraphics(),
+                                        jo
+                                )
                         )
-                    )
                 );
             });
             scrollableList.add(new Scrollable(pos,size, ROWS_IN_SHOP, COLS_IN_SHOP, entOfThisTab));
+            ++i[0];
+        });
+        final int numberOfTabs = i[0];
+        tabList.forEach((ent)->{
+            TabComponent t = (TabComponent)ent.getComponent(ComponentId.BUTTON_COMPONENT);
+            ShopTab.positionTab(ent,t.idx,numberOfTabs);
+        });
+        if(numberOfTabs > 0) {
+            openTab(0);
         }
-        openTab(tabs.PowerUps.ordinal());
 
         BackButtonPrefab.createBackButton(eng, this);
     }
@@ -87,21 +96,15 @@ public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
         scrollableList.forEach((scrollable -> {
             scrollable.setActive(false);
         }));
-        tabComponentList.forEach(TabComponent::unselect);
+        tabList.forEach((ent)->{
+            TabComponent t = (TabComponent) ent.getComponent(ComponentId.BUTTON_COMPONENT);
+            t.unselect();
+        });
         //TODO: show only the objects on this tab
         systemList.clear();
-        tabComponentList.get(idx).select();
+        ((TabComponent) tabList.get(idx).getComponent(ComponentId.BUTTON_COMPONENT)).select();
         Scrollable activeScrollable = scrollableList.get(idx);
         addSystem(activeScrollable);
         activeScrollable.setActive(true);
-    }
-
-    public static enum tabs{
-        PowerUps,
-        Skins,
-        Colors,
-        Menus,
-        Levels,
-        count
     }
 }

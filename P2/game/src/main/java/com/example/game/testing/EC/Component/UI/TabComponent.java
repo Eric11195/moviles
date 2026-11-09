@@ -9,10 +9,12 @@ public class TabComponent extends ButtonComponent{
     public static interface TabbedMenu{
         public void openTab(int idx);
     }
+    public final int idx;
     public TabComponent(TabbedMenu myMenu, int idx){
         super(()->{
             myMenu.openTab(idx);
         });
+        this.idx = idx;
     }
     boolean selected = false;
     public void select(){

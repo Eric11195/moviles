@@ -18,8 +18,8 @@ import java.util.Objects;
 public class FontBuyable extends Buyable {
     FontEng font;
     FontManager.Fonts fontFor;
-    public FontBuyable(String fileName, ShopScene.tabs t, int price, GraphicsInterface g, FontEng f, FontManager.Fonts fontFor){
-        super(fileName,t,BuyableType.font,price);
+    public FontBuyable(String fileName, String tabName, int price, GraphicsInterface g, FontEng f, FontManager.Fonts fontFor){
+        super(fileName,tabName,BuyableType.font,price);
         this.font = f;
         this.fontFor = fontFor;
     }
@@ -27,11 +27,11 @@ public class FontBuyable extends Buyable {
     Vec2 pos=new Vec2();
     Vec2 size=new Vec2();
 
-    public static Buyable deserializeSkin(String fileName, ShopScene.tabs t, int price, GraphicsInterface g, JSONObject obj) {
+    public static Buyable deserializeSkin(String fileName, String tabName, int price, GraphicsInterface g, JSONObject obj) {
         FontEng f = JSON_HELPER.fontFromJSON(g,obj);
         return new FontBuyable(
                 fileName,
-                t,
+                tabName,
                 price,
                 g,
                 f,

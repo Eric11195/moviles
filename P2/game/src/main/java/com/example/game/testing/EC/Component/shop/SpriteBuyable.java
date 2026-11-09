@@ -15,8 +15,8 @@ public class SpriteBuyable extends Buyable {
     String spritePath;
     ImageEng sprite;
     SkinManager.Images imageFor;
-    public SpriteBuyable(String fileName, ShopScene.tabs t, int price, GraphicsInterface g, String imagePath, SkinManager.Images imageFor){
-        super(fileName,t,BuyableType.skin,price);
+    public SpriteBuyable(String fileName, String tabName, int price, GraphicsInterface g, String imagePath, SkinManager.Images imageFor){
+        super(fileName,tabName,BuyableType.skin,price);
         this.spritePath = imagePath;
         if(this.spritePath!=null)
             sprite = g.createImage(spritePath);
@@ -27,10 +27,10 @@ public class SpriteBuyable extends Buyable {
     Vec2 pos=new Vec2();
     Vec2 size=new Vec2();
 
-    public static Buyable deserializeSkin(String fileName, ShopScene.tabs t, int price, GraphicsInterface g, JSONObject obj) {
+    public static Buyable deserializeSkin(String fileName, String tabName, int price, GraphicsInterface g, JSONObject obj) {
         return new SpriteBuyable(
             fileName,
-            t,
+            tabName,
             price,
             g,
             obj.isNull("path")?null: obj.getString("path"),
