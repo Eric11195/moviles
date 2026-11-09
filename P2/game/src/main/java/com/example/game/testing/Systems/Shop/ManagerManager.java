@@ -12,6 +12,7 @@ import java.io.IOException;
 public class ManagerManager implements mcd_Serializable {
     static boolean initialized = false;
     public static boolean init(IFileStorage fileStorage, GraphicsInterface g){
+        if(initialized)return true;
         fileStorage.setRelativePath("presets");
 
         JSONObject joColor = JSON_HELPER.fromJSON(fileStorage,"colors");
