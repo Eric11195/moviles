@@ -108,7 +108,6 @@ public class CoinComponent extends Obstacle {
 //        System.out.println("Coin ("+tr.pos.x+","+tr.pos.y+")");
 //    }
 
-
     @Override
     public JSONObject serialize(){
         JSONObject jo = super.serialize();

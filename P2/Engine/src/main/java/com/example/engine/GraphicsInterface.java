@@ -32,9 +32,9 @@ public interface GraphicsInterface {
      */
     public void drawText(String text, Vec2 x0y0Pos, Vec2 size);
     public ImageEng createImage(String path);
-    public FontEng createFont(String path, float size);
-    public FontEng createFont(float size);
-    public void setFontSize(float size);
+    public FontEng createFont(String path, int size);
+    public FontEng createFont(int size);
+    public void setFontSize(int size);
     public void translate(float x, float y);
     public void scale(float x, float y);
     public void rotate(float x, float y, float rotationDegrees);

@@ -268,16 +268,16 @@ public class GraphicsDesktop implements GraphicsInterface {
     }
 
     @Override
-    public FontEng createFont(String path, float size) {
+    public FontEng createFont(String path, int size) {
         return (FontEng) new FontDesktop(path,size);
     }
     @Override
-    public FontEng createFont(float size) {
+    public FontEng createFont(int size) {
         return (FontEng) new FontDesktop(size);
     }
 
     @Override
-    public void setFontSize(float size) {
+    public void setFontSize(int size) {
         current_font.setFontSize(size);
     }
 

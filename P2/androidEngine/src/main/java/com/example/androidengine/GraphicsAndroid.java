@@ -129,17 +129,17 @@ public class GraphicsAndroid implements GraphicsInterface {
     }
 
     @Override
-    public FontEng createFont(String path, float size) {
+    public FontEng createFont(String path, int size) {
         return new FontAndroid(activity,path,size, false);
     }
 
     @Override
-    public FontEng createFont(float size) {
+    public FontEng createFont(int size) {
         return new FontAndroid(size, false);
     }
 
     @Override
-    public void setFontSize(float size) {
+    public void setFontSize(int size) {
         font.setFontSize(size);
     }
 

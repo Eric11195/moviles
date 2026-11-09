@@ -1,5 +1,7 @@
 package com.example.game.testing.utils;
 import com.example.engine.ColorEng;
+import com.example.engine.FontEng;
+import com.example.engine.GraphicsInterface;
 import com.example.engine.IFileStorage;
 import com.example.utils.Vec2;
 
@@ -46,6 +48,11 @@ public class JSON_HELPER {
         jo.put("color", clr.getColorAsInt());
         return jo;
     }
+    public static JSONObject toJSON(FontEng f, JSONObject jo){
+        jo.put("fontName", f.fileName);
+        jo.put("size", f.fontSize);
+        return jo;
+    }
 
     public static void toJSON(IFileStorage fileStorage, String file_name, JSONObject jo){
         try {
@@ -82,5 +89,12 @@ public class JSON_HELPER {
         return new ColorEng(
           clr.getInt("color")
         );
+    }
+    public static FontEng fontFromJSON(GraphicsInterface g, JSONObject f){
+        if(f.isNull("fontName")){
+            return g.createFont(null, f.getInt("fontName"));
+        }else{
+            return g.createFont(f.getString("fontName"), f.getInt("fontName"));
+        }
     }
 }

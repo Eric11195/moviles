@@ -19,10 +19,10 @@ public class FontLibrary {
         }
     }
     public static ArrayList<FontEng> fonts = new ArrayList<>();
-    public static void createFont(GraphicsInterface g, FontName name, float size){
+    public static void createFont(GraphicsInterface g, FontName name, int size){
         fonts.add(name.value,g.createFont(size));
     }
-    public static void createFont(GraphicsInterface g, FontName name, float size, String path){
+    public static void createFont(GraphicsInterface g, FontName name, int size, String path){
         fonts.add(name.value,g.createFont(path, size));
     }
 

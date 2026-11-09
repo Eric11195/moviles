@@ -9,17 +9,20 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class FontDesktop implements FontEng {
+public class FontDesktop extends FontEng {
     Font java_font;
 
     public FontDesktop(){
-        java_font = new Font("Arial", Font.PLAIN, 16);
+        super(null, 16);
+        java_font = new Font("Arial", Font.PLAIN, this.fontSize);
     }
-    public FontDesktop(float size){
-        java_font = new Font("Arial", Font.PLAIN, (int)size);
+    public FontDesktop(int size){
+        super(null,size);
+        java_font = new Font("Arial", Font.PLAIN, this.fontSize);
     }
 
-    public FontDesktop(String file_name, float size) {
+    public FontDesktop(String file_name, int size) {
+        super(file_name,size);
         try {
             // Read directly from the file system path
             InputStream is = new FileInputStream(new File("Assets/fonts/" + file_name));
@@ -27,14 +30,16 @@ public class FontDesktop implements FontEng {
             setFontSize(size);
         } catch (FontFormatException | IOException exception) {
             exception.printStackTrace();
+            throw new RuntimeException("Font could not be loaded");
         }
     }
     public Font getFont(){
         return java_font;
     }
     @Override
-    public void setFontSize(float new_size){
+    public void setFontSize(int new_size){
+        super.setFontSize(new_size);
         java_font =
-                java_font.deriveFont(new_size);
+                java_font.deriveFont((float)this.fontSize);
     }
 }
