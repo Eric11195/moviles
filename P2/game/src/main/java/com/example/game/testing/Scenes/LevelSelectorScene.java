@@ -5,12 +5,15 @@ import static com.example.game.testing.constants.Constants.DEFAULT_BUTTON_SIZE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
 import com.example.engine.Engine;
+import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.LevelGenerator.LevelFileGenerator;
+import com.example.game.testing.Systems.menu.Scrollable;
 import com.example.game.testing.utils.JSON_HELPER;
 import com.example.utils.Vec2;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -23,12 +26,11 @@ public class LevelSelectorScene extends mcd_Scene{
     @Override
     public void start(Engine eng) {
         int BUTTONS_PER_ROW = 3;
-        Vec2 BASE_POS = new Vec2(LOGIC_WINDOW_SIZE.x/(BUTTONS_PER_ROW+1),LOGIC_WINDOW_SIZE.y/4);
-        Vec2 OFFSET = new Vec2(LOGIC_WINDOW_SIZE.x/(BUTTONS_PER_ROW+1),LOGIC_WINDOW_SIZE.y/5);
-        float BUTTON_SIZE_MULT = 0.8f;
+        Vec2 BASE_POS = new Vec2(LOGIC_WINDOW_SIZE.x/8,0);
         eng.getFileStorage().setRelativePath("levels");
 
         AtomicInteger idx = new AtomicInteger(0);
+        ArrayList<mcd_Entity> buttons = new ArrayList<>();
         eng.getFileStorage().forEachFileOnDirectory((String filename)->{
             if (!filename.contains("Level")) return;
             JSONObject obj = JSON_HELPER.fromJSON(eng.getFileStorage(), "Level" + Integer.toString(idx.get() + 1));
@@ -36,22 +38,24 @@ public class LevelSelectorScene extends mcd_Scene{
                 throw new RuntimeException("File level could not be found");
             }
             Vec2 pos = new Vec2(
-                    (BASE_POS.x + (idx.get() % BUTTONS_PER_ROW) * OFFSET.x) - 0.5f * DEFAULT_BUTTON_SIZE.x,
-                    BASE_POS.y + (idx.get() / BUTTONS_PER_ROW) * OFFSET.y - 0.5f * DEFAULT_BUTTON_SIZE.y
-            );
+                    0,0);
             LevelFileGenerator.LevelGeneratorSerialized lgs = LevelFileGenerator.deserialize(obj);
             int num = lgs.levelGeneratorParams.levelCoinsToWin == -1 ? lgs.levelGeneratorParams.levelTotalMeters : lgs.levelGeneratorParams.levelCoinsToWin;
-            createButton(
+            buttons.add (createButton(
                     this,
                     pos,
-                    DEFAULT_BUTTON_SIZE.mul(BUTTON_SIZE_MULT),
+                    DEFAULT_BUTTON_SIZE,
                     (lgs.levelGeneratorParams.levelCoinsToWin == -1 ? "Distance" : "Coins") + ": " + num,
                     () -> {
                         loadLevel(eng, lgs);
                     }
-            );
+            ));
             idx.incrementAndGet();
         });
+
+        Scrollable scrollable = new Scrollable(BASE_POS,new Vec2(LOGIC_WINDOW_SIZE.x*6/8,LOGIC_WINDOW_SIZE.y),idx.get()/BUTTONS_PER_ROW,BUTTONS_PER_ROW,buttons);
+        systemList.add(scrollable);
+
         createButton(
                 this,
                 new Vec2(0,LOGIC_WINDOW_SIZE.y-40),
