@@ -1,1 +1,6 @@
-{"colorFor":"BACKGROUND_COLOR","color":-6596170,"price":-1,"type":"color"}
+{
+    "type":  "color",
+    "colorFor":  "BACKGROUND_COLOR",
+    "color":  -6596170,
+    "price":  5
+}
