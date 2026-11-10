@@ -1,4 +1,7 @@
-# 1. Element types array (removed invalid [ordered] modifier)
+# Create a UTF-8 encoding object without a Byte Order Mark (BOM)
+$utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+
+# 1. Element types array
 $elementTypes = @(        
         "PLAYER",
         "MISSILE",
@@ -23,29 +26,44 @@ $skinsPerType = @(
     @($null),
     #Zapper Skins
     @($null),
-    #Coins SKins
+    #Coins Skins
     @($null)
 )
 
-# 3. Generate shop skin files
+# 3. Generate shop skin files in script directory without BOM
 for ($i = 0; $i -lt $elementTypes.Count; $i++) {
-    $type     = $elementTypes[$i]
-    for($j = 0; $j -lt $skinsPerType[$i].Count; $j++){   
+    $type = $elementTypes[$i]
+    
+    for ($j = 0; $j -lt $skinsPerType[$i].Count; $j++) {   
         $skinFile = $skinsPerType[$i][$j]
         $fileName = "{0}_skin{1}.json" -f $type, $j
+        $filePath = Join-Path -Path $PSScriptRoot -ChildPath $fileName
 
         $priceOfThis = $shopPrice
-        if($j -eq 0){
+        if ($j -eq 0) {
             $priceOfThis = $defaultPrice
         }
 
-        $jsonObj = [ordered]@{
-            type     = "skin"
-            imageFor = $type
-            path    = $skinFile
-            price    = $priceOfThis
+        if($skinFile -eq $null){
+            $jsonObj = [ordered]@{
+                type     = "skin"
+                imageFor = $type
+                # Strips "assets/" or "assets\" from the beginning of the path
+                path     = $skinFile 
+                price    = $priceOfThis
+            }
+        }else{
+            $jsonObj = [ordered]@{
+                type     = "skin"
+                imageFor = $type
+                # Strips "assets/" or "assets\" from the beginning of the path
+                path     = $skinFile -replace '^assets[\\/]', '' 
+                price    = $priceOfThis
+            }
         }
-        $jsonObj | ConvertTo-Json | Out-File -FilePath $fileName -Encoding ascii
-        Write-Host "Created default: $fileName" -ForegroundColor Cyan
+        
+        $jsonContent = $jsonObj | ConvertTo-Json
+        [System.IO.File]::WriteAllText($filePath, $jsonContent, $utf8NoBom)
+        Write-Host "Created: $fileName" -ForegroundColor Cyan
     }
 }

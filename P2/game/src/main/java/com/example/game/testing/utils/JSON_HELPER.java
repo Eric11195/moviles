@@ -53,6 +53,21 @@ public class JSON_HELPER {
         jo.put("size", f.fontSize);
         return jo;
     }
+    public static JSONObject pathToJSON(String path, String tag, JSONObject jo){
+        String p = path;
+        if(path == null){
+            jo.put(tag,JSONObject.NULL);
+            return jo;
+        }
+        int index = p.toLowerCase().indexOf("assets\\");
+
+        if (index != -1) {
+            // Keep everything after "assets/"
+            p = p.substring(index + "assets\\".length());
+        }
+        jo.put(tag,p);
+        return jo;
+    }
 
     public static void toJSON(IFileStorage fileStorage, String file_name, JSONObject jo){
         try {

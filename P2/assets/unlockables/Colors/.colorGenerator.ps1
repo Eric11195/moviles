@@ -1,4 +1,7 @@
-# 1. Element types array (removed invalid [ordered] modifier)
+# Create a UTF-8 encoding object without a Byte Order Mark (BOM)
+$utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+
+# 1. Element types array
 $elementTypes = @(        
     "PLAYER_COLOR",
     "LASER_COLOR",
@@ -40,10 +43,11 @@ $colors = [ordered]@{
     "Charcoal"  = [long]0xFF34495E
 }
 
-# 4. Generate shop color files
+# 4. Generate shop color files in script directory
 foreach ($type in $elementTypes) {
     foreach ($color in $colors.GetEnumerator()) {
         $fileName = "{0}_{1}.json" -f $type, $color.Name
+        $filePath = Join-Path -Path $PSScriptRoot -ChildPath $fileName
         
         $jsonObj = [ordered]@{
             type     = "color"
@@ -52,15 +56,17 @@ foreach ($type in $elementTypes) {
             price    = $shopPrice
         }
         
-        $jsonObj | ConvertTo-Json | Out-File -FilePath $fileName -Encoding ascii
+        $jsonContent = $jsonObj | ConvertTo-Json
+        [System.IO.File]::WriteAllText($filePath, $jsonContent, $utf8NoBom)
         Write-Host "Created: $fileName" -ForegroundColor Green
     }
 }
 
-# 5. Generate default color files
+# 5. Generate default color files in script directory
 for ($i = 0; $i -lt $elementTypes.Count; $i++) {
     $type     = $elementTypes[$i]
     $fileName = "{0}_default.json" -f $type
+    $filePath = Join-Path -Path $PSScriptRoot -ChildPath $fileName
     
     $jsonObj = [ordered]@{
         type     = "color"
@@ -69,6 +75,7 @@ for ($i = 0; $i -lt $elementTypes.Count; $i++) {
         price    = $defaultPrice
     }
     
-    $jsonObj | ConvertTo-Json | Out-File -FilePath $fileName -Encoding ascii
+    $jsonContent = $jsonObj | ConvertTo-Json
+    [System.IO.File]::WriteAllText($filePath, $jsonContent, $utf8NoBom)
     Write-Host "Created default: $fileName" -ForegroundColor Cyan
 }

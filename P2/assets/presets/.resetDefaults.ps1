@@ -1,13 +1,24 @@
-# Get all files (including hidden ones) in the current directory
-Get-ChildItem -Path . -File -Force | Where-Object {
+# 1. Target the script's actual directory instead of the current working directory
+$targetFolder = $PSScriptRoot
+
+Get-ChildItem -Path $targetFolder -File -Force | Where-Object {
     $_.Name.StartsWith(".") -and 
-    ($_.Name.EndsWith(".colors.json") -or $_.Name.EndsWith(".skins.json") -or $_.Name.EndsWith(".fonts.json"))
+    ($_.Name -match "\.(colors|skins|fonts)\.json$") # Cleaner matching for multiple extensions
 } | ForEach-Object {
+    
     # Remove the first character (the initial dot)
     $newName = $_.Name.Substring(1)
     
-    # Copy the file to the new name (-Force overwrites if the target already exists)
-    Copy-Item -Path $_.FullName -Destination (Join-Path $_.DirectoryName $newName) -Force
+    # Define absolute destination path
+    $destination = Join-Path $_.DirectoryName $newName
     
-    Write-Host "Copied: $($_.Name) -> $newName" -ForegroundColor Green
+    # Copy the file to the new name (-Force overwrites if the target already exists)
+    Copy-Item -Path $_.FullName -Destination $destination -Force
+    
+    # Verification output
+    if (Test-Path $destination) {
+        Write-Host "Copied: $($_.Name) -> $newName" -ForegroundColor Green
+    } else {
+        Write-Host "Failed to copy: $($_.Name)" -ForegroundColor Red
+    }
 }

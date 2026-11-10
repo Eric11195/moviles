@@ -44,30 +44,29 @@ public class SkinManager implements mcd_Serializable {
 
         JSONObject jo = new JSONObject();
         Images[] enum_image = Images.values();
-        final int[] i = {0};
-        imageList.forEach((img)->{
-            jo.put(
-                enum_image[0].toString(),
-                img==null ? null : img.path
+        for(int i = 0; i < Images.COUNT.ordinal(); ++i){
+            ImageEng img = imageList.get(i);
+            JSON_HELPER.pathToJSON(
+                img == null ? null : img.path,
+                enum_image[i].toString(),
+                jo
             );
-            ++i[0];
-        });
+        }
         return jo;
     }
+
     public static SkinManager deserialize(GraphicsInterface g, JSONObject jo){
         ArrayList<ImageEng> imgs = new ArrayList<>();
         Images[] enum_img = Images.values();
         for(int i = 0; i < Images.COUNT.ordinal(); ++i){
-            if(!jo.has(enum_img[i].toString()) || jo.isNull(enum_img[i].toString())){
+            String key = enum_img[i].toString();
+            if(!jo.has(key) || jo.isNull(key)){
                 imgs.add(null);
-                continue;
-            }else {
+            } else {
                 imgs.add(
-                    g.createImage(
-                        jo.getString(
-                            jo.getString(enum_img[i].toString())
+                        g.createImage(
+                                jo.getString(key) // Fixed: removed the redundant outer jo.getString() wrapper
                         )
-                    )
                 );
             }
         }
@@ -83,13 +82,15 @@ public class SkinManager implements mcd_Serializable {
         COINS,
         COUNT
     }
+
     ArrayList<ImageEng> imageList;
+
     public ImageEng getImage(Images clr){
         return imageList.get(clr.ordinal());
     }
+
     public void setImage(Images type, ImageEng img, IFileStorage fs){
-        ImageEng imgEng = imageList.get(type.ordinal());
-        imgEng = img;
+        imageList.set(type.ordinal(), img); // Fixed: actually update the list instead of a local variable
         fs.setRelativePath("presets");
         JSON_HELPER.toJSON(fs, "skins", this.serialize());
     }

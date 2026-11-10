@@ -66,7 +66,7 @@ public class JetpackComponent implements mcd_Component{
             g.setColor(ColorLibrary.DarkGrey);
             g.drawCircle(pos, playerRad, false);
         }else{
-            g.drawImage(img, pos, PLAYER_DIMENSIONS);
+            g.drawImage(img, pos.add(new Vec2(-playerRad,-playerRad)), PLAYER_DIMENSIONS);
         }
     }
 

@@ -6,6 +6,7 @@ import com.example.engine.ImageEng;
 import com.example.game.testing.Scenes.ShopScene;
 import com.example.game.testing.Systems.Shop.ColorManager;
 import com.example.game.testing.Systems.Shop.SkinManager;
+import com.example.game.testing.utils.JSON_HELPER;
 import com.example.utils.Vec2;
 
 import org.json.JSONObject;
@@ -40,7 +41,8 @@ public class SpriteBuyable extends Buyable {
     @Override
     public JSONObject serialize(){
         JSONObject jo = super.serialize();
-        jo.put("path",sprite.path);
+        JSON_HELPER.pathToJSON(sprite == null ? null : sprite.path,"path",jo);
+
         jo.put("imageFor", imageFor.toString());
         return jo;
     }
@@ -48,7 +50,7 @@ public class SpriteBuyable extends Buyable {
     @Override
     public boolean selected() {
         ImageEng img = SkinManager.getInstance().getImage(imageFor);
-        return  (img==null && sprite==null) || (img!=null && Objects.equals(img.path, sprite.path));
+        return  (img==null && sprite==null) || (img!=null && sprite!=null &&Objects.equals(img.path, sprite.path));
     }
 
     @Override
