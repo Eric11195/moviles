@@ -14,7 +14,7 @@ $defaultPrice = -1
 
 $skinsPerType = @(
     #Player Skins
-    @($null),
+    @($null, "img/test_image.jpg"),
     #Missile Skins
     @($null),
     #Laser Skins
@@ -32,7 +32,7 @@ for ($i = 0; $i -lt $elementTypes.Count; $i++) {
     $type     = $elementTypes[$i]
     for($j = 0; $j -lt $skinsPerType[$i].Count; $j++){   
         $skinFile = $skinsPerType[$i][$j]
-        $fileName = "{0}_skin{1}.json" -f $type, $skinFile
+        $fileName = "{0}_skin{1}.json" -f $type, $j
 
         $priceOfThis = $shopPrice
         if($j -eq 0){

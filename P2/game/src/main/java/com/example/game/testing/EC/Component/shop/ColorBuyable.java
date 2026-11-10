@@ -27,10 +27,11 @@ public class ColorBuyable extends Buyable {
     public void render(GraphicsInterface g, float x, float y, float sizeX, float sizeY) {
         pos.x = x; pos.y = y;
         size.x = sizeX; size.y = sizeY;
+
         g.setColor(this.color);
-        g.drawRectangle(pos,size,true);
+        g.drawRectangle(pos.add(new Vec2(0,0.2f*size.y)), size.add(new Vec2(0,-size.y*0.2f)), true);
         g.setColor(ColorManager.getInstance().getColor(ColorManager.Colors.TEXT_COLOR));
-        g.drawText(this.colorFor.toString().replace("_COLOR",""),pos,size);
+        g.drawText(this.colorFor.toString().replace("_COLOR",""),pos,size.add(new Vec2(0,-0.8f*size.y)));
     }
 
     @Override

@@ -46,7 +46,7 @@ public class ShopObject extends ButtonComponent {
             tr.pos.x +tr.size.x*0.1f,
             tr.pos.y+tr.size.y*0.1f,
             tr.size.x*0.8f,
-            tr.size.y*0.8f
+            tr.size.y*0.7f
         );
         String text ="";
         if(this.buyable.price == -1){
@@ -56,7 +56,7 @@ public class ShopObject extends ButtonComponent {
         }
         g.drawText(
             text,
-            new Vec2(tr.pos.x+tr.size.x*0.5f, tr.pos.y+tr.size.y*0.9f)
+            new Vec2(tr.pos.x+tr.size.x*0.5f, tr.pos.y+tr.size.y*1.0f)
         );
     }
     boolean selected(){
