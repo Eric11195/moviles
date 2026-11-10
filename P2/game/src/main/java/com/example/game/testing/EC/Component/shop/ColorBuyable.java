@@ -35,7 +35,8 @@ public class ColorBuyable extends Buyable {
 
     @Override
     public void equip(IFileStorage fs) {
-        ColorManager.getInstance().setColor(colorFor, color, fs);
+        if(!this.selected())
+            ColorManager.getInstance().setColor(colorFor, color, fs);
     }
 
     public static ColorBuyable deserializeColor(String fileName, String tabName, int price, JSONObject obj){

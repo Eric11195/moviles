@@ -47,7 +47,8 @@ public class SpriteBuyable extends Buyable {
 
     @Override
     public boolean selected() {
-        return Objects.equals(SkinManager.getInstance().getImage(imageFor).path, sprite.path);
+        ImageEng img = SkinManager.getInstance().getImage(imageFor);
+        return  (img==null && sprite==null) || (img!=null && Objects.equals(img.path, sprite.path));
     }
 
     @Override
@@ -63,6 +64,7 @@ public class SpriteBuyable extends Buyable {
 
     @Override
     public void equip(IFileStorage fs) {
-        SkinManager.getInstance().setImage(imageFor,sprite,fs);
+        if(!this.selected())
+            SkinManager.getInstance().setImage(imageFor,sprite,fs);
     }
 }

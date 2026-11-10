@@ -48,7 +48,7 @@ public class SkinManager implements mcd_Serializable {
         imageList.forEach((img)->{
             jo.put(
                 enum_image[0].toString(),
-                img.path
+                img==null ? null : img.path
             );
             ++i[0];
         });
