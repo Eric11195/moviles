@@ -9,7 +9,7 @@ $elementTypes = @(
 ) 
 
 # 2. Define prices
-$shopPrice    = 5
+$shopPrice    = 0
 $defaultPrice = -1
 
 $skinsPerType = @(
