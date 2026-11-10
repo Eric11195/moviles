@@ -56,8 +56,9 @@ public class SpriteBuyable extends Buyable {
         pos.x = x; pos.y = y;
         size.x = sizeX; size.y = sizeY;
         if(sprite == null){
-            g.drawText("COLOR",pos,size);
+            g.drawText(imageFor.toString()+" COLOR",pos,size);
         }else {
+            g.drawText(imageFor.toString(),pos,size);
             g.drawImage(sprite, pos, size);
         }
     }

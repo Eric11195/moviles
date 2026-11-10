@@ -39,6 +39,8 @@ public class ShopObject extends ButtonComponent {
         super.render(ent, g);
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
 
+        g.setColor(ColorLibrary.Black);
+        g.drawRoundRectangle(tr.pos, tr.size, 12.0f, false);
         this.buyable.render(
             g,
             tr.pos.x +tr.size.x*0.1f,
@@ -46,8 +48,6 @@ public class ShopObject extends ButtonComponent {
             tr.size.x*0.8f,
             tr.size.y*0.8f
         );
-        g.setColor(ColorLibrary.Black);
-        g.drawRoundRectangle(tr.pos, tr.size, 12.0f, false);
         String text ="";
         if(this.buyable.price == -1){
             text = selected() ? "Equipped":"Bought";
