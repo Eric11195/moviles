@@ -39,3 +39,7 @@ Thumbs.db
 # Temporary debug dumps
 apk_dump/
 **/apk_dump/
+
+# Ignore all .json files
+# Do not ignore .json files that start with a dot (.)
+[^.]*.json
