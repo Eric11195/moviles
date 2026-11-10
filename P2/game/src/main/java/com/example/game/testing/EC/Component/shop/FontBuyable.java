@@ -8,6 +8,7 @@ import com.example.game.testing.Scenes.ShopScene;
 import com.example.game.testing.Systems.Shop.ColorManager;
 import com.example.game.testing.Systems.Shop.FontManager;
 import com.example.game.testing.Systems.Shop.SkinManager;
+import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.JSON_HELPER;
 import com.example.utils.Vec2;
 
@@ -28,7 +29,7 @@ public class FontBuyable extends Buyable {
     Vec2 pos=new Vec2();
     Vec2 size=new Vec2();
 
-    public static Buyable deserializeSkin(String fileName, String tabName, int price, GraphicsInterface g, JSONObject obj) {
+    public static Buyable deserializeFont(String fileName, String tabName, int price, GraphicsInterface g, JSONObject obj) {
         FontEng f = JSON_HELPER.fontFromJSON(g,obj);
         return new FontBuyable(
                 fileName,
@@ -59,7 +60,10 @@ public class FontBuyable extends Buyable {
     public void render(GraphicsInterface g, float x, float y, float sizeX, float sizeY) {
         pos.x = x; pos.y = y;
         size.x = sizeX; size.y = sizeY;
-        g.drawText("Example", pos,size);
+
+        g.setColor(ColorLibrary.Black);
+        g.setFont(font);
+        g.drawText(this.fontFor.toString() ,pos.add(new Vec2(0,0.2f*size.y)), size.add(new Vec2(0,-size.y*0.2f)));
     }
 
     @Override

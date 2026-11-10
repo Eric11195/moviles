@@ -56,7 +56,8 @@ public class ShopObject extends ButtonComponent {
         }
         g.drawText(
             text,
-            new Vec2(tr.pos.x+tr.size.x*0.5f, tr.pos.y+tr.size.y*1.0f)
+            new Vec2(tr.pos.x+tr.size.x*0.1f, tr.pos.y+tr.size.y*0.8f),
+            new Vec2(0.8f*tr.size.x, 0.2f*tr.size.y)
         );
     }
     boolean selected(){

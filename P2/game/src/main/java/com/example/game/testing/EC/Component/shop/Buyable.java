@@ -50,7 +50,7 @@ public abstract class Buyable implements mcd_Serializable {
             case color:
                 return ColorBuyable.deserializeColor(fileName,tabName,price,obj);
             case font:
-                throw new RuntimeException("Unimplemented yet");
+                return FontBuyable.deserializeFont(fileName,tabName,price,g,obj);
             default:
                 throw new RuntimeException("Invalid type");
         }

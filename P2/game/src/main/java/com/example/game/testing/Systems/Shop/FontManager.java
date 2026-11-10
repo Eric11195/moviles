@@ -15,24 +15,28 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class FontManager implements mcd_Serializable {
-    public FontManager(ArrayList<FontEng> colors){
-        if(colors.size() != Fonts.COUNT.ordinal())
-            throw new RuntimeException("Colors array must be same size as Colors.COUNT value");
+    public FontManager(ArrayList<FontEng> fonts){
+        if(fonts.size() != Fonts.COUNT.ordinal())
+            throw new RuntimeException("Fonts array must be same size as Fonts.COUNT value");
 
         fontList = new ArrayList<>();
         for(int i = 0; i < Fonts.COUNT.ordinal(); ++i){
-            fontList.add(colors.get(i));
+            fontList.add(fonts.get(i));
         }
     }
+
     public static void setInstance(FontManager mngr){
         _instance = mngr;
     }
+
     private static FontManager _instance = null;
+
     public static FontManager getInstance(){
         if(_instance == null)
             throw new RuntimeException("_instance must be initialized before this call");
         return _instance;
     }
+
     public static boolean hasInstance(){
         return _instance != null;
     }
@@ -40,26 +44,39 @@ public class FontManager implements mcd_Serializable {
     @Override
     public JSONObject serialize() {
         if(fontList.size() != Fonts.COUNT.ordinal())
-            throw new RuntimeException("Color list size must be Colors.COUNT value");
+            throw new RuntimeException("Font list size must be Fonts.COUNT value");
 
         JSONObject jo = new JSONObject();
-        Fonts[] enum_clr = Fonts.values();
-        final int[] i = {0};
-        fontList.forEach((clr)->{
-            JSONObject joColor = new JSONObject();
-            toJSON(clr, joColor);
-            jo.put(enum_clr[i[0]].toString(), joColor);
-            ++i[0];
-        });
+        Fonts[] enum_font = Fonts.values();
+
+        // Fixed: Replaced awkward lambda with a clean for-loop
+        for(int i = 0; i < Fonts.COUNT.ordinal(); ++i) {
+            FontEng font = fontList.get(i);
+            if (font == null) {
+                jo.put(enum_font[i].toString(), JSONObject.NULL);
+            } else {
+                JSONObject joFont = new JSONObject();
+                toJSON(font, joFont);
+                jo.put(enum_font[i].toString(), joFont);
+            }
+        }
         return jo;
     }
+
     public static FontManager deserialize(GraphicsInterface g, JSONObject jo){
-        ArrayList<FontEng> clrs = new ArrayList<>();
-        Fonts[] enum_clr = Fonts.values();
+        ArrayList<FontEng> fonts = new ArrayList<>();
+        Fonts[] enum_font = Fonts.values();
+
         for(int i = 0; i < Fonts.COUNT.ordinal(); ++i){
-            clrs.add(JSON_HELPER.fontFromJSON(g,jo.getJSONObject(enum_clr[i].toString())));
+            String key = enum_font[i].toString();
+            // Fixed: Safely check for missing or null keys before extracting the object
+            if (!jo.has(key) || jo.isNull(key)) {
+                fonts.add(null);
+            } else {
+                fonts.add(JSON_HELPER.fontFromJSON(g, jo.getJSONObject(key)));
+            }
         }
-        return new FontManager(clrs);
+        return new FontManager(fonts);
     }
 
     public static enum Fonts{
@@ -68,13 +85,17 @@ public class FontManager implements mcd_Serializable {
         TITLE_FONT,
         COUNT
     }
+
     ArrayList<FontEng> fontList;
-    public final FontEng getFont(FontManager.Fonts clr){
-        return fontList.get(clr.ordinal());
+
+    public final FontEng getFont(FontManager.Fonts font){
+        return fontList.get(font.ordinal());
     }
-    public void setFont(IFileStorage fs, FontManager.Fonts type, FontEng clr){
-        FontEng c = fontList.get(type.ordinal());
-        c = clr;
+
+    public void setFont(IFileStorage fs, FontManager.Fonts type, FontEng font){
+        // Fixed: Actually update the item in the list
+        fontList.set(type.ordinal(), font);
+
         fs.setRelativePath("presets");
         JSON_HELPER.toJSON(fs,"fonts",this.serialize());
     }
