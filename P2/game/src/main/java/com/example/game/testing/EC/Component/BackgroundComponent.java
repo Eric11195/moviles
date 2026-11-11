@@ -7,7 +7,6 @@ import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.LevelSpeedSystem;
 import com.example.game.testing.constants.Constants;
-import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Pool;
 import com.example.utils.Vec2;
 
@@ -18,8 +17,8 @@ public class BackgroundComponent implements mcd_Component {
     Vec2 maxDims;
     float speedScale;
     ColorEng color;
-    Pool<DrawRectangleComponent.Rectangle> rectanglePool = new Pool<>(Constants.MAX_BACKGROUND_RECTS,
-            new DrawRectangleComponent.Rectangle(new Vec2(0,0),new Vec2(0,0)));
+    Pool<DrawMultipleRectanglesComponent.Rectangle> rectanglePool = new Pool<>(Constants.MAX_BACKGROUND_RECTS,
+            new DrawMultipleRectanglesComponent.Rectangle(new Vec2(0,0),new Vec2(0,0)));
     public BackgroundComponent(Vec2 _minDims, Vec2 _maxDims, float _speedScale, ColorEng _color){
         minDims = _minDims;
         maxDims = _maxDims;
@@ -28,19 +27,19 @@ public class BackgroundComponent implements mcd_Component {
     }
     @Override
     public void update(mcd_Entity ent, float t, float dt) {
-        DrawRectangleComponent rectangleComponent = (DrawRectangleComponent) ent.getComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
+        DrawMultipleRectanglesComponent rectangleComponent = (DrawMultipleRectanglesComponent) ent.getComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
 
         fillUpRects(rectangleComponent);
 
         float spd = LevelSpeedSystem.getInstance().getSpeedMult();
 
         for (int i = 0; i < rectangleComponent.rectanglesToDraw.size(); i++){
-            DrawRectangleComponent.Rectangle r = rectangleComponent.rectanglesToDraw.get(i);
+            DrawMultipleRectanglesComponent.Rectangle r = rectangleComponent.rectanglesToDraw.get(i);
 
             r.myPos.x -= spd * dt * speedScale;
 
             if (r.myPos.x + r.mySize.x < 0) {
-                DrawRectangleComponent.Rectangle removeRect = rectangleComponent.rectanglesToDraw.remove(i);
+                DrawMultipleRectanglesComponent.Rectangle removeRect = rectangleComponent.rectanglesToDraw.remove(i);
                 rectanglePool.releaseItem(removeRect);
                 i--;
             }
@@ -53,7 +52,7 @@ public class BackgroundComponent implements mcd_Component {
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g) {
     }
-    void fillUpRects(DrawRectangleComponent rectangleComponent){
+    void fillUpRects(DrawMultipleRectanglesComponent rectangleComponent){
         Vec2 pos;
         Vec2 size;
         if (rectangleComponent.rectanglesToDraw.isEmpty()){
@@ -62,21 +61,21 @@ public class BackgroundComponent implements mcd_Component {
             float w = (float)Math.random() * (maxDims.x - minDims.x) + minDims.x;
             size = new Vec2(w,h);
 
-            DrawRectangleComponent.Rectangle addRect = rectanglePool.fetchItem();
+            DrawMultipleRectanglesComponent.Rectangle addRect = rectanglePool.fetchItem();
             addRect.myPos = pos;
             addRect.mySize = size;
 
             rectangleComponent.rectanglesToDraw.add(addRect);
         }
 
-        DrawRectangleComponent.Rectangle rect = rectangleComponent.rectanglesToDraw.get(rectangleComponent.rectanglesToDraw.size()-1);
+        DrawMultipleRectanglesComponent.Rectangle rect = rectangleComponent.rectanglesToDraw.get(rectangleComponent.rectanglesToDraw.size()-1);
         while(rect.myPos.x + rect.mySize.x < Constants.LOGIC_WINDOW_SIZE.x){
             float h = (float)Math.random() * (maxDims.y - minDims.y) + minDims.y;
             pos = new Vec2(rect.myPos.x+rect.mySize.x+xOffset, Constants.LOGIC_WINDOW_SIZE.y-h+yOffset);
             float w = (float)Math.random() * (maxDims.x - minDims.x) + minDims.x;
             size = new Vec2(w,h);
 
-            DrawRectangleComponent.Rectangle addRect = rectanglePool.fetchItem();
+            DrawMultipleRectanglesComponent.Rectangle addRect = rectanglePool.fetchItem();
             addRect.myPos = pos;
             addRect.mySize = size;
 

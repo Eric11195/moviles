@@ -98,11 +98,12 @@ public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
         }));
         tabList.forEach((ent)->{
             TabComponent t = (TabComponent) ent.getComponent(ComponentId.BUTTON_COMPONENT);
-            t.unselect();
+            t.unselect(ent);
         });
         //TODO: show only the objects on this tab
         systemList.clear();
-        ((TabComponent) tabList.get(idx).getComponent(ComponentId.BUTTON_COMPONENT)).select();
+        mcd_Entity ent =tabList.get(idx);
+        ((TabComponent) ent.getComponent(ComponentId.BUTTON_COMPONENT)).select(ent);
         Scrollable activeScrollable = scrollableList.get(idx);
         addSystem(activeScrollable);
         activeScrollable.setActive(true);

@@ -5,7 +5,7 @@ import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
 import com.example.engine.Engine;
 import com.example.game.testing.EC.Component.BackgroundComponent;
-import com.example.game.testing.EC.Component.DrawRectangleComponent;
+import com.example.game.testing.EC.Component.DrawMultipleRectanglesComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.Prefabs.PlayerPrefab;
 import com.example.game.testing.EC.mcd_Entity;
@@ -73,14 +73,14 @@ public class MainGameScene extends mcd_Scene{
                 new Vec2(Constants.BACKGROUND_0_MAX_WIDTH,Constants.BACKGROUND_0_MAX_HEIGHT),
                 Constants.BACKGROUND_0_SPEED_SCALE,
                 ColorLibrary.LightGrey));
-        background0.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT,new DrawRectangleComponent());
+        background0.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT,new DrawMultipleRectanglesComponent());
 
         mcd_Entity background1 = createEntity();
         background1.addComponent(ComponentId.BACKGROUND_COMPONENT, new BackgroundComponent(new Vec2(Constants.BACKGROUND_1_MIN_WIDTH,Constants.BACKGROUND_1_MIN_HEIGHT),
                 new Vec2(Constants.BACKGROUND_1_MAX_WIDTH,Constants.BACKGROUND_1_MAX_HEIGHT),
                 Constants.BACKGROUND_1_SPEED_SCALE,
                 ColorLibrary.DarkGrey));
-        background1.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT,new DrawRectangleComponent());
+        background1.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT,new DrawMultipleRectanglesComponent());
     }
     LevelGeneratorParams lgp;
     LevelFileGenerator.LevelGeneratorSerialized lgs;

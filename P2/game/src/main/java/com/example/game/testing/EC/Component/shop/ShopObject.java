@@ -2,6 +2,7 @@ package com.example.game.testing.EC.Component.shop;
 
 import com.example.engine.GraphicsInterface;
 import com.example.engine.IFileStorage;
+import com.example.game.testing.EC.Component.DrawSingleRectComponent;
 import com.example.game.testing.EC.Component.UI.ButtonComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.ComponentId;
@@ -16,6 +17,7 @@ import com.example.utils.Vec2;
 
 public class ShopObject extends ButtonComponent {
     Buyable buyable;
+
     public ShopObject(mcd_Scene scene, Buyable b) {
         super(()->{
             if(b.price==-1){
@@ -25,7 +27,6 @@ public class ShopObject extends ButtonComponent {
             }
         });
         this.buyable = b;
-        this.idleColor = ColorLibrary.LightGrey;
     }
 
     @Override

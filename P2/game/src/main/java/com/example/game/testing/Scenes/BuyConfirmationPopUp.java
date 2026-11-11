@@ -6,7 +6,7 @@ import com.example.engine.ColorEng;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
 import com.example.engine.Scene;
-import com.example.game.testing.EC.Component.DrawRectangleComponent;
+import com.example.game.testing.EC.Component.DrawMultipleRectanglesComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.Component.UI.ButtonComponent;
 import com.example.game.testing.EC.Component.shop.Buyable;
@@ -35,7 +35,7 @@ public class BuyConfirmationPopUp extends mcd_Scene {
     public void start(Engine eng) {
         createEntity().addComponent(
             ComponentId.DRAW_RECTANGLE_COMPONENT,
-            new DrawRectangleComponent(
+            new DrawMultipleRectanglesComponent(
                 ColorLibrary.Yellow,
                 LOGIC_WINDOW_SIZE.x*0.10f,
                 LOGIC_WINDOW_SIZE.y*0.10f,
@@ -44,7 +44,7 @@ public class BuyConfirmationPopUp extends mcd_Scene {
             )
         );
 
-        ButtonComponent cancelBut = (ButtonComponent) ButtonPrefab.createButton(
+        ButtonPrefab.createButton(
             this,
                 new Vec2(
                     LOGIC_WINDOW_SIZE.x*0.25f,
@@ -55,11 +55,11 @@ public class BuyConfirmationPopUp extends mcd_Scene {
                     LOGIC_WINDOW_SIZE.y*0.12f
                 ),
                 "CANCEL",
-                eng::popScene
-        ).getComponent(ComponentId.BUTTON_COMPONENT);
-        cancelBut.setIdleColor(new ColorEng(0xFFAA3939));
+                eng::popScene,
+                new ColorEng(0xFFAA3939)
+        );
 
-        ButtonComponent acceptBut = (ButtonComponent) ButtonPrefab.createButton(
+        ButtonPrefab.createButton(
                 this,
                 new Vec2(
                         LOGIC_WINDOW_SIZE.x*0.55f,
@@ -80,9 +80,9 @@ public class BuyConfirmationPopUp extends mcd_Scene {
                     }catch(IOException io){
                         throw new RuntimeException("Error while writing back file");
                     }
-                }
-        ).getComponent(ComponentId.BUTTON_COMPONENT);
-        acceptBut.setIdleColor(new ColorEng(0xFF2D882D));
+                },
+                new ColorEng(0xFF2D882D)
+        );
 
         mcd_Entity ent = ShopItemPrefab.createShopItem(this, this.elementToBuy);
         TransformComponent tr = (TransformComponent) ent.getComponent(

@@ -8,6 +8,7 @@ import static com.example.game.testing.constants.Constants.TAB_HEIGHT;
 
 import com.example.engine.ColorEng;
 import com.example.engine.GraphicsInterface;
+import com.example.game.testing.EC.Component.DrawSingleRectComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.Component.shop.Buyable;
 import com.example.game.testing.EC.Component.shop.ColorBuyable;
@@ -19,6 +20,7 @@ import com.example.game.testing.Scenes.ShopScene;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.Shop.ColorManager;
 import com.example.game.testing.Systems.Shop.SkinManager;
+import com.example.game.testing.utils.ColorLibrary;
 
 public class ShopItemPrefab {
     public static mcd_Entity createShopItem(mcd_Scene scene, String fileName, String tabName, int price, ColorEng color){
@@ -26,6 +28,7 @@ public class ShopItemPrefab {
         TransformComponent tr = (TransformComponent) ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
         tr.size.x = (LOGIC_WINDOW_SIZE.x-BACK_BUTTON_SQUARE_SIZE)/COLS_IN_SHOP;
         tr.size.y = (LOGIC_WINDOW_SIZE.y-BACK_BUTTON_SQUARE_SIZE-TAB_HEIGHT)/ROWS_IN_SHOP;
+        ent.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT, new DrawSingleRectComponent(ColorLibrary.LightGrey));
         ent.addComponent(ComponentId.SHOP_OBJECT_COMPONENT, new ShopObject(scene,new ColorBuyable(fileName,tabName,price, ColorManager.Colors.BACKGROUND_COLOR,color.clone())));
         return ent;
     }
@@ -34,6 +37,7 @@ public class ShopItemPrefab {
         TransformComponent tr = (TransformComponent) ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
         tr.size.x = (LOGIC_WINDOW_SIZE.x-BACK_BUTTON_SQUARE_SIZE)/COLS_IN_SHOP;
         tr.size.y = (LOGIC_WINDOW_SIZE.y-BACK_BUTTON_SQUARE_SIZE-TAB_HEIGHT)/ROWS_IN_SHOP;
+        ent.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT, new DrawSingleRectComponent(ColorLibrary.LightGrey));
         ent.addComponent(ComponentId.SHOP_OBJECT_COMPONENT, new ShopObject(scene, new SpriteBuyable(fileName,tabName,price,g,path, imgFor)));
         return ent;
     }
@@ -42,6 +46,7 @@ public class ShopItemPrefab {
         TransformComponent tr = (TransformComponent) ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent());
         tr.size.x = (LOGIC_WINDOW_SIZE.x-BACK_BUTTON_SQUARE_SIZE)/COLS_IN_SHOP;
         tr.size.y = (LOGIC_WINDOW_SIZE.y-BACK_BUTTON_SQUARE_SIZE-TAB_HEIGHT)/ROWS_IN_SHOP;
+        ent.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT, new DrawSingleRectComponent(ColorLibrary.LightGrey));
         ent.addComponent(ComponentId.SHOP_OBJECT_COMPONENT, new ShopObject(scene, b));
         return ent;
     }

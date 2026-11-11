@@ -13,7 +13,7 @@ import static com.example.game.testing.constants.Constants.PLAYER_X_POS;
 import com.example.engine.ColorEng;
 import com.example.engine.ImageEng;
 import com.example.game.testing.EC.Component.ColliderComponent;
-import com.example.game.testing.EC.Component.DrawRectangleComponent;
+import com.example.game.testing.EC.Component.DrawMultipleRectanglesComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.Component.VelocityComponent;
 import com.example.game.testing.EC.ComponentId;
@@ -24,7 +24,6 @@ import com.example.game.testing.Systems.LevelGenerator.DangerMatrix;
 import com.example.game.testing.Systems.LevelGenerator.ObstacleFactory;
 import com.example.game.testing.Systems.Shop.ColorManager;
 import com.example.game.testing.Systems.Shop.SkinManager;
-import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
 import static com.example.game.testing.EC.Component.obstacle.ObstacleId.OBSTACLE_LASER;
 import org.json.JSONObject;
@@ -81,9 +80,9 @@ public class LaserComponent extends WarnedObstacle {
         mainImg = SkinManager.getInstance().getImage(SkinManager.Images.LASER);
         if(mainImg == null) {
             if (!ent.hasComponent(ComponentId.DRAW_RECTANGLE_COMPONENT)) {
-                ent.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT, new DrawRectangleComponent());
+                ent.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT, new DrawMultipleRectanglesComponent());
             }
-            DrawRectangleComponent draw=  (DrawRectangleComponent)  ent.getComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
+            DrawMultipleRectanglesComponent draw=  (DrawMultipleRectanglesComponent)  ent.getComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
             draw.addRectangle(tr.pos,rectSize);
             draw.addRectangle(new Vec2((LOGIC_WINDOW_SIZE.x-rectSize.x),tr.pos.y),rectSize);
             draw.color = color;
@@ -120,7 +119,7 @@ public class LaserComponent extends WarnedObstacle {
             }
         }
         else{color.a = 255;}
-        DrawRectangleComponent draw = (DrawRectangleComponent) ent.getComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
+        DrawMultipleRectanglesComponent draw = (DrawMultipleRectanglesComponent) ent.getComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
         draw.color = color;
     }
     private void disable(mcd_Entity ent)
@@ -183,7 +182,7 @@ public class LaserComponent extends WarnedObstacle {
                     ColliderComponent colliderComponent= (ColliderComponent) ent.getComponent(ComponentId.COLLIDER_COMPONENT);
 
                     colliderComponent.addSingleCollider(colliderRelativeCenter,LASER_HEIGHT/2);
-                    DrawRectangleComponent draw = (DrawRectangleComponent) ent.getComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
+                    DrawMultipleRectanglesComponent draw = (DrawMultipleRectanglesComponent) ent.getComponent(ComponentId.DRAW_RECTANGLE_COMPONENT);
                     TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
                     draw.clearRectangles();
                     draw.addRectangle(tr.pos,paintToScreenSize);
