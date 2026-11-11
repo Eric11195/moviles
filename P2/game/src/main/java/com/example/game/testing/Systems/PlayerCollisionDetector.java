@@ -3,6 +3,7 @@ package com.example.game.testing.Systems;
 import static com.example.game.testing.EC.Component.ColliderComponent.checkAllOverlaps;
 
 import com.example.engine.GraphicsInterface;
+import com.example.game.testing.EC.Component.JetpackComponent;
 import com.example.game.testing.EC.Component.obstacle.Obstacle;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Entity;
@@ -21,7 +22,14 @@ public class PlayerCollisionDetector implements mcd_System {
             if(ent.hasComponent(ComponentId.OBSTACLE_COMPONENT) && checkAllOverlaps(player,ent)){
 //                Player dies
 //                playerCollided(scene);
-
+                if(player.hasComponent(ComponentId.JETPACK_COMPONENT)){
+                    com.example.game.testing.EC.Component.JetpackComponent jc = (JetpackComponent) player.getComponent(ComponentId.JETPACK_COMPONENT);
+                    if(jc.consumeShield()){
+                        //consume 1 shield and kill collided entity
+                        ent.setActive(false);
+                        return;
+                    }
+                }
                 ((Obstacle)ent.getComponent(ComponentId.OBSTACLE_COMPONENT)).onPlayerCollision(player, ent, scene);
                 break;
             }
