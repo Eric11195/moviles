@@ -17,6 +17,7 @@ import com.example.game.testing.EC.Prefabs.ShopItemPrefab;
 import com.example.game.testing.EC.Prefabs.ShopTab;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.menu.Scrollable;
+import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.JSON_HELPER;
 import com.example.utils.Vec2;
 
@@ -51,7 +52,7 @@ public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
         fs.forEachFileOnDirectory((filename)->{
             fs.setRelativePath("unlockables/"+filename+"/");
             int finalI = i[0];
-            tabList.add(ShopTab.createShopTab(this, this, filename,finalI));
+            tabList.add(ShopTab.createShopTab(this, this, filename,finalI, new ColorEng(0xFFFFFFFF)));
             // Open folder
             // Count number of elements
             List<mcd_Entity> entOfThisTab = new ArrayList<>();

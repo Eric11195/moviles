@@ -32,12 +32,7 @@ public class ButtonPrefab {
     public static mcd_Entity createButton(mcd_Scene scene, Vec2 pos, Vec2 size, String text, ButtonComponent.ButtonClickFunction clickFunc, ColorEng clr){
         mcd_Entity ent = scene.createEntity();
         ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent(pos.clone(), size.clone()));
-        ImageEng buttonSkin = SkinManager.getInstance().getImage(SkinManager.Images.BUTTON);
-        if(buttonSkin != null) {
-            ent.addComponent(ComponentId.IMAGE_COMPONENT, new ImageComponent(buttonSkin));
-        }else{
-            ent.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT, new DrawSingleRectComponent(clr));
-        }
+        ent.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT, new DrawSingleRectComponent(clr));
         ent.addComponent(ComponentId.BUTTON_COMPONENT, new ButtonComponent(clickFunc));
         ent.addComponent(ComponentId.TEXT_COMPONENT, new TextRectComponent(text));
         return ent;
