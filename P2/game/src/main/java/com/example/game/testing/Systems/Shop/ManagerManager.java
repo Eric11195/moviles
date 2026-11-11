@@ -27,6 +27,11 @@ public class ManagerManager implements mcd_Serializable {
         if(joFonts==null)return false;
         FontManager.setInstance(FontManager.deserialize(g,joFonts));
 
+        JSONObject joPUp = JSON_HELPER.fromJSON(fileStorage, "powerUps");
+        if(joPUp==null)return false;
+        PowerUpManager.setInstance(PowerUpManager.deserialize(joPUp));
+
+
         return initialized = true;
     }
     public static boolean isInitialized(){

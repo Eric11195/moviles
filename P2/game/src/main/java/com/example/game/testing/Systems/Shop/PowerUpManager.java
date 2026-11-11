@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PowerUpManager implements mcd_Serializable {
-    enum extraVars{
+    public static enum extraVars{
         shieldCount,
         extraStartMeters,
         extraStartSpeed,
@@ -16,16 +16,16 @@ public class PowerUpManager implements mcd_Serializable {
     }
     private final List<Integer> powerUpVars;
     public PowerUpManager(){
-        this.powerUpVars = new ArrayList<Integer>(extraVars.COUNT.ordinal());
+        this.powerUpVars = new ArrayList<Integer>();
     }
-    private PowerUpManager _instance;
+    private static PowerUpManager _instance;
     public PowerUpManager getInstance(){
-        if(this._instance==null)
+        if(_instance==null)
             throw new RuntimeException("You must set instance before the call to this function");
         return _instance;
     }
-    public void setInstance(PowerUpManager _instance) {
-        this._instance = _instance;
+    public static void setInstance(PowerUpManager _instance) {
+        PowerUpManager._instance = _instance;
     }
 
     @Override
@@ -37,11 +37,12 @@ public class PowerUpManager implements mcd_Serializable {
         }
         return jo;
     }
-    private static PowerUpManager deserialize(JSONObject jo){
+    static PowerUpManager deserialize(JSONObject jo){
         PowerUpManager pum = new PowerUpManager();
         var values = extraVars.values();
         for(int i = 0; i < extraVars.COUNT.ordinal(); ++i){
-            pum.powerUpVars.set(i, jo.getInt(values[i].toString()));
+            String key = values[i].toString();
+            pum.powerUpVars.add(jo.getInt(key));
         }
         return pum;
     }
