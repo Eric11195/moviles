@@ -7,6 +7,7 @@ import static com.example.game.testing.constants.Constants.MAX_PLAYER_UPWARDS_SP
 import static com.example.game.testing.constants.Constants.PLAYER_DIMENSIONS;
 import static com.example.game.testing.constants.Constants.Y_PLAYER_ACCEL;
 
+import com.example.engine.ColorEng;
 import com.example.engine.GraphicsInterface;
 import com.example.engine.ImageEng;
 import com.example.game.testing.EC.ComponentId;
@@ -17,6 +18,8 @@ import com.example.game.testing.Systems.Shop.PowerUpManager;
 import com.example.game.testing.Systems.Shop.SkinManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
+
+import java.awt.Color;
 
 public class JetpackComponent implements mcd_Component{
     boolean isFlying;
@@ -59,11 +62,16 @@ public class JetpackComponent implements mcd_Component{
         vel.velocity.y+= GRAVITY_FORCE*dt;
     }
     ImageEng img = null;
+    private static final ColorEng shieldColor = new ColorEng(0,0,255,100);
     @Override
     public void render(mcd_Entity ent, GraphicsInterface g)
     {
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
         Vec2 pos = new Vec2(tr.pos.add(halfsizes));
+        if(this.shieldCount > 0){
+            g.setColor(shieldColor);
+            g.drawCircle(pos, playerRad*1.25f, true);
+        }
         if(img==null) {
             g.setStrokeWidth(3);
 
