@@ -1,0 +1,54 @@
+package com.example.game.testing.Systems.Shop;
+
+import com.example.game.testing.utils.mcd_Serializable;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class PowerUpManager implements mcd_Serializable {
+    enum extraVars{
+        shieldCount,
+        extraStartMeters,
+        extraStartSpeed,
+        COUNT
+    }
+    private final List<Integer> powerUpVars;
+    public PowerUpManager(){
+        this.powerUpVars = new ArrayList<Integer>(extraVars.COUNT.ordinal());
+    }
+    private PowerUpManager _instance;
+    public PowerUpManager getInstance(){
+        if(this._instance==null)
+            throw new RuntimeException("You must set instance before the call to this function");
+        return _instance;
+    }
+    public void setInstance(PowerUpManager _instance) {
+        this._instance = _instance;
+    }
+
+    @Override
+    public JSONObject serialize() {
+        JSONObject jo = new JSONObject();
+        var values = extraVars.values();
+        for(int i = 0; i < extraVars.COUNT.ordinal(); ++i){
+            jo.put(values[i].toString(), this.powerUpVars.get(i));
+        }
+        return jo;
+    }
+    private static PowerUpManager deserialize(JSONObject jo){
+        PowerUpManager pum = new PowerUpManager();
+        var values = extraVars.values();
+        for(int i = 0; i < extraVars.COUNT.ordinal(); ++i){
+            pum.powerUpVars.set(i, jo.getInt(values[i].toString()));
+        }
+        return pum;
+    }
+    public void setVar(extraVars var, int newValue){
+        this.powerUpVars.set(var.ordinal(), newValue);
+    }
+    public void addToVar(extraVars var, int valueToAdd){
+        this.powerUpVars.set(var.ordinal(), valueToAdd+this.powerUpVars.get(var.ordinal()));
+    }
+}
