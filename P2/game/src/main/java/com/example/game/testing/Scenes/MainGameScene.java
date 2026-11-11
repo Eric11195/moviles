@@ -152,7 +152,9 @@ public class MainGameScene extends mcd_Scene{
     }
     @Override
     public void resume(Engine eng){
-        eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYING));
+        var audio = eng.getAudio();
+        audio.stopSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYING));
+        audio.playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYING));
     }
     @Override
     public void pause(Engine eng){

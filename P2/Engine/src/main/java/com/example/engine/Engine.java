@@ -169,7 +169,7 @@ public abstract class Engine implements Runnable{
                     poppedScene.pause(this);
                     poppedScene.cleanup(this);
                     sceneStack.remove(sceneStack.size() - 1);
-                    if (!sceneOpQueue.isEmpty()) {
+                    if (!sceneStack.isEmpty()) {
                         Scene newCurrentScene = sceneStack.get(sceneStack.size()-1);
                         newCurrentScene.resume(this);
                     }
