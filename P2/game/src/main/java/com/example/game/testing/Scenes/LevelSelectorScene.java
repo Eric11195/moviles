@@ -7,6 +7,7 @@ import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import com.example.engine.Engine;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.LevelGenerator.LevelFileGenerator;
+import com.example.game.testing.Systems.LevelsSystem;
 import com.example.game.testing.Systems.menu.Scrollable;
 import com.example.game.testing.utils.JSON_HELPER;
 import com.example.utils.Vec2;
@@ -37,6 +38,7 @@ public class LevelSelectorScene extends mcd_Scene{
             if (obj == null) {
                 throw new RuntimeException("File level could not be found");
             }
+            LevelsSystem.setLevel(obj, idx.get());
             Vec2 pos = new Vec2(
                     0,0);
             LevelFileGenerator.LevelGeneratorSerialized lgs = LevelFileGenerator.deserialize(obj);

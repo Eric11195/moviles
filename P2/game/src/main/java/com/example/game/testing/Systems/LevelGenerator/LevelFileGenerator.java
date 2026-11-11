@@ -96,6 +96,7 @@ public class LevelFileGenerator implements mcd_Serializable {
     @Override
     public JSONObject serialize() {
         JSONObject jo = new JSONObject();
+        jo.put("LevelCompleted",false);
         jo.put("LevelGeneratorParams", lgp.serialize());
         jo.put("ObstacleList", obstacleCompleteList);
         return jo;

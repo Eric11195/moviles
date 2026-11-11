@@ -47,7 +47,8 @@ public class MainMenuScene extends mcd_Scene{
         Vec2 [] ButtonCentralPos = {
             new Vec2(screen_width_third, screen_height_half),
             new Vec2(2*screen_width_third, screen_height_half),
-            new Vec2(LOGIC_WINDOW_SIZE.x/2.0f, screen_height_half + DEFAULT_BUTTON_SIZE.y)
+            new Vec2(LOGIC_WINDOW_SIZE.x/2.0f, screen_height_half + DEFAULT_BUTTON_SIZE.y),
+            new Vec2(LOGIC_WINDOW_SIZE.x/4.0f, screen_height_half + DEFAULT_BUTTON_SIZE.y)
         };
         for(int i = 0; i < ButtonCentralPos.length; ++i){
             ButtonCentralPos[i] = ButtonCentralPos[i].add(DEFAULT_BUTTON_SIZE.mul(-0.5f));
@@ -66,6 +67,16 @@ public class MainMenuScene extends mcd_Scene{
                 MainGameScene mgs = new MainGameScene(eng);
                 mgs.setProceduralLevelGen(getDefaultLevelGeneratorParams());
                 eng.setScene(mgs);
+                // eng.getAds().showRewarded();
+                // eng.getAds().hideBanner();
+            }
+        ); createButton(
+            this,
+            ButtonCentralPos[3],
+            DEFAULT_BUTTON_SIZE,
+            "Create Level",
+            () ->{
+                eng.setScene(new LevelGeneratorToJSON(eng));
                 // eng.getAds().showRewarded();
                 // eng.getAds().hideBanner();
             }

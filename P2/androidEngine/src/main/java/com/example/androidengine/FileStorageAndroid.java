@@ -7,6 +7,7 @@ import com.example.engine.IFileStorage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,14 +61,28 @@ public class FileStorageAndroid implements IFileStorage {
     public String read(String filename) throws IOException {
         String path = resolveAssetPath(filename);
 
-        Log.d(TAG, "[READ] Attempting to open asset path inside APK: assets/" + path);
+        File internalFile = new File(context.getFilesDir(), path);
+
+        if (internalFile.exists()) {
+
+            Log.d(TAG, "[READ] Reading internal file: " + path);
+
+            try (InputStream input = new FileInputStream(internalFile)) {
+                return readFromStream(input);
+            }
+        }
+
+        // Si no existe, leer desde assets
+        Log.d(TAG, "[READ] Reading APK asset: " + path);
 
         try (InputStream input = context.getAssets().open(path)) {
             return readFromStream(input);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             Log.e(TAG, "[READ FAILED] Asset not found inside APK at path: assets/" + path, e);
             throw e;
         }
+        //Log.d(TAG, "[READ] Attempting to open asset path inside APK: assets/" + path)
     }
 
     /**

@@ -10,6 +10,8 @@ import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.Prefabs.TextPrefab;
 import com.example.game.testing.Systems.CoinSystem;
 import com.example.game.testing.Systems.DistanceSystem;
+import com.example.game.testing.Systems.LevelsSystem;
+import com.example.game.testing.Systems.RubySystem;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;
@@ -33,10 +35,13 @@ public class EndGameScene extends mcd_Scene{
     final static float buttonYDelta = (LOGIC_WINDOW_SIZE.y-buttonSize.y*2)/3.0f;
     final static Vec2 buttonPos = new Vec2(pos.x+size.x+LOGIC_WINDOW_SIZE.x*0.1f, buttonYDelta);
 
+    boolean gotExtra = false;
+
     mcd_Scene levelScene;
 
     @Override
     public void start(Engine eng) {
+        gotExtra = false;
         pos.y = LOGIC_WINDOW_SIZE.y * 0.10f;
         eng.getAudio().stopSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYING));
         eng.getAudio().playSound(SoundLibrary.getSound(win? SoundLibrary.SoundsId.WIN:SoundLibrary.SoundsId.LOSE));
@@ -48,7 +53,11 @@ public class EndGameScene extends mcd_Scene{
 
         coinsText.setText("Coins: "+Integer.toString(CoinSystem.getInstance().getCoins()));
         metersText.setText("Distance: "+Integer.toString((int)DistanceSystem.getInstance().getDistance()/100));
-
+        int rubiesGained = (int)(DistanceSystem.getInstance().getDistance()/10)+(int)(CoinSystem.getInstance().getCoins()/2);
+        if( !LevelsSystem.checkCompleted()&&win){
+            RubySystem.gainRubies(rubiesGained);
+        }
+        LevelsSystem.completedLevel();
         buttonPos.y = buttonYDelta;
         createButton(
             this,
@@ -70,5 +79,23 @@ public class EndGameScene extends mcd_Scene{
                 eng.setScene(levelScene);
             }
         );
+
+        if(win){
+        buttonPos.y += buttonYDelta/5 + buttonSize.y;
+        buttonSize.y = buttonSize.y*2;
+        buttonSize.x = buttonSize.x*2;
+        createButton(
+                this,
+                buttonPos,
+                buttonSize,
+                "WATCH AD FOR EXTRA RUBIES",
+                () ->{
+                    if(!gotExtra){
+                    RubySystem.gainRubies(rubiesGained);
+                    gotExtra = true;
+                    }
+                }
+        );
+        }
     }
 }
