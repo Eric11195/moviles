@@ -16,6 +16,7 @@ import com.example.game.testing.EC.Prefabs.ShopItemPrefab;
 import com.example.game.testing.EC.Prefabs.TextPrefab;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.RubySystem;
+import com.example.game.testing.Systems.Shop.FontManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
 
@@ -62,14 +63,16 @@ public class NotEnoughMoneyPopUp extends mcd_Scene {
                 new Vec2(LOGIC_WINDOW_SIZE.x*0.1f, LOGIC_WINDOW_SIZE.y*0.2f),
                 new Vec2(LOGIC_WINDOW_SIZE.x*0.8f,LOGIC_WINDOW_SIZE.y* 0.3f),
                 "Not enough rubies to buy this item.",
-                ColorLibrary.Black.clone()
+                ColorLibrary.Black.clone(),
+                FontManager.Fonts.TITLE_FONT
         );
         TextPrefab.createText(
                 this,
                 new Vec2(LOGIC_WINDOW_SIZE.x*0.1f, LOGIC_WINDOW_SIZE.y*0.3f),
                 new Vec2(LOGIC_WINDOW_SIZE.x*0.8f,LOGIC_WINDOW_SIZE.y* 0.4f),
                 "("+ Integer.toString(RubySystem.getRubies())+"/"+elementToBuy.price+")",
-                ColorLibrary.Black.clone()
+                ColorLibrary.Black.clone(),
+                FontManager.Fonts.TITLE_FONT
         );
     }
 
