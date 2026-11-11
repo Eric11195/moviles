@@ -54,7 +54,7 @@ public class PowerUpManager implements mcd_Serializable {
     public void addToVar(IFileStorage fs, extraVars var, int valueToAdd){
         this.powerUpVars.set(var.ordinal(), valueToAdd+this.powerUpVars.get(var.ordinal()));
         fs.setRelativePath("presets");
-        JSON_HELPER.toJSON(fs, "skins", this.serialize());
+        JSON_HELPER.toJSON(fs, "powerUps", this.serialize());
     }
     public int getVar(extraVars var){
         return this.powerUpVars.get(var.ordinal());
