@@ -102,7 +102,9 @@ public class MainGameScene extends mcd_Scene{
         this.lgs = lgs;
         this.lt = levelType.fixed;
         updateLevelWithPowerUps(this.lgs.levelGeneratorParams);
+        lgs.eliminateAllObstaclesTillDistanceX(PowerUpManager.getInstance().getVar(PowerUpManager.extraVars.extraStartMeters));
     }
+    //Return time stamp of the given level after x meters have passed
     private void updateLevelWithPowerUps(LevelGeneratorParams lgp){
         lgp.levelInitialSpeed += PowerUpManager.getInstance().getVar(PowerUpManager.extraVars.extraStartSpeed);
     }
@@ -145,7 +147,6 @@ public class MainGameScene extends mcd_Scene{
         cs.reset();
         DistanceSystem ds = DistanceSystem.getInstance();
         addSystem(ds);
-        ds.reset();
         addSystem(levelGen);
 
         addRetosSystems(eng);

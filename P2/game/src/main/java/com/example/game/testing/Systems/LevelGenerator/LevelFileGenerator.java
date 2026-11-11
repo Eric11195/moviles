@@ -104,6 +104,12 @@ public class LevelFileGenerator implements mcd_Serializable {
     public static class LevelGeneratorSerialized {
         public LevelGeneratorParams levelGeneratorParams;
         List<ObstacleFactory> obsFactory = new ArrayList<ObstacleFactory>();
+        public void eliminateAllObstaclesTillDistanceX(float x){
+            float timeStamp = this.levelGeneratorParams.calculateTimestampForDistance(x);
+            while(!obsFactory.isEmpty() && obsFactory.get(0).spawnTime < timeStamp){
+                obsFactory.remove(0);
+            }
+        }
     }
 
     public static LevelGeneratorSerialized deserialize(JSONObject obj) {
