@@ -1,5 +1,7 @@
 package com.example.game.testing.Systems.Shop;
 
+import com.example.engine.IFileStorage;
+import com.example.game.testing.utils.JSON_HELPER;
 import com.example.game.testing.utils.mcd_Serializable;
 
 import org.json.JSONObject;
@@ -46,11 +48,13 @@ public class PowerUpManager implements mcd_Serializable {
         }
         return pum;
     }
-    public void setVar(extraVars var, int newValue){
+    public void setVar(IFileStorage fs, extraVars var, int newValue){
         this.powerUpVars.set(var.ordinal(), newValue);
     }
-    public void addToVar(extraVars var, int valueToAdd){
+    public void addToVar(IFileStorage fs, extraVars var, int valueToAdd){
         this.powerUpVars.set(var.ordinal(), valueToAdd+this.powerUpVars.get(var.ordinal()));
+        fs.setRelativePath("presets");
+        JSON_HELPER.toJSON(fs, "skins", this.serialize());
     }
     public int getVar(extraVars var){
         return this.powerUpVars.get(var.ordinal());

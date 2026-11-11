@@ -68,10 +68,6 @@ public class JetpackComponent implements mcd_Component{
     {
         TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
         Vec2 pos = new Vec2(tr.pos.add(halfsizes));
-        if(this.shieldCount > 0){
-            g.setColor(shieldColor);
-            g.drawCircle(pos, playerRad*1.25f, true);
-        }
         if(img==null) {
             g.setStrokeWidth(3);
 
@@ -82,6 +78,10 @@ public class JetpackComponent implements mcd_Component{
             g.drawCircle(pos, playerRad, false);
         }else{
             g.drawImage(img, pos.add(new Vec2(-playerRad,-playerRad)), PLAYER_DIMENSIONS);
+        }
+        if(this.shieldCount > 0){
+            g.setColor(shieldColor);
+            g.drawCircle(pos, playerRad*1.25f, true);
         }
     }
 
