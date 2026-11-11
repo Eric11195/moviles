@@ -19,7 +19,7 @@ public class PowerUpManager implements mcd_Serializable {
         this.powerUpVars = new ArrayList<Integer>();
     }
     private static PowerUpManager _instance;
-    public PowerUpManager getInstance(){
+    public static PowerUpManager getInstance(){
         if(_instance==null)
             throw new RuntimeException("You must set instance before the call to this function");
         return _instance;
@@ -51,5 +51,8 @@ public class PowerUpManager implements mcd_Serializable {
     }
     public void addToVar(extraVars var, int valueToAdd){
         this.powerUpVars.set(var.ordinal(), valueToAdd+this.powerUpVars.get(var.ordinal()));
+    }
+    public int getVar(extraVars var){
+        return this.powerUpVars.get(var.ordinal());
     }
 }

@@ -20,6 +20,7 @@ import com.example.game.testing.Systems.LevelGenerator.FileLevelGenerator;
 import com.example.game.testing.Systems.LevelGenerator.LevelFileGenerator;
 import com.example.game.testing.Systems.LevelGenerator.LevelGeneratorParams;
 import com.example.game.testing.Systems.LevelGenerator.ProceduralLevelGenerator;
+import com.example.game.testing.Systems.Shop.PowerUpManager;
 import com.example.game.testing.constants.Constants;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.SoundLibrary;
@@ -94,11 +95,16 @@ public class MainGameScene extends mcd_Scene{
         this.levelGenSet = true;
         this.lgp = lgp;
         this.lt = levelType.procedural;
+        updateLevelWithPowerUps(this.lgp);
     }
     public void setFixedLevelGen(LevelFileGenerator.LevelGeneratorSerialized lgs){
         this.levelGenSet = true;
         this.lgs = lgs;
         this.lt = levelType.fixed;
+        updateLevelWithPowerUps(this.lgs.levelGeneratorParams);
+    }
+    private void updateLevelWithPowerUps(LevelGeneratorParams lgp){
+        lgp.levelInitialSpeed += PowerUpManager.getInstance().getVar(PowerUpManager.extraVars.extraStartSpeed);
     }
     public void instantiateLevelGen(){
         assert(this.levelGenSet);
