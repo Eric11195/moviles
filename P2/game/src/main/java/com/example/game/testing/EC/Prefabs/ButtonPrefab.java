@@ -37,4 +37,25 @@ public class ButtonPrefab {
         ent.addComponent(ComponentId.TEXT_COMPONENT, new TextRectComponent(text));
         return ent;
     }
+    public static mcd_Entity createButtonOutsideScene(mcd_Scene scene, Vec2 pos, Vec2 size, String text, ButtonComponent.ButtonClickFunction clickFunc){
+        mcd_Entity ent = new mcd_Entity(scene);
+        ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent(pos.clone(), size.clone()));
+        ImageEng buttonSkin = SkinManager.getInstance().getImage(SkinManager.Images.BUTTON);
+        if(buttonSkin != null) {
+            ent.addComponent(ComponentId.IMAGE_COMPONENT, new ImageComponent(buttonSkin));
+        }else{
+            ent.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT, new DrawSingleRectComponent(ColorManager.getInstance().getColor(ColorManager.Colors.BUTTONS_COLOR)));
+        }
+        ent.addComponent(ComponentId.BUTTON_COMPONENT, new ButtonComponent(clickFunc));
+        ent.addComponent(ComponentId.TEXT_COMPONENT, new TextRectComponent(text));
+        return ent;
+    }
+    public static mcd_Entity createButtonOutsideScene(mcd_Scene scene, Vec2 pos, Vec2 size, String text, ButtonComponent.ButtonClickFunction clickFunc, ColorEng clr){
+        mcd_Entity ent = new mcd_Entity(scene);
+        ent.addComponent(ComponentId.TRANSFORM_COMPONENT, new TransformComponent(pos.clone(), size.clone()));
+        ent.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT, new DrawSingleRectComponent(clr));
+        ent.addComponent(ComponentId.BUTTON_COMPONENT, new ButtonComponent(clickFunc));
+        ent.addComponent(ComponentId.TEXT_COMPONENT, new TextRectComponent(text));
+        return ent;
+    }
 }
