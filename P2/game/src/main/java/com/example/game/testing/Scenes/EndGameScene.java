@@ -57,8 +57,9 @@ public class EndGameScene extends mcd_Scene{
         int rubiesGained = (int)(DistanceSystem.getInstance().getDistance()/10)+(int)(CoinSystem.getInstance().getCoins()/2);
         if(win&&!LevelsSystem.checkCompleted()){
             RubySystem.gainRubies(rubiesGained);
+            LevelsSystem.completedLevel();
         }
-        LevelsSystem.completedLevel();
+
 
         buttonPos.y = buttonYDelta;
         createButton(
