@@ -7,4 +7,9 @@ public class NotificationDesktop extends NotificationInterface {
     public void createNotification(String _title, String _body) {
 
     }
+
+    @Override
+    public void scheduleNotification(int i, int sec) {
+
+    }
 }

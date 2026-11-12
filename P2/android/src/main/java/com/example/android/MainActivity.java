@@ -9,9 +9,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.androidengine.AndroidEngine;
+import com.example.androidengine.NotificationAndroid;
 import com.example.game.testing.Scenes.MainMenuScene;
 
 public class MainActivity extends AppCompatActivity {
+    AndroidEngine eng;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,8 +25,16 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        AndroidEngine eng = new AndroidEngine(this, R.id.mainSurfaceView,R.id.adView, 600,400);
+        eng = new AndroidEngine(this, R.id.mainSurfaceView,R.id.adView, 600,400);
         eng.setScene(new MainMenuScene(eng));
         eng.resume();
+        ((NotificationAndroid)eng.getNotifs()).setSmallIcon(R.drawable.homunculus);
+        eng.getNotifs().createNotification("buh","guh");
+        eng.getNotifs().scheduleNotification(0,0);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 }
