@@ -8,7 +8,6 @@ import static com.example.game.testing.constants.Constants.ZAPPER_DELTA_WIDTH;
 import static com.example.game.testing.constants.Constants.ZAPPER_HEAD_RADIUS;
 import static com.example.game.testing.constants.Constants.ZAPPER_LINE_WIDTH;
 import static com.example.game.testing.constants.Constants.ZAPPER_MAX_COLLIDERS;
-import static com.example.game.testing.utils.JSON_HELPER.vec2FromJSON;
 import static com.example.game.testing.utils.StartPlayerDead.startPlayerDead;
 
 import com.example.engine.GraphicsInterface;
@@ -159,8 +158,8 @@ public class ZapperComponent extends Obstacle {
     public JSONObject serialize(){
         JSONObject jo = super.serialize();
         TransformComponent tr = (TransformComponent) myEnt.getComponent(ComponentId.TRANSFORM_COMPONENT);
-        jo.put("start", JSON_HELPER.toJSON(tr.pos));
-        jo.put("end", JSON_HELPER.toJSON(end.add(tr.pos)));
+        jo.put("start", JSON_HELPER.toJSONModifiable(tr.pos));
+        jo.put("end", JSON_HELPER.toJSONModifiable(end.add(tr.pos)));
         jo.put("id",OBSTACLE_ZAPPER);
         return jo;
     }

@@ -1,7 +1,7 @@
 package com.example.game.testing.Systems.Shop;
 
 import static com.example.game.testing.utils.JSON_HELPER.colorFromJSON;
-import static com.example.game.testing.utils.JSON_HELPER.toJSON;
+import static com.example.game.testing.utils.JSON_HELPER.toJSONModifiable;
 
 import com.example.engine.ColorEng;
 import com.example.engine.IFileStorage;
@@ -45,7 +45,7 @@ public class ColorManager implements mcd_Serializable {
         final int[] i = {0};
         colorList.forEach((clr)->{
             JSONObject joColor = new JSONObject();
-            toJSON(clr, joColor);
+            JSON_HELPER.toJSONModifiable(clr, joColor);
             jo.put(enum_clr[i[0]].toString(), joColor);
             ++i[0];
         });
@@ -87,6 +87,6 @@ public class ColorManager implements mcd_Serializable {
     }
     private void storeChangesToFile(IFileStorage fs){
         fs.setRelativePath("presets");
-        JSON_HELPER.toJSON(fs, "colors",this.serialize());
+        JSON_HELPER.toJSONModifiable(fs, "colors",this.serialize());
     }
 }

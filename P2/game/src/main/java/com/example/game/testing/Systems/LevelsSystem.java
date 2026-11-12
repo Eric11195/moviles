@@ -1,14 +1,10 @@
 package com.example.game.testing.Systems;
 
 import com.example.engine.Engine;
-import com.example.engine.IFileStorage;
-import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.utils.JSON_HELPER;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import javax.naming.Context;
 
 public class LevelsSystem{
 
@@ -29,7 +25,7 @@ public class LevelsSystem{
         JSONObject infoLevel= info.getJSONObject(currentLevel);
         try {
         infoLevel.put("LevelCompleted",true);
-        JSON_HELPER.toJSON(eng.getFileStorage(),"infoLevels",info);
+        JSON_HELPER.toJSONModifiable(eng.getFileStorage(),"infoLevels",info);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }

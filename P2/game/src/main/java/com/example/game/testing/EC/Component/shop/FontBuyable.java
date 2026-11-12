@@ -3,18 +3,13 @@ package com.example.game.testing.EC.Component.shop;
 import com.example.engine.FontEng;
 import com.example.engine.GraphicsInterface;
 import com.example.engine.IFileStorage;
-import com.example.engine.ImageEng;
-import com.example.game.testing.Scenes.ShopScene;
-import com.example.game.testing.Systems.Shop.ColorManager;
 import com.example.game.testing.Systems.Shop.FontManager;
-import com.example.game.testing.Systems.Shop.SkinManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.JSON_HELPER;
 import com.example.utils.Vec2;
 
 import org.json.JSONObject;
 
-import java.awt.Font;
 import java.util.Objects;
 
 public class FontBuyable extends Buyable {
@@ -44,7 +39,7 @@ public class FontBuyable extends Buyable {
     @Override
     public JSONObject serialize(){
         JSONObject jo = super.serialize();
-        JSON_HELPER.toJSON(this.font, jo);
+        JSON_HELPER.toJSONModifiable(this.font, jo);
         jo.put("fontFor", fontFor.toString());
         return jo;
     }

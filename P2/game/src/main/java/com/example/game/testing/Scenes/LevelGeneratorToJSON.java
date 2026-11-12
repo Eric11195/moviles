@@ -1,11 +1,12 @@
 package com.example.game.testing.Scenes;
 
-import static com.example.game.testing.utils.JSON_HELPER.toJSON;
+import static com.example.game.testing.utils.JSON_HELPER.toJSONModifiable;
 
 import com.example.engine.Engine;
 import com.example.engine.IFileStorage;
 import com.example.game.testing.Systems.LevelGenerator.LevelFileGenerator;
 import com.example.game.testing.Systems.LevelGenerator.LevelGeneratorParams;
+import com.example.game.testing.utils.JSON_HELPER;
 
 import org.json.JSONObject;
 
@@ -53,12 +54,12 @@ public class LevelGeneratorToJSON extends mcd_Scene {
         );
         IFileStorage fileStorage = eng.getFileStorage();
         fileStorage.setRelativePath("levels");
-        toJSON(fileStorage, "Level1", j1);
-        toJSON(fileStorage, "Level2", j2);
-        toJSON(fileStorage, "Level3", j3);
-        toJSON(fileStorage, "Level4", j4);
-        toJSON(fileStorage, "Level5", j5);
-        toJSON(fileStorage, "Level6", j6);
+        JSON_HELPER.toJSONModifiable(fileStorage, "Level1", j1);
+        JSON_HELPER.toJSONModifiable(fileStorage, "Level2", j2);
+        JSON_HELPER.toJSONModifiable(fileStorage, "Level3", j3);
+        JSON_HELPER.toJSONModifiable(fileStorage, "Level4", j4);
+        JSON_HELPER.toJSONModifiable(fileStorage, "Level5", j5);
+        JSON_HELPER.toJSONModifiable(fileStorage, "Level6", j6);
         eng.setScene(new MainMenuScene(eng));
     }
     private static LevelGeneratorParams getCoin1Params() {

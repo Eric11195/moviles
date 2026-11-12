@@ -1,9 +1,7 @@
 package com.example.game.testing.Systems.Shop;
 
-import static com.example.game.testing.utils.JSON_HELPER.colorFromJSON;
-import static com.example.game.testing.utils.JSON_HELPER.toJSON;
+import static com.example.game.testing.utils.JSON_HELPER.toJSONModifiable;
 
-import com.example.engine.ColorEng;
 import com.example.engine.FontEng;
 import com.example.engine.GraphicsInterface;
 import com.example.engine.IFileStorage;
@@ -56,7 +54,7 @@ public class FontManager implements mcd_Serializable {
                 jo.put(enum_font[i].toString(), JSONObject.NULL);
             } else {
                 JSONObject joFont = new JSONObject();
-                toJSON(font, joFont);
+                toJSONModifiable(font, joFont);
                 jo.put(enum_font[i].toString(), joFont);
             }
         }
@@ -97,6 +95,6 @@ public class FontManager implements mcd_Serializable {
         fontList.set(type.ordinal(), font);
 
         fs.setRelativePath("presets");
-        JSON_HELPER.toJSON(fs,"fonts",this.serialize());
+        JSON_HELPER.toJSONModifiable(fs,"fonts",this.serialize());
     }
 }

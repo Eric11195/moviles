@@ -31,6 +31,7 @@ public class ManagerManager implements mcd_Serializable {
         if(joPUp==null)return false;
         PowerUpManager.setInstance(PowerUpManager.deserialize(joPUp));
 
+        JSON_HELPER.deserialize(fileStorage);
 
         return initialized = true;
     }

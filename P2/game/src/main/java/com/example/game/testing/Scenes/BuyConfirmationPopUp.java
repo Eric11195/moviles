@@ -76,7 +76,7 @@ public class BuyConfirmationPopUp extends mcd_Scene {
                     elementToBuy.buy(eng.getFileStorage());
                     eng.getFileStorage().setRelativePath("unlockables/"+elementToBuy.tabName);
                     try {
-                        eng.getFileStorage().writeModifiable(elementToBuy.fileName, JSON_HELPER.toJSON(elementToBuy).toString());
+                        eng.getFileStorage().writeModifiable(elementToBuy.fileName, JSON_HELPER.toJSONModifiable(elementToBuy).toString());
                     }catch(IOException io){
                         throw new RuntimeException("Error while writing back file");
                     }

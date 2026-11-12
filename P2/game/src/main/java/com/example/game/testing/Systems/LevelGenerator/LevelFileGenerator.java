@@ -1,7 +1,7 @@
 package com.example.game.testing.Systems.LevelGenerator;
 
 import static com.example.game.testing.EC.Prefabs.PlayerPrefab.createPlayer;
-import static com.example.game.testing.utils.JSON_HELPER.toJSON;
+import static com.example.game.testing.utils.JSON_HELPER.toJSONModifiable;
 
 import com.example.engine.Engine;
 import com.example.game.testing.EC.Component.obstacle.CoinComponent;

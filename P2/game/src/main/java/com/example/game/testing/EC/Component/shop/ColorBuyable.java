@@ -1,12 +1,10 @@
 package com.example.game.testing.EC.Component.shop;
 
-import static com.example.game.testing.utils.JSON_HELPER.toJSON;
+import static com.example.game.testing.utils.JSON_HELPER.toJSONModifiable;
 
 import com.example.engine.ColorEng;
 import com.example.engine.GraphicsInterface;
 import com.example.engine.IFileStorage;
-import com.example.engine.ImageEng;
-import com.example.game.testing.Scenes.ShopScene;
 import com.example.game.testing.Systems.Shop.ColorManager;
 import com.example.game.testing.utils.JSON_HELPER;
 import com.example.utils.Vec2;
@@ -53,7 +51,7 @@ public class ColorBuyable extends Buyable {
     @Override
     public JSONObject serialize() {
         JSONObject jo = super.serialize();
-        toJSON(color, jo);
+        JSON_HELPER.toJSONModifiable(color, jo);
         jo.put("colorFor",colorFor.toString());
         return jo;
     }

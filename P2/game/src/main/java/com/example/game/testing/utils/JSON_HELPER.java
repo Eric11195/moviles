@@ -8,17 +8,65 @@ import com.example.utils.Vec2;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.List;
 
 public class JSON_HELPER {
-    public static JSONArray toJSON(List<?> l) {
+    static boolean checkValidityOfJSONs = false;
+    public static Dictionary<String, Long> hashPerFile;
+    private static void initializeHasherFile(JSONObject jo){
+
+    }
+    public static void deserialize(IFileStorage fileStorage){
+        hashPerFile = new Hashtable<>();
+
+        String file_name = "hashPerFile";
+        fileStorage.setRelativePath("security");
+        System.out.println("Begin Reading "+file_name+" in "+fileStorage.getCurrentPath());
+
+        JSONObject jo;
+        try {
+            String content = fileStorage.readModifiable(file_name);
+            jo = new JSONObject(content);
+            System.out.println(file_name+" Read succesfully");
+        } catch (java.io.IOException e) {
+            //File does not exist
+            jo = new JSONObject();
+            initializeHasherFile(jo);
+        }
+        for(String key : jo.keySet()){
+            hashPerFile.put(key,jo.getLong(key));
+        }
+        saveCurrentHasher(fileStorage);
+    }
+    private static void saveCurrentHasher(IFileStorage fs){
+        JSONObject jo = new JSONObject();
+        Enumeration<String> keys = hashPerFile.keys();
+        while(keys.hasMoreElements()) {
+            String key = keys.nextElement();
+            jo.put(key, hashPerFile.get(key));
+        }
+        String file_name = "hashPerFile.json";
+        String path = fs.getCurrentPath();
+        fs.setRelativePath("security");
+        try {
+            fs.writeModifiable(file_name, jo.toString());
+            System.out.println("In path: "+ fs.getCurrentPath()+"\nJSON written to file "+file_name+".json succesfully");
+        }catch(java.io.IOException e){
+            e.printStackTrace();
+        }
+        fs.setRelativePath(path);
+    }
+    public static JSONArray toJSONModifiable(List<?> l) {
         JSONArray ja = new JSONArray();
 
         l.forEach(elem -> {
             if (elem instanceof mcd_Serializable) {
-                ja.put(toJSON((mcd_Serializable) elem));
+                ja.put(toJSONModifiable((mcd_Serializable) elem));
             }else if (elem instanceof Vec2) {
-                ja.put(toJSON((Vec2) elem));
+                ja.put(toJSONModifiable((Vec2) elem));
             } else {
                 throw new IllegalArgumentException(
                         "Unsupported type: " + elem.getClass().getName()
@@ -35,20 +83,20 @@ public class JSON_HELPER {
 //        });
 //        return ja;
 //    }
-    public static <T extends mcd_Serializable> JSONObject toJSON(T obj){
+    public static <T extends mcd_Serializable> JSONObject toJSONModifiable(T obj){
         return obj.serialize();
     }
-    public static JSONObject toJSON(Vec2 v){
+    public static JSONObject toJSONModifiable(Vec2 v){
         JSONObject jo = new JSONObject();
         jo.put("x",(double)v.x);
         jo.put("y",(double)v.y);
         return jo;
     }
-    public static JSONObject toJSON(ColorEng clr, JSONObject jo){
+    public static JSONObject toJSONModifiable(ColorEng clr, JSONObject jo){
         jo.put("color", clr.getColorAsInt());
         return jo;
     }
-    public static JSONObject toJSON(FontEng f, JSONObject jo){
+    public static JSONObject toJSONModifiable(FontEng f, JSONObject jo){
         jo.put("fontName", f.fileName);
         jo.put("fontSize", f.fontSize);
         return jo;
@@ -69,10 +117,14 @@ public class JSON_HELPER {
         return jo;
     }
 
-    public static void toJSON(IFileStorage fileStorage, String file_name, JSONObject jo){
+    public static void toJSONModifiable(IFileStorage fileStorage, String file_name, JSONObject jo){
+        if(hashPerFile==null){
+            throw new RuntimeException("HashPerFile not initialized, deserialize must be called");
+        }
         try {
             String json = jo.toString();
             long hash = HashUtils.getHashForJSONObject(json);
+            hashPerFile.put(file_name, hash);
             System.out.println("Written file with hash:"+hash);
             fileStorage.writeModifiable(file_name+".json", json);
             System.out.println("In path: "+ fileStorage.getCurrentPath()+"\nJSON written to file "+file_name+".json succesfully");
@@ -89,9 +141,6 @@ public class JSON_HELPER {
             }
 
             String content = fileStorage.read(file_name);
-            long hash = HashUtils.getHashForJSONObject(content);
-            System.out.println("Read file with expected hash: "+hash);
-
             JSONObject jo = new JSONObject(content);
             System.out.println(file_name+" Read succesfully");
             return jo;
@@ -103,6 +152,9 @@ public class JSON_HELPER {
         return null;
     }
     public static JSONObject fromJSONModifiable(IFileStorage fileStorage, String file_name) {
+        if(hashPerFile==null){
+            throw new RuntimeException("HashPerFile not initialized, deserialize must be called");
+        }
         System.out.println("Begin Reading "+file_name+" in "+fileStorage.getCurrentPath());
         try {
             if (!file_name.endsWith(".json")) {
@@ -112,6 +164,11 @@ public class JSON_HELPER {
             String content = fileStorage.readModifiable(file_name);
             long hash = HashUtils.getHashForJSONObject(content);
             System.out.println("Read file with expected hash: "+hash);
+
+            Long l = hashPerFile.get(file_name);
+            if(checkValidityOfJSONs && (l==null || l != hash)){
+                throw new RuntimeException("Incorrect Hash for file "+file_name+".json");
+            }
 
             JSONObject jo = new JSONObject(content);
             System.out.println(file_name+" Read succesfully");

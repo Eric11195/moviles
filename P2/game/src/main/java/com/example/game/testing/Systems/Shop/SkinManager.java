@@ -1,9 +1,7 @@
 package com.example.game.testing.Systems.Shop;
 
-import static com.example.game.testing.utils.JSON_HELPER.colorFromJSON;
-import static com.example.game.testing.utils.JSON_HELPER.toJSON;
+import static com.example.game.testing.utils.JSON_HELPER.toJSONModifiable;
 
-import com.example.engine.ColorEng;
 import com.example.engine.GraphicsInterface;
 import com.example.engine.IFileStorage;
 import com.example.engine.ImageEng;
@@ -93,6 +91,6 @@ public class SkinManager implements mcd_Serializable {
     public void setImage(Images type, ImageEng img, IFileStorage fs){
         imageList.set(type.ordinal(), img); // Fixed: actually update the list instead of a local variable
         fs.setRelativePath("presets");
-        JSON_HELPER.toJSON(fs, "skins", this.serialize());
+        JSON_HELPER.toJSONModifiable(fs, "skins", this.serialize());
     }
 }
