@@ -45,9 +45,9 @@ Java_com_yourpackage_game_SaveSecurity_calculateFileHash(
     const std::string SECRET_SALT = "SecretmcdSalt_PayMeInsteadOfHackingMaGame;-;";
     std::string dataToHash = fileString + SECRET_SALT;
 
-    // 3. Generate a 64-character SHA-256 hex string
+    // 3. Generate 64bit hash value
     uint64_t rawHash = computeDeterministicHash64(dataToHash);
 
-    // 4. Return the hash string back to Kotlin/Java
+    // 4. Return the hash value back to Kotlin/Java
     return static_cast<jlong>(rawHash);
 }
