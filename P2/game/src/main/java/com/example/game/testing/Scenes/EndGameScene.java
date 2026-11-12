@@ -12,6 +12,7 @@ import com.example.game.testing.Systems.CoinSystem;
 import com.example.game.testing.Systems.DistanceSystem;
 import com.example.game.testing.Systems.LevelsSystem;
 import com.example.game.testing.Systems.RubySystem;
+import com.example.game.testing.Systems.Shop.FontManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.SoundLibrary;
 import com.example.utils.Vec2;
@@ -45,11 +46,11 @@ public class EndGameScene extends mcd_Scene{
         pos.y = LOGIC_WINDOW_SIZE.y * 0.10f;
         eng.getAudio().stopSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYING));
         eng.getAudio().playSound(SoundLibrary.getSound(win? SoundLibrary.SoundsId.WIN:SoundLibrary.SoundsId.LOSE));
-        TextPrefab.createText(this,pos,size,win? "YOU WIN":"YOU LOSE", win?ColorLibrary.Blue : ColorLibrary.Red);
+        TextPrefab.createText(this,pos,size,win? "YOU WIN":"YOU LOSE", win?ColorLibrary.Blue : ColorLibrary.Red, FontManager.Fonts.TITLE_FONT);
         pos.y = pos.y + size.y + LOGIC_WINDOW_SIZE.y*0.1f;
-        coinsText = (TextRectComponent) TextPrefab.createText(this, pos,size, "0", ColorLibrary.Gold).getComponent(ComponentId.TEXT_COMPONENT);
+        coinsText = (TextRectComponent) TextPrefab.createText(this, pos,size, "0", ColorLibrary.Gold, FontManager.Fonts.COIN_N_DISTANCE_COUNT).getComponent(ComponentId.TEXT_COMPONENT);
         pos.y = pos.y + size.y + LOGIC_WINDOW_SIZE.y*0.1f;
-        metersText = (TextRectComponent) TextPrefab.createText(this, pos,size, "0", ColorLibrary.Gold).getComponent(ComponentId.TEXT_COMPONENT);
+        metersText = (TextRectComponent) TextPrefab.createText(this, pos,size, "0", ColorLibrary.Gold, FontManager.Fonts.COIN_N_DISTANCE_COUNT).getComponent(ComponentId.TEXT_COMPONENT);
 
         coinsText.setText("Coins: "+Integer.toString(CoinSystem.getInstance().getCoins()));
         metersText.setText("Distance: "+Integer.toString((int)DistanceSystem.getInstance().getDistance()/100));

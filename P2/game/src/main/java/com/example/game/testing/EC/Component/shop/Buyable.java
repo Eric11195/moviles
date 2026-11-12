@@ -32,7 +32,8 @@ public abstract class Buyable implements mcd_Serializable {
     protected static enum BuyableType{
         skin,
         color,
-        font
+        font,
+        powerUp
     }
     public abstract void equip(IFileStorage fs);
     @Override
@@ -51,10 +52,12 @@ public abstract class Buyable implements mcd_Serializable {
                 return ColorBuyable.deserializeColor(fileName,tabName,price,obj);
             case font:
                 return FontBuyable.deserializeFont(fileName,tabName,price,g,obj);
+            case powerUp:
+                return PowerUpBuyable.deserializePUp(fileName,tabName,g,price,obj);
             default:
                 throw new RuntimeException("Invalid type");
         }
     }
     public abstract boolean selected();
-
+    public void buy(IFileStorage fs){}
 }

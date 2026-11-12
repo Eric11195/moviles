@@ -67,4 +67,43 @@ public class LevelGeneratorParams implements mcd_Serializable {
         lgp.maxNumberOfSimultaneousCoins = jo.getInt("maxNumberOfSimultaneousCoins");
         return lgp;
     }
+
+    /**
+     * Calculates the exact timestamp (in seconds) when the game reaches a specific distance.
+     *
+     * @param targetDistanceInPixels The distance traveled (if your game uses 'meters'
+     *                               that do not equal 1 pixel, convert to pixels first).
+     * @return The timestamp in seconds.
+     */
+    public float calculateTimestampForDistance(float targetDistanceInPixels) {
+        if (targetDistanceInPixels <= 0) return 0.0f;
+
+        float totalTimeInSeconds = 0.0f;
+        float distanceRemaining = targetDistanceInPixels;
+        float currentSpeed = this.levelInitialSpeed;
+
+        // Handle edge case where speed never increases to prevent infinite loops
+        if (this.augmentSpeedEachXPixels <= 0) {
+            return targetDistanceInPixels / currentSpeed;
+        }
+
+        while (distanceRemaining > 0) {
+            if (distanceRemaining >= this.augmentSpeedEachXPixels) {
+                // Calculate time to cross the full interval at the current speed
+                totalTimeInSeconds += this.augmentSpeedEachXPixels / currentSpeed;
+
+                // Deduct the distance covered in this interval
+                distanceRemaining -= this.augmentSpeedEachXPixels;
+
+                // Increase the speed for the next interval
+                currentSpeed += this.augmentSpeedByYEachXPixels;
+            } else {
+                // Calculate time to cross the remaining fraction of an interval
+                totalTimeInSeconds += distanceRemaining / currentSpeed;
+                distanceRemaining = 0;
+            }
+        }
+
+        return totalTimeInSeconds;
+    }
 }

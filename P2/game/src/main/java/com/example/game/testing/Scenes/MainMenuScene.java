@@ -55,7 +55,7 @@ public class MainMenuScene extends mcd_Scene{
         }
 
         for (int i = 0; i<text.length;i++){
-            TextPrefab.createText(this,new Vec2(screen_width_sixth,screen_height_eighth+yOffset*i),textSize,text[i], ColorLibrary.Black);
+            TextPrefab.createText(this,new Vec2(screen_width_sixth,screen_height_eighth+yOffset*i),textSize,text[i], ColorLibrary.Black, FontManager.Fonts.TITLE_FONT);
         }
 
         createButton(

@@ -18,16 +18,10 @@ public class ButtonComponent implements mcd_Component {
     public interface ButtonClickFunction{
         void onClick();
     }
-    public void setIdleColor(ColorEng clr){
-        idleColor = clr.clone();
-    }
-    public void onClick(){}
+    public void onClick(mcd_Entity ent){}
     ButtonClickFunction func;
     boolean hovering = false;
     boolean clicked = false;
-    protected ColorEng idleColor = ColorManager.getInstance().getColor(ColorManager.Colors.BUTTONS_COLOR);
-    protected ColorEng hoverColor = ColorLibrary.Green.clone();
-    protected ColorEng clickedColor = ColorLibrary.Blue.clone();
     public ButtonComponent(ButtonClickFunction onClickFunc){
         func = onClickFunc;
     }
@@ -41,23 +35,12 @@ public class ButtonComponent implements mcd_Component {
             clicked=true;
             ent.getEngine().getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.BUTTON));
             func.onClick();
-            this.onClick();
+            this.onClick(ent);
         }
     }
 
     @Override
     public void render(mcd_Entity ent,  GraphicsInterface g) {
-        if(!ent.hasComponent(ComponentId.TRANSFORM_COMPONENT)) return;
-        TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
-        if(clicked){
-            g.setColor(clickedColor);
-        }
-        else if(hovering){
-            g.setColor(hoverColor);
-        }else{
-            g.setColor(idleColor);
-        }
-        g.drawRoundRectangle(tr.pos,tr.size,12.0f, true);
     }
 
     public boolean clickedDown(mcd_Entity ent){

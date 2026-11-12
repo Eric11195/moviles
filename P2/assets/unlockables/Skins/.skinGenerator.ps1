@@ -8,7 +8,8 @@ $elementTypes = @(
         "LASER",
         "WARNINGS",
         "ZAPPER",
-        "COINS"
+        "COINS",
+        "BUTTON"
 ) 
 
 # 2. Define prices
@@ -27,7 +28,24 @@ $skinsPerType = @(
     #Zapper Skins
     @($null),
     #Coins Skins
-    @($null)
+    @($null),
+    #Buttons
+    @(
+        $null,
+        "img/UI_Flat_Banner02a.png",
+        "img/UI_Flat_Banner03a.png",
+        "img/UI_Flat_Button01a_3.png",
+        "img/UI_Flat_Button02a_4.png",
+        "img/UI_Flat_FrameSlot01a.png",
+        "img/UI_Flat_FrameSlot01b.png",
+        "img/UI_Flat_FrameSlot01c.png",
+        "img/UI_Flat_FrameSlot02a.png",
+        "img/UI_Flat_FrameSlot02b.png",
+        "img/UI_Flat_FrameSlot02c.png",
+        "img/UI_Flat_InputField02a.png",
+        "img/UI_Flat_Select01a_1.png",
+        "img/UI_Flat_Select02a_1.png"
+    )
 )
 
 # 3. Generate shop skin files in script directory without BOM

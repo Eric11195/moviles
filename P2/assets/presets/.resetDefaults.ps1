@@ -3,7 +3,7 @@ $targetFolder = $PSScriptRoot
 
 Get-ChildItem -Path $targetFolder -File -Force | Where-Object {
     $_.Name.StartsWith(".") -and 
-    ($_.Name -match "\.(colors|skins|fonts)\.json$") # Cleaner matching for multiple extensions
+    ($_.Name -match "\.(colors|skins|fonts|powerUps)\.json$") # Cleaner matching for multiple extensions
 } | ForEach-Object {
     
     # Remove the first character (the initial dot)

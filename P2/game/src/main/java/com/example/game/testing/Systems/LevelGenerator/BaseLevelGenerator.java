@@ -6,6 +6,7 @@ import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.DistanceSystem;
 import com.example.game.testing.Systems.LevelGenerator.ObstacleGenerator.Generator;
 import com.example.game.testing.Systems.LevelSpeedSystem;
+import com.example.game.testing.Systems.Shop.PowerUpManager;
 import com.example.game.testing.Systems.mcd_System;
 import com.example.utils.Vec2;
 
@@ -29,6 +30,7 @@ public abstract class BaseLevelGenerator implements mcd_System {
         lss.reset();
         lss.addValue(params.levelInitialSpeed);
         DistanceSystem.getInstance().reset();
+        DistanceSystem.getInstance().addValue(100*PowerUpManager.getInstance().getVar(PowerUpManager.extraVars.extraStartMeters));
     }
 
     @Override

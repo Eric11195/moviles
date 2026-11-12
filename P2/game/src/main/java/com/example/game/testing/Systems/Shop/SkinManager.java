@@ -80,6 +80,7 @@ public class SkinManager implements mcd_Serializable {
         WARNINGS,
         ZAPPER,
         COINS,
+        BUTTON,
         COUNT
     }
 

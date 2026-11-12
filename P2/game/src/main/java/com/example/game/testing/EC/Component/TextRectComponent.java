@@ -11,9 +11,15 @@ import com.example.game.testing.Systems.Shop.FontManager;
 public class TextRectComponent implements mcd_Component {
     String text;
     ColorEng textColor = ColorManager.getInstance().getColor(ColorManager.Colors.TEXT_COLOR);
+    FontManager.Fonts f = FontManager.Fonts.BUTTON_FONT;
     public TextRectComponent(String text, ColorEng textColor){
         this.text = text;
         this.textColor = textColor;
+    }
+    public TextRectComponent(String text, ColorEng textColor, FontManager.Fonts f){
+        this.text = text;
+        this.textColor = textColor;
+        this.f = f;
     }
     public TextRectComponent(String text){
         this.text = text;
@@ -25,7 +31,7 @@ public class TextRectComponent implements mcd_Component {
     public void render(mcd_Entity ent, GraphicsInterface g) {
         TransformComponent tr = (TransformComponent)ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
         g.setColor(textColor);
-        g.setFont(FontManager.getInstance().getFont(FontManager.Fonts.BUTTON_FONT));
+        g.setFont(FontManager.getInstance().getFont(this.f));
         g.drawText(text,tr.pos,tr.size);
     }
     public void setText(String s){

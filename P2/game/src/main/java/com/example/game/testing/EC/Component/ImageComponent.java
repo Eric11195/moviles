@@ -13,12 +13,20 @@ public class ImageComponent implements mcd_Component {
     public ImageComponent(String _filePath){
         setImg(_filePath);
     }
+    public ImageComponent(ImageEng img){
+        setImg(img);
+    }
 
     @Override
     public void update(mcd_Entity ent, float t, float dt) {}
     public void setImg(String _filePath){
         filePath = _filePath;
         dirty=true;
+    }
+    public void setImg(ImageEng img ){
+        this.img = img;
+        filePath = img.path;
+        dirty=false;
     }
 
     @Override

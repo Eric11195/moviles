@@ -1,6 +1,7 @@
 package com.example.game.testing.Scenes;
 
 import static com.example.game.testing.EC.Prefabs.ButtonPrefab.createButton;
+import static com.example.game.testing.EC.Prefabs.ButtonPrefab.createButtonOutsideScene;
 import static com.example.game.testing.constants.Constants.DEFAULT_BUTTON_SIZE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
@@ -44,7 +45,7 @@ public class LevelSelectorScene extends mcd_Scene{
                     0,0);
             LevelFileGenerator.LevelGeneratorSerialized lgs = LevelFileGenerator.deserialize(obj);
             int num = lgs.levelGeneratorParams.levelCoinsToWin == -1 ? lgs.levelGeneratorParams.levelTotalMeters : lgs.levelGeneratorParams.levelCoinsToWin;
-            buttons.add (createButton(
+            buttons.add (createButtonOutsideScene(
                     this,
                     pos,
                     DEFAULT_BUTTON_SIZE,

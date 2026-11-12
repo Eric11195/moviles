@@ -1,7 +1,8 @@
 $scriptsToRun = @(
     "$PSScriptRoot\Colors\.colorGenerator.ps1",
     "$PSScriptRoot\Skins\.skinGenerator.ps1",
-    "$PSScriptRoot\Fonts\.fontGenerator.ps1"
+    "$PSScriptRoot\Fonts\.fontGenerator.ps1",
+    "$PSScriptRoot\PowerUps\.powerUpGenerator.ps1"
 )
 
 foreach ($script in $scriptsToRun) {

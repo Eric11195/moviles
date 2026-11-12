@@ -2,7 +2,6 @@ package com.example.game.testing.EC.Component;
 
 
 import com.example.engine.ColorEng;
-import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Component;
 import com.example.engine.GraphicsInterface;
 import com.example.game.testing.EC.mcd_Entity;
@@ -13,7 +12,7 @@ import com.example.utils.Vec2;
 import java.util.List;
 
 
-public class DrawRectangleComponent implements mcd_Component {
+public class DrawMultipleRectanglesComponent implements mcd_Component {
     public static class Rectangle extends PoolObject<Rectangle>
     {
         public Vec2 myPos,mySize;
@@ -30,11 +29,11 @@ public class DrawRectangleComponent implements mcd_Component {
     };
     public ColorEng color;
     public List<Rectangle> rectanglesToDraw;
-    public DrawRectangleComponent() {
+    public DrawMultipleRectanglesComponent() {
         color = ColorLibrary.Red.clone();
         rectanglesToDraw = new java.util.ArrayList<Rectangle>();
     }
-    public DrawRectangleComponent(ColorEng clr, float x, float y, float w, float h){
+    public DrawMultipleRectanglesComponent(ColorEng clr, float x, float y, float w, float h){
         color = clr.clone();
         rectanglesToDraw = new java.util.ArrayList<Rectangle>();
         rectanglesToDraw.add(new Rectangle(new Vec2(x,y), new Vec2(w,h)));

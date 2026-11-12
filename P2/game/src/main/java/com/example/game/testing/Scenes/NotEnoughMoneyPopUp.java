@@ -6,16 +6,14 @@ import com.example.engine.ColorEng;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
 import com.example.engine.Scene;
-import com.example.game.testing.EC.Component.DrawRectangleComponent;
-import com.example.game.testing.EC.Component.TransformComponent;
+import com.example.game.testing.EC.Component.DrawMultipleRectanglesComponent;
 import com.example.game.testing.EC.Component.UI.ButtonComponent;
 import com.example.game.testing.EC.Component.shop.Buyable;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.Prefabs.ButtonPrefab;
-import com.example.game.testing.EC.Prefabs.ShopItemPrefab;
 import com.example.game.testing.EC.Prefabs.TextPrefab;
-import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.RubySystem;
+import com.example.game.testing.Systems.Shop.FontManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
 
@@ -33,7 +31,7 @@ public class NotEnoughMoneyPopUp extends mcd_Scene {
     public void start(Engine eng) {
         createEntity().addComponent(
             ComponentId.DRAW_RECTANGLE_COMPONENT,
-            new DrawRectangleComponent(
+            new DrawMultipleRectanglesComponent(
                 ColorLibrary.Yellow,
                 LOGIC_WINDOW_SIZE.x*0.10f,
                 LOGIC_WINDOW_SIZE.y*0.10f,
@@ -53,23 +51,25 @@ public class NotEnoughMoneyPopUp extends mcd_Scene {
                     LOGIC_WINDOW_SIZE.y*0.12f
                 ),
                 "OK",
-                eng::popScene
+                eng::popScene,
+                new ColorEng(0xFFAA3939)
         ).getComponent(ComponentId.BUTTON_COMPONENT);
-        okBut.setIdleColor(new ColorEng(0xFFAA3939));
 
         TextPrefab.createText(
                 this,
                 new Vec2(LOGIC_WINDOW_SIZE.x*0.1f, LOGIC_WINDOW_SIZE.y*0.2f),
                 new Vec2(LOGIC_WINDOW_SIZE.x*0.8f,LOGIC_WINDOW_SIZE.y* 0.3f),
                 "Not enough rubies to buy this item.",
-                ColorLibrary.Black.clone()
+                ColorLibrary.Black.clone(),
+                FontManager.Fonts.TITLE_FONT
         );
         TextPrefab.createText(
                 this,
                 new Vec2(LOGIC_WINDOW_SIZE.x*0.1f, LOGIC_WINDOW_SIZE.y*0.3f),
                 new Vec2(LOGIC_WINDOW_SIZE.x*0.8f,LOGIC_WINDOW_SIZE.y* 0.4f),
                 "("+ Integer.toString(RubySystem.getRubies())+"/"+elementToBuy.price+")",
-                ColorLibrary.Black.clone()
+                ColorLibrary.Black.clone(),
+                FontManager.Fonts.TITLE_FONT
         );
     }
 

@@ -5,7 +5,7 @@ import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
 import com.example.engine.Engine;
 import com.example.game.testing.EC.Component.BackgroundComponent;
-import com.example.game.testing.EC.Component.DrawRectangleComponent;
+import com.example.game.testing.EC.Component.DrawMultipleRectanglesComponent;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.Prefabs.PlayerPrefab;
 import com.example.game.testing.EC.mcd_Entity;
@@ -20,6 +20,7 @@ import com.example.game.testing.Systems.LevelGenerator.FileLevelGenerator;
 import com.example.game.testing.Systems.LevelGenerator.LevelFileGenerator;
 import com.example.game.testing.Systems.LevelGenerator.LevelGeneratorParams;
 import com.example.game.testing.Systems.LevelGenerator.ProceduralLevelGenerator;
+import com.example.game.testing.Systems.Shop.PowerUpManager;
 import com.example.game.testing.constants.Constants;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.SoundLibrary;
@@ -73,14 +74,14 @@ public class MainGameScene extends mcd_Scene{
                 new Vec2(Constants.BACKGROUND_0_MAX_WIDTH,Constants.BACKGROUND_0_MAX_HEIGHT),
                 Constants.BACKGROUND_0_SPEED_SCALE,
                 ColorLibrary.LightGrey));
-        background0.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT,new DrawRectangleComponent());
+        background0.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT,new DrawMultipleRectanglesComponent());
 
         mcd_Entity background1 = createEntity();
         background1.addComponent(ComponentId.BACKGROUND_COMPONENT, new BackgroundComponent(new Vec2(Constants.BACKGROUND_1_MIN_WIDTH,Constants.BACKGROUND_1_MIN_HEIGHT),
                 new Vec2(Constants.BACKGROUND_1_MAX_WIDTH,Constants.BACKGROUND_1_MAX_HEIGHT),
                 Constants.BACKGROUND_1_SPEED_SCALE,
                 ColorLibrary.DarkGrey));
-        background1.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT,new DrawRectangleComponent());
+        background1.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT,new DrawMultipleRectanglesComponent());
     }
     LevelGeneratorParams lgp;
     LevelFileGenerator.LevelGeneratorSerialized lgs;
@@ -94,11 +95,18 @@ public class MainGameScene extends mcd_Scene{
         this.levelGenSet = true;
         this.lgp = lgp;
         this.lt = levelType.procedural;
+        updateLevelWithPowerUps(this.lgp);
     }
     public void setFixedLevelGen(LevelFileGenerator.LevelGeneratorSerialized lgs){
         this.levelGenSet = true;
         this.lgs = lgs;
         this.lt = levelType.fixed;
+        updateLevelWithPowerUps(this.lgs.levelGeneratorParams);
+        lgs.eliminateAllObstaclesTillDistanceX(PowerUpManager.getInstance().getVar(PowerUpManager.extraVars.extraStartMeters));
+    }
+    //Return time stamp of the given level after x meters have passed
+    private void updateLevelWithPowerUps(LevelGeneratorParams lgp){
+        lgp.levelInitialSpeed += PowerUpManager.getInstance().getVar(PowerUpManager.extraVars.extraStartSpeed);
     }
     public void instantiateLevelGen(){
         assert(this.levelGenSet);
@@ -139,14 +147,15 @@ public class MainGameScene extends mcd_Scene{
         cs.reset();
         DistanceSystem ds = DistanceSystem.getInstance();
         addSystem(ds);
-        ds.reset();
         addSystem(levelGen);
 
         addRetosSystems(eng);
     }
     @Override
     public void resume(Engine eng){
-        eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYING));
+        var audio = eng.getAudio();
+        audio.stopSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYING));
+        audio.playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYING));
     }
     @Override
     public void pause(Engine eng){
