@@ -90,7 +90,9 @@ public class FileStorageAndroid implements IFileStorage {
             }
 
             internalFile.createNewFile();
-
+            try (FileOutputStream output = new FileOutputStream(internalFile)) {
+                output.write("{}".getBytes(StandardCharsets.UTF_8));
+            }
             Log.d(TAG, "[CREATE] Created empty file: " + path);
         }
 

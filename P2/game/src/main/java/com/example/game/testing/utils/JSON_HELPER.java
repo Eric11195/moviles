@@ -102,6 +102,27 @@ public class JSON_HELPER {
 
         return null;
     }
+    public static JSONObject fromJSONModifiable(IFileStorage fileStorage, String file_name) {
+        System.out.println("Begin Reading "+file_name+" in "+fileStorage.getCurrentPath());
+        try {
+            if (!file_name.endsWith(".json")) {
+                file_name += ".json";
+            }
+
+            String content = fileStorage.readModifiable(file_name);
+            long hash = HashUtils.getHashForJSONObject(content);
+            System.out.println("Read file with expected hash: "+hash);
+
+            JSONObject jo = new JSONObject(content);
+            System.out.println(file_name+" Read succesfully");
+            return jo;
+        } catch (java.io.IOException e) {
+            System.out.println("Error while reading file "+file_name+" in "+fileStorage.getCurrentPath());
+            e.printStackTrace();
+        }
+
+        return null;
+    }
     public static Vec2 vec2FromJSON(JSONObject v){
         return new Vec2(
                 (float)v.getDouble("x"),

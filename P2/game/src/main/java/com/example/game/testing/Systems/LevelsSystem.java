@@ -21,7 +21,7 @@ public class LevelsSystem{
     public static void completedLevel()
     {
 
-        JSONObject info = JSON_HELPER.fromJSON(eng.getFileStorage(), "infoLevels");
+        JSONObject info = JSON_HELPER.fromJSONModifiable(eng.getFileStorage(), "infoLevels");
         if(!info.has(currentLevel)) {
 
             info.put(currentLevel, new JSONObject());
@@ -36,7 +36,7 @@ public class LevelsSystem{
     }
     public static boolean checkRecord(int score)
     {
-        JSONObject info = JSON_HELPER.fromJSON(eng.getFileStorage(), "infoLevels");
+        JSONObject info = JSON_HELPER.fromJSONModifiable(eng.getFileStorage(), "infoLevels");
         if(!info.has(currentLevel)) {
 
             info.put(currentLevel, new JSONObject());
@@ -55,7 +55,7 @@ public class LevelsSystem{
 
     public static boolean checkCompleted()
     {
-        JSONObject info = JSON_HELPER.fromJSON(eng.getFileStorage(), "infoLevels");
+        JSONObject info = JSON_HELPER.fromJSONModifiable(eng.getFileStorage(), "infoLevels");
 
         if(!info.has(currentLevel)) {
 
