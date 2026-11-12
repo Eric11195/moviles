@@ -26,6 +26,7 @@ public class LevelSelectorScene extends mcd_Scene{
     }
     @Override
     public void start(Engine eng) {
+        LevelsSystem.init(eng);
         int BUTTONS_PER_ROW = 3;
         Vec2 BASE_POS = new Vec2(LOGIC_WINDOW_SIZE.x/8,0);
         eng.getFileStorage().setRelativePath("levels");
@@ -49,6 +50,7 @@ public class LevelSelectorScene extends mcd_Scene{
                     DEFAULT_BUTTON_SIZE,
                     (lgs.levelGeneratorParams.levelCoinsToWin == -1 ? "Distance" : "Coins") + ": " + num,
                     () -> {
+                        LevelsSystem.setCurrentLevel(idx.get());
                         loadLevel(eng, lgs);
                     }
             ));
