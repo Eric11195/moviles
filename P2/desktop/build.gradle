@@ -1,13 +1,52 @@
 plugins {
     id 'java-library'
 }
+
 java {
     sourceCompatibility JavaVersion.VERSION_11
     targetCompatibility JavaVersion.VERSION_11
 }
+
 dependencies {
     implementation project(':desktopEngine')
     implementation project(':engine')
     implementation project(':game')
     implementation project(':utils')
+}
+
+// --- C++ WINDOWS BUILD AUTOMATION ---
+
+// 1. Define paths for the CMake source and the output directory
+def androidModuleDir = project(':android').projectDir
+def windowsBuildDir = new File(project.layout.buildDirectory.get().asFile, "windows_cxx_build")
+
+// 2. Task to configure CMake (mkdir build_windows & cmake ..)
+tasks.register('configureCMakeWindows', Exec) {
+    group = 'native'
+    description = 'Configures CMake for Windows Desktop'
+
+    doFirst {
+        windowsBuildDir.mkdirs()
+    }
+    workingDir = windowsBuildDir
+    commandLine 'cmake', androidModuleDir.absolutePath, '-DCMAKE_BUILD_TYPE=Release'
+}
+
+// 3. Task to compile the DLL (cmake --build .)
+tasks.register('buildCMakeWindows', Exec) {
+    group = 'native'
+    description = 'Builds the Windows C++ DLL'
+    dependsOn configureCMakeWindows
+    workingDir = windowsBuildDir
+
+    commandLine 'cmake', '--build', '.', '--config', 'Release'
+}
+
+// 4. Attach this to the standard Gradle run task
+tasks.withType(JavaExec).configureEach {
+    dependsOn buildCMakeWindows
+
+    // Automatically injects the DLL path into the JVM so you don't need manual VM arguments
+    def dllOutputFolder = new File(windowsBuildDir, "Release").absolutePath
+    systemProperty "java.library.path", dllOutputFolder
 }

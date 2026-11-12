@@ -72,6 +72,8 @@ public class JSON_HELPER {
     public static void toJSON(IFileStorage fileStorage, String file_name, JSONObject jo){
         try {
             String json = jo.toString();
+            long hash = HashUtils.getHashForJSONObject(json);
+            System.out.println("Written file with hash:"+hash);
             fileStorage.write(file_name+".json", json);
             System.out.println("In path: "+ fileStorage.getCurrentPath()+"\nJSON written to file "+file_name+".json succesfully");
         }catch(java.io.IOException e){
@@ -87,6 +89,9 @@ public class JSON_HELPER {
             }
 
             String content = fileStorage.read(file_name);
+            long hash = HashUtils.getHashForJSONObject(content);
+            System.out.println("Read file with expected hash: "+hash);
+
             JSONObject jo = new JSONObject(content);
             System.out.println(file_name+" Read succesfully");
             return jo;

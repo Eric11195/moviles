@@ -1,5 +1,10 @@
 #include "getHashForJSONObject.hpp"
+#include <jni.h>
 
-unsigned long long int getHashForJSONObject(const char* json){
-    return 0ull;
+extern "C"
+JNIEXPORT jlong JNICALL
+Java_com_example_game_testing_utils_HashUtils_getHashForJSONObject(JNIEnv *env, jclass clazz,
+                                                      jstring json_string) {
+    // TODO: implement getHash()
+    return 0ll;
 }

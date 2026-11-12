@@ -8,5 +8,5 @@ public class HashUtils {
     }
 
     // Declare the native method. The 'native' keyword tells Java to look in the C++ library.
-    public native String getHash(String jsonString);
+    public static native long getHashForJSONObject(String jsonString);
 }

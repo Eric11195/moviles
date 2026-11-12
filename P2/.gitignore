@@ -11,7 +11,8 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 
 # Android Studio / IntelliJ IDE files
-.idea/
+.idea/*
+!.idea/runConfigurations/
 *.iml
 .navigation/
 captures/
