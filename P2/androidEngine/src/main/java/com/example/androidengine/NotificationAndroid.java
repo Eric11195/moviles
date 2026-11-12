@@ -22,10 +22,6 @@ public class NotificationAndroid extends NotificationInterface {
     AppCompatActivity app;
     NotificationManagerCompat notificationManager;
     int nextNotifIdx = 0;
-    int smallIcon;
-    public void setSmallIcon(int si){
-        smallIcon = si;
-    }
     public NotificationAndroid(AppCompatActivity _app){
         app = _app;
 
@@ -36,6 +32,12 @@ public class NotificationAndroid extends NotificationInterface {
         notificationManager = NotificationManagerCompat.from(app);
         notificationManager.createNotificationChannel(channel);
     }
+
+    @Override
+    public void setSmallIcon(int si){
+        smallIcon = si;
+    }
+
 
     @Override
     public void createNotification(String _title, String _body) {
