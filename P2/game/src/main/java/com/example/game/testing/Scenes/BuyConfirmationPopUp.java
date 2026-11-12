@@ -8,7 +8,6 @@ import com.example.engine.GraphicsInterface;
 import com.example.engine.Scene;
 import com.example.game.testing.EC.Component.DrawMultipleRectanglesComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
-import com.example.game.testing.EC.Component.UI.ButtonComponent;
 import com.example.game.testing.EC.Component.shop.Buyable;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.Prefabs.ButtonPrefab;
@@ -77,7 +76,7 @@ public class BuyConfirmationPopUp extends mcd_Scene {
                     elementToBuy.buy(eng.getFileStorage());
                     eng.getFileStorage().setRelativePath("unlockables/"+elementToBuy.tabName);
                     try {
-                        eng.getFileStorage().write(elementToBuy.fileName, JSON_HELPER.toJSON(elementToBuy).toString());
+                        eng.getFileStorage().writeModifiable(elementToBuy.fileName, JSON_HELPER.toJSON(elementToBuy).toString());
                     }catch(IOException io){
                         throw new RuntimeException("Error while writing back file");
                     }

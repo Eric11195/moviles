@@ -26,12 +26,17 @@ public class FileStorageDesktop implements IFileStorage {
     }
 
     @Override
+    public String readModifiable(String filename) throws IOException {
+        return read(filename);
+    }
+
+    @Override
     public String getCurrentPath() {
         return basePath.toString();
     }
 
     @Override
-    public void write(String filename, String content) throws IOException {
+    public void writeModifiable(String filename, String content) throws IOException {
         Path filePath = basePath.resolve(filename).normalize();
 
         // Prevent paths from escaping the base directory.

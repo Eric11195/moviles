@@ -36,11 +36,10 @@ public class LevelSelectorScene extends mcd_Scene{
         ArrayList<mcd_Entity> buttons = new ArrayList<>();
         eng.getFileStorage().forEachFileOnDirectory((String filename)->{
             if (!filename.contains("Level")) return;
-            JSONObject obj = JSON_HELPER.fromJSON(eng.getFileStorage(), "Level" + Integer.toString(idx.get() + 1));
+            JSONObject obj = JSON_HELPER.fromJSON(eng.getFileStorage(), filename);
             if (obj == null) {
                 throw new RuntimeException("File level could not be found");
             }
-            LevelsSystem.setLevel(obj, idx.get());
             Vec2 pos = new Vec2(
                     0,0);
             LevelFileGenerator.LevelGeneratorSerialized lgs = LevelFileGenerator.deserialize(obj);
@@ -51,7 +50,8 @@ public class LevelSelectorScene extends mcd_Scene{
                     DEFAULT_BUTTON_SIZE,
                     (lgs.levelGeneratorParams.levelCoinsToWin == -1 ? "Distance" : "Coins") + ": " + num,
                     () -> {
-                        LevelsSystem.setCurrentLevel(idx.get());
+                        //FALTA PONERLE EL NOMBRE BIEN
+                        LevelsSystem.setCurrentLevel(filename);
                         loadLevel(eng, lgs);
                     }
             ));

@@ -42,7 +42,7 @@ public class FileStorageAndroid implements IFileStorage {
     }
 
     @Override
-    public void write(String filename, String content) throws IOException {
+    public void writeModifiable(String filename, String content) throws IOException {
         File file = resolveFile(filename);
 
         Log.d(TAG, "[WRITE] Writing file to absolute device path: " + file.getAbsolutePath());
@@ -61,17 +61,6 @@ public class FileStorageAndroid implements IFileStorage {
     public String read(String filename) throws IOException {
         String path = resolveAssetPath(filename);
 
-        File internalFile = new File(context.getFilesDir(), path);
-
-        if (internalFile.exists()) {
-
-            Log.d(TAG, "[READ] Reading internal file: " + path);
-
-            try (InputStream input = new FileInputStream(internalFile)) {
-                return readFromStream(input);
-            }
-        }
-
         // Si no existe, leer desde assets
         Log.d(TAG, "[READ] Reading APK asset: " + path);
 
@@ -81,6 +70,34 @@ public class FileStorageAndroid implements IFileStorage {
         catch (IOException e) {
             Log.e(TAG, "[READ FAILED] Asset not found inside APK at path: assets/" + path, e);
             throw e;
+        }
+        //Log.d(TAG, "[READ] Attempting to open asset path inside APK: assets/" + path)
+    }
+
+    @Override
+    public String readModifiable(String filename) throws IOException {
+
+        String path = resolveAssetPath(filename);
+
+        File internalFile = new File(context.getFilesDir(), path);
+
+        // Crear el fichero si no existe
+        if (!internalFile.exists()) {
+            File parent = internalFile.getParentFile();
+
+            if (parent != null && !parent.exists()) {
+                parent.mkdirs();
+            }
+
+            internalFile.createNewFile();
+
+            Log.d(TAG, "[CREATE] Created empty file: " + path);
+        }
+
+        Log.d(TAG, "[READ] Reading internal file: " + path);
+
+        try (InputStream input = new FileInputStream(internalFile)) {
+            return readFromStream(input);
         }
         //Log.d(TAG, "[READ] Attempting to open asset path inside APK: assets/" + path)
     }

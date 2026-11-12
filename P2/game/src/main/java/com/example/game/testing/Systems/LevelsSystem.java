@@ -5,58 +5,73 @@ import com.example.engine.IFileStorage;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.utils.JSON_HELPER;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.naming.Context;
 
 public class LevelsSystem{
-    static JSONObject [] levels= new JSONObject[7];
 
     static Engine eng;
-    static int currentLevel;
-    public static void init(Engine engine){eng =engine; }
-    public static void setLevel(JSONObject level, int id)
+    static String currentLevel;
+    public static void init(Engine engine)
     {
-        levels[id+1] = level;
+        eng =engine;
     }
-
     public static void completedLevel()
     {
-        levels[currentLevel].put("LevelCompleted",true);
-        JSON_HELPER.toJSON(eng.getFileStorage(),"Level"+Integer.toString(currentLevel),levels[currentLevel]);
+
+        JSONObject info = JSON_HELPER.fromJSON(eng.getFileStorage(), "infoLevels");
+        if(!info.has(currentLevel)) {
+
+            info.put(currentLevel, new JSONObject());
+        }
+        JSONObject infoLevel= info.getJSONObject(currentLevel);
+        try {
+        infoLevel.put("LevelCompleted",true);
+        JSON_HELPER.toJSON(eng.getFileStorage(),"infoLevels",info);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
     public static boolean checkRecord(int score)
     {
-        if(!levels[currentLevel].has("Record"))
+        JSONObject info = JSON_HELPER.fromJSON(eng.getFileStorage(), "infoLevels");
+        if(!info.has(currentLevel)) {
+
+            info.put(currentLevel, new JSONObject());
+        }
+        JSONObject infoLevel= info.getJSONObject(currentLevel);
+        if(!infoLevel.has("Record"))
         {
-            levels[currentLevel].put("Record",score);
+            infoLevel.put("Record",score);
             return true;
         }
-        boolean sol =levels[currentLevel].getInt("Record") < score;
-        levels[currentLevel].put("Record", Math.max(levels[currentLevel].getInt("Record"),score));
+        boolean sol =infoLevel.getInt("Record") < score;
+        infoLevel.put("Record", Math.max( infoLevel.getInt("Record"),score));
 
         return sol;
     }
 
     public static boolean checkCompleted()
     {
+        JSONObject info = JSON_HELPER.fromJSON(eng.getFileStorage(), "infoLevels");
 
-        if(!levels[currentLevel].has("LevelCompleted"))
-        {
-            levels[currentLevel].put("LevelCompleted",false);
+        if(!info.has(currentLevel)) {
 
+            info.put(currentLevel, new JSONObject());
         }
-        return levels[currentLevel].getBoolean("LevelCompleted");
+        JSONObject infoLevel= info.getJSONObject(currentLevel);
+
+        if(!infoLevel.has("LevelCompleted")){
+            infoLevel.put("LevelCompleted", false);
+        }
+        return info.getBoolean(currentLevel+"LevelCompleted");
     }
 
-    public static void setCurrentLevel(int id)
+    public static void setCurrentLevel(String name)
     {
-        currentLevel = id;
-    }
-
-    public static JSONObject getLevel(int id)
-    {
-        return levels[id];
+        currentLevel = name;
     }
 
 }

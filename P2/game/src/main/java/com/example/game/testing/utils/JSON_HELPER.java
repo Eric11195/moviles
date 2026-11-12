@@ -74,7 +74,7 @@ public class JSON_HELPER {
             String json = jo.toString();
             long hash = HashUtils.getHashForJSONObject(json);
             System.out.println("Written file with hash:"+hash);
-            fileStorage.write(file_name+".json", json);
+            fileStorage.writeModifiable(file_name+".json", json);
             System.out.println("In path: "+ fileStorage.getCurrentPath()+"\nJSON written to file "+file_name+".json succesfully");
         }catch(java.io.IOException e){
             e.printStackTrace();
