@@ -41,14 +41,16 @@ public abstract class Engine implements Runnable{
     ArrayList<sceneOperation> sceneOpQueue=new ArrayList<sceneOperation>();
 
     private final AdsInterface ads;
+    private final NotificationInterface notifs;
 
-    protected Engine(GraphicsInterface graphics, InputBase input, AudioInterface audio, IFileStorage fileStorage, AdsInterface ads) {
+    protected Engine(GraphicsInterface graphics, InputBase input, AudioInterface audio, IFileStorage fileStorage, AdsInterface ads, NotificationInterface notifs) {
         this.graphics = graphics;
         this.input = input;
         this.audio = audio;
         this.fileStorage = fileStorage;
         this.ads = ads;
         this.ads.initialize();
+        this.notifs = notifs;
     }
 
     public Scene getCurrentScene() {
@@ -88,6 +90,7 @@ public abstract class Engine implements Runnable{
     public AudioInterface getAudio() {return audio; }
     public IFileStorage getFileStorage(){return fileStorage; }
     public AdsInterface getAds(){return this.ads;}
+    public NotificationInterface getNotifs(){return notifs;};
 
     public boolean getRunning() {
         return running;
