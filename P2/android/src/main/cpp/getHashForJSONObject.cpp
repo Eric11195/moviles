@@ -28,9 +28,8 @@ uint64_t computeDeterministicHash64(const std::string& data) {
 }
 
 extern "C" JNIEXPORT jlong JNICALL
-Java_com_yourpackage_game_SaveSecurity_calculateFileHash(
-        JNIEnv* env,
-        jobject /* this */,
+Java_com_example_game_testing_utils_HashUtils_getHashForJSONObject(
+        JNIEnv *env, jclass clazz,
         jstring jFileContent) {
 
     // 1. Convert Java jstring to C++ std::string
