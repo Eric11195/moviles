@@ -62,7 +62,8 @@ public class LevelsSystem{
         if(!infoLevel.has("LevelCompleted")){
             infoLevel.put("LevelCompleted", false);
         }
-        return info.getBoolean("LevelCompleted");
+
+        return infoLevel.getBoolean("LevelCompleted");
     }
 
     public static void setCurrentLevel(String name)
