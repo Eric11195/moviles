@@ -42,8 +42,11 @@ public abstract class Engine implements Runnable{
 
     private final AdsInterface ads;
     private final NotificationInterface notifs;
+    private final ISocial social;
+    public ISocial getSocial(){return social;}
 
-    protected Engine(GraphicsInterface graphics, InputBase input, AudioInterface audio, IFileStorage fileStorage, AdsInterface ads, NotificationInterface notifs) {
+
+    protected Engine(GraphicsInterface graphics, InputBase input, AudioInterface audio, IFileStorage fileStorage, AdsInterface ads, NotificationInterface notifs, ISocial social) {
         this.graphics = graphics;
         this.input = input;
         this.audio = audio;
@@ -51,6 +54,7 @@ public abstract class Engine implements Runnable{
         this.ads = ads;
         this.ads.initialize();
         this.notifs = notifs;
+        this.social = social;
     }
 
     public Scene getCurrentScene() {

@@ -6,7 +6,7 @@ import com.example.engine.GraphicsInterface;
 
 public class DesktopEngine extends Engine{
     public DesktopEngine(int width, int height){
-        super(new GraphicsDesktop(width, height), new InputDesktop(), new AudioDesktop(), new FileStorageDesktop(), new AdsDesktop(), new NotificationDesktop());
+        super(new GraphicsDesktop(width, height), new InputDesktop(), new AudioDesktop(), new FileStorageDesktop(), new AdsDesktop(), new NotificationDesktop(), new SocialDesktop());
         ((InputDesktop)getInput()).registerCanvas(((GraphicsDesktop)getGraphics()).getCanvas());
     }
     @Override
