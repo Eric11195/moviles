@@ -1,9 +1,14 @@
 package com.example.android;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -25,10 +30,13 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        if (Build.VERSION.SDK_INT >= 33 && ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS},0);
+
         eng = new AndroidEngine(this, R.id.mainSurfaceView,R.id.adView, 600,400);
         eng.setScene(new MainMenuScene(eng));
         eng.resume();
-        ((NotificationAndroid)eng.getNotifs()).setSmallIcon(R.drawable.homunculus);
+        eng.getNotifs().setSmallIcon(R.drawable.homunculus);
         eng.getNotifs().createNotification("buh","guh");
         eng.getNotifs().scheduleNotification(0,0);
     }
