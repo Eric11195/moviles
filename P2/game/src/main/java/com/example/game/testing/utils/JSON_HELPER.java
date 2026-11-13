@@ -16,13 +16,23 @@ import java.util.List;
 public class JSON_HELPER {
     static boolean checkValidityOfJSONs = false;
     public static Dictionary<String, Long> hashPerFile;
-    private static void initializeHasherFile(JSONObject jo){
 
+    private final static String[] saveFiles ={
+        "colors",
+        "fonts",
+        "powerUps",
+        "levels"
+    };
+    private static void initializeHasherFile(JSONObject jo){
+        long defaultFileHash = HashUtils.getHashForJSONObject("{}");
+        for(String file : saveFiles){
+            jo.put(file, defaultFileHash);
+        }
     }
     public static void deserialize(IFileStorage fileStorage){
         hashPerFile = new Hashtable<>();
 
-        String file_name = "hashPerFile";
+        String file_name = "hashPerFile.json";
         fileStorage.setRelativePath("security");
         System.out.println("Begin Reading "+file_name+" in "+fileStorage.getCurrentPath());
 
