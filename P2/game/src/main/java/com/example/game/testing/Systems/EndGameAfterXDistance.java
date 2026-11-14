@@ -20,7 +20,7 @@ public class EndGameAfterXDistance implements mcd_System{
     public void update(mcd_Scene scene, float t, float dt) {
         if(DistanceSystem.getInstance().getDistance() >= maxDistance){
             Engine eng = scene.getEngine();
-            eng.setScene(new EndGameScene(eng,scene, this.win));
+            eng.setScene(new EndGameScene(eng,scene, this.win, false));
         }
     }
     Vec2 pos = new Vec2(DistanceSystem.pos.x+DistanceSystem.size.x, DistanceSystem.pos.y+5);

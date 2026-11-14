@@ -24,6 +24,7 @@ import com.example.game.testing.Systems.Shop.PowerUpManager;
 import com.example.game.testing.constants.Constants;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.SoundLibrary;
+import com.example.game.testing.utils.StartPlayerDead;
 import com.example.utils.Vec2;
 
 /**
@@ -54,10 +55,12 @@ public class MainGameScene extends mcd_Scene{
     protected MainGameScene(Engine myEngine) {
         super(myEngine);
         retos = Retos.none;
+        StartPlayerDead.setInfinite(true);
     }
     protected MainGameScene(Engine myEngine, Retos r){
         super(myEngine);
         this.retos = r;
+        StartPlayerDead.setInfinite(false);
     }
     private int coinsToWin;
     public void setCoinsToWin(int coins){

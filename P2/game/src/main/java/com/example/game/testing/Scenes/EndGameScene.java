@@ -15,6 +15,7 @@ import com.example.game.testing.Systems.RubySystem;
 import com.example.game.testing.Systems.Shop.FontManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.SoundLibrary;
+import com.example.game.testing.utils.StartPlayerDead;
 import com.example.utils.Vec2;
 
 /**
@@ -24,16 +25,18 @@ public class EndGameScene extends mcd_Scene{
     private TextRectComponent metersText;
     private TextRectComponent coinsText;
     private boolean win;
-    public EndGameScene(Engine myEngine, mcd_Scene levelScene, boolean win) {
+    private boolean infinite;
+    public EndGameScene(Engine myEngine, mcd_Scene levelScene, boolean win, boolean infiniteMode) {
         super(myEngine);
         this.win = win;
         this.levelScene = levelScene;
+        this.infinite = infiniteMode;
     }
     final static Vec2 pos = new Vec2(LOGIC_WINDOW_SIZE.x*0.1f, 0);
     final static Vec2 size = new Vec2(LOGIC_WINDOW_SIZE.x*0.4f, LOGIC_WINDOW_SIZE.y*0.15f);
 
     final static Vec2 buttonSize = DEFAULT_BUTTON_SIZE;
-    final static float buttonYDelta = (LOGIC_WINDOW_SIZE.y-buttonSize.y*2)/3.0f;
+    final static float buttonYDelta = (LOGIC_WINDOW_SIZE.y-buttonSize.y*2)/4.0f;
     final static Vec2 buttonPos = new Vec2(pos.x+size.x+LOGIC_WINDOW_SIZE.x*0.1f, buttonYDelta);
 
     boolean gotExtra = false;
@@ -73,6 +76,21 @@ public class EndGameScene extends mcd_Scene{
         );
         buttonPos.y += buttonYDelta + buttonSize.y;
         createButton(
+                this,
+                buttonPos,
+                buttonSize,
+                "Share Score",
+                () ->{
+                    eng.getSocial().sendMessage(
+                        (StartPlayerDead.getInfinite()?"Infinite Mode":LevelsSystem.getCurrentLevelName()) +
+                        "\nResult: "+(win?"Win":"Loose")+
+                        "\nTotal Meters: "+DistanceSystem.getInstance().getDistance()/100+
+                        "\nTotal coins: "+CoinSystem.getInstance().getCoins()
+                    );
+                }
+        );
+        buttonPos.y += buttonYDelta + buttonSize.y;
+        createButton(
             this,
             buttonPos,
             buttonSize,
@@ -94,8 +112,8 @@ public class EndGameScene extends mcd_Scene{
                 "WATCH AD FOR EXTRA RUBIES",
                 () ->{
                     if(!gotExtra){
-                    RubySystem.gainRubies(rubiesGained);
-                    gotExtra = true;
+                        RubySystem.gainRubies(rubiesGained);
+                        gotExtra = true;
                     }
                 }
         );

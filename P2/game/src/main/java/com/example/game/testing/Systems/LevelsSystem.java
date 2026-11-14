@@ -10,6 +10,10 @@ public class LevelsSystem{
 
     static Engine eng;
     static String currentLevel;
+    public static String getCurrentLevelName()
+    {
+        return currentLevel;
+    }
     public static void init(Engine engine)
     {
         eng =engine;
