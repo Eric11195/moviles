@@ -57,9 +57,8 @@ public class EndGameScene extends mcd_Scene{
 
         coinsText.setText("Coins: "+Integer.toString(CoinSystem.getInstance().getCoins()));
         metersText.setText("Distance: "+Integer.toString((int)DistanceSystem.getInstance().getDistance()/100));
-        int rubiesGained = (int)(DistanceSystem.getInstance().getDistance()/10)+(int)(CoinSystem.getInstance().getCoins()/2);
         if(win&&!LevelsSystem.checkCompleted()){
-            RubySystem.gainRubies(rubiesGained);
+            RubySystem.gainRubies(LevelsSystem.getReward());
             LevelsSystem.completedLevel();
         }
 
@@ -112,7 +111,7 @@ public class EndGameScene extends mcd_Scene{
                 "WATCH AD FOR EXTRA RUBIES",
                 () ->{
                     if(!gotExtra){
-                        RubySystem.gainRubies(rubiesGained);
+                        RubySystem.gainRubies(LevelsSystem.getReward());
                         gotExtra = true;
                     }
                 }
