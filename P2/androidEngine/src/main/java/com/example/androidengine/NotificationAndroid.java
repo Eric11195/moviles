@@ -38,10 +38,10 @@ public class NotificationAndroid extends NotificationInterface {
         smallIcon = si;
     }
 
-
     @Override
-    public void createNotification(String _title, String _body) {
-        notifs.add(new NotificationData(_title,_body));
+    public void createNotification(NotificationData data) {
+        notifs.add(data);
+
     }
 
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)

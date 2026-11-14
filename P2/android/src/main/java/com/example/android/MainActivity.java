@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.androidengine.AndroidEngine;
 import com.example.androidengine.NotificationAndroid;
+import com.example.engine.NotificationData;
 import com.example.game.testing.Scenes.MainMenuScene;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,8 +38,9 @@ public class MainActivity extends AppCompatActivity {
         eng.setScene(new MainMenuScene(eng));
         eng.resume();
         eng.getNotifs().setSmallIcon(R.drawable.homunculus);
-        eng.getNotifs().createNotification("buh","guh");
-        eng.getNotifs().scheduleNotification(0,0);
+        eng.getNotifs().createNotification(
+                new NotificationData("MCD", "Vuelve a mochilacohetonadisfrutar AHORA!!!", "RUBY_REWARD"));
+        eng.getNotifs().scheduleNotification(0,5);
     }
 
     @Override
