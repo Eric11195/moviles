@@ -13,4 +13,9 @@ public class SocialDesktop implements ISocial {
     public void sendMessage(String text, ImageEng img, String titleImg, String imageDesc) {
         System.out.println("Warning: Social::sendMessage does nothing on desktop");
     }
+
+    @Override
+    public void createPost(String text, ImageEng img) {
+        System.out.println("Warning: Social::sendMessage does nothing on desktop");
+    }
 }
