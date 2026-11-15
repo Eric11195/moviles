@@ -74,21 +74,45 @@ public class EndGameScene extends mcd_Scene{
                 eng.setScene(new MainMenuScene(eng));
             }
         );
+        float prevX = buttonPos.x;
+        Vec2 halfWidth = new Vec2(buttonSize.x/2.0f, buttonSize.y);
+        buttonPos.x -= halfWidth.x/2.0f;
         buttonPos.y += buttonYDelta + buttonSize.y;
         createButton(
-                this,
-                buttonPos,
-                buttonSize,
-                "Share Score",
-                () ->{
-                    eng.getSocial().sendMessage(
-                        (StartPlayerDead.getInfinite()?"Infinite Mode":LevelsSystem.getCurrentLevelName()) +
-                        "\nResult: "+(win?"Win":"Loose")+
-                        "\nTotal Meters: "+DistanceSystem.getInstance().getDistance()/100+
-                        "\nTotal coins: "+CoinSystem.getInstance().getCoins()
-                    );
-                }
+            this,
+            buttonPos,
+            halfWidth,
+            "Msg Score",
+            () ->{
+                eng.getSocial().sendMessage(
+                    (StartPlayerDead.getInfinite()?"Infinite Mode":LevelsSystem.getCurrentLevelName()) +
+                    "\nResult: "+(win?"Win":"Loose")+
+                    "\nTotal Meters: "+DistanceSystem.getInstance().getDistance()/100+
+                    "\nTotal coins: "+CoinSystem.getInstance().getCoins(),
+                    eng.getGraphics().createImage("img/homunculus_round.png"),
+                    "Homunculus",
+                    "indescribable"
+                );
+            }
         );
+        buttonPos.x += halfWidth.x + buttonSize.x/2;
+        createButton(
+            this,
+            buttonPos,
+            halfWidth,
+            "Post Score",
+            () ->{
+                eng.getSocial().createPost(
+                    (StartPlayerDead.getInfinite()?"Infinite Mode":LevelsSystem.getCurrentLevelName()) +
+                    "\nResult: "+(win?"Win":"Loose")+
+                    "\nTotal Meters: "+DistanceSystem.getInstance().getDistance()/100+
+                    "\nTotal coins: "+CoinSystem.getInstance().getCoins(),
+                    eng.getGraphics().createImage("img/homunculus_round.png")
+                );
+            }
+        );
+        buttonPos.x = prevX;
+
         buttonPos.y += buttonYDelta + buttonSize.y;
         createButton(
             this,

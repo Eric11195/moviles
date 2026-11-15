@@ -8,6 +8,7 @@ import android.util.Log;
 import com.example.engine.ImageEng;
 import com.example.utils.Utils;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -17,23 +18,16 @@ public class ImageAndroid extends ImageEng {
     // Id looks like R.drawable.imageName on res/drawable
     public ImageAndroid(Context context, String path){
         super(path);
-        try {
-            InputStream input = context.getAssets().open(path);
+        try (InputStream raw = context.getAssets().open(path);
+             BufferedInputStream input = new BufferedInputStream(raw)) {
 
             bm = BitmapFactory.decodeStream(input);
 
-            input.close();
-
             if (bm == null) {
-                throw new RuntimeException(
-                        "Failed to decode image: " + path
-                );
+                throw new RuntimeException("Failed to decode image: " + path);
             }
-
         } catch (IOException e) {
-            throw new RuntimeException(
-                    "Failed to load asset: " + path, e
-            );
+            throw new RuntimeException("Failed to load asset: " + path, e);
         }
     }
     public final Bitmap getBitmap(){
