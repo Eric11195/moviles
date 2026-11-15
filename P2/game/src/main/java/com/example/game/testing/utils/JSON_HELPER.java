@@ -14,14 +14,16 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class JSON_HELPER {
-    static boolean checkValidityOfJSONs = false;
+    static boolean checkValidityOfJSONs = true;
     public static Dictionary<String, Long> hashPerFile;
 
     private final static String[] saveFiles ={
         "colors",
         "fonts",
         "powerUps",
-        "levels"
+        "levels",
+        "skins",
+        "bought"
     };
     private static void initializeHasherFile(JSONObject jo){
         long defaultFileHash = HashUtils.getHashForJSONObject("{}");
@@ -36,14 +38,17 @@ public class JSON_HELPER {
         fileStorage.setRelativePath("security");
         System.out.println("Begin Reading "+file_name+" in "+fileStorage.getCurrentPath());
 
-        JSONObject jo;
+        JSONObject jo=null;
         try {
             String content = fileStorage.readModifiable(file_name);
             jo = new JSONObject(content);
-            System.out.println(file_name+" Read succesfully");
+
         } catch (java.io.IOException e) {
             //File does not exist
-            jo = new JSONObject();
+            e.printStackTrace();
+        }
+        System.out.println(file_name+" Read succesfully");
+        if(jo==null || jo.length()==0){
             initializeHasherFile(jo);
         }
         for(String key : jo.keySet()){
@@ -138,6 +143,7 @@ public class JSON_HELPER {
             System.out.println("Written file with hash:"+hash);
             fileStorage.writeModifiable(file_name+".json", json);
             System.out.println("In path: "+ fileStorage.getCurrentPath()+"\nJSON written to file "+file_name+".json succesfully");
+            saveCurrentHasher(fileStorage);
         }catch(java.io.IOException e){
             e.printStackTrace();
         }
@@ -167,6 +173,7 @@ public class JSON_HELPER {
         }
         System.out.println("Begin Reading "+file_name+" in "+fileStorage.getCurrentPath());
         try {
+            Long l = hashPerFile.get(file_name);
             if (!file_name.endsWith(".json")) {
                 file_name += ".json";
             }
@@ -175,9 +182,9 @@ public class JSON_HELPER {
             long hash = HashUtils.getHashForJSONObject(content);
             System.out.println("Read file with expected hash: "+hash);
 
-            Long l = hashPerFile.get(file_name);
             if(checkValidityOfJSONs && (l==null || l != hash)){
-                return null;
+                throw new RuntimeException("Invalid hash for file "+file_name+ "should be" +hash+" but is "+ l);
+//                return null;
             }
 
             JSONObject jo = new JSONObject(content);
