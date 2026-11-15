@@ -21,7 +21,7 @@ public class ShopObject extends ButtonComponent {
 
     public ShopObject(mcd_Scene scene, Buyable b) {
         super(()->{
-            if(ShopManager.getInstance().isBought(b)){
+            if(b.price==-1 || ShopManager.getInstance().isBought(b)){
                 equip(scene.getEngine().getFileStorage(), b);
             }else {
                 buy(scene, b);
@@ -51,7 +51,7 @@ public class ShopObject extends ButtonComponent {
             tr.size.y*0.7f
         );
         String text ="";
-        if(ShopManager.getInstance().isBought(this.buyable)){
+        if(this.buyable.price==-1 || ShopManager.getInstance().isBought(this.buyable)){
             text = selected() ? "Equipped":"Bought";
         }else{
             text = Integer.toString(this.buyable.price);

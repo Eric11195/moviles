@@ -66,6 +66,7 @@ public class PowerUpBuyable extends Buyable {
     public void equip(IFileStorage fs) {}
     @Override
     public void buy(IFileStorage fs){
+        super.buy(fs);
         PowerUpManager.getInstance().addToVar(fs,var, value);
     }
 }

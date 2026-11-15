@@ -73,12 +73,6 @@ public class BuyConfirmationPopUp extends mcd_Scene {
                     eng.popScene();
                     RubySystem.pay(elementToBuy.price);
                     elementToBuy.buy(eng.getFileStorage());
-                    eng.getFileStorage().setRelativePath("unlockables/"+elementToBuy.tabName);
-                    try {
-                        eng.getFileStorage().writeModifiable(elementToBuy.fileName, JSON_HELPER.toJSONModifiable(elementToBuy).toString());
-                    }catch(IOException io){
-                        throw new RuntimeException("Error while writing back file");
-                    }
                 },
                 new ColorEng(0xFF2D882D)
         );
