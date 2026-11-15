@@ -31,6 +31,9 @@ public class ManagerManager implements mcd_Serializable {
         if(joPUp==null)return false;
         PowerUpManager.setInstance(PowerUpManager.deserialize(joPUp));
 
+        JSONObject joShop = JSON_HELPER.fromJSON(fileStorage, "shop");
+        ShopManager.setInstance(ShopManager.deserialize(joShop));
+
         JSON_HELPER.deserialize(fileStorage);
 
         return initialized = true;

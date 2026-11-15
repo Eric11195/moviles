@@ -8,10 +8,15 @@ import com.example.game.testing.utils.mcd_Serializable;
 
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 public abstract class Buyable implements mcd_Serializable {
     public final String fileName;
     public String tabName;
     public final BuyableType type;
+    public String getId(){
+        return tabName+'_'+fileName;
+    }
     /**
      * If price == -1. Then this item has already been bought
      */
@@ -60,4 +65,17 @@ public abstract class Buyable implements mcd_Serializable {
     }
     public abstract boolean selected();
     public void buy(IFileStorage fs){}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Buyable that = (Buyable) o;
+        return Objects.equals(getId(), that.getId()); // Add more fields here if needed
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId()); // Must use the exact same fields as equals()
+    }
 }
