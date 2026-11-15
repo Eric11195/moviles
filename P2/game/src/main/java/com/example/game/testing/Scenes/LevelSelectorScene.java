@@ -52,6 +52,7 @@ public class LevelSelectorScene extends mcd_Scene{
                     () -> {
                         //FALTA PONERLE EL NOMBRE BIEN
                         LevelsSystem.setCurrentLevel(filename);
+                        LevelsSystem.setReward(obj.getJSONObject("LevelGeneratorParams").getInt("reward"));
                         loadLevel(eng, lgs);
                     }
             ));

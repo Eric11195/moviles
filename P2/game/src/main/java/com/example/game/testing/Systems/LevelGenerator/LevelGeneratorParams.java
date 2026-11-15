@@ -37,6 +37,7 @@ public class LevelGeneratorParams implements mcd_Serializable {
      * value to add to an acumulator. each time the acumulator reaches 1 it will spawn a coin
      */
     public float coinLinearCreationPerSecond;
+    public int reward;
     public JSONObject serialize(){
         JSONObject jo = new JSONObject();
         jo.put("levelInitialSpeed", Double.valueOf(levelInitialSpeed));
@@ -50,6 +51,7 @@ public class LevelGeneratorParams implements mcd_Serializable {
         jo.put("augmentSpeedEachXPixels", augmentSpeedEachXPixels);
         jo.put("augmentSpeedByYEachXPixels", Double.valueOf(augmentSpeedByYEachXPixels));
         jo.put("maxNumberOfSimultaneousCoins",maxNumberOfSimultaneousCoins);
+        jo.put("reward",reward);
         return jo;
     }
     public static LevelGeneratorParams deserialize(JSONObject jo){
@@ -65,6 +67,7 @@ public class LevelGeneratorParams implements mcd_Serializable {
         lgp.augmentSpeedByYEachXPixels = (float)jo.getDouble("augmentSpeedByYEachXPixels");
         lgp.augmentSpeedEachXPixels = jo.getInt("augmentSpeedEachXPixels");
         lgp.maxNumberOfSimultaneousCoins = jo.getInt("maxNumberOfSimultaneousCoins");
+        lgp.reward = jo.getInt("reward");
         return lgp;
     }
 

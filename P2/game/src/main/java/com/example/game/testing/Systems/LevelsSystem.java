@@ -10,6 +10,8 @@ public class LevelsSystem{
 
     static Engine eng;
     static String currentLevel;
+
+    static int reward;
     public static String getCurrentLevelName()
     {
         return currentLevel;
@@ -73,6 +75,14 @@ public class LevelsSystem{
     public static void setCurrentLevel(String name)
     {
         currentLevel = name;
+    }
+    public static int getReward()
+    {
+        return reward;
+    }
+    public static void setReward(int r)
+    {
+        reward = r;
     }
 
 }

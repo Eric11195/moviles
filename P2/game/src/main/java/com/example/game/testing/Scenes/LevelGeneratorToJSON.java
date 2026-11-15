@@ -79,7 +79,7 @@ public class LevelGeneratorToJSON extends mcd_Scene {
         lg.coinLinearCreationPerSecond = 1.5f;
         lg.augmentSpeedEachXPixels = 15000;
         lg.augmentSpeedByYEachXPixels = 10f;
-
+        lg.reward = 10;
         return lg;
     }
 
@@ -101,7 +101,7 @@ public class LevelGeneratorToJSON extends mcd_Scene {
         lg.coinLinearCreationPerSecond = 1.8f;
         lg.augmentSpeedEachXPixels = 12000;
         lg.augmentSpeedByYEachXPixels = 12f;
-
+        lg.reward = 20;
         return lg;
     }
 
@@ -123,7 +123,7 @@ public class LevelGeneratorToJSON extends mcd_Scene {
         lg.coinLinearCreationPerSecond = 2.0f;
         lg.augmentSpeedEachXPixels = 10000;
         lg.augmentSpeedByYEachXPixels = 15f;
-
+        lg.reward = 30;
         return lg;
     }
 
@@ -146,7 +146,7 @@ public class LevelGeneratorToJSON extends mcd_Scene {
 
         lg.augmentSpeedEachXPixels = 3000; // Accelerates frequently to help reach the goal faster
         lg.augmentSpeedByYEachXPixels = 5f;
-
+        lg.reward = 10;
         return lg;
     }
 
@@ -171,7 +171,7 @@ public class LevelGeneratorToJSON extends mcd_Scene {
 
         lg.augmentSpeedEachXPixels = 4000;
         lg.augmentSpeedByYEachXPixels = 8f;
-
+        lg.reward = 20;
         return lg;
     }
 
@@ -195,7 +195,7 @@ public class LevelGeneratorToJSON extends mcd_Scene {
 
         lg.augmentSpeedEachXPixels = 5000;
         lg.augmentSpeedByYEachXPixels = 10f;
-
+        lg.reward = 30;
         return lg;
     }
 
