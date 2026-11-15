@@ -4,6 +4,7 @@ import com.example.engine.GraphicsInterface;
 import com.example.engine.IFileStorage;
 import com.example.game.testing.Scenes.ShopScene;
 import com.example.game.testing.Systems.Shop.ColorManager;
+import com.example.game.testing.Systems.Shop.ShopManager;
 import com.example.game.testing.utils.mcd_Serializable;
 
 import org.json.JSONObject;
@@ -64,7 +65,9 @@ public abstract class Buyable implements mcd_Serializable {
         }
     }
     public abstract boolean selected();
-    public void buy(IFileStorage fs){}
+    public void buy(IFileStorage fs){
+        ShopManager.getInstance().buyObject(this);
+    }
 
     @Override
     public boolean equals(Object o) {

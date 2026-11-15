@@ -72,7 +72,6 @@ public class BuyConfirmationPopUp extends mcd_Scene {
                 ()->{
                     eng.popScene();
                     RubySystem.pay(elementToBuy.price);
-                    elementToBuy.price = -1;
                     elementToBuy.buy(eng.getFileStorage());
                     eng.getFileStorage().setRelativePath("unlockables/"+elementToBuy.tabName);
                     try {

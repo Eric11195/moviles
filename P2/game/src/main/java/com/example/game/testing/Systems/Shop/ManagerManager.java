@@ -13,8 +13,10 @@ public class ManagerManager implements mcd_Serializable {
     static boolean initialized = false;
     public static boolean init(IFileStorage fileStorage, GraphicsInterface g){
         if(initialized)return true;
-        fileStorage.setRelativePath("presets");
 
+        JSON_HELPER.deserialize(fileStorage);
+
+        fileStorage.setRelativePath("presets");
         JSONObject joColor = JSON_HELPER.fromJSON(fileStorage,"colors");
         if(joColor==null)return false;
         ColorManager.setInstance(ColorManager.deserialize(joColor));
@@ -31,10 +33,9 @@ public class ManagerManager implements mcd_Serializable {
         if(joPUp==null)return false;
         PowerUpManager.setInstance(PowerUpManager.deserialize(joPUp));
 
-        JSONObject joShop = JSON_HELPER.fromJSON(fileStorage, "shop");
-        ShopManager.setInstance(ShopManager.deserialize(joShop));
-
-        JSON_HELPER.deserialize(fileStorage);
+        fileStorage.setRelativePath("saves");
+        JSONObject joShop = JSON_HELPER.fromJSONModifiable(fileStorage, "bought");
+        ShopManager.setInstance(ShopManager.deserialize(joShop, fileStorage));
 
         return initialized = true;
     }

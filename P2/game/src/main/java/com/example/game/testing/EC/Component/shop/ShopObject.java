@@ -12,6 +12,7 @@ import com.example.game.testing.Scenes.NotEnoughMoneyPopUp;
 import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.game.testing.Systems.RubySystem;
 import com.example.game.testing.Systems.Shop.ColorManager;
+import com.example.game.testing.Systems.Shop.ShopManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
 
@@ -20,7 +21,7 @@ public class ShopObject extends ButtonComponent {
 
     public ShopObject(mcd_Scene scene, Buyable b) {
         super(()->{
-            if(b.price==-1){
+            if(ShopManager.getInstance().isBought(b)){
                 equip(scene.getEngine().getFileStorage(), b);
             }else {
                 buy(scene, b);
@@ -50,7 +51,7 @@ public class ShopObject extends ButtonComponent {
             tr.size.y*0.7f
         );
         String text ="";
-        if(this.buyable.price == -1){
+        if(ShopManager.getInstance().isBought(this.buyable)){
             text = selected() ? "Equipped":"Bought";
         }else{
             text = Integer.toString(this.buyable.price);
