@@ -39,7 +39,15 @@ public class PowerUpManager implements mcd_Serializable {
         }
         return jo;
     }
-    static PowerUpManager deserialize(JSONObject jo){
+    static PowerUpManager deserialize(IFileStorage fs){
+        fs.setRelativePath("saves");
+        JSONObject jo = JSON_HELPER.fromJSONModifiable(fs,"powerUps");
+        if(jo==null || jo.length()==0){
+            //read default
+            fs.setRelativePath("presets");
+            jo = JSON_HELPER.fromJSON(fs,"powerUps");
+        }
+
         PowerUpManager pum = new PowerUpManager();
         var values = extraVars.values();
         for(int i = 0; i < extraVars.COUNT.ordinal(); ++i){
@@ -53,7 +61,7 @@ public class PowerUpManager implements mcd_Serializable {
     }
     public void addToVar(IFileStorage fs, extraVars var, int valueToAdd){
         this.powerUpVars.set(var.ordinal(), valueToAdd+this.powerUpVars.get(var.ordinal()));
-        fs.setRelativePath("presets");
+        fs.setRelativePath("saves");
         JSON_HELPER.toJSONModifiable(fs, "powerUps", this.serialize());
     }
     public int getVar(extraVars var){

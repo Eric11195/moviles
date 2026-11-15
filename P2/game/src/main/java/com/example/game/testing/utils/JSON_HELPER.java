@@ -177,7 +177,7 @@ public class JSON_HELPER {
 
             Long l = hashPerFile.get(file_name);
             if(checkValidityOfJSONs && (l==null || l != hash)){
-                throw new RuntimeException("Incorrect Hash for file "+file_name+".json");
+                return null;
             }
 
             JSONObject jo = new JSONObject(content);

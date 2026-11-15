@@ -16,26 +16,15 @@ public class ManagerManager implements mcd_Serializable {
 
         JSON_HELPER.deserialize(fileStorage);
 
-        fileStorage.setRelativePath("presets");
-        JSONObject joColor = JSON_HELPER.fromJSON(fileStorage,"colors");
-        if(joColor==null)return false;
-        ColorManager.setInstance(ColorManager.deserialize(joColor));
+        ColorManager.setInstance(ColorManager.deserialize(fileStorage));
 
-        JSONObject joSkins = JSON_HELPER.fromJSON(fileStorage,"skins");
-        if(joSkins==null)return false;
-        SkinManager.setInstance(SkinManager.deserialize(g,joSkins));
+        SkinManager.setInstance(SkinManager.deserialize(g,fileStorage));
 
-        JSONObject joFonts = JSON_HELPER.fromJSON(fileStorage, "fonts");
-        if(joFonts==null)return false;
-        FontManager.setInstance(FontManager.deserialize(g,joFonts));
+        FontManager.setInstance(FontManager.deserialize(g,fileStorage));
 
-        JSONObject joPUp = JSON_HELPER.fromJSON(fileStorage, "powerUps");
-        if(joPUp==null)return false;
-        PowerUpManager.setInstance(PowerUpManager.deserialize(joPUp));
+        PowerUpManager.setInstance(PowerUpManager.deserialize(fileStorage));
 
-        fileStorage.setRelativePath("saves");
-        JSONObject joShop = JSON_HELPER.fromJSONModifiable(fileStorage, "bought");
-        ShopManager.setInstance(ShopManager.deserialize(joShop, fileStorage));
+        ShopManager.setInstance(ShopManager.deserialize(fileStorage));
 
         return initialized = true;
     }

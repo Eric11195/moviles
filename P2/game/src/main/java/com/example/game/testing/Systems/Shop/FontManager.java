@@ -61,7 +61,15 @@ public class FontManager implements mcd_Serializable {
         return jo;
     }
 
-    public static FontManager deserialize(GraphicsInterface g, JSONObject jo){
+    public static FontManager deserialize(GraphicsInterface g, IFileStorage fs){
+        fs.setRelativePath("saves");
+        JSONObject jo = JSON_HELPER.fromJSONModifiable(fs,"fonts");
+        if(jo==null || jo.length()==0){
+            //read default
+            fs.setRelativePath("presets");
+            jo = JSON_HELPER.fromJSON(fs,"fonts");
+        }
+
         ArrayList<FontEng> fonts = new ArrayList<>();
         Fonts[] enum_font = Fonts.values();
 
@@ -94,7 +102,7 @@ public class FontManager implements mcd_Serializable {
         // Fixed: Actually update the item in the list
         fontList.set(type.ordinal(), font);
 
-        fs.setRelativePath("presets");
+        fs.setRelativePath("saves");
         JSON_HELPER.toJSONModifiable(fs,"fonts",this.serialize());
     }
 }

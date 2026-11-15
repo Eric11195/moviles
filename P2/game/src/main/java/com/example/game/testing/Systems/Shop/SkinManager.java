@@ -53,7 +53,15 @@ public class SkinManager implements mcd_Serializable {
         return jo;
     }
 
-    public static SkinManager deserialize(GraphicsInterface g, JSONObject jo){
+    public static SkinManager deserialize(GraphicsInterface g, IFileStorage fs){
+        fs.setRelativePath("saves");
+        JSONObject jo = JSON_HELPER.fromJSONModifiable(fs,"skins");
+        if(jo==null || jo.length()==0){
+            //read default
+            fs.setRelativePath("presets");
+            jo = JSON_HELPER.fromJSON(fs,"skins");
+        }
+
         ArrayList<ImageEng> imgs = new ArrayList<>();
         Images[] enum_img = Images.values();
         for(int i = 0; i < Images.COUNT.ordinal(); ++i){
@@ -90,7 +98,7 @@ public class SkinManager implements mcd_Serializable {
 
     public void setImage(Images type, ImageEng img, IFileStorage fs){
         imageList.set(type.ordinal(), img); // Fixed: actually update the list instead of a local variable
-        fs.setRelativePath("presets");
+        fs.setRelativePath("saves");
         JSON_HELPER.toJSONModifiable(fs, "skins", this.serialize());
     }
 }

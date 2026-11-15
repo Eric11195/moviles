@@ -1,6 +1,7 @@
 $scriptsToRun = @(
     "$PSScriptRoot\presets\.resetDefaults.ps1",
-    "$PSScriptRoot\unlockables\.resetUnlocks.ps1"
+    "$PSScriptRoot\unlockables\.resetUnlocks.ps1",
+    "$PSScriptRoot\saves\.clearProgress.ps1"
 )
 
 foreach ($script in $scriptsToRun) {

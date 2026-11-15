@@ -51,7 +51,15 @@ public class ColorManager implements mcd_Serializable {
         });
         return jo;
     }
-    public static ColorManager deserialize(JSONObject jo){
+    public static ColorManager deserialize(IFileStorage fs){
+        fs.setRelativePath("saves");
+        JSONObject jo = JSON_HELPER.fromJSONModifiable(fs,"colors");
+        if(jo==null || jo.length()==0){
+            //read default
+            fs.setRelativePath("presets");
+            jo = JSON_HELPER.fromJSON(fs,"colors");
+        }
+
         ArrayList<ColorEng> clrs = new ArrayList<>();
         Colors[] enum_clr = Colors.values();
         for(int i = 0; i < Colors.COUNT.ordinal(); ++i){
@@ -86,7 +94,7 @@ public class ColorManager implements mcd_Serializable {
         storeChangesToFile(fs);
     }
     private void storeChangesToFile(IFileStorage fs){
-        fs.setRelativePath("presets");
+        fs.setRelativePath("saves");
         JSON_HELPER.toJSONModifiable(fs, "colors",this.serialize());
     }
 }
