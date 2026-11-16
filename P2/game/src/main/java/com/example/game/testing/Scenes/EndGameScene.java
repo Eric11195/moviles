@@ -36,7 +36,7 @@ public class EndGameScene extends mcd_Scene{
     final static Vec2 size = new Vec2(LOGIC_WINDOW_SIZE.x*0.4f, LOGIC_WINDOW_SIZE.y*0.15f);
 
     final static Vec2 buttonSize = DEFAULT_BUTTON_SIZE;
-    final static float buttonYDelta = (LOGIC_WINDOW_SIZE.y-buttonSize.y*2)/4.0f;
+    final static float buttonYDelta = (LOGIC_WINDOW_SIZE.y-buttonSize.y*4)/5.0f;
     final static Vec2 buttonPos = new Vec2(pos.x+size.x+LOGIC_WINDOW_SIZE.x*0.1f, buttonYDelta);
 
     boolean gotExtra = false;
@@ -62,7 +62,8 @@ public class EndGameScene extends mcd_Scene{
             LevelsSystem.completedLevel();
         }
 
-
+        buttonSize.x = DEFAULT_BUTTON_SIZE.x;
+        buttonSize.y = DEFAULT_BUTTON_SIZE.y;
         buttonPos.y = buttonYDelta;
         createButton(
             this,
@@ -125,21 +126,19 @@ public class EndGameScene extends mcd_Scene{
         );
 
         if(win){
-        buttonPos.y += buttonYDelta/5 + buttonSize.y;
-        buttonSize.y = buttonSize.y*2;
-        buttonSize.x = buttonSize.x*2;
-        createButton(
-                this,
-                buttonPos,
-                buttonSize,
-                "WATCH AD FOR EXTRA RUBIES",
-                () ->{
-                    if(!gotExtra){
-                        RubySystem.gainRubies(LevelsSystem.getReward());
-                        gotExtra = true;
+            buttonPos.y += buttonYDelta + buttonSize.y;
+            createButton(
+                    this,
+                    buttonPos,
+                    buttonSize,
+                    "WATCH AD FOR EXTRA RUBIES",
+                    () ->{
+                        if(!gotExtra){
+                            RubySystem.gainRubies(LevelsSystem.getReward());
+                            gotExtra = true;
+                        }
                     }
-                }
-        );
+            );
         }
     }
 }
