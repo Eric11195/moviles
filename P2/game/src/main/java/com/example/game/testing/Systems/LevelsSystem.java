@@ -1,6 +1,7 @@
 package com.example.game.testing.Systems;
 
 import com.example.engine.Engine;
+import com.example.engine.IFileStorage;
 import com.example.game.testing.utils.JSON_HELPER;
 
 import org.json.JSONException;
@@ -22,8 +23,9 @@ public class LevelsSystem{
     }
     public static void completedLevel()
     {
-
-        JSONObject info = JSON_HELPER.fromJSONModifiable(eng.getFileStorage(), "infoLevels");
+        IFileStorage fs = eng.getFileStorage();
+        fs.setRelativePath("saves");
+        JSONObject info = JSON_HELPER.fromJSONModifiable(fs, "infoLevels");
         if(!info.has(currentLevel)) {
 
             info.put(currentLevel, new JSONObject());
@@ -38,7 +40,9 @@ public class LevelsSystem{
     }
     public static boolean checkRecord(int score)
     {
-        JSONObject info = JSON_HELPER.fromJSONModifiable(eng.getFileStorage(), "infoLevels");
+        IFileStorage fs = eng.getFileStorage();
+        fs.setRelativePath("saves");
+        JSONObject info = JSON_HELPER.fromJSONModifiable(fs, "infoLevels");
         if(!info.has(currentLevel)) {
 
             info.put(currentLevel, new JSONObject());
@@ -57,7 +61,9 @@ public class LevelsSystem{
 
     public static boolean checkCompleted()
     {
-        JSONObject info = JSON_HELPER.fromJSONModifiable(eng.getFileStorage(), "infoLevels");
+        IFileStorage fs = eng.getFileStorage();
+        fs.setRelativePath("saves");
+        JSONObject info = JSON_HELPER.fromJSONModifiable(fs, "infoLevels");
 
         if(!info.has(currentLevel)) {
 

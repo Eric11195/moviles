@@ -11,41 +11,38 @@ import java.nio.file.StandardOpenOption;
 import java.util.stream.Stream;
 
 public class FileStorageDesktop implements IFileStorage {
-    private final Path rootPath =
-            Paths.get("./assets").toAbsolutePath().normalize();
 
+    private final Path rootPath = Paths.get("./assets").toAbsolutePath().normalize();
     private Path basePath = rootPath;
 
     @Override
-    public void setRelativePath(String relativePath) {
-        basePath = rootPath.resolve(relativePath).normalize();
-
-        if (!basePath.startsWith(rootPath)) {
-            throw new IllegalArgumentException("Invalid relative path");
-        }
-    }
-
-    @Override
-    public String readModifiable(String filename) throws IOException {
-        return read(filename);
-    }
-
-    @Override
     public String getCurrentPath() {
-        return basePath.toString();
+        return rootPath.relativize(basePath).toString().replace("\\", "/");
+    }
+
+    @Override
+    public void setRelativePath(String relativePath) {
+        if (relativePath == null || relativePath.isEmpty()) {
+            basePath = rootPath;
+            return;
+        }
+
+        Path resolved = rootPath.resolve(relativePath).normalize();
+
+        if (!resolved.startsWith(rootPath)) {
+            throw new IllegalArgumentException("Invalid relative path: " + relativePath);
+        }
+
+        basePath = resolved;
     }
 
     @Override
     public void writeModifiable(String filename, String content) throws IOException {
-        Path filePath = basePath.resolve(filename).normalize();
+        Path filePath = resolveFile(filename);
 
-        // Prevent paths from escaping the base directory.
-        if (!filePath.startsWith(basePath)) {
-            throw new IOException("Invalid filename: " + filename);
+        if (filePath.getParent() != null) {
+            Files.createDirectories(filePath.getParent());
         }
-
-        // Create the base directory if necessary.
-        Files.createDirectories(filePath.getParent());
 
         Files.writeString(
                 filePath,
@@ -59,32 +56,51 @@ public class FileStorageDesktop implements IFileStorage {
 
     @Override
     public String read(String filename) throws IOException {
-        Path filePath = basePath.resolve(filename).normalize();
-
-        // Prevent paths from escaping the base directory.
-        if (!filePath.startsWith(basePath)) {
-            throw new IOException("Invalid filename: " + filename);
-        }
-
+        Path filePath = resolveFile(filename);
         return Files.readString(filePath, StandardCharsets.UTF_8);
     }
 
     @Override
+    public String readModifiable(String filename) throws IOException {
+        Path filePath = resolveFile(filename);
+
+        if (!Files.exists(filePath) || !Files.isRegularFile(filePath)) {
+            return null;
+        }
+
+        try {
+            return Files.readString(filePath, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    @Override
     public boolean forEachFileOnDirectory(ForEachFileOnDirectoryFunc f) {
+        if (!Files.isDirectory(basePath)) {
+            return false;
+        }
+
         try (Stream<Path> entries = Files.list(basePath)) {
             for (Path entry : (Iterable<Path>) entries::iterator) {
                 String fileName = entry.getFileName().toString();
-
-                // Ignore files/folders that start with a dot
                 if (!fileName.startsWith(".")) {
                     f.func(fileName);
-                }else{
-                    System.out.println(">>>>>File ignored in forEachFileOnDirectory: "+fileName);
                 }
             }
             return true;
         } catch (IOException e) {
             return false;
         }
+    }
+
+    private Path resolveFile(String filename) throws IOException {
+        Path filePath = basePath.resolve(filename).normalize();
+
+        if (!filePath.startsWith(basePath)) {
+            throw new IOException("Invalid filename: " + filename);
+        }
+
+        return filePath;
     }
 }

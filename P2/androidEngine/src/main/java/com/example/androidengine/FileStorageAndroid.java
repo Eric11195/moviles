@@ -14,7 +14,6 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
 
 public class FileStorageAndroid implements IFileStorage {
 
@@ -38,7 +37,14 @@ public class FileStorageAndroid implements IFileStorage {
             return;
         }
 
-        baseDirectory = relativePath;
+        Path root = Paths.get("").normalize();
+        Path resolved = root.resolve(relativePath).normalize();
+
+        if (resolved.isAbsolute() || resolved.startsWith("..")) {
+            throw new IllegalArgumentException("Invalid relative path: " + relativePath);
+        }
+
+        baseDirectory = resolved.toString().replace("\\", "/");
     }
 
     @Override
@@ -61,64 +67,53 @@ public class FileStorageAndroid implements IFileStorage {
     public String read(String filename) throws IOException {
         String path = resolveAssetPath(filename);
 
-        // Si no existe, leer desde assets
         Log.d(TAG, "[READ] Reading APK asset: " + path);
 
         try (InputStream input = context.getAssets().open(path)) {
             return readFromStream(input);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.e(TAG, "[READ FAILED] Asset not found inside APK at path: assets/" + path, e);
             throw e;
         }
-        //Log.d(TAG, "[READ] Attempting to open asset path inside APK: assets/" + path)
     }
 
     @Override
     public String readModifiable(String filename) throws IOException {
+        File internalFile = resolveFile(filename);
 
-        String path = resolveAssetPath(filename);
-
-        File internalFile = new File(context.getFilesDir(), path);
-
-        // Crear el fichero si no existe
-        if (!internalFile.exists()) {
-            File parent = internalFile.getParentFile();
-
-            if (parent != null && !parent.exists()) {
-                parent.mkdirs();
-            }
-
-            internalFile.createNewFile();
-            try (FileOutputStream output = new FileOutputStream(internalFile)) {
-                output.write("{}".getBytes(StandardCharsets.UTF_8));
-            }
-            Log.d(TAG, "[CREATE] Created empty file: " + path);
+        if (!internalFile.exists() || !internalFile.isFile()) {
+            Log.d(TAG, "[READ] Modifiable file not found: " + internalFile.getAbsolutePath());
+            return null;
         }
 
-        Log.d(TAG, "[READ] Reading internal file: " + path);
+        Log.d(TAG, "[READ] Reading internal file: " + internalFile.getAbsolutePath());
 
         try (InputStream input = new FileInputStream(internalFile)) {
             return readFromStream(input);
+        } catch (IOException e) {
+            Log.w(TAG, "[READ FAILED] Could not open modifiable file: " + internalFile.getAbsolutePath(), e);
+            return null;
         }
-        //Log.d(TAG, "[READ] Attempting to open asset path inside APK: assets/" + path)
     }
 
-    /**
-     * @param f the func to be applied
-     * @return false on error (non valid directoy)
-     */
     @Override
     public boolean forEachFileOnDirectory(ForEachFileOnDirectoryFunc f) {
         try {
             String path = resolveAssetPath("");
-            for(String fileName : Objects.requireNonNull(context.getAssets().list(path))){
-                f.func(fileName);
+            String[] entries = context.getAssets().list(path);
+            if (entries == null) {
+                return false;
             }
-        }catch(IOException ex){
+
+            for (String fileName : entries) {
+                if (!fileName.startsWith(".")) {
+                    f.func(fileName);
+                }
+            }
+            return true;
+        } catch (IOException ex) {
             return false;
         }
-        return true;
     }
 
     private String readFromStream(InputStream input) throws IOException {
