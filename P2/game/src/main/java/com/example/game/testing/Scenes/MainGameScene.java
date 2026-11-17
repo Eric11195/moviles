@@ -78,8 +78,9 @@ public class MainGameScene extends mcd_Scene{
     }
     private  void checkBackGroundColor()
     {
-        colorBackg1 = StyleSystem.getBackgroundColor1();
-        colorBackg2 = StyleSystem.getBackgroundColor2();
+        colorBackg1 = retos == Retos.none?ColorLibrary.Grey : StyleSystem.getBackgroundColor1();
+        colorBackg2 = retos == Retos.none?ColorLibrary.DarkGrey : StyleSystem.getBackgroundColor2();
+
     };
     public void createBackground (){
         checkBackGroundColor();
