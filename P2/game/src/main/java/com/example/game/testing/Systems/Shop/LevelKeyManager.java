@@ -16,7 +16,7 @@ import java.util.Set;
 
 public class LevelKeyManager implements mcd_Serializable {
     /**
-     * Keys 0101-3112 are reserved for day of the year keys
+     * Keys 0100-3111 are reserved for day of the year keys
      * Keys 1-7 are reserved for day of the week keys
      * Key 0 is always unlocked
      * Key 3112-INT_MAX are reserved for specific levels
@@ -73,7 +73,7 @@ public class LevelKeyManager implements mcd_Serializable {
     public boolean checkKey(int key){
         return key == 0 ||
             key == currentDayMonth_key ||
-            key==currentDayOfWeek_key ||
+            key == currentDayOfWeek_key ||
             keysUnlocked.contains(key);
     }
 }
