@@ -93,7 +93,6 @@ public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
 
     @Override
     public void openTab(int idx) {
-        //TODO: hide all previous objects
         scrollableList.forEach((scrollable -> {
             scrollable.setActive(false);
         }));
@@ -101,7 +100,6 @@ public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
             TabComponent t = (TabComponent) ent.getComponent(ComponentId.BUTTON_COMPONENT);
             t.unselect(ent);
         });
-        //TODO: show only the objects on this tab
         systemList.clear();
         mcd_Entity ent =tabList.get(idx);
         ((TabComponent) ent.getComponent(ComponentId.BUTTON_COMPONENT)).select(ent);

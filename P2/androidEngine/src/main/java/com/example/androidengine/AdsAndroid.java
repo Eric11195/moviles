@@ -1,13 +1,14 @@
 package com.example.androidengine;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.engine.AdsInterface;
 
@@ -49,6 +50,8 @@ public class AdsAndroid implements AdsInterface {
     private RewardedAd rewardedAd;
 
     private volatile boolean initialized = false;
+    private volatile boolean isBannerRequested = false;
+    private ProgressBar progressBar;
 
     public AdsAndroid(Activity activity, int bannerViewId) {
         this.activity = activity;
@@ -72,17 +75,79 @@ public class AdsAndroid implements AdsInterface {
                             initialized = true;
                             Log.d(TAG, "Google Mobile Ads initialized.");
 
-                            loadBanner();
+                            if (isBannerRequested) {
+                                loadBanner();
+                            }
                             loadRewardedAd();
-
                         });
                     }
             );
         }).start();
     }
+
+    private void showLoadingSymbol() {
+        ensureProgressBarCreated();
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hideLoadingSymbol() {
+        if (progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    private void ensureProgressBarCreated() {
+        if (progressBar == null && bannerView != null && bannerView.getParent() instanceof ViewGroup) {
+            ViewGroup parent = (ViewGroup) bannerView.getParent();
+            progressBar = new ProgressBar(activity);
+
+            ViewGroup.LayoutParams bannerParams = bannerView.getLayoutParams();
+            if (bannerParams instanceof ConstraintLayout.LayoutParams) {
+                ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+                ConstraintLayout.LayoutParams bLp = (ConstraintLayout.LayoutParams) bannerParams;
+                lp.bottomToBottom = bLp.bottomToBottom;
+                lp.topToTop = bLp.topToTop;
+                lp.leftToLeft = bLp.leftToLeft;
+                lp.rightToRight = bLp.rightToRight;
+                lp.startToStart = bLp.startToStart;
+                lp.endToEnd = bLp.endToEnd;
+                progressBar.setLayoutParams(lp);
+            } else if (bannerParams instanceof FrameLayout.LayoutParams) {
+                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+                lp.gravity = ((FrameLayout.LayoutParams) bannerParams).gravity;
+                progressBar.setLayoutParams(lp);
+            } else {
+                ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+                progressBar.setLayoutParams(lp);
+            }
+
+            progressBar.setVisibility(View.GONE);
+            progressBar.setElevation(bannerView.getElevation() + 1.0f);
+            parent.addView(progressBar);
+        }
+    }
+
     private void loadBanner() {
         if (bannerView == null) {
             Log.e(TAG, "AdView was not found in the Activity layout!");
+            hideLoadingSymbol();
+            return;
+        }
+
+        if (!isBannerRequested) {
+            hideLoadingSymbol();
+            bannerView.setVisibility(View.GONE);
             return;
         }
 
@@ -106,17 +171,29 @@ public class AdsAndroid implements AdsInterface {
                     @Override
                     public void onAdLoaded(@NonNull BannerAd ad) {
                         Log.d(TAG, "Banner successfully loaded!");
+                        activity.runOnUiThread(() -> {
+                            hideLoadingSymbol();
 
-                        bannerView.setVisibility(View.VISIBLE);
-
-                        Log.d(TAG, "AdView dimensions: "
-                                + bannerView.getWidth() + "x"
-                                + bannerView.getHeight());
+                            if (isBannerRequested) {
+                                bannerView.setVisibility(View.VISIBLE);
+                                Log.d(TAG, "AdView dimensions: "
+                                        + bannerView.getWidth() + "x"
+                                        + bannerView.getHeight());
+                            } else {
+                                bannerView.setVisibility(View.GONE);
+                            }
+                        });
                     }
 
                     @Override
                     public void onAdFailedToLoad(@NonNull LoadAdError error) {
                         Log.e(TAG, "Banner failed to load: " + error);
+                        activity.runOnUiThread(() -> {
+                            hideLoadingSymbol();
+                            if (bannerView != null) {
+                                bannerView.setVisibility(View.GONE);
+                            }
+                        });
                     }
                 }
         );
@@ -124,14 +201,17 @@ public class AdsAndroid implements AdsInterface {
 
     @Override
     public void showBanner() {
-
         activity.runOnUiThread(() -> {
+            isBannerRequested = true;
+            if (bannerView != null) {
+                bannerView.setVisibility(View.GONE);
+            }
+            showLoadingSymbol();
+
             if (!initialized) {
                 Log.d(TAG, "Banner requested; waiting for initialization.");
                 return;
             }
-
-            bannerView.setVisibility(View.VISIBLE);
 
             loadBanner();
         });
@@ -140,6 +220,8 @@ public class AdsAndroid implements AdsInterface {
     @Override
     public void hideBanner() {
         activity.runOnUiThread(() -> {
+            isBannerRequested = false;
+            hideLoadingSymbol();
             if (bannerView != null) {
                 bannerView.setVisibility(View.GONE);
             }
@@ -182,7 +264,8 @@ public class AdsAndroid implements AdsInterface {
             );
         });
     }
-    boolean rewardAvailable=false;
+
+    boolean rewardAvailable = false;
 
     @Override
     public boolean hasReward() {
@@ -192,7 +275,7 @@ public class AdsAndroid implements AdsInterface {
     @Override
     public void consumeReward() {
         assert(rewardAvailable);
-        rewardAvailable=false;
+        rewardAvailable = false;
     }
 
     private void loadRewardedAd() {
