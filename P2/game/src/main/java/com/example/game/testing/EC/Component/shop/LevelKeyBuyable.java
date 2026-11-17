@@ -2,6 +2,7 @@ package com.example.game.testing.EC.Component.shop;
 
 import com.example.engine.GraphicsInterface;
 import com.example.engine.IFileStorage;
+import com.example.game.testing.Systems.Shop.LevelKeyManager;
 import com.example.game.testing.Systems.Shop.ShopManager;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
@@ -39,10 +40,10 @@ public class LevelKeyBuyable extends Buyable {
 
     @Override
     public boolean selected() {
-        return ShopManager.getInstance().isBought(this);
+        return false;
     }
     public void buy(IFileStorage fs){
         super.buy(fs);
-
+        LevelKeyManager.getInstance().addKey(this.key);
     }
 }

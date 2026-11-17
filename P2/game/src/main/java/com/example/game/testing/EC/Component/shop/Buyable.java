@@ -61,6 +61,8 @@ public abstract class Buyable implements mcd_Serializable {
                 return FontBuyable.deserializeFont(fileName,tabName,price,g,obj);
             case powerUp:
                 return PowerUpBuyable.deserializePUp(fileName,tabName,g,price,obj);
+            case levelKey:
+                return LevelKeyBuyable.deserializeLevelKey(fileName,tabName,price,obj);
             default:
                 throw new RuntimeException("Invalid type");
         }
