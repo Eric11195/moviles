@@ -26,6 +26,8 @@ public class ManagerManager implements mcd_Serializable {
 
         ShopManager.setInstance(ShopManager.deserialize(fileStorage));
 
+        LevelKeyManager.setInstance(LevelKeyManager.deserialize(fileStorage));
+
         return initialized = true;
     }
     public static boolean isInitialized(){
