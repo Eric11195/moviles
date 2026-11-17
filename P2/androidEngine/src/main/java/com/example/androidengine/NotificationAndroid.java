@@ -4,33 +4,72 @@ import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
+import androidx.work.Data;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
 
 import com.example.engine.NotificationData;
 import com.example.engine.NotificationInterface;
 
+import java.util.concurrent.TimeUnit;
+
 public class NotificationAndroid extends NotificationInterface {
-    final String CHANNEL_ID = "Notifications";
+    public static class NotificationWorker extends Worker{
+        final String CHANNEL_ID = "Notifications";
+
+        public NotificationWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+            super(context, workerParams);
+        }
+
+        @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
+        @NonNull
+        @Override
+        public Result doWork() {
+            var app = getApplicationContext();
+
+            // Create channel
+            int importance = NotificationManager. IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "NotificationChannel", importance);
+            channel.setDescription("meow");
+            var notificationManager = NotificationManagerCompat.from(app);
+            notificationManager.createNotificationChannel(channel);
+
+            Intent intent = new Intent(app, app.getClass());
+            intent.putExtra(getInputData().getString("Message"),getInputData().getString("Value"));
+            PendingIntent contentIntent = PendingIntent. getActivity(app, 0, intent,
+                    PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(app, CHANNEL_ID)
+                    .setContentTitle(getInputData().getString("Title"))
+                    .setContentText(getInputData().getString("Body"))
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setContentIntent(contentIntent)
+                    .setSmallIcon(IconCompat.createWithResource(app,getInputData().getInt("Icon",0)));
+            notificationManager.notify(0,builder.build());
+
+            return Result.success();
+        }
+    }
     AppCompatActivity app;
-    NotificationManagerCompat notificationManager;
-    int nextNotifIdx = 0;
+    int workId = 0;
     public NotificationAndroid(AppCompatActivity _app){
         app = _app;
-
-        // Create channel
-        int importance = NotificationManager. IMPORTANCE_DEFAULT;
-        NotificationChannel channel = new NotificationChannel(CHANNEL_ID , "NotificationChannel", importance);
-        channel.setDescription("meow");
-        notificationManager = NotificationManagerCompat.from(app);
-        notificationManager.createNotificationChannel(channel);
+        WorkManager.getInstance(app).cancelAllWork();
     }
 
     @Override
@@ -41,24 +80,22 @@ public class NotificationAndroid extends NotificationInterface {
     @Override
     public void createNotification(NotificationData data) {
         notifs.add(data);
-
     }
 
-    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     @Override
     public void scheduleNotification(int i, int sec) {
-        Intent intent = new Intent(app.getBaseContext(), app.getClass());
-        PendingIntent contentIntent = PendingIntent. getActivity(app, 0, intent,
-                PendingIntent. FLAG_IMMUTABLE | PendingIntent. FLAG_UPDATE_CURRENT);
-
         NotificationData data = notifs.get(i);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(app, CHANNEL_ID)
-                .setContentTitle(data.title)
-                .setContentText(data.body)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(contentIntent)
-                .setSmallIcon(IconCompat.createWithResource(app,smallIcon));
-        notificationManager.notify(nextNotifIdx,builder.build());
-        ++nextNotifIdx;
+        PeriodicWorkRequest.Builder request = new PeriodicWorkRequest.Builder(NotificationWorker.class, sec, TimeUnit.SECONDS).setInitialDelay(sec,TimeUnit.SECONDS);
+        var requestData = new Data.Builder();
+        requestData.putString("Title", data.title);
+        requestData.putString("Body", data.body);
+        requestData.putString("Tag", data.tag);
+        requestData.putString("Value", data.value);
+        requestData.putInt("Icon", smallIcon);
+
+        request.setInputData(requestData.build());
+        WorkManager.getInstance(app).enqueueUniquePeriodicWork(Integer.toString(workId), ExistingPeriodicWorkPolicy.REPLACE,request.build());
+        workId++;
     }
+
 }

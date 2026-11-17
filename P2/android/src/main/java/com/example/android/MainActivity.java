@@ -40,11 +40,11 @@ public class MainActivity extends AppCompatActivity {
         eng.getNotifs().setSmallIcon(R.drawable.homunculus);
         eng.getNotifs().createNotification(
                 new NotificationData("MCD", "Vuelve a mochilacohetonadisfrutar AHORA!!!", "RUBY_REWARD"));
-        eng.getNotifs().scheduleNotification(0,5);
     }
 
     @Override
     protected void onPause() {
+        eng.getNotifs().scheduleNotification(0,5);
         super.onPause();
     }
 }
