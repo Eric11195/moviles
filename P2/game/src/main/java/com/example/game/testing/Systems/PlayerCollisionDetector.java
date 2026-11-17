@@ -24,7 +24,10 @@ public class PlayerCollisionDetector implements mcd_System {
 //                playerCollided(scene);
                 if(player.hasComponent(ComponentId.JETPACK_COMPONENT)){
                     com.example.game.testing.EC.Component.JetpackComponent jc = (JetpackComponent) player.getComponent(ComponentId.JETPACK_COMPONENT);
-                    if(jc.consumeShield()){
+                    if(
+                        (!(ent.getComponent(ComponentId.OBSTACLE_COMPONENT) instanceof com.example.game.testing.EC.Component.obstacle.CoinComponent))
+                        && jc.consumeShield()
+                    ){
                         //consume 1 shield and kill collided entity
                         ent.setActive(false);
                         return;
