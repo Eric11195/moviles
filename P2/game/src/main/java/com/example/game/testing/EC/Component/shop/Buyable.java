@@ -39,7 +39,8 @@ public abstract class Buyable implements mcd_Serializable {
         skin,
         color,
         font,
-        powerUp
+        powerUp,
+        levelKey
     }
     public abstract void equip(IFileStorage fs);
     @Override
