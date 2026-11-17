@@ -3,6 +3,7 @@ package com.example.game.testing.Scenes;
 import static com.example.game.testing.EC.Prefabs.ButtonPrefab.createButton;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
+import com.example.engine.ColorEng;
 import com.example.engine.Engine;
 import com.example.game.testing.EC.Component.BackgroundComponent;
 import com.example.game.testing.EC.Component.DrawMultipleRectanglesComponent;
@@ -15,12 +16,14 @@ import com.example.game.testing.Systems.EndGameAfterXCoins;
 import com.example.game.testing.Systems.EndGameAfterXDistance;
 import com.example.game.testing.Systems.GameDistanceToEndOfLevelRenderer;
 import com.example.game.testing.Systems.LevelGenerator.BaseLevelGenerator;
+import com.example.game.testing.Systems.LevelsSystem;
 import com.example.game.testing.Systems.PlayerCollisionDetector;
 import com.example.game.testing.Systems.LevelGenerator.FileLevelGenerator;
 import com.example.game.testing.Systems.LevelGenerator.LevelFileGenerator;
 import com.example.game.testing.Systems.LevelGenerator.LevelGeneratorParams;
 import com.example.game.testing.Systems.LevelGenerator.ProceduralLevelGenerator;
 import com.example.game.testing.Systems.Shop.PowerUpManager;
+import com.example.game.testing.Systems.StyleSystem;
 import com.example.game.testing.constants.Constants;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.SoundLibrary;
@@ -33,6 +36,9 @@ import com.example.utils.Vec2;
 public class MainGameScene extends mcd_Scene{
     BaseLevelGenerator levelGen = null;
     float gameTime;
+
+    ColorEng colorBackg1;
+    ColorEng colorBackg2;
 
     public static enum Retos{
         none(0),
@@ -70,20 +76,25 @@ public class MainGameScene extends mcd_Scene{
     public void setDistanceToWin(float distanceToWin){
         this.distanceToWin = distanceToWin;
     }
-
+    private  void checkBackGroundColor()
+    {
+        colorBackg1 = StyleSystem.getBackgroundColor1();
+        colorBackg2 = StyleSystem.getBackgroundColor2();
+    };
     public void createBackground (){
+        checkBackGroundColor();
         mcd_Entity background0 = createEntity();
         background0.addComponent(ComponentId.BACKGROUND_COMPONENT, new BackgroundComponent(new Vec2(Constants.BACKGROUND_0_MIN_WIDTH,Constants.BACKGROUND_0_MIN_HEIGHT),
                 new Vec2(Constants.BACKGROUND_0_MAX_WIDTH,Constants.BACKGROUND_0_MAX_HEIGHT),
                 Constants.BACKGROUND_0_SPEED_SCALE,
-                ColorLibrary.LightGrey));
+                colorBackg1));
         background0.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT,new DrawMultipleRectanglesComponent());
 
         mcd_Entity background1 = createEntity();
         background1.addComponent(ComponentId.BACKGROUND_COMPONENT, new BackgroundComponent(new Vec2(Constants.BACKGROUND_1_MIN_WIDTH,Constants.BACKGROUND_1_MIN_HEIGHT),
                 new Vec2(Constants.BACKGROUND_1_MAX_WIDTH,Constants.BACKGROUND_1_MAX_HEIGHT),
                 Constants.BACKGROUND_1_SPEED_SCALE,
-                ColorLibrary.DarkGrey));
+                colorBackg2));
         background1.addComponent(ComponentId.DRAW_RECTANGLE_COMPONENT,new DrawMultipleRectanglesComponent());
     }
     LevelGeneratorParams lgp;
@@ -124,6 +135,7 @@ public class MainGameScene extends mcd_Scene{
         super.update(eng, gameTime, dt);
         gameTime += dt;
     }
+
     @Override
     public void start(Engine eng) {
         createBackground();

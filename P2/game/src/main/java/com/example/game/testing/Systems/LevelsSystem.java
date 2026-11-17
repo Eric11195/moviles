@@ -11,7 +11,7 @@ public class LevelsSystem{
 
     static Engine eng;
     static String currentLevel;
-
+    static String worldName;
     static int reward;
     public static String getCurrentLevelName()
     {
@@ -90,5 +90,6 @@ public class LevelsSystem{
     {
         reward = r;
     }
-
+    public static String getWorldName(){return  worldName;}
+    public static void setWorldName(String name){worldName = name;}
 }
