@@ -11,7 +11,9 @@ import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.LevelGenerator.LevelFileGenerator;
 import com.example.game.testing.Systems.LevelsSystem;
 import com.example.game.testing.Systems.Shop.ColorManager;
+import com.example.game.testing.Systems.Shop.LevelKeyManager;
 import com.example.game.testing.Systems.menu.Scrollable;
+import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.JSON_HELPER;
 import com.example.utils.Vec2;
 
@@ -38,8 +40,9 @@ public class LevelSelectorScene extends mcd_Scene{
         ArrayList<mcd_Entity> buttons = new ArrayList<>();
 
         //TODO: MODIFY COLORS WITh STYLE.JSON
-        ColorEng regularColor = ColorManager.getInstance().getColor(ColorManager.Colors.MISSILE_COLOR);
-        ColorEng completedColor = ColorManager.getInstance().getColor(ColorManager.Colors.BUTTONS_COLOR);
+        ColorEng regularColor = ColorManager.getInstance().getColor(ColorManager.Colors.BUTTONS_COLOR);
+        ColorEng completedColor = ColorLibrary.Gold;
+        ColorEng blockedColor = ColorLibrary.Blue;
 
         eng.getFileStorage().forEachFileOnDirectory((String filename)->{
             if (!filename.contains("Level")) return;
@@ -53,18 +56,20 @@ public class LevelSelectorScene extends mcd_Scene{
             int num = lgs.levelGeneratorParams.levelCoinsToWin == -1 ? lgs.levelGeneratorParams.levelTotalMeters : lgs.levelGeneratorParams.levelCoinsToWin;
 
             boolean levelCompleted = false;
+            boolean levelBlocked = obj.has("levelKey") && !LevelKeyManager.getInstance().checkKey(obj.getInt("levelKey"));
             buttons.add (createButtonOutsideScene(
                     this,
                     pos,
                     DEFAULT_BUTTON_SIZE,
                     (lgs.levelGeneratorParams.levelCoinsToWin == -1 ? "Distance" : "Coins") + ": " + num,
                     () -> {
+                        if(levelBlocked) return;
                         //FALTA PONERLE EL NOMBRE BIEN
                         LevelsSystem.setCurrentLevel(filename);
                         LevelsSystem.setReward(obj.getJSONObject("LevelGeneratorParams").getInt("reward"));
                         loadLevel(eng, lgs);
                     },
-                    levelCompleted ? completedColor : regularColor
+                    levelCompleted ? completedColor : (levelBlocked? blockedColor : regularColor)
             ));
             idx.incrementAndGet();
         });

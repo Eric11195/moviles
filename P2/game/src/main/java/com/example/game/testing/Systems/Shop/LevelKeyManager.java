@@ -75,7 +75,5 @@ public class LevelKeyManager implements mcd_Serializable {
             key == currentDayMonth_key ||
             key==currentDayOfWeek_key ||
             keysUnlocked.contains(key);
-
-
     }
 }
