@@ -26,7 +26,8 @@ public class JSON_HELPER {
             "powerUps",
             "levels",
             "skins",
-            "bought"
+            "bought",
+            "rubies"
     };
 
     public static void initializeHasherDefault(JSONObject jo) {

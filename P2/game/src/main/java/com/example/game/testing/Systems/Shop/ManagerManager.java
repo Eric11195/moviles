@@ -3,6 +3,7 @@ package com.example.game.testing.Systems.Shop;
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
 import com.example.engine.IFileStorage;
+import com.example.game.testing.Systems.RubySystem;
 import com.example.game.testing.utils.JSON_HELPER;
 import com.example.game.testing.utils.mcd_Serializable;
 import com.example.game.testing.utils.ps1Runner;
@@ -18,6 +19,7 @@ public class ManagerManager implements mcd_Serializable {
 
         try {
             JSON_HELPER.deserialize(eng, fileStorage);
+            RubySystem.deserialize(fileStorage);
 
             ColorManager.setInstance(ColorManager.deserialize(fileStorage));
 

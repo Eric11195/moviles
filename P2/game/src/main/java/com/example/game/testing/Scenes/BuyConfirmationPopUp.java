@@ -71,7 +71,7 @@ public class BuyConfirmationPopUp extends mcd_Scene {
                 "CONFIRM",
                 ()->{
                     eng.popScene();
-                    RubySystem.pay(elementToBuy.price);
+                    RubySystem.pay(eng.getFileStorage(),elementToBuy.price);
                     elementToBuy.buy(eng.getFileStorage());
                 },
                 new ColorEng(0xFF2D882D)
