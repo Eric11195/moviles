@@ -27,8 +27,9 @@ public class MainMenuScene extends mcd_Scene{
     }
     @Override
     public void start(Engine eng) {
-        if(!ManagerManager.init(eng.getFileStorage(), eng.getGraphics())){
-            throw new RuntimeException("Could not be correctly initialize");
+        if (!ManagerManager.init(eng)) {
+            eng.setScene(new CorruptedSaveFileScene(eng));
+            return;
         }
 
         GraphicsInterface g = eng.getGraphics();

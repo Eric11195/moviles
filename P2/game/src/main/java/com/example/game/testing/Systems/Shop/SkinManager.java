@@ -53,14 +53,23 @@ public class SkinManager implements mcd_Serializable {
         return jo;
     }
 
+    private static JSONObject initializeWithPresets(IFileStorage fs){
+        fs.setRelativePath("presets");
+        return JSON_HELPER.fromJSON(fs,"skins");
+    }
+
     public static SkinManager deserialize(GraphicsInterface g, IFileStorage fs){
         fs.setRelativePath("saves");
-        JSONObject jo = JSON_HELPER.fromJSONModifiable(fs,"skins");
-        if(jo==null || jo.length()==0){
-            //read default
-            fs.setRelativePath("presets");
-            jo = JSON_HELPER.fromJSON(fs,"skins");
+        JSONObject jo;
+        try{
+            jo = JSON_HELPER.fromJSONModifiable(fs,"skins");
+            if(jo==null || jo.length()==0){
+                initializeWithPresets(fs);
+            }
+        }catch(Throwable t){
+            jo = initializeWithPresets(fs);
         }
+
 
         ArrayList<ImageEng> imgs = new ArrayList<>();
         Images[] enum_img = Images.values();

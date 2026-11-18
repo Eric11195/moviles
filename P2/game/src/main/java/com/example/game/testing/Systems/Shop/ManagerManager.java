@@ -1,5 +1,6 @@
 package com.example.game.testing.Systems.Shop;
 
+import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
 import com.example.engine.IFileStorage;
 import com.example.game.testing.utils.JSON_HELPER;
@@ -7,29 +8,34 @@ import com.example.game.testing.utils.mcd_Serializable;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
-
 public class ManagerManager implements mcd_Serializable {
     static boolean initialized = false;
-    public static boolean init(IFileStorage fileStorage, GraphicsInterface g){
-        if(initialized)return true;
+    public static boolean init(Engine eng){
+        if(initialized) return true;
+        IFileStorage fileStorage = eng.getFileStorage();
+        GraphicsInterface g = eng.getGraphics();
 
-        JSON_HELPER.deserialize(fileStorage);
+        try {
+            JSON_HELPER.deserialize(eng, fileStorage);
 
-        ColorManager.setInstance(ColorManager.deserialize(fileStorage));
+            ColorManager.setInstance(ColorManager.deserialize(fileStorage));
 
-        SkinManager.setInstance(SkinManager.deserialize(g,fileStorage));
+            SkinManager.setInstance(SkinManager.deserialize(g, fileStorage));
 
-        FontManager.setInstance(FontManager.deserialize(g,fileStorage));
+            FontManager.setInstance(FontManager.deserialize(g, fileStorage));
 
-        PowerUpManager.setInstance(PowerUpManager.deserialize(fileStorage));
+            PowerUpManager.setInstance(PowerUpManager.deserialize(fileStorage));
 
-        ShopManager.setInstance(ShopManager.deserialize(fileStorage));
+            ShopManager.setInstance(ShopManager.deserialize(fileStorage));
 
-        LevelKeyManager.setInstance(LevelKeyManager.deserialize(fileStorage));
-
+            LevelKeyManager.setInstance(LevelKeyManager.deserialize(fileStorage));
+        } catch (Throwable e) {
+            e.printStackTrace();
+            return false;
+        }
         return initialized = true;
     }
+
     public static boolean isInitialized(){
         return initialized;
     }

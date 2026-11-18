@@ -51,13 +51,23 @@ public class ColorManager implements mcd_Serializable {
         });
         return jo;
     }
+
+    private static JSONObject initiliazeWithPresets(IFileStorage fs){
+        fs.setRelativePath("presets");
+        return JSON_HELPER.fromJSON(fs,"colors");
+    }
+
     public static ColorManager deserialize(IFileStorage fs){
         fs.setRelativePath("saves");
-        JSONObject jo = JSON_HELPER.fromJSONModifiable(fs,"colors");
-        if(jo==null || jo.length()==0){
-            //read default
-            fs.setRelativePath("presets");
-            jo = JSON_HELPER.fromJSON(fs,"colors");
+        JSONObject jo;
+        try {
+            jo = JSON_HELPER.fromJSONModifiable(fs, "colors");
+            if(jo==null || jo.length()==0){
+                jo = initiliazeWithPresets(fs);
+            }
+        }catch(Throwable t) {
+            t.printStackTrace();
+            jo = initiliazeWithPresets(fs);
         }
 
         ArrayList<ColorEng> clrs = new ArrayList<>();

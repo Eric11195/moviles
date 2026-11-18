@@ -1,9 +1,12 @@
 package com.example.game.testing.utils;
 
 import com.example.engine.ColorEng;
+import com.example.engine.Engine;
 import com.example.engine.FontEng;
 import com.example.engine.GraphicsInterface;
 import com.example.engine.IFileStorage;
+import com.example.game.testing.Scenes.CorruptedSaveFileScene;
+import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.utils.Vec2;
 
 import org.json.JSONArray;
@@ -27,15 +30,20 @@ public class JSON_HELPER {
             "bought"
     };
 
-    private static void initializeHasherFile(JSONObject jo) {
+    public static void initializeHasherDefault(JSONObject jo) {
         long defaultFileHash = HashUtils.getHashForJSONObject("{}");
         for (String file : saveFiles) {
             jo.put(file, defaultFileHash);
         }
     }
 
-    public static void deserialize(IFileStorage fileStorage) {
+    static Engine engine;
+    static IFileStorage fs;
+    public static void deserialize(Engine eng, IFileStorage fileStorage) {
         hashPerFile = new Hashtable<>();
+
+        engine = eng;
+        fs = fileStorage;
 
         String file_name = "hashPerFile.json";
         fileStorage.setRelativePath("security");
@@ -55,16 +63,19 @@ public class JSON_HELPER {
         }
 
         if (jo.length() == 0) {
-            initializeHasherFile(jo);
+            initializeHasherDefault(jo);
         }
+
+        saveCurrentHasher(fileStorage, jo);
+    }
+    public static void storeValuesFromJSON(JSONObject jo) {
         for (String key : jo.keySet()) {
             hashPerFile.put(key, jo.getLong(key));
         }
-        saveCurrentHasher(fileStorage);
+        saveCurrentHasher(fs,jo);
     }
 
-    private static void saveCurrentHasher(IFileStorage fs) {
-        JSONObject jo = new JSONObject();
+    private static void saveCurrentHasher(IFileStorage fs, JSONObject jo) {
         Enumeration<String> keys = hashPerFile.keys();
         while (keys.hasMoreElements()) {
             String key = keys.nextElement();
@@ -148,7 +159,7 @@ public class JSON_HELPER {
             System.out.println("Written file with hash:" + hash);
             fileStorage.writeModifiable(file_name + ".json", json);
             System.out.println("In path: " + fileStorage.getCurrentPath() + "\nJSON written to file " + file_name + ".json succesfully");
-            saveCurrentHasher(fileStorage);
+            saveCurrentHasher(fileStorage,jo);
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
@@ -197,7 +208,8 @@ public class JSON_HELPER {
             long hash = HashUtils.getHashForJSONObject(content);
             System.out.println("Read file with expected hash: " + hash);
 
-            if (checkValidityOfJSONs && (l == null || l != hash)) {
+            if (checkValidityOfJSONs && (l != null && l != hash)) {
+                engine.pushScene(new CorruptedSaveFileScene(engine));
                 throw new RuntimeException("Invalid hash for file " + file_name + " should be " + hash + " but is " + l);
             }
 

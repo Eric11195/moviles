@@ -29,15 +29,24 @@ public class ShopManager implements mcd_Serializable {
     public static void setInstance(ShopManager sm){
         _instance = sm;
     }
+    private static JSONObject initializeWithPreset(IFileStorage fs) {
+        fs.setRelativePath("presets");
+        return JSON_HELPER.fromJSON(fs, "bought");
+    }
     public static ShopManager deserialize(IFileStorage fs){
         fs.setRelativePath("saves");
-        JSONObject jo = JSON_HELPER.fromJSONModifiable(fs, "bought");
 
         List<String> ls = new ArrayList<>();
-
-        if(jo==null || jo.length()==0){
+        JSONObject jo;
+        try{
+            jo = JSON_HELPER.fromJSONModifiable(fs, "bought");
+            if(jo==null || jo.length()==0){
+                return new ShopManager(ls,fs);
+            }
+        }catch(Throwable t){
             return new ShopManager(ls,fs);
         }
+
         JSONArray ja = jo.getJSONArray("boughtObjects");
         for(int i = 0; i < ja.length(); ++i){
             ls.add(ja.getString(i));
