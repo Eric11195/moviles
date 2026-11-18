@@ -39,10 +39,11 @@ public class NotificationAndroid extends NotificationInterface {
         @Override
         public Result doWork() {
             var app = getApplicationContext();
+            int workId = getInputData().getInt("WorkId", 0);
 
             // Create channel
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "NotificationChannel", importance);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "NotificationChannel"+workId, importance);
             channel.setDescription("meow");
             var notificationManager = NotificationManagerCompat.from(app);
             notificationManager.createNotificationChannel(channel);
@@ -59,24 +60,7 @@ public class NotificationAndroid extends NotificationInterface {
                     .setContentIntent(contentIntent)
                     .setSmallIcon(IconCompat.createWithResource(app, getInputData().getInt("Icon", 0)));
 
-            int notificationId = (int) System.currentTimeMillis();
-            notificationManager.notify(notificationId, builder.build());
-
-            int sec = getInputData().getInt("Interval", 0);
-            int workId = getInputData().getInt("WorkId", 0);
-
-            if (sec > 0) {
-                OneTimeWorkRequest nextRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-                        .setInitialDelay(sec, TimeUnit.SECONDS)
-                        .setInputData(getInputData())
-                        .build();
-
-                WorkManager.getInstance(app).enqueueUniqueWork(
-                        "NotifWork_" + workId,
-                        ExistingWorkPolicy.REPLACE,
-                        nextRequest
-                );
-            }
+            notificationManager.notify(workId, builder.build());
 
             return Result.success();
         }
