@@ -37,9 +37,7 @@ public class CorruptedSaveFileScene extends mcd_Scene {
         float entityHeight = totalHeight / 3.0f;
 
         ButtonComponent.ButtonClickFunction onContinue = () -> {
-            JSONObject jo = new JSONObject();
-            JSON_HELPER.initializeHasherDefault(jo);
-            JSON_HELPER.storeValuesFromJSON(jo);
+            ManagerManager.reset();
             eng.setScene(new MainMenuScene(eng));
             if(!ManagerManager.init(eng)){
                 throw new RuntimeException("Error initializing managers after cleanup");

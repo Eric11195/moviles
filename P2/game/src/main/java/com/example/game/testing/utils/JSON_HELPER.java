@@ -6,7 +6,6 @@ import com.example.engine.FontEng;
 import com.example.engine.GraphicsInterface;
 import com.example.engine.IFileStorage;
 import com.example.game.testing.Scenes.CorruptedSaveFileScene;
-import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.utils.Vec2;
 
 import org.json.JSONArray;
@@ -66,26 +65,32 @@ public class JSON_HELPER {
             initializeHasherDefault(jo);
         }
 
-        saveCurrentHasher(fileStorage, jo);
+        for (String key : jo.keySet()) {
+            hashPerFile.put(key, jo.getLong(key));
+        }
+
+        saveCurrentHasher(fileStorage);
     }
+
     public static void storeValuesFromJSON(JSONObject jo) {
         for (String key : jo.keySet()) {
             hashPerFile.put(key, jo.getLong(key));
         }
-        saveCurrentHasher(fs,jo);
+        saveCurrentHasher(fs);
     }
 
-    private static void saveCurrentHasher(IFileStorage fs, JSONObject jo) {
+    private static void saveCurrentHasher(IFileStorage fs) {
+        JSONObject hasherJson = new JSONObject();
         Enumeration<String> keys = hashPerFile.keys();
         while (keys.hasMoreElements()) {
             String key = keys.nextElement();
-            jo.put(key, hashPerFile.get(key));
+            hasherJson.put(key, hashPerFile.get(key));
         }
         String file_name = "hashPerFile.json";
         String path = fs.getCurrentPath();
         fs.setRelativePath("security");
         try {
-            fs.writeModifiable(file_name, jo.toString());
+            fs.writeModifiable(file_name, hasherJson.toString());
             System.out.println("In path: " + fs.getCurrentPath() + "\nJSON written to file " + file_name + " succesfully");
         } catch (java.io.IOException e) {
             e.printStackTrace();
@@ -153,13 +158,18 @@ public class JSON_HELPER {
             throw new RuntimeException("HashPerFile not initialized, deserialize must be called");
         }
         try {
+            String key = file_name;
+            if (key.endsWith(".json")) {
+                key = key.substring(0, key.length() - 5);
+            }
+
             String json = jo.toString();
             long hash = HashUtils.getHashForJSONObject(json);
-            hashPerFile.put(file_name, hash);
+            hashPerFile.put(key, hash);
             System.out.println("Written file with hash:" + hash);
-            fileStorage.writeModifiable(file_name + ".json", json);
-            System.out.println("In path: " + fileStorage.getCurrentPath() + "\nJSON written to file " + file_name + ".json succesfully");
-            saveCurrentHasher(fileStorage,jo);
+            fileStorage.writeModifiable(key + ".json", json);
+            System.out.println("In path: " + fileStorage.getCurrentPath() + "\nJSON written to file " + key + ".json succesfully");
+            saveCurrentHasher(fileStorage);
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
@@ -194,27 +204,31 @@ public class JSON_HELPER {
         }
         System.out.println("Begin Reading " + file_name + " in " + fileStorage.getCurrentPath());
         try {
-            Long l = hashPerFile.get(file_name);
-            if (!file_name.endsWith(".json")) {
-                file_name += ".json";
+            String key = file_name;
+            if (key.endsWith(".json")) {
+                key = key.substring(0, key.length() - 5);
             }
+            String actualFileName = key + ".json";
 
-            String content = fileStorage.readModifiable(file_name);
+            String content = fileStorage.readModifiable(actualFileName);
             if (content == null || content.isEmpty()) {
-                System.out.println("File " + file_name + " could not be opened, returning {}");
+                System.out.println("File " + actualFileName + " could not be opened, returning {}");
                 return new JSONObject();
             }
 
+            Long l = hashPerFile.get(key);
             long hash = HashUtils.getHashForJSONObject(content);
-            System.out.println("Read file with expected hash: " + hash);
+            System.out.println("Read file with expected hash: " + l + " but calculated: " + hash);
 
             if (checkValidityOfJSONs && (l != null && l != hash)) {
-                engine.pushScene(new CorruptedSaveFileScene(engine));
-                throw new RuntimeException("Invalid hash for file " + file_name + " should be " + hash + " but is " + l);
+                if (engine != null) {
+                    engine.pushScene(new CorruptedSaveFileScene(engine));
+                }
+                throw new RuntimeException("Invalid hash for file " + actualFileName + " should be " + hash + " but is " + l);
             }
 
             JSONObject jo = new JSONObject(content);
-            System.out.println(file_name + " Read succesfully");
+            System.out.println(actualFileName + " Read succesfully");
             return jo;
         } catch (java.io.IOException e) {
             System.out.println("Error while reading file " + file_name + " in " + fileStorage.getCurrentPath());
