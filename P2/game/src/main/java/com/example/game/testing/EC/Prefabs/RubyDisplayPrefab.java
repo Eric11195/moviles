@@ -9,10 +9,10 @@ import com.example.game.testing.Scenes.mcd_Scene;
 import com.example.utils.Vec2;
 
 public class RubyDisplayPrefab {
-    public static mcd_Entity createRubyDisplay(mcd_Scene scene, Vec2 pos, Vec2 size){
+    public static mcd_Entity createRubyDisplay(mcd_Scene scene, Vec2 pos, Vec2 size, Vec2 pos2, Vec2 size2){
         mcd_Entity ent = new mcd_Entity(scene);
         ent.addComponent(ComponentId.TRANSFORM_COMPONENT,new TransformComponent(pos,size));
-        ent.addComponent(ComponentId.RUBY_DISPLAY_COMPONENT, new RubyDisplayComponent());
+        ent.addComponent(ComponentId.RUBY_DISPLAY_COMPONENT, new RubyDisplayComponent(pos2,size2));
         ent.addComponent(ComponentId.IMAGE_COMPONENT,new ImageComponent("img/ruby.png"));
         return ent;
     }

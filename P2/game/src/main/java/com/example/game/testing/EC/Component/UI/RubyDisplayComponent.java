@@ -11,9 +11,11 @@ import com.example.game.testing.utils.ColorLibrary;
 import com.example.utils.Vec2;
 
 public class RubyDisplayComponent implements mcd_Component {
-    Vec2 textOffset = new Vec2(Constants.RUBIES_IMAGE_SIZE.x,0);
-    public RubyDisplayComponent(){
-
+    Vec2 pos;
+    Vec2 size;
+    public RubyDisplayComponent(Vec2 pos, Vec2 size){
+        this.pos = pos;
+        this.size = size;
     }
     @Override
     public void update(mcd_Entity ent, float t, float dt) {
@@ -25,6 +27,6 @@ public class RubyDisplayComponent implements mcd_Component {
         g.setColor(ColorLibrary.HotPink);
         g.setFontSize((int) tr.size.y);
         int rubies = RubySystem.getRubies();
-        g.drawText(Integer.toString(rubies),tr.pos.add(textOffset),tr.size);
+        g.drawText(Integer.toString(rubies),tr.pos.add(pos),size);
     }
 }

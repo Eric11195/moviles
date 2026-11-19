@@ -7,6 +7,7 @@ import static com.example.game.testing.constants.Constants.DEFAULT_RUBIES_SIZE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.MARGINS;
 import static com.example.game.testing.constants.Constants.ROWS_IN_SHOP;
+import static com.example.game.testing.constants.Constants.RUBIES_IMAGE_SIZE;
 import static com.example.game.testing.constants.Constants.SHOP_POS;
 import static com.example.game.testing.constants.Constants.SHOP_SIZE;
 import static com.example.game.testing.constants.Constants.TAB_HEIGHT;
@@ -90,7 +91,12 @@ public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
 
         BackButtonPrefab.createBackButton(eng, this);
 
-        addEntity(RubyDisplayPrefab.createRubyDisplay(this,DEFAULT_RUBIES_POSITION,DEFAULT_RUBIES_SIZE));
+        addEntity(RubyDisplayPrefab.createRubyDisplay(this,
+                DEFAULT_RUBIES_POSITION,
+                RUBIES_IMAGE_SIZE,
+                new Vec2(RUBIES_IMAGE_SIZE.x,0),
+                new Vec2(RUBIES_IMAGE_SIZE.x*2,RUBIES_IMAGE_SIZE.y)
+                ));
     }
 
     @Override

@@ -104,4 +104,7 @@ public class Constants {
     public static final Vec2 DEFAULT_RUBIES_SIZE = new Vec2(32,32);
     public static final Vec2 RUBIES_IMAGE_SIZE = new Vec2(32,32);
     public static final Vec2 DEFAULT_RUBIES_POSITION = new Vec2(LOGIC_WINDOW_SIZE.x-DEFAULT_RUBIES_SIZE.x- RUBIES_IMAGE_SIZE.x-MARGINS.x,MARGINS.y);
+
+    public static final String NOTIF_EXTRA = "RUBY_REWARD";
+    public static final String RUBY_REWARD = "5";
 }
