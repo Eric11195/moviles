@@ -105,7 +105,6 @@ public class MainMenuScene extends mcd_Scene{
         );
         //SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG).setStreamId(eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG)));
         //eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.WIN));
-        addEntity(RubyDisplayPrefab.createRubyDisplay(this,DEFAULT_RUBIES_POSITION,DEFAULT_RUBIES_SIZE));
 
         eng.getAds().showBanner();
     }

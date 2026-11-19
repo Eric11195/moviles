@@ -5,7 +5,10 @@ import static com.example.game.testing.constants.Constants.COLS_IN_SHOP;
 import static com.example.game.testing.constants.Constants.DEFAULT_RUBIES_POSITION;
 import static com.example.game.testing.constants.Constants.DEFAULT_RUBIES_SIZE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
+import static com.example.game.testing.constants.Constants.MARGINS;
 import static com.example.game.testing.constants.Constants.ROWS_IN_SHOP;
+import static com.example.game.testing.constants.Constants.SHOP_POS;
+import static com.example.game.testing.constants.Constants.SHOP_SIZE;
 import static com.example.game.testing.constants.Constants.TAB_HEIGHT;
 
 import com.example.engine.ColorEng;
@@ -35,14 +38,8 @@ public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
     }
     List<Scrollable> scrollableList;
     List<mcd_Entity> tabList;
-    private static final Vec2 pos = new Vec2(
-        BACK_BUTTON_SQUARE_SIZE,
-        TAB_HEIGHT
-    );
-    private static final Vec2 size = new Vec2(
-        LOGIC_WINDOW_SIZE.x-BACK_BUTTON_SQUARE_SIZE,
-        LOGIC_WINDOW_SIZE.y  - BACK_BUTTON_SQUARE_SIZE-TAB_HEIGHT
-    );
+    private static final Vec2 pos = SHOP_POS.add(MARGINS);
+    private static final Vec2 size = SHOP_SIZE.sub(MARGINS);
 
     @Override
     public void start(Engine eng) {

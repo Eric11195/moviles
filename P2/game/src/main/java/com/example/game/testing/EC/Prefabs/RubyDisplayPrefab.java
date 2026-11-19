@@ -1,5 +1,6 @@
 package com.example.game.testing.EC.Prefabs;
 
+import com.example.game.testing.EC.Component.ImageComponent;
 import com.example.game.testing.EC.Component.TransformComponent;
 import com.example.game.testing.EC.Component.UI.RubyDisplayComponent;
 import com.example.game.testing.EC.ComponentId;
@@ -12,6 +13,7 @@ public class RubyDisplayPrefab {
         mcd_Entity ent = new mcd_Entity(scene);
         ent.addComponent(ComponentId.TRANSFORM_COMPONENT,new TransformComponent(pos,size));
         ent.addComponent(ComponentId.RUBY_DISPLAY_COMPONENT, new RubyDisplayComponent());
+        ent.addComponent(ComponentId.IMAGE_COMPONENT,new ImageComponent("img/ruby.png"));
         return ent;
     }
 }
