@@ -50,50 +50,51 @@ public class LevelSelectorScene extends mcd_Scene{
         //eng.getFileStorage().setRelativePath("levels");
         eng.getFileStorage().forEachFileOnDirectory((String worldname)-> {
             if (!worldname.contains("World")) return;
-                eng.getFileStorage().setRelativePath("levels/" + worldname);
-                AtomicReference<JSONObject> styleJSON = new AtomicReference<>(null);
-                eng.getFileStorage().forEachFileOnDirectory((String stylefile) -> {
-                    if (!stylefile.contains("style")) return;
-                       styleJSON.set(JSON_HELPER.fromJSON(eng.getFileStorage(), stylefile));
-                });
-                if (styleJSON.get() == null) {
-                   throw new RuntimeException("File style could not be found");
-                }
-                StyleSystem.setColors(styleJSON.get());
-                regularColor.set(StyleSystem.getButtonUnLockedColor());
-                blockedColor.set(StyleSystem.getButtonLockedColor());
-                completedColor.set(StyleSystem.getButtonCompleteColor());
-                //check for style.json
-                eng.getFileStorage().forEachFileOnDirectory((String filename) -> {
-                   if (!filename.contains("Level")) return;
-                   JSONObject obj = JSON_HELPER.fromJSON(eng.getFileStorage(), filename);
-                   if (obj == null) {
-                      throw new RuntimeException("File level could not be found");
-                   }
-                   Vec2 pos = new Vec2(0, 0);
-                   LevelFileGenerator.LevelGeneratorSerialized lgs = LevelFileGenerator.deserialize(obj);
-                   int num = lgs.levelGeneratorParams.levelCoinsToWin == -1 ? lgs.levelGeneratorParams.levelTotalMeters : lgs.levelGeneratorParams.levelCoinsToWin;
 
-                   boolean levelCompleted = false;
-                   boolean levelBlocked = obj.has("levelKey") && !LevelKeyManager.getInstance().checkKey(obj.getInt("levelKey"));
-                   buttons.add(createButtonOutsideScene(
-                                this,
-                                pos,
-                                DEFAULT_BUTTON_SIZE,
-                                (lgs.levelGeneratorParams.levelCoinsToWin == -1 ? "Distance" : "Coins") + ": " + num,
-                                () -> {
-                                    if (levelBlocked) return;
-                                    //FALTA PONERLE EL NOMBRE BIEN
-                                    LevelsSystem.setCurrentLevel(filename);
-                                    LevelsSystem.setReward(obj.getJSONObject("LevelGeneratorParams").getInt("reward"));
-                                    StyleSystem.setBackgroundColor(styleJSON.get());
-                                    loadLevel(eng, lgs);
-                                },
-                                levelCompleted ? completedColor.get() : (levelBlocked ? blockedColor.get() : regularColor.get())
-                        ));
-                        idx.incrementAndGet();
-                    });
-                });
+            eng.getFileStorage().setRelativePath("levels/" + worldname);
+            AtomicReference<JSONObject> styleJSON = new AtomicReference<>(null);
+            eng.getFileStorage().forEachFileOnDirectory((String stylefile) -> {
+                if (!stylefile.contains("style")) return;
+               styleJSON.set(JSON_HELPER.fromJSON(eng.getFileStorage(), stylefile));
+            });
+            if (styleJSON.get() == null) {
+               throw new RuntimeException("File style could not be found");
+            }
+            StyleSystem.setColors(styleJSON.get());
+            regularColor.set(StyleSystem.getButtonUnLockedColor());
+            blockedColor.set(StyleSystem.getButtonLockedColor());
+            completedColor.set(StyleSystem.getButtonCompleteColor());
+            //check for style.json
+            eng.getFileStorage().forEachFileOnDirectory((String filename) -> {
+               if (!filename.contains("Level")) return;
+               JSONObject obj = JSON_HELPER.fromJSON(eng.getFileStorage(), filename);
+               if (obj == null) {
+                  throw new RuntimeException("File level could not be found");
+               }
+               Vec2 pos = new Vec2(0, 0);
+               LevelFileGenerator.LevelGeneratorSerialized lgs = LevelFileGenerator.deserialize(obj);
+               int num = lgs.levelGeneratorParams.levelCoinsToWin == -1 ? lgs.levelGeneratorParams.levelTotalMeters : lgs.levelGeneratorParams.levelCoinsToWin;
+
+               boolean levelCompleted = false;
+               boolean levelBlocked = obj.has("levelKey") && !LevelKeyManager.getInstance().checkKey(obj.getInt("levelKey"));
+               buttons.add(createButtonOutsideScene(
+                    this,
+                    pos,
+                    DEFAULT_BUTTON_SIZE,
+                    (lgs.levelGeneratorParams.levelCoinsToWin == -1 ? "Distance" : "Coins") + ": " + num,
+                    () -> {
+                        if (levelBlocked) return;
+                        //FALTA PONERLE EL NOMBRE BIEN
+                        LevelsSystem.setCurrentLevel(filename);
+                        LevelsSystem.setReward(obj.getJSONObject("LevelGeneratorParams").getInt("reward"));
+                        StyleSystem.setBackgroundColor(styleJSON.get());
+                        loadLevel(eng, lgs);
+                    },
+                    levelCompleted ? completedColor.get() : (levelBlocked ? blockedColor.get() : regularColor.get())
+               ));
+               idx.incrementAndGet();
+            });
+        });
 
         Scrollable scrollable = new Scrollable(BASE_POS,new Vec2(LOGIC_WINDOW_SIZE.x*6/8,LOGIC_WINDOW_SIZE.y),idx.get()/BUTTONS_PER_ROW,BUTTONS_PER_ROW,buttons);
         systemList.add(scrollable);
