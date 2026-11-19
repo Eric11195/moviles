@@ -56,6 +56,7 @@ public class ShopObject extends ButtonComponent {
         }else{
             text = Integer.toString(this.buyable.price);
         }
+        g.setColor(ColorLibrary.HotPink);
         g.drawText(
             text,
             new Vec2(tr.pos.x+tr.size.x*0.1f, tr.pos.y+tr.size.y*0.8f),

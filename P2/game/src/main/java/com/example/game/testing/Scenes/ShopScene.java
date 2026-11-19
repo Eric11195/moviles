@@ -2,6 +2,8 @@ package com.example.game.testing.Scenes;
 
 import static com.example.game.testing.constants.Constants.BACK_BUTTON_SQUARE_SIZE;
 import static com.example.game.testing.constants.Constants.COLS_IN_SHOP;
+import static com.example.game.testing.constants.Constants.DEFAULT_RUBIES_POSITION;
+import static com.example.game.testing.constants.Constants.DEFAULT_RUBIES_SIZE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.ROWS_IN_SHOP;
 import static com.example.game.testing.constants.Constants.TAB_HEIGHT;
@@ -13,6 +15,7 @@ import com.example.game.testing.EC.Component.UI.TabComponent;
 import com.example.game.testing.EC.Component.shop.Buyable;
 import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.Prefabs.BackButtonPrefab;
+import com.example.game.testing.EC.Prefabs.RubyDisplayPrefab;
 import com.example.game.testing.EC.Prefabs.ShopItemPrefab;
 import com.example.game.testing.EC.Prefabs.ShopTab;
 import com.example.game.testing.EC.mcd_Entity;
@@ -89,6 +92,8 @@ public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
         }
 
         BackButtonPrefab.createBackButton(eng, this);
+
+        addEntity(RubyDisplayPrefab.createRubyDisplay(this,DEFAULT_RUBIES_POSITION,DEFAULT_RUBIES_SIZE));
     }
 
     @Override

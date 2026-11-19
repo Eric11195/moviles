@@ -2,11 +2,14 @@ package com.example.game.testing.Scenes;
 
 import static com.example.game.testing.EC.Prefabs.ButtonPrefab.createButton;
 import static com.example.game.testing.constants.Constants.DEFAULT_BUTTON_SIZE;
+import static com.example.game.testing.constants.Constants.DEFAULT_RUBIES_POSITION;
+import static com.example.game.testing.constants.Constants.DEFAULT_RUBIES_SIZE;
 import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 import static com.example.game.testing.constants.Constants.getDefaultLevelGeneratorParams;
 
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
+import com.example.game.testing.EC.Prefabs.RubyDisplayPrefab;
 import com.example.game.testing.EC.Prefabs.TextPrefab;
 import com.example.game.testing.Systems.Shop.ColorManager;
 import com.example.game.testing.Systems.Shop.FontManager;
@@ -102,6 +105,8 @@ public class MainMenuScene extends mcd_Scene{
         );
         //SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG).setStreamId(eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.PLAYNG)));
         //eng.getAudio().playSound(SoundLibrary.getSound(SoundLibrary.SoundsId.WIN));
+        addEntity(RubyDisplayPrefab.createRubyDisplay(this,DEFAULT_RUBIES_POSITION,DEFAULT_RUBIES_SIZE));
+
         eng.getAds().showBanner();
     }
     @Override
