@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -45,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
                 new RubyRewardScene(eng,Integer.parseInt(getIntent().getStringExtra(Constants.NOTIF_EXTRA))) :
                 new MainMenuScene(eng));
 
-        eng.resume();
-
         eng.getNotifs().setSmallIcon(R.drawable.homunculus);
         eng.getNotifs().createNotification(
                 new NotificationData("MCD", "Vuelve a mochilacohetonadisfrutar AHORA!!!",
@@ -55,8 +54,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        eng.resume();
+        super.onResume();
+    }
+
+    @Override
     protected void onPause() {
         eng.getNotifs().scheduleNotification(NotificationId.NOTIFICATION_DEFAULT.ordinal(),5);
+        eng.pause();
         super.onPause();
     }
 }

@@ -95,7 +95,7 @@ public class ShopScene extends mcd_Scene implements TabComponent.TabbedMenu {
                 DEFAULT_RUBIES_POSITION,
                 RUBIES_IMAGE_SIZE,
                 new Vec2(RUBIES_IMAGE_SIZE.x,0),
-                new Vec2(RUBIES_IMAGE_SIZE.x*2,RUBIES_IMAGE_SIZE.y)
+                new Vec2(RUBIES_IMAGE_SIZE.x,RUBIES_IMAGE_SIZE.y)
                 ));
     }
 
