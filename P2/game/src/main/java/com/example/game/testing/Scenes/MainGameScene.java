@@ -16,14 +16,13 @@ import com.example.game.testing.Systems.EndGameAfterXCoins;
 import com.example.game.testing.Systems.EndGameAfterXDistance;
 import com.example.game.testing.Systems.GameDistanceToEndOfLevelRenderer;
 import com.example.game.testing.Systems.LevelGenerator.BaseLevelGenerator;
-import com.example.game.testing.Systems.LevelsSystem;
 import com.example.game.testing.Systems.PlayerCollisionDetector;
 import com.example.game.testing.Systems.LevelGenerator.FileLevelGenerator;
 import com.example.game.testing.Systems.LevelGenerator.LevelFileGenerator;
 import com.example.game.testing.Systems.LevelGenerator.LevelGeneratorParams;
 import com.example.game.testing.Systems.LevelGenerator.ProceduralLevelGenerator;
 import com.example.game.testing.Systems.Shop.PowerUpManager;
-import com.example.game.testing.Systems.StyleSystem;
+import com.example.game.testing.Systems.StyleLevelSelectorSystem;
 import com.example.game.testing.constants.Constants;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.SoundLibrary;
@@ -78,8 +77,8 @@ public class MainGameScene extends mcd_Scene{
     }
     private  void checkBackGroundColor()
     {
-        colorBackg1 = retos == Retos.none?ColorLibrary.Grey : StyleSystem.getBackgroundColor1();
-        colorBackg2 = retos == Retos.none?ColorLibrary.DarkGrey : StyleSystem.getBackgroundColor2();
+        colorBackg1 = retos == Retos.none?ColorLibrary.Grey : StyleLevelSelectorSystem.getBackgroundColor1();
+        colorBackg2 = retos == Retos.none?ColorLibrary.DarkGrey : StyleLevelSelectorSystem.getBackgroundColor2();
 
     };
     public void createBackground (){

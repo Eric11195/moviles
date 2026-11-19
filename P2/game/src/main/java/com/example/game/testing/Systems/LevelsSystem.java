@@ -66,7 +66,6 @@ public class LevelsSystem{
         JSONObject info = JSON_HELPER.fromJSONModifiable(fs, "infoLevels");
 
         if(!info.has(currentLevel)) {
-
             info.put(currentLevel, new JSONObject());
         }
         JSONObject infoLevel= info.getJSONObject(currentLevel);

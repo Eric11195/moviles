@@ -7,12 +7,13 @@ import static com.example.game.testing.constants.Constants.LOGIC_WINDOW_SIZE;
 
 import com.example.engine.ColorEng;
 import com.example.engine.Engine;
+import com.example.engine.IFileStorage;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.LevelGenerator.LevelFileGenerator;
 import com.example.game.testing.Systems.LevelsSystem;
 import com.example.game.testing.Systems.Shop.ColorManager;
 import com.example.game.testing.Systems.Shop.LevelKeyManager;
-import com.example.game.testing.Systems.StyleSystem;
+import com.example.game.testing.Systems.StyleLevelSelectorSystem;
 import com.example.game.testing.Systems.menu.Scrollable;
 import com.example.game.testing.utils.ColorLibrary;
 import com.example.game.testing.utils.JSON_HELPER;
@@ -41,15 +42,15 @@ public class LevelSelectorScene extends mcd_Scene{
         AtomicInteger idx = new AtomicInteger(0);
         ArrayList<mcd_Entity> buttons = new ArrayList<>();
 
-        //TODO: MODIFY COLORS WITh STYLE.JSON
+        IFileStorage fs = eng.getFileStorage();
+        fs.setRelativePath("saves");
+        JSONObject info = JSON_HELPER.fromJSONModifiable(fs, "infoLevels");
 
-        AtomicReference< ColorEng> regularColor = new AtomicReference<>(ColorManager.getInstance().getColor(ColorManager.Colors.BUTTONS_COLOR));
-        AtomicReference< ColorEng>  completedColor =new AtomicReference<>(ColorLibrary.Gold);
-        AtomicReference< ColorEng>  blockedColor = new AtomicReference<>(ColorLibrary.Gold);
-
-        //eng.getFileStorage().setRelativePath("levels");
         eng.getFileStorage().forEachFileOnDirectory((String worldname)-> {
             if (!worldname.contains("World")) return;
+            ColorEng regularColor = ColorManager.getInstance().getColor(ColorManager.Colors.BUTTONS_COLOR).clone();
+            ColorEng completedColor = ColorLibrary.Gold.clone();
+            ColorEng blockedColor = ColorLibrary.Gold.clone();
 
             eng.getFileStorage().setRelativePath("levels/" + worldname);
             AtomicReference<JSONObject> styleJSON = new AtomicReference<>(null);
@@ -60,11 +61,14 @@ public class LevelSelectorScene extends mcd_Scene{
             if (styleJSON.get() == null) {
                throw new RuntimeException("File style could not be found");
             }
-            StyleSystem.setColors(styleJSON.get());
-            regularColor.set(StyleSystem.getButtonUnLockedColor());
-            blockedColor.set(StyleSystem.getButtonLockedColor());
-            completedColor.set(StyleSystem.getButtonCompleteColor());
+            StyleLevelSelectorSystem.setColors(styleJSON.get());
+            regularColor = StyleLevelSelectorSystem.getButtonUnLockedColor();
+            blockedColor = StyleLevelSelectorSystem.getButtonLockedColor();
+            completedColor = StyleLevelSelectorSystem.getButtonCompleteColor();
             //check for style.json
+            ColorEng finalCompletedColor = completedColor;
+            ColorEng finalBlockedColor = blockedColor;
+            ColorEng finalRegularColor = regularColor;
             eng.getFileStorage().forEachFileOnDirectory((String filename) -> {
                if (!filename.contains("Level")) return;
                JSONObject obj = JSON_HELPER.fromJSON(eng.getFileStorage(), filename);
@@ -75,7 +79,7 @@ public class LevelSelectorScene extends mcd_Scene{
                LevelFileGenerator.LevelGeneratorSerialized lgs = LevelFileGenerator.deserialize(obj);
                int num = lgs.levelGeneratorParams.levelCoinsToWin == -1 ? lgs.levelGeneratorParams.levelTotalMeters : lgs.levelGeneratorParams.levelCoinsToWin;
 
-               boolean levelCompleted = false;
+               boolean levelCompleted = info.getJSONObject(filename).getBoolean("LevelCompleted");
                boolean levelBlocked = obj.has("levelKey") && !LevelKeyManager.getInstance().checkKey(obj.getInt("levelKey"));
                buttons.add(createButtonOutsideScene(
                     this,
@@ -87,10 +91,10 @@ public class LevelSelectorScene extends mcd_Scene{
                         //FALTA PONERLE EL NOMBRE BIEN
                         LevelsSystem.setCurrentLevel(filename);
                         LevelsSystem.setReward(obj.getJSONObject("LevelGeneratorParams").getInt("reward"));
-                        StyleSystem.setBackgroundColor(styleJSON.get());
+                        StyleLevelSelectorSystem.setBackgroundColor(styleJSON.get());
                         loadLevel(eng, lgs);
                     },
-                    levelCompleted ? completedColor.get() : (levelBlocked ? blockedColor.get() : regularColor.get())
+                    levelCompleted ? finalCompletedColor : (levelBlocked ? finalBlockedColor : finalRegularColor)
                ));
                idx.incrementAndGet();
             });

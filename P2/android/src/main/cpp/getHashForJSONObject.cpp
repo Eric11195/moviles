@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <cstdint>
 
 // cpp hash is not deterministic. That's why we gotta use:
 // FNV-1a https://en.wikipedia.org/wiki/Fowler–Noll–Vo_hash_function

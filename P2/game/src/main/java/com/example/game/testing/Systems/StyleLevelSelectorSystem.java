@@ -4,7 +4,7 @@ import com.example.engine.ColorEng;
 
 import org.json.JSONObject;
 
-public class StyleSystem {
+public class StyleLevelSelectorSystem {
     private static ColorEng backgroundColor1;
     private static ColorEng backgroundColor2;
     private static ColorEng buttonLockedColor;
