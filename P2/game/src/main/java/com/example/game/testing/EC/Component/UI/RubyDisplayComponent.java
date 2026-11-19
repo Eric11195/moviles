@@ -6,12 +6,17 @@ import com.example.game.testing.EC.ComponentId;
 import com.example.game.testing.EC.mcd_Component;
 import com.example.game.testing.EC.mcd_Entity;
 import com.example.game.testing.Systems.RubySystem;
+import com.example.game.testing.constants.Constants;
 import com.example.game.testing.utils.ColorLibrary;
+import com.example.utils.Vec2;
 
 public class RubyDisplayComponent implements mcd_Component {
+    Vec2 textOffset = new Vec2(Constants.RUBIES_IMAGE_SIZE.x,0);
+    public RubyDisplayComponent(){
+
+    }
     @Override
     public void update(mcd_Entity ent, float t, float dt) {
-        TransformComponent tr = (TransformComponent) ent.getComponent(ComponentId.TRANSFORM_COMPONENT);
     }
 
     @Override
@@ -20,6 +25,6 @@ public class RubyDisplayComponent implements mcd_Component {
         g.setColor(ColorLibrary.HotPink);
         g.setFontSize((int) tr.size.y);
         int rubies = RubySystem.getRubies();
-        g.drawText(Integer.toString(rubies),tr.pos,tr.size);
+        g.drawText(Integer.toString(rubies),tr.pos.add(textOffset),tr.size);
     }
 }

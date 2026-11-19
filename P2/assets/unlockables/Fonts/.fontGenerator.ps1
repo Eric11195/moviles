@@ -9,7 +9,7 @@ $elementTypes = @(
 ) 
 
 # 2. Define prices
-$shopPrice    = 0
+$shopPrice = 10
 $defaultPrice = -1
 
 # Fonts dictionary
