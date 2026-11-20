@@ -15,21 +15,44 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Android implementation of {@link IFileStorage} accessing internal app storage and APK assets.
+ */
 public class FileStorageAndroid implements IFileStorage {
 
+    /** Logcat tag string. */
     private static final String TAG = "FileStorageAndroid";
+
+    /** Application Context. */
     private final Context context;
+
+    /** Current base relative directory path. */
     private String baseDirectory = "";
 
+    /**
+     * Constructs FileStorageAndroid with Application context.
+     *
+     * @param context Application context
+     */
     public FileStorageAndroid(Context context) {
         this.context = context.getApplicationContext();
     }
 
+    /**
+     * Retrieves current relative base directory path.
+     *
+     * @return relative directory path
+     */
     @Override
     public String getCurrentPath() {
         return baseDirectory;
     }
 
+    /**
+     * Sets current relative base directory path.
+     *
+     * @param relativePath relative directory path
+     */
     @Override
     public void setRelativePath(String relativePath) {
         if (relativePath == null || relativePath.isEmpty()) {
@@ -47,6 +70,13 @@ public class FileStorageAndroid implements IFileStorage {
         baseDirectory = resolved.toString().replace("\\", "/");
     }
 
+    /**
+     * Writes content string to internal app storage.
+     *
+     * @param filename file name
+     * @param content text content string
+     * @throws IOException if writing fails
+     */
     @Override
     public void writeModifiable(String filename, String content) throws IOException {
         File file = resolveFile(filename);
@@ -63,6 +93,13 @@ public class FileStorageAndroid implements IFileStorage {
         }
     }
 
+    /**
+     * Reads text content from APK assets directory.
+     *
+     * @param filename asset file name
+     * @return file content string
+     * @throws IOException if asset file is missing or unreadable
+     */
     @Override
     public String read(String filename) throws IOException {
         String path = resolveAssetPath(filename);
@@ -77,6 +114,13 @@ public class FileStorageAndroid implements IFileStorage {
         }
     }
 
+    /**
+     * Reads text content from internal app storage.
+     *
+     * @param filename file name
+     * @return content string or null if file does not exist
+     * @throws IOException if reading fails
+     */
     @Override
     public String readModifiable(String filename) throws IOException {
         File internalFile = resolveFile(filename);
@@ -96,6 +140,12 @@ public class FileStorageAndroid implements IFileStorage {
         }
     }
 
+    /**
+     * Iterates over files in assets directory.
+     *
+     * @param f callback function
+     * @return true on success, false otherwise
+     */
     @Override
     public boolean forEachFileOnDirectory(ForEachFileOnDirectoryFunc f) {
         try {
@@ -116,6 +166,13 @@ public class FileStorageAndroid implements IFileStorage {
         }
     }
 
+    /**
+     * Reads entire InputStream into a String.
+     *
+     * @param input InputStream
+     * @return content string
+     * @throws IOException if read fails
+     */
     private String readFromStream(InputStream input) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         byte[] buffer = new byte[8192];
@@ -126,6 +183,13 @@ public class FileStorageAndroid implements IFileStorage {
         return output.toString(StandardCharsets.UTF_8.name());
     }
 
+    /**
+     * Resolves file path relative to internal app storage.
+     *
+     * @param filename file name
+     * @return File instance
+     * @throws IOException if path escapes base directory
+     */
     private File resolveFile(String filename) throws IOException {
         File base = new File(context.getFilesDir(), baseDirectory);
 
@@ -139,6 +203,13 @@ public class FileStorageAndroid implements IFileStorage {
         return filePath.toFile();
     }
 
+    /**
+     * Resolves asset path string for Android AssetManager.
+     *
+     * @param filename file name
+     * @return asset path string
+     * @throws IOException if path escapes base directory
+     */
     private String resolveAssetPath(String filename) throws IOException {
         Path basePath = Paths.get(baseDirectory).normalize();
         Path filePath = basePath.resolve(filename).normalize();

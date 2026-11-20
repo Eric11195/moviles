@@ -1,22 +1,25 @@
 package com.example.androidengine;
 
-
-
 import static android.view.MotionEvent.*;
 
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.engine.InputBase;
-import com.example.engine.TouchEvent;
 import com.example.engine.TouchEventType;
 import com.example.utils.Vec2;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * Android implementation of {@link InputBase} registering View OnTouchListener.
+ */
 public class InputAndroid extends InputBase {
-    public void registerView (View _view){
+
+    /**
+     * Registers an Android View to capture MotionEvent touches into the InputBase queue.
+     *
+     * @param _view Android View instance
+     */
+    public void registerView(View _view) {
         _view.setOnTouchListener(
                 new View.OnTouchListener() {
                     @Override

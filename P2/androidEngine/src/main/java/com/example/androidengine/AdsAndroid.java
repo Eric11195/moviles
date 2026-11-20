@@ -30,40 +30,69 @@ import com.google.android.libraries.ads.mobile.sdk.common.AdRequest;
 import com.google.android.libraries.ads.mobile.sdk.rewarded.RewardedAdEventCallback;
 import com.google.android.libraries.ads.mobile.sdk.rewarded.RewardedAdPreloader;
 
+/**
+ * Android implementation of {@link AdsInterface} using Google Mobile Ads SDK.
+ */
 public class AdsAndroid implements AdsInterface {
 
+    /** Logcat tag for debugging. */
     private static final String TAG = "AdsAndroid";
 
-    // Google's official test ad unit IDs.
+    /** Google official test ad unit ID for banners. */
     private static final String BANNER_TEST_ID =
-            "ca-app-pub-3940256099942544/6300978111"; // AdMob Adaptive Banner
-    private static final String REWARDED_TEST_ID =
-            "ca-app-pub-3940256099942544/5224354917"; // AdMob Rewarded Ad
+            "ca-app-pub-3940256099942544/6300978111";
 
-    // Replace with your AdMob application ID.
+    /** Google official test ad unit ID for rewarded ads. */
+    private static final String REWARDED_TEST_ID =
+            "ca-app-pub-3940256099942544/5224354917";
+
+    /** Google Mobile Ads test application ID. */
     private static final String APP_ID =
             "ca-app-pub-3940256099942544~3347511713";
 
+    /** Hosting activity context. */
     private final Activity activity;
 
+    /** AdView component holding banner ads. */
     private AdView bannerView;
+
+    /** Rewarded ad object instance. */
     private RewardedAd rewardedAd;
 
+    /** Volatile flag indicating if MobileAds SDK initialization is complete. */
     private volatile boolean initialized = false;
+
+    /** Volatile flag tracking whether a banner request is pending/active. */
     private volatile boolean isBannerRequested = false;
+
+    /** Progress indicator displayed while loading banner ads. */
     private ProgressBar progressBar;
 
+    /**
+     * Constructs AdsAndroid for an Activity and AdView resource ID.
+     *
+     * @param activity hosting Activity instance
+     * @param bannerViewId resource ID of the AdView in activity layout
+     */
     public AdsAndroid(Activity activity, int bannerViewId) {
         this.activity = activity;
         this.bannerView = activity.findViewById(bannerViewId);
         Log.d(TAG, "AdsAndroid constructor called");
     }
 
+    /**
+     * Checks if MobileAds SDK initialization has completed.
+     *
+     * @return true if initialized, false otherwise
+     */
     @Override
     public boolean isReady() {
         return initialized;
     }
 
+    /**
+     * Initializes Google Mobile Ads SDK on a background thread.
+     */
     @Override
     public void initialize() {
         new Thread(() -> {
@@ -85,6 +114,9 @@ public class AdsAndroid implements AdsInterface {
         }).start();
     }
 
+    /**
+     * Displays the progress loading indicator for banner ads.
+     */
     private void showLoadingSymbol() {
         ensureProgressBarCreated();
         if (progressBar != null) {
@@ -92,12 +124,18 @@ public class AdsAndroid implements AdsInterface {
         }
     }
 
+    /**
+     * Hides the progress loading indicator.
+     */
     private void hideLoadingSymbol() {
         if (progressBar != null) {
             progressBar.setVisibility(View.GONE);
         }
     }
 
+    /**
+     * Dynamically creates and attaches a ProgressBar to the parent container of bannerView.
+     */
     private void ensureProgressBarCreated() {
         if (progressBar == null && bannerView != null && bannerView.getParent() instanceof ViewGroup) {
             ViewGroup parent = (ViewGroup) bannerView.getParent();
@@ -138,6 +176,9 @@ public class AdsAndroid implements AdsInterface {
         }
     }
 
+    /**
+     * Loads a banner advertisement into the AdView component.
+     */
     private void loadBanner() {
         if (bannerView == null) {
             Log.e(TAG, "AdView was not found in the Activity layout!");
@@ -199,6 +240,9 @@ public class AdsAndroid implements AdsInterface {
         );
     }
 
+    /**
+     * Requests and displays a banner ad with loading indicator.
+     */
     @Override
     public void showBanner() {
         activity.runOnUiThread(() -> {
@@ -217,6 +261,9 @@ public class AdsAndroid implements AdsInterface {
         });
     }
 
+    /**
+     * Hides active banner ad and loading indicator.
+     */
     @Override
     public void hideBanner() {
         activity.runOnUiThread(() -> {
@@ -228,6 +275,9 @@ public class AdsAndroid implements AdsInterface {
         });
     }
 
+    /**
+     * Displays a rewarded video ad if ready.
+     */
     @Override
     public void showRewarded() {
         activity.runOnUiThread(() -> {
@@ -236,10 +286,8 @@ public class AdsAndroid implements AdsInterface {
                 return;
             }
 
-            // Polling returns the next available ad and loads another ad in the background.
             final RewardedAd ad = RewardedAdPreloader.pollAd(REWARDED_TEST_ID);
 
-            // If this is null, the ad hasn't finished downloading yet (or failed to load)
             if (ad == null) {
                 Log.e(TAG, "Rewarded ad is not available yet.");
                 return;
@@ -254,7 +302,6 @@ public class AdsAndroid implements AdsInterface {
                         }
                     });
 
-            // Show the ad.
             ad.show(
                     activity,
                     rewardItem -> {
@@ -265,19 +312,31 @@ public class AdsAndroid implements AdsInterface {
         });
     }
 
+    /** Flag indicating if user earned a reward. */
     boolean rewardAvailable = false;
 
+    /**
+     * Checks if a reward is available.
+     *
+     * @return true if reward earned, false otherwise
+     */
     @Override
     public boolean hasReward() {
         return rewardAvailable;
     }
 
+    /**
+     * Consumes the earned reward.
+     */
     @Override
     public void consumeReward() {
         assert(rewardAvailable);
         rewardAvailable = false;
     }
 
+    /**
+     * Preloads rewarded ad instances.
+     */
     private void loadRewardedAd() {
         if (!initialized) {
             return;
@@ -285,7 +344,6 @@ public class AdsAndroid implements AdsInterface {
         AdRequest adRequest = new AdRequest.Builder(REWARDED_TEST_ID).build();
         PreloadConfiguration preloadConfig = new PreloadConfiguration(adRequest);
 
-        // Add the callback to log errors if preloading fails
         RewardedAdPreloader.start(REWARDED_TEST_ID, preloadConfig, new PreloadCallback() {
             @Override
             public void onAdFailedToPreload(@NonNull String preloadId, @NonNull LoadAdError error) {

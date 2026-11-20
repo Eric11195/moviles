@@ -24,22 +24,52 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Android implementation of {@link ISocial} using Android Intents, FileProvider, and system shares.
+ */
 public class SocialAndroid implements ISocial {
+
+    /** Hosting Activity context. */
     private final Activity act;
 
+    /**
+     * Constructs SocialAndroid with hosting Activity.
+     *
+     * @param act hosting Activity instance
+     */
     public SocialAndroid(Activity act) {
         this.act = act;
     }
+
+    /**
+     * Shares plain text message via system share chooser.
+     *
+     * @param text message text content
+     */
     @Override
     public void sendMessage(String text) {
         shareContent(text, null, null, null, "Share text");
     }
 
+    /**
+     * Shares image and text content via system share chooser.
+     *
+     * @param text message text content
+     * @param img attached image asset
+     * @param titleImg title for cached image
+     * @param imageDesc description for image clip
+     */
     @Override
     public void sendMessage(String text, ImageEng img, String titleImg, String imageDesc) {
         shareContent(text, img, titleImg, imageDesc, "Share image");
     }
 
+    /**
+     * Creates a social post dialog providing options for Instagram Story, Instagram Post, Facebook, or system chooser.
+     *
+     * @param text post text content
+     * @param img image asset
+     */
     @Override
     public void createPost(String text, ImageEng img) {
         if (img == null) {
@@ -50,7 +80,6 @@ public class SocialAndroid implements ISocial {
         ImageAndroid imgA = (ImageAndroid) img;
         Bitmap bitmap = imgA.getBitmap();
 
-        // Build options dynamically based on which apps are installed
         List<String> labels = new ArrayList<>();
         List<Runnable> actions = new ArrayList<>();
 
@@ -72,14 +101,13 @@ public class SocialAndroid implements ISocial {
             labels.add("Facebook");
             actions.add(() -> {
                 copyCaptionToClipboard(text);
-                shareToPackage(bitmap, "com.facebook.katana", "fb_post",text);
+                shareToPackage(bitmap, "com.facebook.katana", "fb_post", text);
             });
         }
 
         labels.add("More apps...");
         actions.add(() -> sendMessage(text, img, "post_image", text));
 
-        // Must run on UI thread because ButtonComponent.update() runs on GameLoopThread
         act.runOnUiThread(() -> {
             new android.app.AlertDialog.Builder(act)
                     .setTitle("Share your result")
@@ -88,6 +116,12 @@ public class SocialAndroid implements ISocial {
         });
     }
 
+    /**
+     * Checks whether a package is installed on the device.
+     *
+     * @param packageName package name string
+     * @return true if installed, false otherwise
+     */
     private boolean isAppInstalled(String packageName) {
         try {
             act.getPackageManager().getPackageInfo(packageName, 0);
@@ -97,6 +131,11 @@ public class SocialAndroid implements ISocial {
         }
     }
 
+    /**
+     * Copies caption text to system clipboard.
+     *
+     * @param text text to copy
+     */
     private void copyCaptionToClipboard(String text) {
         if (text == null || text.trim().isEmpty()) return;
         act.runOnUiThread(() -> {
@@ -107,6 +146,14 @@ public class SocialAndroid implements ISocial {
         });
     }
 
+    /**
+     * Shares image card to a specific package name.
+     *
+     * @param bitmap source icon bitmap
+     * @param packageName target app package name
+     * @param fileName file name prefix for cache
+     * @param extraText caption text
+     */
     private void shareToPackage(Bitmap bitmap, String packageName, String fileName, String extraText) {
         Bitmap extra = createShareCard(bitmap, extraText);
         Uri imageUri = saveBitmapToCache(extra, fileName);
@@ -120,6 +167,12 @@ public class SocialAndroid implements ISocial {
         act.startActivity(intent);
     }
 
+    /**
+     * Shares image card directly to Instagram Story.
+     *
+     * @param bitmap source icon bitmap
+     * @param text caption text
+     */
     private void shareToInstagramStory(Bitmap bitmap, String text) {
         Bitmap extra = createShareCard(bitmap, text);
         Uri imageUri = saveBitmapToCache(extra, "ig_story");
@@ -133,6 +186,15 @@ public class SocialAndroid implements ISocial {
         act.startActivity(intent);
     }
 
+    /**
+     * Shares content using Android Intent chooser.
+     *
+     * @param text message text
+     * @param img image asset
+     * @param titleImg title for cached file
+     * @param imageDesc description for image clip
+     * @param chooserTitle dialog title
+     */
     private void shareContent(String text, ImageEng img, String titleImg, String imageDesc, String chooserTitle) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         boolean hasText = text != null && !text.trim().isEmpty();
@@ -166,6 +228,13 @@ public class SocialAndroid implements ISocial {
         act.startActivity(chooser);
     }
 
+    /**
+     * Saves bitmap to internal cache directory and returns a content Uri via FileProvider.
+     *
+     * @param bitmap Bitmap instance to save
+     * @param titleImg file name prefix
+     * @return FileProvider Uri or null on failure
+     */
     private Uri saveBitmapToCache(Bitmap bitmap, String titleImg) {
         if (bitmap == null) return null;
 
@@ -174,7 +243,6 @@ public class SocialAndroid implements ISocial {
             return null;
         }
 
-        // Sanitize titleImg for a safe filename, or fallback to a default name
         String safeName = (titleImg != null && !titleImg.trim().isEmpty())
                 ? titleImg.replaceAll("[^a-zA-Z0-9._-]", "_")
                 : "shared_image";
@@ -195,11 +263,17 @@ public class SocialAndroid implements ISocial {
         );
     }
 
+    /**
+     * Helper launching targeted Intent or falling back to chooser.
+     *
+     * @param targetedIntent targeted package Intent
+     * @param imageUri Uri of image
+     * @param fallbackTitle title for fallback chooser
+     */
     private void launchOrFallback(Intent targetedIntent, Uri imageUri, String fallbackTitle) {
         if (targetedIntent.resolveActivity(act.getPackageManager()) != null) {
             act.startActivity(targetedIntent);
         } else {
-            // Fallback if Instagram/Facebook is not installed
             Intent fallback = new Intent(Intent.ACTION_SEND);
             fallback.setType("image/png");
             fallback.putExtra(Intent.EXTRA_STREAM, imageUri);
@@ -207,6 +281,14 @@ public class SocialAndroid implements ISocial {
             act.startActivity(Intent.createChooser(fallback, fallbackTitle));
         }
     }
+
+    /**
+     * Generates a composite share card bitmap (1080x1080) with centered icon and caption text.
+     *
+     * @param icon icon bitmap
+     * @param text caption text
+     * @return 1080x1080 share card Bitmap
+     */
     private Bitmap createShareCard(Bitmap icon, String text) {
         int cardSize = 1080;
         int padding = 80;
@@ -214,10 +296,8 @@ public class SocialAndroid implements ISocial {
         Bitmap card = Bitmap.createBitmap(cardSize, cardSize, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(card);
 
-        // 1. Background color (dark slate makes the white circular icon stand out)
         canvas.drawColor(Color.parseColor("#24293E"));
 
-        // 2. Scale and center the icon in the upper half
         if (icon != null) {
             int targetIconSize = 380;
             float scale = Math.min(
@@ -237,7 +317,6 @@ public class SocialAndroid implements ISocial {
             }
         }
 
-        // 3. Render wrapped, centered text below the icon
         if (text != null && !text.trim().isEmpty()) {
             TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
             textPaint.setColor(Color.WHITE);

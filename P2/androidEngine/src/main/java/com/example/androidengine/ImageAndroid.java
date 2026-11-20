@@ -3,20 +3,28 @@ package com.example.androidengine;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import com.example.engine.ImageEng;
-import com.example.utils.Utils;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-//To load an image put it inside res/drawable
+/**
+ * Android implementation of {@link ImageEng} encapsulating Android {@link Bitmap}.
+ */
 public class ImageAndroid extends ImageEng {
+
+    /** Android Bitmap asset instance. */
     private Bitmap bm;
-    // Id looks like R.drawable.imageName on res/drawable
-    public ImageAndroid(Context context, String path){
+
+    /**
+     * Constructs ImageAndroid loading Bitmap asset from assets directory.
+     *
+     * @param context Android Context
+     * @param path relative path to image asset file
+     */
+    public ImageAndroid(Context context, String path) {
         super(path);
         try (InputStream raw = context.getAssets().open(path);
              BufferedInputStream input = new BufferedInputStream(raw)) {
@@ -30,15 +38,33 @@ public class ImageAndroid extends ImageEng {
             throw new RuntimeException("Failed to load asset: " + path, e);
         }
     }
-    public final Bitmap getBitmap(){
+
+    /**
+     * Returns the underlying Android Bitmap.
+     *
+     * @return Bitmap instance
+     */
+    public final Bitmap getBitmap() {
         return bm;
     }
+
+    /**
+     * Retrieves the image width in pixels.
+     *
+     * @return width in pixels
+     */
     @Override
-    public final int getWidth(){
+    public final int getWidth() {
         return bm.getWidth();
     }
+
+    /**
+     * Retrieves the image height in pixels.
+     *
+     * @return height in pixels
+     */
     @Override
-    public final int getHeight(){
+    public final int getHeight() {
         return bm.getHeight();
     }
 }

@@ -1,41 +1,51 @@
 package com.example.engine;
 
+/**
+ * Interface defining lifecycle methods for game scenes (update, render, start, cleanup, resume, pause).
+ */
 public interface Scene {
+
     /**
-     * Called each frame while scene is the one marked as active
-     * @param eng
-     * @param t
-     * @param dt
+     * Called each frame while the scene is active.
+     *
+     * @param eng active Engine instance
+     * @param t total elapsed time in seconds
+     * @param dt delta time for current frame in seconds
      */
     void update(Engine eng, float t, float dt);
 
     /**
-     * Called each frame while scene is the one marked as active
-     * @param g
+     * Called each frame to render scene content.
+     *
+     * @param g active GraphicsInterface rendering context
      */
     void render(GraphicsInterface g);
 
     /**
-     * Called once when the scene is added to the engine
-     * @param eng
+     * Called once when the scene is first set/pushed onto the engine scene stack.
+     *
+     * @param eng active Engine instance
      */
     void start(Engine eng);
 
     /**
-     * Called once when the scene is erased from the engine
-     * @param eng
+     * Called once when the scene is removed/popped from the engine scene stack.
+     *
+     * @param eng active Engine instance
      */
     void cleanup(Engine eng);
 
     /**
-     * Called each time this scene becomes active. This is called after start
-     * @param eng
+     * Called whenever this scene becomes active (after start or after popping top scene).
+     *
+     * @param eng active Engine instance
      */
     void resume(Engine eng);
 
     /**
-     * Called each time this scene becomes unactive. This is called before cleanup
-     * @param eng
+     * Called whenever this scene becomes inactive (before pause or when pushing a new scene).
+     *
+     * @param eng active Engine instance
      */
     void pause(Engine eng);
 }
