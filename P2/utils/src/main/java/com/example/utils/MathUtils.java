@@ -49,26 +49,41 @@ package com.example.utils;
 import java.util.Random;
 
 /**
- * A few math methods that don't fit very well anywhere else.
+ * A collection of utility mathematical routines and fast approximations.
  */
 public class MathUtils extends PlatformMathUtils {
+
+    /** Value of PI as a float. */
     public static final float PI = (float) Math.PI;
+
+    /** Value of 2 * PI as a float. */
     public static final float TWOPI = (float) (Math.PI * 2);
+
+    /** Value of 1 / PI as a float. */
     public static final float INV_PI = 1f / PI;
+
+    /** Value of PI / 2 as a float. */
     public static final float HALF_PI = PI / 2;
+
+    /** Value of PI / 4 as a float. */
     public static final float QUARTER_PI = PI / 4;
+
+    /** Value of 3 * PI / 2 as a float. */
     public static final float THREE_HALVES_PI = TWOPI - HALF_PI;
 
     /**
-     * Degrees to radians conversion factor
+     * Degrees to radians conversion factor.
      */
     public static final float DEG2RAD = PI / 180;
 
     /**
-     * Radians to degrees conversion factor
+     * Radians to degrees conversion factor.
      */
     public static final float RAD2DEG = 180 / PI;
 
+    /**
+     * Lookup table for sine values.
+     */
     public static final float[] sinLUT = new float[Settings.SINCOS_LUT_LENGTH];
 
     static {
@@ -77,6 +92,12 @@ public class MathUtils extends PlatformMathUtils {
         }
     }
 
+    /**
+     * Computes the sine of an angle in radians using a lookup table or StrictMath.
+     *
+     * @param x angle in radians
+     * @return sine of x
+     */
     public static final float sin(float x) {
         if (Settings.SINCOS_LUT_ENABLED) {
             return sinLUT(x);
@@ -85,6 +106,12 @@ public class MathUtils extends PlatformMathUtils {
         }
     }
 
+    /**
+     * Computes sine using the lookup table.
+     *
+     * @param x angle in radians
+     * @return sine of x from lookup table
+     */
     public static final float sinLUT(float x) {
         x %= TWOPI;
 
@@ -114,6 +141,12 @@ public class MathUtils extends PlatformMathUtils {
         }
     }
 
+    /**
+     * Computes the cosine of an angle in radians using a lookup table or StrictMath.
+     *
+     * @param x angle in radians
+     * @return cosine of x
+     */
     public static final float cos(float x) {
         if (Settings.SINCOS_LUT_ENABLED) {
             return sinLUT(HALF_PI - x);
@@ -122,6 +155,12 @@ public class MathUtils extends PlatformMathUtils {
         }
     }
 
+    /**
+     * Returns the absolute value of a float.
+     *
+     * @param x input float value
+     * @return absolute value of x
+     */
     public static final float abs(final float x) {
         if (Settings.FAST_ABS) {
             return x > 0 ? x : -x;
@@ -130,15 +169,33 @@ public class MathUtils extends PlatformMathUtils {
         }
     }
 
+    /**
+     * Fast approximation of absolute value for a float.
+     *
+     * @param x input float value
+     * @return absolute value of x
+     */
     public static final float fastAbs(final float x) {
         return x > 0 ? x : -x;
     }
 
+    /**
+     * Fast absolute value calculation for an integer.
+     *
+     * @param x input integer value
+     * @return absolute value of x
+     */
     public static final int abs(int x) {
         int y = x >> 31;
         return (x ^ y) - y;
     }
 
+    /**
+     * Returns the floor of a float value.
+     *
+     * @param x input float value
+     * @return floor value as an integer
+     */
     public static final int floor(final float x) {
         if (Settings.FAST_FLOOR) {
             return fastFloor(x);
@@ -147,6 +204,12 @@ public class MathUtils extends PlatformMathUtils {
         }
     }
 
+    /**
+     * Fast floor implementation for a float value.
+     *
+     * @param x input float value
+     * @return floor value as an integer
+     */
     public static final int fastFloor(final float x) {
         int y = (int) x;
         if (x < y) {
@@ -155,6 +218,12 @@ public class MathUtils extends PlatformMathUtils {
         return y;
     }
 
+    /**
+     * Returns the ceiling of a float value.
+     *
+     * @param x input float value
+     * @return ceiling value as an integer
+     */
     public static final int ceil(final float x) {
         if (Settings.FAST_CEIL) {
             return fastCeil(x);
@@ -163,6 +232,12 @@ public class MathUtils extends PlatformMathUtils {
         }
     }
 
+    /**
+     * Fast ceiling implementation for a float value.
+     *
+     * @param x input float value
+     * @return ceiling value as an integer
+     */
     public static final int fastCeil(final float x) {
         int y = (int) x;
         if (x > y) {
@@ -171,6 +246,12 @@ public class MathUtils extends PlatformMathUtils {
         return y;
     }
 
+    /**
+     * Rounds a float value to the nearest integer.
+     *
+     * @param x input float value
+     * @return rounded integer value
+     */
     public static final int round(final float x) {
         if (Settings.FAST_ROUND) {
             return floor(x + .5f);
@@ -180,10 +261,10 @@ public class MathUtils extends PlatformMathUtils {
     }
 
     /**
-     * Rounds up the value to the nearest higher power^2 value.
+     * Rounds up the value to the nearest higher power of 2 value.
      *
-     * @param x
-     * @return power^2 value
+     * @param x input integer
+     * @return nearest higher power of 2 value
      */
     public static final int ceilPowerOf2(int x) {
         int pow2 = 1;
@@ -193,22 +274,60 @@ public class MathUtils extends PlatformMathUtils {
         return pow2;
     }
 
+    /**
+     * Returns the maximum of two float values.
+     *
+     * @param a first float
+     * @param b second float
+     * @return maximum of a and b
+     */
     public final static float max(final float a, final float b) {
         return a > b ? a : b;
     }
 
+    /**
+     * Returns the maximum of two integer values.
+     *
+     * @param a first integer
+     * @param b second integer
+     * @return maximum of a and b
+     */
     public final static int max(final int a, final int b) {
         return a > b ? a : b;
     }
 
+    /**
+     * Returns the minimum of two float values.
+     *
+     * @param a first float
+     * @param b second float
+     * @return minimum of a and b
+     */
     public final static float min(final float a, final float b) {
         return a < b ? a : b;
     }
 
+    /**
+     * Returns the minimum of two integer values.
+     *
+     * @param a first integer
+     * @param b second integer
+     * @return minimum of a and b
+     */
     public final static int min(final int a, final int b) {
         return a < b ? a : b;
     }
 
+    /**
+     * Maps a float value from one range to another.
+     *
+     * @param val input value
+     * @param fromMin original range lower bound
+     * @param fromMax original range upper bound
+     * @param toMin target range lower bound
+     * @param toMax target range upper bound
+     * @return mapped value in target range
+     */
     public final static float map(final float val, final float fromMin, final float fromMax,
                                   final float toMin, final float toMax) {
         final float mult = (val - fromMin) / (fromMax - fromMin);
@@ -216,11 +335,26 @@ public class MathUtils extends PlatformMathUtils {
         return res;
     }
 
-    /** Returns the closest value to 'a' that is in between 'low' and 'high' */
+    /**
+     * Returns the closest float value to 'a' that is between 'low' and 'high'.
+     *
+     * @param a value to clamp
+     * @param low lower bound
+     * @param high upper bound
+     * @return clamped value
+     */
     public final static float clamp(final float a, final float low, final float high) {
         return max(low, min(a, high));
     }
 
+    /**
+     * Clamps a 2D vector within lower and upper bound 2D vectors.
+     *
+     * @param a vector to clamp
+     * @param low lower bound vector
+     * @param high upper bound vector
+     * @return new clamped vector
+     */
     public final static Vec2 clamp(final Vec2 a, final Vec2 low, final Vec2 high) {
         final Vec2 min = new Vec2();
         min.x = a.x < high.x ? a.x : high.x;
@@ -230,6 +364,14 @@ public class MathUtils extends PlatformMathUtils {
         return min;
     }
 
+    /**
+     * Clamps a 2D vector within lower and upper bounds and stores the result in a destination vector.
+     *
+     * @param a vector to clamp
+     * @param low lower bound vector
+     * @param high upper bound vector
+     * @param dest destination vector for the result
+     */
     public final static void clampToOut(final Vec2 a, final Vec2 low, final Vec2 high, final Vec2 dest) {
         dest.x = a.x < high.x ? a.x : high.x;
         dest.y = a.y < high.y ? a.y : high.y;
@@ -238,10 +380,10 @@ public class MathUtils extends PlatformMathUtils {
     }
 
     /**
-     * Next Largest Power of 2: Given a binary integer value x, the next largest power of 2 can be
-     * computed by a SWAR algorithm that recursively "folds" the upper bits into the lower bits. This
-     * process yields a bit vector with the same most significant 1 as x, but all 1's below it. Adding
-     * 1 to that value yields the next largest power of 2.
+     * Computes the next largest power of 2 for a given integer.
+     *
+     * @param x input integer
+     * @return next largest power of 2
      */
     public final static int nextPowerOfTwo(int x) {
         x |= x >> 1;
@@ -252,10 +394,23 @@ public class MathUtils extends PlatformMathUtils {
         return x + 1;
     }
 
+    /**
+     * Checks if an integer is a power of 2.
+     *
+     * @param x input integer
+     * @return true if x is a power of 2, false otherwise
+     */
     public final static boolean isPowerOfTwo(final int x) {
         return x > 0 && (x & x - 1) == 0;
     }
 
+    /**
+     * Computes the power of a base float raised to an exponent float.
+     *
+     * @param a base
+     * @param b exponent
+     * @return a raised to power b
+     */
     public static final float pow(float a, float b) {
         if (Settings.FAST_POW) {
             return fastPow(a, b);
@@ -264,6 +419,13 @@ public class MathUtils extends PlatformMathUtils {
         }
     }
 
+    /**
+     * Computes atan2 of y and x.
+     *
+     * @param y ordinate
+     * @param x abscissa
+     * @return angle in radians
+     */
     public static final float atan2(final float y, final float x) {
         if (Settings.FAST_ATAN2) {
             return fastAtan2(y, x);
@@ -272,6 +434,13 @@ public class MathUtils extends PlatformMathUtils {
         }
     }
 
+    /**
+     * Fast approximation of atan2.
+     *
+     * @param y ordinate
+     * @param x abscissa
+     * @return fast approximation of angle in radians
+     */
     public static final float fastAtan2(float y, float x) {
         if (x == 0.0f) {
             if (y > 0.0f) return HALF_PI;
@@ -293,6 +462,12 @@ public class MathUtils extends PlatformMathUtils {
         return atan;
     }
 
+    /**
+     * Reduces an angle in radians to the range [-PI, PI].
+     *
+     * @param theta angle in radians
+     * @return reduced angle in radians
+     */
     public static final float reduceAngle(float theta) {
         theta %= TWOPI;
         if (abs(theta) > PI) {
@@ -304,24 +479,59 @@ public class MathUtils extends PlatformMathUtils {
         return theta;
     }
 
+    /**
+     * Generates a pseudo-random float between argLow and argHigh.
+     *
+     * @param argLow lower bound (inclusive)
+     * @param argHigh upper bound (exclusive)
+     * @return random float between argLow and argHigh
+     */
     public static final float randomFloat(float argLow, float argHigh) {
         return (float) Math.random() * (argHigh - argLow) + argLow;
     }
 
+    /**
+     * Generates a pseudo-random float using a given Random instance.
+     *
+     * @param r random number generator
+     * @param argLow lower bound (inclusive)
+     * @param argHigh upper bound (exclusive)
+     * @return random float between argLow and argHigh
+     */
     public static final float randomFloat(Random r, float argLow, float argHigh) {
         return r.nextFloat() * (argHigh - argLow) + argLow;
     }
 
+    /**
+     * Computes the square root of a float.
+     *
+     * @param x input float value
+     * @return square root of x
+     */
     public static final float sqrt(float x) {
         return (float) StrictMath.sqrt(x);
     }
 
+    /**
+     * Computes the squared distance between two 2D vectors.
+     *
+     * @param v1 first 2D vector
+     * @param v2 second 2D vector
+     * @return squared distance between v1 and v2
+     */
     public final static float distanceSquared(Vec2 v1, Vec2 v2) {
         float dx = (v1.x - v2.x);
         float dy = (v1.y - v2.y);
         return dx * dx + dy * dy;
     }
 
+    /**
+     * Computes the Euclidean distance between two 2D vectors.
+     *
+     * @param v1 first 2D vector
+     * @param v2 second 2D vector
+     * @return distance between v1 and v2
+     */
     public final static float distance(Vec2 v1, Vec2 v2) {
         return sqrt(distanceSquared(v1, v2));
     }

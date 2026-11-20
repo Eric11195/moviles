@@ -30,9 +30,19 @@ package com.example.utils;
  */
 class PlatformMathUtils {
 
+    /** Constant scale factor for bit shifting float bits. */
     private static final float SHIFT23 = 1 << 23;
+
+    /** Inverse scale factor for bit shifting float bits. */
     private static final float INV_SHIFT23 = 1.0f / SHIFT23;
 
+    /**
+     * Fast approximation of power function (a^b).
+     *
+     * @param a base
+     * @param b exponent
+     * @return fast approximation of a raised to power b
+     */
     public static final float fastPow(float a, float b) {
         float x = Float.floatToRawIntBits(a);
         x *= INV_SHIFT23;
