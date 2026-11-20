@@ -48,8 +48,8 @@ public class NotificationAndroid extends NotificationInterface {
             var notificationManager = NotificationManagerCompat.from(app);
             notificationManager.createNotificationChannel(channel);
 
-            Intent intent = new Intent(app, app.getClass());
-            intent.putExtra(getInputData().getString("Message"), getInputData().getString("Value"));
+            Intent intent = app.getPackageManager().getLaunchIntentForPackage(getInputData().getString("Package"));
+            intent.putExtra(getInputData().getString("Tag"), getInputData().getString("Value"));
             PendingIntent contentIntent = PendingIntent.getActivity(app, 0, intent,
                     PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -58,7 +58,8 @@ public class NotificationAndroid extends NotificationInterface {
                     .setContentText(getInputData().getString("Body"))
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setContentIntent(contentIntent)
-                    .setSmallIcon(IconCompat.createWithResource(app, getInputData().getInt("Icon", 0)));
+                    .setSmallIcon(IconCompat.createWithResource(app, getInputData().getInt("Icon", 0)))
+                    .setAutoCancel(true);
 
             notificationManager.notify(workId, builder.build());
 
@@ -80,13 +81,13 @@ public class NotificationAndroid extends NotificationInterface {
     }
 
     @Override
-    public void createNotification(NotificationData data) {
-        notifs.add(data);
+    public void createNotification(NotificationData data, int idx) {
+        notifs.add(idx,data);
     }
 
     @Override
-    public void scheduleNotification(int i, int sec) {
-        NotificationData data = notifs.get(i);
+    public void scheduleNotification(int idx, int sec) {
+        NotificationData data = notifs.get(idx);
         OneTimeWorkRequest.Builder request = new OneTimeWorkRequest.Builder(NotificationWorker.class)
                 .setInitialDelay(sec, TimeUnit.SECONDS);
 
@@ -98,6 +99,7 @@ public class NotificationAndroid extends NotificationInterface {
         requestData.putInt("Icon", smallIcon);
         requestData.putInt("Interval", sec);
         requestData.putInt("WorkId", workId);
+        requestData.putString("Package",app.getPackageName());
 
         request.setInputData(requestData.build());
         WorkManager.getInstance(app).enqueueUniqueWork(

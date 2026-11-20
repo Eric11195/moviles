@@ -91,11 +91,20 @@ public class Constants {
     //=====================================================
     //SHOP
     //=====================================================
-    public static Vec2 MARGINS = new Vec2(10,10);
+    public static final Vec2 MARGINS = new Vec2(10,10);
     public static final int ROWS_IN_SHOP = 2;
     public static final int COLS_IN_SHOP = 3;
     public static final int BACK_BUTTON_SQUARE_SIZE = 40;
+    public static final int SCROLLBAR_SIZE = 40;
     public static final float TAB_HEIGHT = LOGIC_WINDOW_SIZE.y / 14.0f;
-    public static Vec2 DEFAULT_RUBIES_SIZE = new Vec2(40,40);
-    public static Vec2 DEFAULT_RUBIES_POSITION = new Vec2(LOGIC_WINDOW_SIZE.x-DEFAULT_RUBIES_SIZE.x-MARGINS.x,MARGINS.y);
+    public static final Vec2 SHOP_POS = new Vec2(BACK_BUTTON_SQUARE_SIZE*2,
+            TAB_HEIGHT);
+    public static final Vec2 SHOP_SIZE = new Vec2(LOGIC_WINDOW_SIZE.x-BACK_BUTTON_SQUARE_SIZE*4,
+            LOGIC_WINDOW_SIZE.y - BACK_BUTTON_SQUARE_SIZE-TAB_HEIGHT);
+    public static final Vec2 DEFAULT_RUBIES_SIZE = new Vec2(32,32);
+    public static final Vec2 RUBIES_IMAGE_SIZE = new Vec2(32,32);
+    public static final Vec2 DEFAULT_RUBIES_POSITION = new Vec2(LOGIC_WINDOW_SIZE.x-DEFAULT_RUBIES_SIZE.x- RUBIES_IMAGE_SIZE.x-MARGINS.x,MARGINS.y);
+
+    public static final String NOTIF_EXTRA = "RUBY_REWARD";
+    public static final String RUBY_REWARD = "5";
 }

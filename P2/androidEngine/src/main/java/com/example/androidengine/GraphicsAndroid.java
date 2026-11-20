@@ -381,8 +381,8 @@ public class GraphicsAndroid implements GraphicsInterface {
         can.clipRect(
             x,
             y,
-            width,
-            height
+            x+width,
+            y+height
         );
     }
 }

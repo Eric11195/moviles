@@ -2,6 +2,7 @@
 package com.example.game.testing.Systems.menu;
 
 import static com.example.game.testing.constants.Constants.BACK_BUTTON_SQUARE_SIZE;
+import static com.example.game.testing.constants.Constants.SCROLLBAR_SIZE;
 
 import com.example.engine.Engine;
 import com.example.engine.GraphicsInterface;
@@ -69,7 +70,7 @@ public class Scrollable implements mcd_System {
         // Reserve space for the bottom button.
         viewportHeight = Math.max(
                 0,
-                size.y - BACK_BUTTON_SQUARE_SIZE
+                size.y
         );
 
         this.barProgress = 0;
@@ -202,27 +203,41 @@ public class Scrollable implements mcd_System {
 
     @Override
     public void render(GraphicsInterface g) {
-        g.clipRect(0,(int)startPos.y,(int)size.x+BACK_BUTTON_SQUARE_SIZE,(int) size.y+BACK_BUTTON_SQUARE_SIZE);
-        // Render inner objects.
-        allMyObjects.forEach(ent -> ent.render(g));
-
         // Calculate scrollbar position.
         scrollBarPos.x =
-                startPos.x - BACK_BUTTON_SQUARE_SIZE * 0.9f;
+                startPos.x - SCROLLBAR_SIZE;
 
         scrollBarPos.y =
                 startPos.y +
                         barProgress * getAvailableBarMovement();
 
+
+        g.clipRect((int)startPos.x-SCROLLBAR_SIZE,(int)startPos.y,(int)size.x+SCROLLBAR_SIZE,(int) size.y);
+
+        // Render inner objects.
+        allMyObjects.forEach(ent -> ent.render(g));
+
         // Render scrollbar.
+        g.setColor(ColorLibrary.LightGrey);
+
+        g.drawRoundRectangle(
+                new Vec2(scrollBarPos.x,startPos.y),
+                new Vec2(scrollBarSize.x,getAvailableBarMovement()+scrollBarSize.y),
+                10,
+                true
+        );
         g.setColor(ColorLibrary.DarkGrey);
 
         g.drawRoundRectangle(
                 scrollBarPos,
                 scrollBarSize,
-                90,
+                10,
                 true
         );
+
+
+
+
         g.resetClipping();
     }
 
@@ -232,6 +247,5 @@ public class Scrollable implements mcd_System {
 
     public void setActive(boolean value) {
 
-        allMyObjects.forEach(ent -> ent.setActive(value));
     }
 }

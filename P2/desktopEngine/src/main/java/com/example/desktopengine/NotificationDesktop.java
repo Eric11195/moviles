@@ -10,12 +10,12 @@ public class NotificationDesktop extends NotificationInterface {
     }
 
     @Override
-    public void createNotification(NotificationData data) {
+    public void createNotification(NotificationData data, int idx) {
 
     }
 
     @Override
-    public void scheduleNotification(int i, int sec) {
+    public void scheduleNotification(int idx, int sec) {
 
     }
 }
